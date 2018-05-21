@@ -7,9 +7,6 @@ import com.shentu.wallpager.mvp.model.SplashModel;
 import dagger.Module;
 import dagger.Provides;
 
-import me.jessyan.mvparms.demo.mvp.contract.SplashContract;
-import me.jessyan.mvparms.demo.mvp.model.SplashModel;
-
 
 @Module
 public class SplashModule {

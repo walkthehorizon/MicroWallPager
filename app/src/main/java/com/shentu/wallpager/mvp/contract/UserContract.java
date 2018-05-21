@@ -24,7 +24,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import java.util.List;
 
 import io.reactivex.Observable;
-import me.jessyan.mvparms.demo.mvp.model.entity.User;
+import com.shentu.wallpager.mvp.model.entity.User;
 
 /**
  * ================================================

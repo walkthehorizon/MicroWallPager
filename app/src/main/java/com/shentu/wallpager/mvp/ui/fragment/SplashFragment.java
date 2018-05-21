@@ -15,23 +15,27 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.glide.GlideArms;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.lifecycle.Lifecycleable;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
+import com.shentu.wallpager.R;
+import com.shentu.wallpager.di.component.DaggerSplashComponent;
+import com.shentu.wallpager.di.module.SplashModule;
+import com.shentu.wallpager.mvp.contract.SplashContract;
+import com.shentu.wallpager.mvp.model.entity.SplashAd;
+import com.shentu.wallpager.mvp.presenter.SplashPresenter;
+import com.shentu.wallpager.mvp.ui.activity.MainActivity;
+import com.shentu.wallpager.mvp.ui.activity.SplashActivity;
 
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.di.component.DaggerSplashComponent;
-import me.jessyan.mvparms.demo.di.module.SplashModule;
-import me.jessyan.mvparms.demo.mvp.contract.SplashContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.SplashAd;
-import me.jessyan.mvparms.demo.mvp.presenter.SplashPresenter;
-import me.jessyan.mvparms.demo.mvp.ui.activity.MainActivity;
 import timber.log.Timber;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -41,6 +45,8 @@ public class SplashFragment extends BaseFragment<SplashPresenter> implements Spl
 
     @BindView(R.id.iv_splash)
     ImageView mIvSplash;
+    @Inject
+    AppManager appManager;
 
     public static SplashFragment newInstance() {
         SplashFragment fragment = new SplashFragment();
@@ -66,12 +72,13 @@ public class SplashFragment extends BaseFragment<SplashPresenter> implements Spl
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         mPresenter.getAd();
-        Observable.timer(3, TimeUnit.SECONDS)
+        Observable.timer(5, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .compose(RxLifecycleUtils.bindToLifecycle((Lifecycleable) SplashFragment.this))
                 .subscribe(aLong -> {
                     launchActivity(new Intent(getActivity(), MainActivity.class));
+                    killMyself();
                 });
 
         Timber.e("initData");
@@ -142,7 +149,7 @@ public class SplashFragment extends BaseFragment<SplashPresenter> implements Spl
 
     @Override
     public void killMyself() {
-
+        appManager.killActivity(SplashActivity.class);
     }
 
     @Override

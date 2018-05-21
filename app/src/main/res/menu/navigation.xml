@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_hot"
         android:icon="@drawable/ic_whatshot_black_24dp"
         android:title="@string/title_recommend" />
 
     <item
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_category"
         android:icon="@drawable/ic_spa_black_24dp"
         android:title="@string/title_category" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_rank"
         android:icon="@drawable/ic_equalizer_black_24dp"
         android:title="@string/title_rank" />
 

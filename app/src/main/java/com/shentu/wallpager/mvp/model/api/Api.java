@@ -15,7 +15,7 @@
  */
 package com.shentu.wallpager.mvp.model.api;
 
-import me.jessyan.mvparms.demo.BuildConfig;
+import com.shentu.wallpager.BuildConfig;
 
 /**
  * ================================================

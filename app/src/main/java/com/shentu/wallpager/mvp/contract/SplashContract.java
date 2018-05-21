@@ -2,9 +2,9 @@ package com.shentu.wallpager.mvp.contract;
 
 import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
+import com.shentu.wallpager.mvp.model.entity.SplashAd;
 
 import io.reactivex.Observable;
-import me.jessyan.mvparms.demo.mvp.model.entity.SplashAd;
 
 public interface SplashContract {
     interface View extends IView {

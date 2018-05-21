@@ -3,8 +3,6 @@ package com.shentu.wallpager.di;
 import com.blankj.utilcode.util.SPUtils;
 import com.shentu.wallpager.mvp.model.entity.User;
 
-import me.jessyan.mvparms.demo.mvp.model.entity.User;
-
 public class HkUserManager {
     protected String USER_UID = "USER_UID";
     protected String USER_AVATAR = "USER_AVATAR";

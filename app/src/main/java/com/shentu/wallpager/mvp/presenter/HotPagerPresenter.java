@@ -7,20 +7,21 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxLifecycleUtils;
-import com.shentu.wallpager.mvp.contract.SplashContract;
-import com.shentu.wallpager.mvp.model.entity.SplashAd;
+import com.shentu.wallpager.mvp.contract.HotPagerContract;
+import com.shentu.wallpager.mvp.model.entity.WallPager;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
-import timber.log.Timber;
 
 
 @FragmentScope
-public class SplashPresenter extends BasePresenter<SplashContract.Model, SplashContract.View> {
+public class HotPagerPresenter extends BasePresenter<HotPagerContract.Model, HotPagerContract.View> {
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
@@ -31,29 +32,22 @@ public class SplashPresenter extends BasePresenter<SplashContract.Model, SplashC
     AppManager mAppManager;
 
     @Inject
-    public SplashPresenter(SplashContract.Model model, SplashContract.View rootView) {
+    public HotPagerPresenter(HotPagerContract.Model model, HotPagerContract.View rootView) {
         super(model, rootView);
     }
 
-    public void getAd() {
-        mModel.getSplashAd()
-                .subscribeOn(Schedulers.io())
+    public void getWallPages() {
+        mModel.getWallPageList()
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> mRootView.showLoading())
-                .doFinally(() -> mRootView.hideLoading())
+                .subscribeOn(Schedulers.io())
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))
-                .subscribe(new ErrorHandleSubscriber<SplashAd>(mErrorHandler) {
-                    @Override
-                    public void onNext(SplashAd splashAd) {
-                        Timber.e("onNext");
-                        mRootView.showSplash(splashAd);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        super.onComplete();
-                    }
-                });
+                .subscribe(new Consumer<List<WallPager>>() {
+            @Override
+            public void accept(List<WallPager> wallPagers) throws Exception {
+                mRootView.hideLoading();
+                mRootView.showHotPager(wallPagers);
+            }
+        });
     }
 
     @Override

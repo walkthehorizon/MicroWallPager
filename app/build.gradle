@@ -11,7 +11,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "me.jessyan.mvparms.demo"
+        applicationId "com.shentu.wallpager"
         minSdkVersion rootProject.ext.android["minSdkVersion"]
         targetSdkVersion rootProject.ext.android["targetSdkVersion"]
         versionCode rootProject.ext.android["versionCode"]
@@ -64,10 +64,10 @@ dependencies {
     implementation(rootProject.ext.dependencies["cardview-v7"]) {
         exclude module: 'support-annotations'
     }
+    implementation rootProject.ext.dependencies["design"]
+    implementation rootProject.ext.dependencies["constraint-layout"]
+    implementation rootProject.ext.dependencies["vector-drawable"]
     //tools
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    implementation 'com.android.support:support-vector-drawable:27.1.1'
     annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
     implementation rootProject.ext.dependencies["progressmanager"]
     implementation rootProject.ext.dependencies["retrofit-url-manager"]
@@ -78,15 +78,14 @@ dependencies {
     annotationProcessor(rootProject.ext.dependencies["butterknife-compiler"]) {
         exclude module: 'support-annotations'
     }
-    implementation rootProject.ext.dependencies["paginate"]
-    //arms
-//    implementation project(':arms')
     implementation rootProject.ext.dependencies["arms"]
-    //Github 仓库上最新的 Demo 具有下一个版本的新特性, 所以依赖最新的远程库会出现版本不兼容的情况, 详情请查看 https://github.com/JessYanCoding/MVPArms/wiki/Issues#2
-//    implementation 'me.jessyan:arms:2.4.1'
+    implementation rootProject.ext.dependencies["BRVAdapterHelper"]
     //test
     testImplementation rootProject.ext.dependencies["junit"]
     debugImplementation rootProject.ext.dependencies["canary-debug"]
     releaseImplementation rootProject.ext.dependencies["canary-release"]
     testImplementation rootProject.ext.dependencies["canary-release"]
+    //refresh
+    implementation rootProject.ext.dependencies["SmartRefreshLayout"]
+    implementation rootProject.ext.dependencies["SmartRefreshHeader"]
 }

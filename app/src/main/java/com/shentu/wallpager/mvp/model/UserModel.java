@@ -21,6 +21,10 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
+import com.shentu.wallpager.mvp.contract.UserContract;
+import com.shentu.wallpager.mvp.model.api.cache.CommonCache;
+import com.shentu.wallpager.mvp.model.api.service.UserService;
+import com.shentu.wallpager.mvp.model.entity.User;
 
 import java.util.List;
 
@@ -32,10 +36,6 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
-import me.jessyan.mvparms.demo.mvp.contract.UserContract;
-import me.jessyan.mvparms.demo.mvp.model.api.cache.CommonCache;
-import me.jessyan.mvparms.demo.mvp.model.api.service.UserService;
-import me.jessyan.mvparms.demo.mvp.model.entity.User;
 import timber.log.Timber;
 
 /**

@@ -4,23 +4,44 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.view.ViewPager;
+import android.util.SparseIntArray;
+import android.view.MenuItem;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.shentu.wallpager.R;
+import com.shentu.wallpager.di.component.DaggerMainComponent;
+import com.shentu.wallpager.di.module.MainModule;
+import com.shentu.wallpager.mvp.contract.MainContract;
+import com.shentu.wallpager.mvp.presenter.MainPresenter;
+import com.shentu.wallpager.mvp.ui.adapter.MainPagerAdapter;
+import com.shentu.wallpager.mvp.ui.widget.DefaultToolbar;
 
-import me.jessyan.mvparms.demo.di.component.DaggerMainComponent;
-import me.jessyan.mvparms.demo.di.module.MainModule;
-import me.jessyan.mvparms.demo.mvp.contract.MainContract;
-import me.jessyan.mvparms.demo.mvp.presenter.MainPresenter;
+import javax.inject.Inject;
 
-import me.jessyan.mvparms.demo.R;
-
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View {
+public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View, ViewPager.OnPageChangeListener, BottomNavigationView.OnNavigationItemSelectedListener {
+
+    @Inject
+    MainPagerAdapter mainPagerAdapter;
+    @Inject
+    SparseIntArray itemIds;
+
+    @BindView(R.id.main_viewpager)
+    ViewPager viewPager;
+
+    @BindView(R.id.bottom_navigation_view)
+    BottomNavigationView bottomNavigationView;
+
+    @BindView(R.id.default_toolbar)
+    DefaultToolbar toolbar;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -34,12 +55,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public int initView(@Nullable Bundle savedInstanceState) {
-        return R.layout.activity_main; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
+        return R.layout.activity_main;
     }
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-
+        toolbar.setTitle(getResources().getString(R.string.app_name));
+        viewPager.setOffscreenPageLimit(mainPagerAdapter.getCount());
+        viewPager.addOnPageChangeListener(this);
+        viewPager.setAdapter(mainPagerAdapter);
     }
 
     @Override
@@ -67,5 +91,43 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     public void killMyself() {
         finish();
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (position < 0 || position >= itemIds.size()) {
+            return;
+        }
+        bottomNavigationView.setSelectedItemId(itemIds.get(position));
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int pos = itemIds.indexOfValue(item.getItemId());
+        if (pos == -1) {
+            return false;
+        }
+        viewPager.setCurrentItem(pos);
+        return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mainPagerAdapter = null;
+        viewPager.clearOnPageChangeListeners();
+        bottomNavigationView.setOnNavigationItemSelectedListener(null);
+        itemIds = null;
+        mainPagerAdapter = null;
     }
 }

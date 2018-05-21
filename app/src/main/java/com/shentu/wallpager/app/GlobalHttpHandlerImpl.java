@@ -19,14 +19,11 @@ import android.content.Context;
 
 import com.jess.arms.http.GlobalHttpHandler;
 import com.shentu.wallpager.app.utils.HkUtils;
+import com.shentu.wallpager.di.HkUserManager;
 
 import java.net.URI;
 
-import me.jessyan.mvparms.demo.BuildConfig;
-import me.jessyan.mvparms.demo.app.utils.HkUtils;
-import me.jessyan.mvparms.demo.di.HkUserManager;
-import me.jessyan.mvparms.demo.mvp.model.SplashModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.User;
+import com.shentu.wallpager.BuildConfig;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;

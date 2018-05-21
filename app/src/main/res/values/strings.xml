@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MVPArms</string>
+    <string name="app_name">MicroWallPager</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_recommend">推荐</string>
     <string name="title_category">分类</string>

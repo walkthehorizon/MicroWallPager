@@ -11,8 +11,7 @@ import com.jess.arms.di.component.AppComponent;
 import com.shentu.wallpager.mvp.ui.fragment.SplashFragment;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
-import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.ui.fragment.SplashFragment;
+import com.shentu.wallpager.R;
 import timber.log.Timber;
 
 public class SplashActivity extends BaseActivity {

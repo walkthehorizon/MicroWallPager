@@ -2,16 +2,15 @@ package com.shentu.wallpager.mvp.presenter;
 
 import android.app.Application;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
-
-import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
+import com.shentu.wallpager.mvp.contract.MainContract;
 
 import javax.inject.Inject;
 
-import me.jessyan.mvparms.demo.mvp.contract.MainContract;
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
 @ActivityScope

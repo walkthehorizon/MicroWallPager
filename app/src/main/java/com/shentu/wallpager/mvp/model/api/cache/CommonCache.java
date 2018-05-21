@@ -27,8 +27,6 @@ import io.rx_cache2.EvictProvider;
 import io.rx_cache2.LifeCache;
 import io.rx_cache2.Reply;
 import io.rx_cache2.internal.RxCache;
-import me.jessyan.mvparms.demo.mvp.model.entity.SplashAd;
-import me.jessyan.mvparms.demo.mvp.model.entity.User;
 
 /**
  * ================================================

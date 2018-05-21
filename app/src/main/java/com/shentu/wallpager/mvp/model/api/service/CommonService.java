@@ -19,8 +19,6 @@ package com.shentu.wallpager.mvp.model.api.service;
 import com.shentu.wallpager.mvp.model.entity.SplashAd;
 
 import io.reactivex.Observable;
-import me.jessyan.mvparms.demo.mvp.model.entity.SplashAd;
-import me.jessyan.mvparms.demo.mvp.model.entity.User;
 import retrofit2.http.GET;
 
 /**

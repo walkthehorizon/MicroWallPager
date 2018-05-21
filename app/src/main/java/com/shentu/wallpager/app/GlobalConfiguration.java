@@ -28,6 +28,7 @@ import com.jess.arms.http.imageloader.glide.GlideImageLoaderStrategy;
 import com.jess.arms.http.log.RequestInterceptor;
 import com.jess.arms.integration.ConfigModule;
 import com.jess.arms.utils.ArmsUtils;
+import com.shentu.wallpager.BuildConfig;
 import com.shentu.wallpager.mvp.model.api.Api;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -35,8 +36,6 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import me.jessyan.mvparms.demo.BuildConfig;
-import me.jessyan.mvparms.demo.mvp.model.api.Api;
 import me.jessyan.progressmanager.ProgressManager;
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager;
 
