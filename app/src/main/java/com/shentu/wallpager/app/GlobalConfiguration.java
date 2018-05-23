@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 
 import com.jess.arms.base.delegate.AppLifecycles;
 import com.jess.arms.di.module.GlobalConfigModule;
@@ -57,11 +58,11 @@ public final class GlobalConfiguration implements ConfigModule {
 
     @Override
     public void applyOptions(Context context, GlobalConfigModule.Builder builder) {
-        String cachePath = BuildConfig.Debug?Environment.getExternalStorageDirectory().getAbsolutePath():context.getFilesDir()+"/"+"com.mvp.test";
+        String cachePath = (BuildConfig.Debug ? Environment.getExternalStorageDirectory().getAbsolutePath() : context.getFilesDir()) + "/Android/data/" + BuildConfig.APPLICATION_ID;
         if (!BuildConfig.LOG_DEBUG) { //Release 时,让框架不再打印 Http 请求和响应的信息
             builder.printHttpLogLevel(RequestInterceptor.Level.NONE);
         }
-
+        Log.e("Global", "开始整体配置 " + cachePath);
         builder.baseurl(Api.APP_DOMAIN)
                 .cacheFile(new File(cachePath))
                 //强烈建议自己自定义图片加载逻辑,因为默认提供的 GlideImageLoaderStrategy 并不能满足复杂的需求
@@ -145,6 +146,9 @@ public final class GlobalConfiguration implements ConfigModule {
                 })
                 .rxCacheConfiguration((context1, rxCacheBuilder) -> {//这里可以自己自定义配置 RxCache 的参数
                     rxCacheBuilder.useExpiredDataIfLoaderNotAvailable(true);
+//                    File file = new File(cachePath, "cache");
+//                    FileUtils.createOrExistsDir(file);
+//                    rxCacheBuilder.persistence(file, new GsonSpeaker());
                     // 想自定义 RxCache 的缓存文件夹或者解析方式, 如改成 fastjson, 请 return rxCacheBuilder.persistence(cacheDirectory, new FastJsonSpeaker());
                     // 否则请 return null;
                     return null;

@@ -44,14 +44,14 @@ public class SplashActivity extends BaseActivity {
     private void requestPermissions() {
         RxPermissions rxPermissions;
         rxPermissions = new RxPermissions(this);
-        rxPermissions.requestEach(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        rxPermissions.requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(permission -> {
                     if (permission.granted) {
-                        Timber.d(permission.name + "被允许");
+                        Timber.e(permission.name + "被允许");
                     } else if (permission.shouldShowRequestPermissionRationale) {
-                        Timber.d(permission.name + "被拒绝，可重新请求");
+                        Timber.e(permission.name + "被拒绝，可重新请求");
                     } else {
-                        Timber.d(permission.name + "被拒绝，不再提示");
+                        Timber.e(permission.name + "被拒绝，不再提示");
                     }
                 });
     }

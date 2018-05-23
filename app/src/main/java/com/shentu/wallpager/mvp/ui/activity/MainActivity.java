@@ -125,7 +125,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     protected void onDestroy() {
         super.onDestroy();
         mainPagerAdapter = null;
-        viewPager.clearOnPageChangeListeners();
         bottomNavigationView.setOnNavigationItemSelectedListener(null);
         itemIds = null;
         mainPagerAdapter = null;

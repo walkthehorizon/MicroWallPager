@@ -36,6 +36,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
+import io.rx_cache2.Reply;
 import timber.log.Timber;
 
 /**
@@ -70,7 +71,12 @@ public class UserModel extends BaseModel implements UserContract.Model {
                                 .getUsers(listObservable
                                         , new DynamicKey(lastIdQueried)
                                         , new EvictDynamicKey(update))
-                                .map(listReply -> listReply.getData());
+                                .map(new Function<Reply<List<User>>, List<User>>() {
+                                    @Override
+                                    public List<User> apply(Reply<List<User>> listReply) throws Exception {
+                                        return listReply.getData();
+                                    }
+                                });
                     }
                 });
 

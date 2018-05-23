@@ -25,6 +25,7 @@ import io.reactivex.Observable;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictProvider;
 import io.rx_cache2.LifeCache;
+import io.rx_cache2.ProviderKey;
 import io.rx_cache2.Reply;
 import io.rx_cache2.internal.RxCache;
 
@@ -42,6 +43,7 @@ public interface CommonCache {
     @LifeCache(duration = 2, timeUnit = TimeUnit.MINUTES)
     Observable<Reply<List<User>>> getUsers(Observable<List<User>> users, DynamicKey idLastUserQueried, EvictProvider evictProvider);
 
-    @LifeCache(duration = 2 ,timeUnit = TimeUnit.HOURS)
+    @ProviderKey("splash-ad-one-day")
+    @LifeCache(duration = 1 ,timeUnit = TimeUnit.DAYS)
     Observable<Reply<SplashAd>> getSplashAd(Observable<SplashAd> ad, EvictProvider evictProvider);
 }
