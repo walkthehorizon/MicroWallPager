@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    tools:layout_editor_absoluteY="25dp">
+
+    <ImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/pink_dark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:textColor="@color/colorPrimaryText"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+        app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+        app:layout_constraintTop_toTopOf="@+id/iv_avatar"
+        tools:text="崩坏学园" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_vertical_margin"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/colorSecondText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_avatar"
+        tools:text="个人股热一热挺好风格豪放的合法化规划风格化风格化规范化风格" />
+
+    <include
+        android:id="@+id/layout_cover"
+        layout="@layout/test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content" />
+
+    <!--<ImageView-->
+    <!--android:layout_marginTop="12dp"-->
+    <!--android:id="@+id/iv_1"-->
+    <!--android:layout_marginStart="@dimen/activity_horizontal_margin"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="0dp"-->
+    <!--app:layout_constraintDimensionRatio="w,1:1"-->
+    <!--app:layout_constraintEnd_toStartOf="@id/iv_2"-->
+    <!--app:layout_constraintHorizontal_weight="2"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="@id/tv_content"-->
+    <!--tools:background="@color/green" />-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_2"-->
+    <!--android:layout_marginTop="12dp"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_marginEnd="@dimen/activity_horizontal_margin"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_marginStart="5dp"-->
+    <!--app:layout_constraintDimensionRatio="w,1:1.02"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintHorizontal_weight="1"-->
+    <!--app:layout_constraintStart_toEndOf="@id/iv_1"-->
+    <!--app:layout_constraintTop_toBottomOf="@id/tv_content"-->
+    <!--tools:background="@color/pink" />-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_3"-->
+    <!--android:layout_marginEnd="@dimen/activity_horizontal_margin"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_marginStart="5dp"-->
+    <!--android:layout_marginTop="5dp"-->
+    <!--app:layout_constraintDimensionRatio="w,1:1.02"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintHorizontal_weight="1"-->
+    <!--app:layout_constraintStart_toEndOf="@id/iv_1"-->
+    <!--app:layout_constraintTop_toBottomOf="@id/iv_2"-->
+    <!--app:layout_constraintbottom_toBottomOf="@id/iv_1"-->
+    <!--tools:background="@color/blue" />-->
+
+    <View
+        android:id="@+id/view_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_divider_height"
+        android:layout_margin="12dp"
+        android:background="@color/colorDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_cover" />
+
+    <TextView
+        android:id="@+id/tv_share"
+        android:layout_marginTop="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:drawablePadding="6dp"
+        android:drawableStart="@drawable/ic_share_black_24dp"
+        android:gravity="center"
+        android:textColor="@color/colorSecondText"
+        app:layout_constraintEnd_toStartOf="@id/tv_comment"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_divider"
+        tools:text="100" />
+
+    <TextView
+        android:id="@+id/tv_comment"
+        android:layout_marginTop="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="6dp"
+        android:drawableStart="@drawable/ic_comment_black_24dp"
+        android:gravity="center"
+        android:textColor="@color/colorSecondText"
+        app:layout_constraintEnd_toStartOf="@id/tv_support"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@id/tv_share"
+        app:layout_constraintTop_toBottomOf="@+id/view_divider"
+        tools:text="100" />
+
+    <TextView
+        android:id="@+id/tv_support"
+        android:layout_marginTop="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:drawablePadding="6dp"
+        android:drawableStart="@drawable/ic_whatshot_black_24dp"
+        android:gravity="center"
+        android:textColor="@color/colorSecondText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@id/tv_comment"
+        app:layout_constraintTop_toBottomOf="@+id/view_divider"
+        tools:text="100" />
+
+</android.support.constraint.ConstraintLayout>
