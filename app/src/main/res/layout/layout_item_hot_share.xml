@@ -1,6 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/tv_share"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="48dp"
+        android:drawablePadding="6dp"
+        android:textSize="12sp"
+        android:visibility="gone"
+        android:drawableStart="@drawable/ic_share_black_24dp"
+        android:gravity="center"
+        android:textColor="@color/colorSecondText"
+        app:layout_constraintEnd_toStartOf="@+id/tv_comment"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_divider"
+        android:text="分享" />
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/tv_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:drawablePadding="6dp"
+        android:textSize="12sp"
+        android:visibility="gone"
+        android:drawableStart="@drawable/ic_comment_black_24dp"
+        android:gravity="center"
+        android:textColor="@color/colorSecondText"
+        app:layout_constraintEnd_toStartOf="@+id/tv_support"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@id/tv_share"
+        app:layout_constraintTop_toBottomOf="@+id/view_divider"
+        android:text="评论" />
+
+    <TextView
+        android:id="@+id/tv_support"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginEnd="48dp"
+        android:drawablePadding="6dp"
+        android:textIsSelectable="true"
+        android:drawableStart="@drawable/bg_whatshot_state"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:visibility="gone"
+        android:textColor="@color/colorSecondText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@id/tv_comment"
+        app:layout_constraintTop_toBottomOf="@+id/view_divider"
+        android:text="点赞" />
+</merge>

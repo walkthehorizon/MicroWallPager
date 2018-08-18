@@ -1,6 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="12dp"
+        app:srcCompat="@drawable/ic_close_grey_24dp" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="首次登录需验证手机号"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/tv_send_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:textColor="@color/grey_21"
+        android:text="验证码已发送到XXX"
+        android:textSize="18sp" />
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/mb_send_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_send_tips"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="X秒后可重新发送"
+        android:textColor="@color/colorSecondText"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        app:backgroundTint="@color/colorPrimary"
+        app:cornerRadius="5dp" />
+
+    <com.shentu.wallpaper.mvp.ui.widget.VerificationCodeInput
+        android:id="@+id/vc_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mb_send_code"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        app:box="4"
+        app:child_h_padding="5dp" />
+</RelativeLayout>

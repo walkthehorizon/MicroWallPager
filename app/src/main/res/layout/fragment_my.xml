@@ -1,8 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorActivityBackground"
     android:orientation="vertical">
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rlHead"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:background="@drawable/bg_gradient_my_head">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circle_avatar"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="60dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_head"
+            app:civ_border_color="@color/colorDivider"
+            app:civ_border_width="2dp" />
+
+        <TextView
+            android:id="@+id/tvMyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="70dp"
+            android:layout_toEndOf="@+id/circle_avatar"
+            android:drawableEnd="@drawable/ic_im_sex_man"
+            android:maxLength="8"
+            android:maxLines="1"
+            android:text="微梦用户"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="100dp"
+            android:layout_toEndOf="@+id/circle_avatar"
+            android:text="点击查看或编辑个人资料"
+            android:textColor="@color/grey_91" />
+
+    </RelativeLayout>
+
+    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+        android:id="@+id/item_collect"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/rlHead"
+        android:layout_marginTop="12dp"
+        app:item_arrow_visible="true"
+        app:item_divider_visible="true"
+        app:item_icon="@drawable/ic_collections_black_24dp"
+        app:item_title="我的收藏" />
+
+    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+        android:id="@+id/item_browser"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/item_collect"
+        app:item_arrow_visible="true"
+        app:item_icon="@drawable/ic_pets_pink_24dp"
+        app:item_title="浏览记录" />
+
+    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+        android:id="@+id/item_update"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/item_browser"
+        android:layout_marginTop="12dp"
+        app:item_icon="@drawable/ic_update_black_24dp"
+        app:item_title="检查更新" />
+
+    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+        android:id="@+id/item_cache"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/item_update"
+        app:item_arrow_visible="false"
+        app:item_icon="@drawable/ic_delete_forever_black_24dp"
+        app:item_title="清除缓存" />
+
+    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+        android:id="@+id/item_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/item_cache"
+        android:layout_marginTop="12dp"
+        app:item_arrow_visible="true"
+        app:item_icon="@drawable/ic_feedback_black_24dp"
+        app:item_title="意见反馈" />
+
+    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+        android:id="@+id/item_more"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/item_feedback"
+        app:item_arrow_visible="true"
+        app:item_icon="@drawable/ic_more_horiz_pink_24dp"
+        app:item_title="更多设置" />
+
+
+</RelativeLayout>

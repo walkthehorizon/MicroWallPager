@@ -1,8 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-</LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/app_bg_login" />
+
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        android:text="微梦登录"
+        android:textColor="@color/colorPrimary"
+        android:textSize="32sp" />
+
+    <EditText
+        android:id="@+id/et_phone"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/tv_title"
+        android:layout_marginEnd="36dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_login_input"
+        android:focusable="true"
+        android:textColor="@color/colorPrimaryText"
+        android:focusableInTouchMode="true"
+        android:hint="请输入手机号码"
+        android:imeOptions="actionNext"
+        android:inputType="phone"
+        android:textColorHint="@color/grey_dark"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/et_phone"
+        android:layout_marginEnd="36dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="12dp"
+        android:textColorHint="@color/grey_dark"
+        android:textColor="@color/colorPrimaryText"
+        android:background="@drawable/bg_login_input"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:hint="请输入密码"
+        android:imeOptions="actionNext"
+        android:inputType="textPassword"
+        android:maxLength="16"
+        android:minLines="6"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_forget_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/et_password"
+        android:layout_alignEnd="@+id/et_password"
+        android:layout_marginEnd="12dp"
+        android:textColor="@color/colorPrimary"
+        android:text="忘记密码?" />
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/mb_login"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_below="@+id/et_password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="36dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:text="登录"
+        android:textAppearance="?android:attr/textAppearanceButton"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:backgroundTint="@color/colorPrimary" />
+
+    <TextView
+        android:id="@+id/tv_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mb_login"
+        android:layout_marginEnd="36dp"
+        android:layout_marginStart="36dp"
+        android:text="注册账号"
+        android:textColor="@color/colorPrimary" />
+
+    <TextView
+        android:id="@+id/tv_see"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/mb_login"
+        android:layout_marginEnd="36dp"
+        android:layout_marginStart="36dp"
+        android:text="随便看看 》"
+        android:textColor="@color/colorPrimary" />
+
+</RelativeLayout>

@@ -1,8 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorActivityBackground"
     android:orientation="vertical">
 
-</LinearLayout>
+    <com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/mIvCover"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"/>
+
+    <TextView
+        android:id="@+id/mTvVersion"
+        android:layout_marginTop="12dp"
+        android:layout_width="320dp"
+        android:textSize="18sp"
+        android:textColor="@color/colorPrimary"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/mIvCover"
+        android:gravity="center"
+        tools:text = "微梦美图：1.0.0"
+        android:layout_height="wrap_content" />
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/mbLogout"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="60dp"
+        android:gravity="center"
+        android:text="注销登录"
+        android:textAllCaps="false"
+        android:textAppearance="?android:attr/textAppearanceMediumInverse"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/colorPrimary"
+        app:cornerRadius="30dp"
+        app:rippleColor="@color/colorPrimaryDark" />
+</RelativeLayout>

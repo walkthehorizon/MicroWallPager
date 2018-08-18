@@ -41,8 +41,8 @@
 
  #实体类不参与混淆
 -keep class com.jess.arms.widget.** { *; } #自定义控件不参与混淆
--keep class com.shentu.wallpager.mvp.ui.widget.** { *; }
--keep class com.shentu.wallpager.mvp.model.entity.** { *; }#自定义实体，理论上全都实现Serializable
+-keep class com.shentu.wallpaper.mvp.ui.widget.** { *; }
+-keep class com.shentu.wallpaper.model.entity.** { *; }#自定义实体，理论上全都实现Serializable
 -keep class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator *;
 }
@@ -205,6 +205,8 @@
 ################annotation###############
 -keep class android.support.annotation.** { *; }
 -keep interface android.support.annotation.** { *; }
+-keep public class *implements java.lang.annotation.Annotation.** { *; }
+#-keep public class * implementation java.lang.annotation.Annotation.** { *; }
 
 
 ################RxLifeCycle#################
@@ -252,3 +254,26 @@
 -keepclassmembers  class **$** extends com.chad.library.adapter.base.BaseViewHolder {
      <init>(...);
 }
+
+#################mob#####################
+-keep class com.mob.**{*;}
+-keep class cn.smssdk.**{*;}
+-dontwarn com.mob.**
+
+#################mShareSdk#####################
+-keep class cn.sharesdk.**{*;}
+-keep class com.sina.**{*;}
+-keep class **.R$* {*;}
+-keep class **.R{*;}
+-keep class com.mob.**{*;}
+-keep class m.framework.**{*;}
+-dontwarn cn.sharesdk.**
+-dontwarn com.sina.**
+-dontwarn com.mob.**
+-dontwarn **.R$*
+#################mBugly#####################
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+# tinker混淆规则
+-dontwarn com.tencent.tinker.**
+-keep class com.tencent.tinker.** { *; }

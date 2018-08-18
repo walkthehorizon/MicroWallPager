@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
     android:layout_marginBottom="12dp"
+    android:background="@color/white"
     tools:layout_editor_absoluteY="25dp">
 
     <ImageView
@@ -14,9 +14,9 @@
         android:layout_height="36dp"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        tools:background="@color/pink_dark"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/pink_dark" />
 
     <TextView
         android:id="@+id/tv_user_name"
@@ -63,56 +63,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_cover" />
 
-    <TextView
-        android:id="@+id/tv_share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="12dp"
-        android:drawablePadding="6dp"
-        android:textSize="12sp"
-        android:drawableStart="@drawable/ic_share_black_24dp"
-        android:gravity="center"
-        android:textColor="@color/colorSecondText"
-        app:layout_constraintEnd_toStartOf="@id/tv_comment"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_divider"
-        android:text="分享" />
-
-    <TextView
-        android:id="@+id/tv_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:drawablePadding="6dp"
-        android:textSize="12sp"
-        android:drawableStart="@drawable/ic_comment_black_24dp"
-        android:gravity="center"
-        android:textColor="@color/colorSecondText"
-        app:layout_constraintEnd_toStartOf="@id/tv_support"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toEndOf="@id/tv_share"
-        app:layout_constraintTop_toBottomOf="@+id/view_divider"
-        android:text="评论" />
-
-    <TextView
-        android:id="@+id/tv_support"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginTop="12dp"
-        android:drawablePadding="6dp"
-        android:drawableStart="@drawable/ic_whatshot_black_24dp"
-        android:gravity="center"
-        android:textSize="12sp"
-        android:textColor="@color/colorSecondText"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toEndOf="@id/tv_comment"
-        app:layout_constraintTop_toBottomOf="@+id/view_divider"
-        android:text="点赞" />
+    <include layout="@layout/layout_item_hot_share" />
 
 </android.support.constraint.ConstraintLayout>

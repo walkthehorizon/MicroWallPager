@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llFilter"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/mTvDefault"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="默认"
+        android:textColor="@color/bg_hot_filter_text_color"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_divider_height"
+        android:background="@color/colorDivider" />
+
+    <TextView
+        android:id="@+id/mTvWallpaper"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="主题壁纸"
+        android:textColor="@color/bg_hot_filter_text_color"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_divider_height"
+        android:background="@color/colorDivider" />
+
+    <TextView
+        android:id="@+id/mTvCos"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="Cos美图"
+        android:textColor="@color/bg_hot_filter_text_color"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_divider_height"
+        android:background="@color/colorDivider" />
+
+    <TextView
+        android:id="@+id/mTvGirl"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="性感写真"
+        android:textColor="@color/bg_hot_filter_text_color"
+        android:textSize="16sp" />
+</LinearLayout>

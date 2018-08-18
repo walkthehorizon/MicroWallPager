@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:background="?attr/colorPrimary"
+    android:layout_height="?android:attr/actionBarSize"
+    android:background="?android:attr/colorPrimary"
     app:contentInsetStart="0dp">
 
     <ImageView
         android:id="@+id/iv_start"
-        android:layout_width="?attr/actionBarSize"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_width="?android:attr/actionBarSize"
+        android:layout_height="?android:attr/actionBarSize"
         android:layout_centerInParent="true"
         android:padding="16dp"
         android:visibility="gone"
@@ -24,15 +23,14 @@
         android:layout_gravity="center"
         android:textColor="#fff"
         android:textSize="18sp"
-        tools:text="@string/app_name" />
+        android:text="@string/app_name" />
 
     <ImageView
         android:id="@+id/iv_end"
-        android:layout_width="?attr/actionBarSize"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_width="?android:attr/actionBarSize"
+        android:layout_height="?android:attr/actionBarSize"
         android:layout_centerInParent="true"
         android:layout_gravity="end"
         android:padding="16dp"
-        android:visibility="gone"
-        app:srcCompat= "@drawable/ic_arrow_back_black_24dp" />
+        android:visibility="gone" />
 </android.support.v7.widget.Toolbar>

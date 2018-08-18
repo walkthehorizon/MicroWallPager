@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.shentu.wallpager">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.shentu.wallpaper">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -10,24 +11,45 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".app.HkApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/arms_log"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:icon,android:allowBackup,android:theme">
         <activity android:name=".mvp.ui.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".mvp.ui.activity.MainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".mvp.ui.activity.PictureBrowserActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.CategoryListActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.CategoryPageActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <!--
         autolayout meta
         配置设计图的宽高,配合AutoLauout控件使用,在设计图尺寸以外的其它尺寸手机上,也能达到和设计图一样的效果
@@ -43,8 +65,16 @@
 
         <!-- arms配置 -->
         <meta-data
-            android:name="com.shentu.wallpager.app.GlobalConfiguration"
+            android:name="com.shentu.wallpaper.app.GlobalConfiguration"
             android:value="ConfigModule" />
+
+        <activity
+            android:name=".mvp.ui.activity.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".mvp.ui.activity.SettingMoreActivity" />
+
     </application>
 
 </manifest>

@@ -1,4 +1,11 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.mob.sdk'
+//apply from: 'tinker-support.gradle'
+
+
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -11,20 +18,28 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.shentu.wallpager"
+        applicationId "com.shentu.wallpaper"
         minSdkVersion rootProject.ext.android["minSdkVersion"]
         targetSdkVersion rootProject.ext.android["targetSdkVersion"]
         versionCode rootProject.ext.android["versionCode"]
         versionName rootProject.ext.android["versionName"]
         testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled = true
+
+        ndk{
+            abiFilters 'armeabi', 'armeabi-v7a'
+        }
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
     buildTypes {
 
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
-            buildConfigField "boolean", "USE_CANARY", "true"
-            buildConfigField "String", "Sever", '"http://ta.candylive.tv"'
+            buildConfigField "boolean", "USE_CANARY", "false"
+            buildConfigField "String", "Sever", '"http:/47.105.40.169/wallpaper/"'
             buildConfigField "boolean", "Debug", "true"
             buildConfigField "String", "API_KEY", '"tang01tang"'
             minifyEnabled false
@@ -34,7 +49,7 @@ android {
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"
             buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "String", "Sever", '"http://ta.candylive.tv"'
+            buildConfigField "String", "Sever", '"http://47.105.40.169/wallpaper/"'
             buildConfigField "boolean", "Debug", "true"
             buildConfigField "String", "API_KEY", '"tang01tang"'
             minifyEnabled true
@@ -48,6 +63,46 @@ android {
         disable 'InvalidPackage'
         disable "ResourceType"
         abortOnError false
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['jniLibs']
+        }
+    }
+}
+
+MobSDK {
+    appKey "2726f3a69c300"
+    appSecret "5ef67a98fcae47f91163577728158ac3"
+
+    SMSSDK {}
+    ShareSDK {
+        //平台配置信息
+        devInfo {
+            SinaWeibo {
+                appKey "568898243"
+                appSecret "38a4f8204cc784f81f9f0daaf31e02e3"
+                callbackUri "http://www.sharesdk.cn"
+                shareByAppClient false
+            }
+            Wechat {
+                appId "wx4868b35061f87885"
+                appSecret "64020361b8ec4c99936c0e3999a9f249"
+            }
+            QQ {
+                appId "100371282"
+                appKey "aed9b0303e3ed1e27bae87c33761161d"
+                shareByAppClient true
+            }
+        }
+    }
+}
+
+kapt {
+    generateStubs = true
+    arguments {
+        arg("moduleName", project.getName())
     }
 }
 
@@ -68,24 +123,42 @@ dependencies {
     implementation rootProject.ext.dependencies["constraint-layout"]
     implementation rootProject.ext.dependencies["vector-drawable"]
     //tools
-    annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
     implementation rootProject.ext.dependencies["progressmanager"]
     implementation rootProject.ext.dependencies["retrofit-url-manager"]
     implementation rootProject.ext.dependencies["lifecyclemodel"]
     implementation rootProject.ext.dependencies["logger"]
     implementation rootProject.ext.dependencies["utilcode"]
     //view
-    annotationProcessor(rootProject.ext.dependencies["butterknife-compiler"]) {
+    kapt(rootProject.ext.dependencies["butterknife-compiler"]) {
         exclude module: 'support-annotations'
     }
     implementation rootProject.ext.dependencies["arms"]
     implementation rootProject.ext.dependencies["BRVAdapterHelper"]
+    implementation rootProject.ext.dependencies["circleimageview"]
+    //refresh
+    implementation rootProject.ext.dependencies["SmartRefreshLayout"]
+    implementation rootProject.ext.dependencies["SmartRefreshHeader"]
+    //arouter
+    implementation rootProject.ext.dependencies["arouter"]
+    kapt rootProject.ext.dependencies["arouter-compiler"]
+    //multidex
+    implementation rootProject.ext.dependencies["multidex"]
+    //glide-transformations
+    implementation rootProject.ext.dependencies["glide-transformations"]
+    //dagger
+    kapt rootProject.ext.dependencies["dagger2-compiler"]
+    kapt rootProject.ext.dependencies["dagger2-android-processor"]
+    //photoview
+    implementation rootProject.ext.dependencies["photoview"]
+    //material-dialogs
+    implementation rootProject.ext.dependencies["material-dialogs"]
+    //bugly
+    implementation rootProject.ext.dependencies["bugly-upgrade"]
+    implementation rootProject.ext.dependencies["bugly-tinker"]
     //test
     testImplementation rootProject.ext.dependencies["junit"]
     debugImplementation rootProject.ext.dependencies["canary-debug"]
     releaseImplementation rootProject.ext.dependencies["canary-release"]
     testImplementation rootProject.ext.dependencies["canary-release"]
-    //refresh
-    implementation rootProject.ext.dependencies["SmartRefreshLayout"]
-    implementation rootProject.ext.dependencies["SmartRefreshHeader"]
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
