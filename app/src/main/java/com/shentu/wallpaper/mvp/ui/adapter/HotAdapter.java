@@ -89,11 +89,11 @@ public class HotAdapter extends BaseMultiItemQuickAdapter<Subject, BaseViewHolde
                     .transform(transformation)
                     .into((ImageView) helper.getView(R.id.iv_1));
             GlideArms.with(helper.itemView.getContext())
-                    .load(PicUtils.getInstance().buildtl200(item.cover2))
+                    .load(PicUtils.getInstance().buildtl200(item.cover.replace("type_2/1","type_2/2")))
                     .transform(transformation)
                     .into((ImageView) helper.getView(R.id.iv_2));
             GlideArms.with(helper.itemView.getContext())
-                    .load(PicUtils.getInstance().buildtl640(item.cover3))
+                    .load(PicUtils.getInstance().buildtl200(item.cover.replace("type_2/1","type_2/3")))
                     .transform(transformation)
                     .into((ImageView) helper.getView(R.id.iv_3));
         }
