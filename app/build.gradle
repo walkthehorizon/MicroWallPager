@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'com.mob.sdk'
 //apply from: 'tinker-support.gradle'
 
@@ -39,7 +39,8 @@ android {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "String", "Sever", '"http:/192.168.199.119/wallpaper/"'
+//            buildConfigField "String", "Sever", '"http:/192.168.199.119/wallpaper/"'
+            buildConfigField "String", "Sever", '"http://47.105.40.169/wallpaper/"'
             buildConfigField "boolean", "Debug", "true"
             buildConfigField "String", "API_KEY", '"tang01tang"'
             minifyEnabled false

@@ -205,8 +205,6 @@
 ################annotation###############
 -keep class android.support.annotation.** { *; }
 -keep interface android.support.annotation.** { *; }
--keep public class *implements java.lang.annotation.Annotation.** { *; }
-#-keep public class * implementation java.lang.annotation.Annotation.** { *; }
 
 
 ################RxLifeCycle#################
