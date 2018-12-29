@@ -1,17 +1,15 @@
 package com.shentu.wallpaper.model;
 
 import android.app.Application;
-import android.support.annotation.IntegerRes;
 
 import com.google.gson.Gson;
 import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.integration.IRepositoryManager;
 import com.shentu.wallpaper.app.BasePageModel;
 import com.shentu.wallpaper.model.api.service.MicroService;
-import com.shentu.wallpaper.model.entity.SubjectsEntity;
+import com.shentu.wallpaper.model.entity.BasePageResponse;
+import com.shentu.wallpaper.model.entity.Subject;
 import com.shentu.wallpaper.mvp.contract.HotPagerContract;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -39,11 +37,11 @@ public class HotPagerModel extends BasePageModel implements HotPagerContract.Mod
     }
 
     @Override
-    public Observable<SubjectsEntity> getSubjectList(int subjectType, boolean clear) {
+    public Observable<BasePageResponse<Subject>> getSubjects(int subjectType, boolean clear) {
         offset = clear ? 0 : (limit + offset);
         return mRepositoryManager
                 .obtainRetrofitService(MicroService.class)
-                .getSubjectList(subjectType,limit, offset);
+                .getSubjects(subjectType,limit, offset);
     }
 
 }

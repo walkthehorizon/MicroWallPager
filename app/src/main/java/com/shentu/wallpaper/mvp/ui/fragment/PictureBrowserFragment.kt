@@ -3,33 +3,26 @@ package com.shentu.wallpaper.mvp.ui.fragment
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.os.Message
-import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
-
+import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.event.SwitchNavigationEvent
 import com.shentu.wallpaper.di.component.DaggerPictureBrowserComponent
 import com.shentu.wallpaper.di.module.PictureBrowserModule
+import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import com.shentu.wallpaper.mvp.presenter.PictureBrowserPresenter
-
-import com.shentu.wallpaper.R
-
-import com.shentu.wallpaper.app.EventBusTags
-import com.shentu.wallpaper.app.event.SwitchNavigationEvent
-import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.ui.activity.PictureBrowserActivity
 import com.shentu.wallpaper.mvp.ui.activity.PictureBrowserActivity.Companion.SUBJECT_ID
 import com.shentu.wallpaper.mvp.ui.adapter.PictureBrowserVpAdapter
 import kotlinx.android.synthetic.main.fragment_picture_browser.*
-import org.simple.eventbus.Subscriber
-import javax.inject.Inject
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
 /**
@@ -134,7 +127,7 @@ class PictureBrowserFragment : BaseFragment<PictureBrowserPresenter>(), PictureB
         rl_bottom.visibility = View.GONE
     }
 
-    @Subscriber(tag = EventBusTags.SWITCH_BROWSE_NAVIGATION)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     fun switchNavigation(event: SwitchNavigationEvent){
         if (rl_head.visibility == View.VISIBLE) {
             hideNavigation()

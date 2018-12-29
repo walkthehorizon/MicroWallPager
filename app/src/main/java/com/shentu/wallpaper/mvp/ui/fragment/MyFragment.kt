@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import butterknife.OnClick
-import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
 import com.jess.arms.base.BaseFragment
@@ -14,26 +12,19 @@ import com.jess.arms.di.component.AppComponent
 import com.jess.arms.http.imageloader.glide.GlideArms
 import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.R
-import com.shentu.wallpaper.R.id.circle_avatar
-import com.shentu.wallpaper.R.id.tvMyName
-import com.shentu.wallpaper.app.EventBusTags
 import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.app.event.LoginSuccessEvent
 import com.shentu.wallpaper.di.component.DaggerMyComponent
 import com.shentu.wallpaper.di.module.MyModule
-import com.shentu.wallpaper.model.api.cache.MicroCache
 import com.shentu.wallpaper.mvp.contract.MyContract
 import com.shentu.wallpaper.mvp.presenter.MyPresenter
 import com.shentu.wallpaper.mvp.ui.activity.SettingMoreActivity
 import com.tencent.bugly.beta.Beta
 import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Action
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_my.*
-import org.simple.eventbus.Subscriber
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
 class MyFragment : BaseFragment<MyPresenter>(), MyContract.View {
@@ -78,7 +69,7 @@ class MyFragment : BaseFragment<MyPresenter>(), MyContract.View {
         }
     }
 
-    @Subscriber(tag = EventBusTags.LOGIN_SUCCESS)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     fun loadUserData(event: LoginSuccessEvent?) {
         tvMyName.text = HkUserManager.getInstance().user.nickname
         GlideArms.with(this)

@@ -1,8 +1,9 @@
 package com.shentu.wallpaper.mvp.contract
 
-import com.jess.arms.mvp.IView
 import com.jess.arms.mvp.IModel
-import com.shentu.wallpaper.model.entity.ResultResponse
+import com.jess.arms.mvp.IView
+import com.shentu.wallpaper.model.entity.BaseResponse
+import com.shentu.wallpaper.model.entity.User
 import io.reactivex.Observable
 
 
@@ -14,11 +15,11 @@ interface LoginContract {
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model : IModel {
-        fun registerAccount(phone: String,password: String): Observable<ResultResponse>
+        fun registerAccount(phone: String,password: String): Observable<BaseResponse<Boolean>>
 
-        fun loginAccount(phone: String, password: String): Observable<ResultResponse>
+        fun loginAccount(phone: String, password: String): Observable<BaseResponse<User>>
 
-        fun logoutAccount():Observable<ResultResponse>
+        fun logoutAccount():Observable<BaseResponse<Boolean>>
     }
 
 }

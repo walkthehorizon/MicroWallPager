@@ -13,6 +13,6 @@ public interface SplashContract {
     }
 
     interface Model extends IModel {
-        Observable getSplashAd();
+        Observable<SplashAd> getSplashAd();
     }
 }

@@ -5,13 +5,11 @@ import com.google.gson.Gson
 import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.integration.IRepositoryManager
 import com.jess.arms.mvp.BaseModel
-import com.shentu.wallpaper.mvp.contract.CategoryContract
-import com.shentu.wallpaper.model.api.cache.CommonCache
-import com.shentu.wallpaper.model.api.cache.MicroCache
 import com.shentu.wallpaper.model.api.service.MicroService
-import com.shentu.wallpaper.model.entity.CategorysEntity
+import com.shentu.wallpaper.model.entity.BasePageResponse
+import com.shentu.wallpaper.model.entity.Category
+import com.shentu.wallpaper.mvp.contract.CategoryContract
 import io.reactivex.Observable
-import io.rx_cache2.EvictProvider
 import javax.inject.Inject
 
 
@@ -26,18 +24,9 @@ constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager
     @Inject
     lateinit var mApplication: Application
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    override fun getCategorys(): Observable<CategorysEntity?> {
-        return Observable.just(mRepositoryManager
+    override fun getCategorys(): Observable<BasePageResponse<Category>> {
+        return mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
-                .categorys)
-                .flatMap<CategorysEntity> { observable ->
-                    mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getCategorys(observable, EvictProvider(false))
-                            .map { reply -> reply.data }
-                }
+                .categorys
     }
 }

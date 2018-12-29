@@ -2,22 +2,15 @@ package com.shentu.wallpaper.mvp.model
 
 import android.app.Application
 import com.google.gson.Gson
-import com.jess.arms.integration.IRepositoryManager
-import com.jess.arms.mvp.BaseModel
-
 import com.jess.arms.di.scope.FragmentScope
+import com.jess.arms.integration.IRepositoryManager
 import com.shentu.wallpaper.app.BasePageModel
-import com.shentu.wallpaper.model.api.cache.MicroCache
 import com.shentu.wallpaper.model.api.service.MicroService
-import com.shentu.wallpaper.model.entity.CategoryListEntity
-import javax.inject.Inject
-
+import com.shentu.wallpaper.model.entity.BaseResponse
+import com.shentu.wallpaper.model.entity.Category
 import com.shentu.wallpaper.mvp.contract.CategoryListContract
 import io.reactivex.Observable
-import io.rx_cache2.DynamicKey
-import io.rx_cache2.DynamicKeyGroup
-import io.rx_cache2.EvictDynamicKey
-import io.rx_cache2.EvictDynamicKeyGroup
+import javax.inject.Inject
 
 
 @FragmentScope
@@ -31,16 +24,18 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
     @Inject
     lateinit var mApplication: Application
 
-    override fun getCategoryList(id: Int, page: Int, clear: Boolean): Observable<CategoryListEntity> {
+    override fun getCategoryList(id: Int, page: Int, clear: Boolean): Observable<BaseResponse<Category>> {
         offset = page * limit
-        return Observable.just(mRepositoryManager
-                .obtainRetrofitService(MicroService::class.java)
-                .getCategoryList(id, limit, offset))
-                .flatMap<CategoryListEntity> { observable ->
-                    mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getCategoryList(observable, DynamicKeyGroup(id, page), EvictDynamicKeyGroup(clear))
-                            .map { reply -> reply.data }
-                }
+        return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
+                .getCategoryById(id, limit, offset)
+//        return Observable.just(mRepositoryManager
+//                .obtainRetrofitService(MicroService::class.java)
+//                .getCategoryById(id, limit, offset))
+//                .flatMap<BaseResponse<Category>> { observable ->
+//                    mRepositoryManager.obtainCacheService(MicroCache::class.java)
+//                            .getCategoryList(observable, DynamicKeyGroup(id, page), EvictDynamicKeyGroup(clear))
+//                            .map { reply -> reply.data }
+//                }
     }
 
     override fun onDestroy() {

@@ -1,8 +1,6 @@
 package com.shentu.wallpaper.model.entity;
 
-import com.shentu.wallpaper.model.entity.BaseJson;
-
-public class SplashAd extends BaseJson {
+public class SplashAd extends BaseResponse {
     /**
      * aid : 1
      * cover_url : http://

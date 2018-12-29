@@ -3,7 +3,6 @@ package com.shentu.wallpaper.mvp.model
 import android.app.Application
 import com.google.gson.Gson
 import com.jess.arms.integration.IRepositoryManager
-import com.jess.arms.mvp.BaseModel
 
 import com.jess.arms.di.scope.FragmentScope
 import com.shentu.wallpaper.app.BasePageModel
@@ -30,7 +29,7 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
         offset = page * limit
         return Observable.just(mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
-                .getCategoryList(id, limit, offset))
+                .getCategoryById(id, limit, offset))
                 .flatMap<CategoryListEntity> { observable ->
                     mRepositoryManager.obtainCacheService(MicroCache::class.java)
                             .getCategoryList(observable, DynamicKeyGroup(id, page), EvictDynamicKeyGroup(clear))

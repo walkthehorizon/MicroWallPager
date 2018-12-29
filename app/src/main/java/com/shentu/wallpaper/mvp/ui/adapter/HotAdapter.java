@@ -1,8 +1,6 @@
 package com.shentu.wallpaper.mvp.ui.adapter;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -12,11 +10,9 @@ import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.jess.arms.http.imageloader.glide.GlideArms;
 import com.shentu.wallpaper.R;
-import com.shentu.wallpaper.app.utils.HkUtils;
 import com.shentu.wallpaper.app.utils.PicUtils;
 import com.shentu.wallpaper.app.utils.ShareUtils;
 import com.shentu.wallpaper.model.entity.Subject;
@@ -28,12 +24,6 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class HotAdapter extends BaseMultiItemQuickAdapter<Subject, BaseViewHolder> {
 
-    /**
-     * Same as QuickAdapter#QuickAdapter(Context,int) but with
-     * some initialization data.
-     *
-     * @param data A new list is created out of this one to avoid mutable list
-     */
     public HotAdapter(List<Subject> data) {
         super(data);
         addItemType(Subject.ITEM_VIEW_1, R.layout.app_item_hot_page_1);
@@ -63,7 +53,6 @@ public class HotAdapter extends BaseMultiItemQuickAdapter<Subject, BaseViewHolde
 
     @Override
     protected void convert(BaseViewHolder helper, Subject item) {
-
         GlideArms.with(helper.itemView.getContext())
                 .load(item.owner.avatar)
                 .placeholder(R.drawable.default_head)

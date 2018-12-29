@@ -28,5 +28,4 @@ import com.shentu.wallpaper.BuildConfig;
  */
 public interface Api {
     String APP_DOMAIN = BuildConfig.Sever;
-    String RequestSuccess = "0";
 }

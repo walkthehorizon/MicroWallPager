@@ -17,21 +17,16 @@ package com.shentu.wallpaper.app.utils;
 
 import com.jess.arms.mvp.IView;
 import com.jess.arms.utils.RxLifecycleUtils;
-import com.trello.rxlifecycle2.LifecycleTransformer;
-import com.trello.rxlifecycle2.RxLifecycle;
+import com.shentu.wallpaper.model.entity.BasePageResponse;
+import com.shentu.wallpaper.model.entity.BaseResponse;
 
-import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
  * ================================================
- * 放置便于使用 RxJava 的一些工具类
+ * 放置便于使用 RxJava 的一些工具方法
  * <p>
  * Created by JessYan on 11/10/2016 16:39
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
@@ -43,41 +38,65 @@ public class RxUtils {
     private RxUtils() {
     }
 
+    //用于无需状态控制的observable
+    public static <T> ObservableTransformer<T, T> applyClearSchedulers(final IView view) {
+        return observable -> observable.subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxLifecycleUtils.bindToLifecycle(view));
+    }
+
     public static <T> ObservableTransformer<T, T> applySchedulers(final IView view) {
-        return new ObservableTransformer<T, T>() {
-            @Override
-            public Observable<T> apply(Observable<T> observable) {
-                return observable.subscribeOn(Schedulers.io())
-                        .doOnSubscribe(new Consumer<Disposable>() {
-                            @Override
-                            public void accept(@NonNull Disposable disposable) throws Exception {
-                                view.showLoading();//显示进度条
-                            }
-                        })
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doFinally(new Action() {
-                            @Override
-                            public void run() {
-                                view.hideLoading();//隐藏进度条
-                            }
-                        }).compose(RxLifecycleUtils.bindToLifecycle(view));
-            }
+        return observable -> {
+            //隐藏进度条
+            return observable.subscribeOn(Schedulers.io())
+                    .doOnSubscribe(disposable -> view.showLoading())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(t -> handleOnNext(t, view))
+                    .doOnError(throwable -> {
+                        view.showError();
+                        view.hideLoading();
+                    })
+                    .compose(RxLifecycleUtils.bindToLifecycle(view));
+        };
+    }
+
+    public static <T> ObservableTransformer<T, T> applySchedulers(final IView view, boolean clear) {
+        return observable -> {
+            //隐藏进度条
+            return observable.subscribeOn(Schedulers.io())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(t -> {
+                        handleOnNext(t, view);
+                        view.hideRefresh(clear);
+                    })
+                    .doOnError(throwable -> {
+                        view.showError();
+                        view.hideRefresh(clear);
+                        view.hideLoading();
+                    })
+                    .compose(RxLifecycleUtils.bindToLifecycle(view));
         };
     }
 
     /**
-     * 此方法已废弃
-     *
-     * @param view
-     * @param <T>
-     * @return
-     * @see RxLifecycleUtils 此类可以实现 {@link RxLifecycle} 的所有功能, 使用方法和之前一致
-     * @deprecated Use {@link RxLifecycleUtils#bindToLifecycle(IView)} instead
+     * 接收数据前进行统一处理，目标fragment/activity需实现IView
      */
-    @Deprecated
-    public static <T> LifecycleTransformer<T> bindToLifecycle(IView view) {
-        return RxLifecycleUtils.bindToLifecycle(view);
+    private static <T> void handleOnNext(T t, IView view) {
+        if (((BaseResponse) t).isSuccess()) {
+            //有些接口好像不统一
+            if (isDataEmpty((BaseResponse) t)) {
+                view.showEmpty();
+            } else {
+                view.showContent();
+            }
+        }
     }
 
+    private static boolean isDataEmpty(BaseResponse t) {
+        return t.getData() == null || (t.getData() instanceof BasePageResponse
+                && ((BasePageResponse) t.getData()).getCount() == 0);
+    }
 }

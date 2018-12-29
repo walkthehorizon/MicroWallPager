@@ -10,15 +10,12 @@ public class Subject implements MultiItemEntity {
     public int id;
     public String name;
     public String cover;
-    public String cover2;
-    public String cover3;
     public String description;
-    public int type;
-    public User owner;
-    public boolean supported;
+    public String tag;
+    public String created;
 
     @Override
     public int getItemType() {
-        return type;
+        return ITEM_VIEW_2;
     }
 }

@@ -1,34 +1,26 @@
 package com.shentu.wallpaper.mvp.presenter
 
 import android.app.Application
-import android.content.Context
-import android.text.TextUtils
-import cn.smssdk.gui.RegisterPage
 import com.blankj.utilcode.util.RegexUtils
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.google.gson.GsonBuilder
+import com.google.gson.Gson
 import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.http.imageloader.ImageLoader
 import com.jess.arms.integration.AppManager
+import com.jess.arms.integration.EventBusManager
 import com.jess.arms.mvp.BasePresenter
-import com.jess.arms.utils.ArmsUtils
-import com.jess.arms.utils.RxLifecycleUtils
 import com.shentu.wallpaper.app.Constant
-import com.shentu.wallpaper.app.EventBusTags
 import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.app.StateCode
 import com.shentu.wallpaper.app.event.LoginSuccessEvent
-import com.shentu.wallpaper.model.entity.ResultResponse
+import com.shentu.wallpaper.app.utils.RxUtils
+import com.shentu.wallpaper.model.entity.BaseResponse
 import com.shentu.wallpaper.model.entity.User
 import com.shentu.wallpaper.mvp.contract.LoginContract
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
-import org.simple.eventbus.EventBus
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 
@@ -45,6 +37,9 @@ constructor(model: LoginContract.Model, rootView: LoginContract.View) :
     lateinit var mImageLoader: ImageLoader
     @Inject
     lateinit var mAppManager: AppManager
+
+    @Inject
+    lateinit var gson:Gson
 
 //    fun sendCode(context: Context) {
 //        val page = RegisterPage()
@@ -67,58 +62,47 @@ constructor(model: LoginContract.Model, rootView: LoginContract.View) :
 //    }
 
     fun registerAccount(phone: String, password: String) {
-        if(!(checkPhone(phone) && checkPassword(password))) return
+        if (!(checkPhone(phone) && checkPassword(password))) return
         mModel.registerAccount(phone, password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(RxLifecycleUtils.bindToLifecycle<ResultResponse>(mRootView))
-                .subscribe(object : ErrorHandleSubscriber<ResultResponse>(mErrorHandler) {
-                    override fun onNext(t: ResultResponse) {
-                        ToastUtils.showShort(t.result)
-                        if (t.state == 1 || t.state == StateCode.STATE_USER_EXIST) {
-                            loginAccount(phone, password)
+                .compose(RxUtils.applySchedulers(mRootView))
+                .doOnSubscribe { mRootView.showLoading() }
+                .doOnError{mRootView.hideLoading()}
+                .subscribe(object : ErrorHandleSubscriber<BaseResponse<Boolean>>(mErrorHandler) {
+                    override fun onNext(t: BaseResponse<Boolean>) {
+                        ToastUtils.showShort(t.msg)
+                        if (!(t.isSuccess || t.state == StateCode.STATE_USER_EXIST)) {
+                            mRootView.hideLoading()
+                            return
                         }
-                    }
-
-                    override fun onError(t: Throwable) {
-                        super.onError(t)
-                        ToastUtils.showShort(t.message)
+                        loginAccount(phone, password)
                     }
                 })
     }
 
     fun loginAccount(phone: String, password: String) {
-        if(!(checkPhone(phone) && checkPassword(password))) return
-        mRootView.showLoading()
+        if (!(checkPhone(phone) && checkPassword(password))) return
         mModel.loginAccount(phone, password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(RxLifecycleUtils.bindToLifecycle<ResultResponse>(mRootView))
-                .subscribe(object : ErrorHandleSubscriber<ResultResponse>(mErrorHandler) {
-                    override fun onNext(t: ResultResponse) {
-                        ToastUtils.showShort(t.result)
-                        mRootView.hideLoading()
-                        if(t.state == StateCode.STATE_SUCCESS){
-                            SPUtils.getInstance().put(Constant.LAST_LOGIN_ACCOUNT,phone)
-                            HkUserManager.getInstance().user = ArmsUtils.obtainAppComponentFromContext(mApplication).gson().fromJson(t.data,User::class.java)
-                            Timber.e(HkUserManager.getInstance().user.toString())
-                            HkUserManager.getInstance().save()
-                            EventBus.getDefault().post(LoginSuccessEvent(),EventBusTags.LOGIN_SUCCESS)
-                            mRootView.killMyself()
-                        }
+                .compose(RxUtils.applyClearSchedulers(mRootView))
+                .doOnNext{mRootView.hideLoading()}
+                .doOnError{mRootView.hideLoading()}
+                .subscribe(object : ErrorHandleSubscriber<BaseResponse<User>>(mErrorHandler) {
+                    override fun onNext(t: BaseResponse<User>) {
+                        if(!t.isSuccess)return
                         if (t.state == StateCode.STATE_USER_NOT_EXIST) {
                             mRootView.showVerifyDialog()
+                            return
                         }
-                    }
-
-                    override fun onError(t: Throwable) {
-                        super.onError(t)
-                        ToastUtils.showShort(t.message)
+                        SPUtils.getInstance().put(Constant.LAST_LOGIN_ACCOUNT, phone)
+                        HkUserManager.getInstance().user = t.data
+                        Timber.e(HkUserManager.getInstance().user.toString())
+                        HkUserManager.getInstance().save()
+                        EventBusManager.getInstance().post(LoginSuccessEvent())
+                        mRootView.killMyself()
                     }
                 })
     }
 
-    private fun checkPhone(phone: String) : Boolean{
+    private fun checkPhone(phone: String): Boolean {
         if (!RegexUtils.isMobileSimple(phone)) {
             ToastUtils.showShort("手机号输入错误")
             return false
@@ -126,8 +110,8 @@ constructor(model: LoginContract.Model, rootView: LoginContract.View) :
         return true
     }
 
-    private fun checkPassword(password: String):Boolean{
-        if (password.length < 6 || password.length >16) {
+    private fun checkPassword(password: String): Boolean {
+        if (password.length < 6 || password.length > 16) {
             ToastUtils.showShort("密码输入错误")
             return false
         }

@@ -6,16 +6,13 @@ import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
-import com.jess.arms.utils.RxLifecycleUtils;
-import com.shentu.wallpaper.model.entity.SubjectsEntity;
+import com.shentu.wallpaper.app.utils.RxUtils;
+import com.shentu.wallpaper.model.entity.BasePageResponse;
+import com.shentu.wallpaper.model.entity.Subject;
 import com.shentu.wallpaper.mvp.contract.HotPagerContract;
-
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
@@ -37,21 +34,12 @@ public class HotPagerPresenter extends BasePresenter<HotPagerContract.Model, Hot
     }
 
     public void getSubjects(int subjectType, boolean clear) {
-        mModel.getSubjectList(subjectType,clear)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))
-                .subscribe(new ErrorHandleSubscriber<SubjectsEntity>(mErrorHandler) {
+        mModel.getSubjects(subjectType, clear)
+                .compose(RxUtils.applySchedulers(mRootView,clear))
+                .subscribe(new ErrorHandleSubscriber<BasePageResponse<Subject>>(mErrorHandler) {
                     @Override
-                    public void onNext(SubjectsEntity subjectsEntity) {
-                        mRootView.hideLoading();
-                        mRootView.showHotSubject(subjectsEntity.results,clear);
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-                        super.onError(t);
-                        mRootView.hideLoading();
+                    public void onNext(BasePageResponse<Subject> response) {
+                        mRootView.showHotSubject(response.getResults(), clear);
                     }
                 });
     }

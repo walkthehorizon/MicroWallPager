@@ -13,51 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.shentu.wallpaper.model.entity;
+package com.shentu.wallpaper.model.entity
 
 
-
-import com.shentu.wallpaper.model.api.Api;
-
-import java.io.Serializable;
+import java.io.Serializable
 
 /**
  * ================================================
  * 如果你服务器返回的数据格式固定为这种方式(这里只提供思想,服务器返回的数据格式可能不一致,可根据自家服务器返回的格式作更改)
- * 替换范型即可重用 {@link BaseJson}
- * <p>
+ * 替换范型即可重用 [BaseResponse]
+ *
+ *
  * Created by JessYan on 26/09/2016 15:19
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
+ * [Contact me](mailto:jess.yan.effort@gmail.com)
+ * [Follow me](https://github.com/JessYanCoding)
  * ================================================
  */
-public class BaseJson<T> implements Serializable {
-    private T data;
-    private String state;
-    private String msg;
-
-    public T getData() {
-        return data;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
+open class BaseResponse<T> : Serializable {
+    val data: T? = null
+    val state: Int? = null
+    val msg: String? = null
 
     /**
      * 请求是否成功
      *
      * @return
      */
-    public boolean isSuccess() {
-        if (state.equals(Api.RequestSuccess)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    val isSuccess: Boolean get() = state == 0
 }
