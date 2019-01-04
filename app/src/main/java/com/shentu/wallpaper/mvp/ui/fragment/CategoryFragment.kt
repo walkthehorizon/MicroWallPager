@@ -1,32 +1,27 @@
 package com.shentu.wallpaper.mvp.ui.fragment
 
+
+
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.AppBarLayout
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.blankj.utilcode.util.BarUtils
-
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.R
-
-
-
-import com.shentu.wallpaper.di.module.CategoryModule
-import com.shentu.wallpaper.mvp.contract.CategoryContract
 import com.shentu.wallpaper.di.component.DaggerCategoryComponent
+import com.shentu.wallpaper.di.module.CategoryModule
 import com.shentu.wallpaper.model.entity.Category
+import com.shentu.wallpaper.mvp.contract.CategoryContract
 import com.shentu.wallpaper.mvp.presenter.CategoryPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.CategoryAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.RvCategoryDecoration
 import kotlinx.android.synthetic.main.fragment_category.*
-import kotlinx.android.synthetic.main.fragment_category.view.*
 
 
 /**
@@ -77,7 +72,7 @@ class CategoryFragment : BaseFragment<CategoryPresenter>(), CategoryContract.Vie
         rvCategory.layoutManager = GridLayoutManager(context, 3)
         rvCategory.addItemDecoration(RvCategoryDecoration(12))
         rvCategory.setHasFixedSize(true)
-        mPresenter?.getCategorys()
+//        mPresenter?.getCategorys()
     }
 
     override fun setData(data: Any?) {

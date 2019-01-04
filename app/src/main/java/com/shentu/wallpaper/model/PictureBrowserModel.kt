@@ -2,23 +2,18 @@ package com.shentu.wallpaper.model
 
 import android.app.Application
 import com.google.gson.Gson
+import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.integration.IRepositoryManager
 import com.jess.arms.mvp.BaseModel
-
-import com.jess.arms.di.scope.FragmentScope
-import javax.inject.Inject
-
-import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
-import com.shentu.wallpaper.model.api.cache.CommonCache
 import com.shentu.wallpaper.model.api.cache.MicroCache
 import com.shentu.wallpaper.model.api.service.MicroService
-import com.shentu.wallpaper.model.entity.CategorysEntity
-import com.shentu.wallpaper.model.entity.SubjectDetailEntity
+import com.shentu.wallpaper.model.entity.BasePageResponse
+import com.shentu.wallpaper.model.entity.Wallpaper
+import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import io.reactivex.Observable
-import io.reactivex.functions.Function
 import io.rx_cache2.DynamicKey
 import io.rx_cache2.EvictDynamicKey
-import io.rx_cache2.EvictProvider
+import javax.inject.Inject
 
 
 @FragmentScope
@@ -31,13 +26,13 @@ constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager
     @Inject
     lateinit var mApplication: Application;
 
-    override fun getAllSubjectPictures(id: Int): Observable<SubjectDetailEntity> {
+    override fun getWallPapersBySubjectId(id: Int): Observable<BasePageResponse<Wallpaper>> {
         return Observable.just(mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
-                .getWallpaperBySubjectId(id, 100, 0))
-                .flatMap<SubjectDetailEntity> { observable ->
+                .getWallpapersBySubjectId(id, 100, 0))
+                .flatMap<BasePageResponse<Wallpaper>> { observable ->
                     mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getWallPaperBySubjectId(observable, DynamicKey(id), EvictDynamicKey(false))
+                            .getWallPapersBySubjectId(observable, DynamicKey(id), EvictDynamicKey(false))
                             .map { reply -> reply.data }
                 }
 

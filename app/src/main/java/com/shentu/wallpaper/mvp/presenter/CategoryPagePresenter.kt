@@ -3,21 +3,14 @@ package com.shentu.wallpaper.mvp.presenter
 import android.app.Application
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.OnLifecycleEvent
-
-import com.jess.arms.integration.AppManager
 import com.jess.arms.di.scope.FragmentScope
-import com.jess.arms.mvp.BasePresenter
 import com.jess.arms.http.imageloader.ImageLoader
-import com.jess.arms.utils.RxLifecycleUtils
-import com.shentu.wallpaper.model.entity.CategoryListEntity
-import me.jessyan.rxerrorhandler.core.RxErrorHandler
-import javax.inject.Inject
-
+import com.jess.arms.integration.AppManager
+import com.jess.arms.mvp.BasePresenter
 import com.shentu.wallpaper.mvp.contract.CategoryPageContract
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import timber.log.Timber
+import javax.inject.Inject
 
 
 @FragmentScope
@@ -39,21 +32,21 @@ constructor(model: CategoryPageContract.Model, rootView: CategoryPageContract.Vi
         Timber.e("initData000")
     }
 
-    fun getCategoryList(id: Int, page: Int, clear: Boolean) {
-        mModel.getCategoryList(id, page, clear)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .doOnSubscribe { mRootView.showLoading() }
-                .doFinally { mRootView.hideLoading() }
-                .compose(RxLifecycleUtils.bindToLifecycle<CategoryListEntity>(mRootView))
-                .subscribe(object : ErrorHandleSubscriber<CategoryListEntity>(mErrorHandler) {
-                    override fun onNext(t: CategoryListEntity) {
-                        mRootView.showCategoryPicture(t.results)
-                    }
-                })
-    }
+//    fun getCategoryList(id: Int, page: Int, clear: Boolean) {
+//        mModel.getCategoryList(id, page, clear)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .doOnSubscribe { mRootView.showLoading() }
+//                .doFinally { mRootView.hideLoading() }
+//                .compose(RxLifecycleUtils.bindToLifecycle<CategoryListEntity>(mRootView))
+//                .subscribe(object : ErrorHandleSubscriber<CategoryListEntity>(mErrorHandler) {
+//                    override fun onNext(t: CategoryListEntity) {
+//                        mRootView.showCategoryPicture(t.results)
+//                    }
+//                })
+//    }
 
     override fun onDestroy() {
-        super.onDestroy();
+        super.onDestroy()
     }
 }

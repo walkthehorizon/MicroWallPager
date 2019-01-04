@@ -1,8 +1,8 @@
 package com.shentu.wallpaper.mvp.contract
 
-import com.jess.arms.mvp.IView
 import com.jess.arms.mvp.IModel
-import com.shentu.wallpaper.model.entity.SubjectDetailEntity
+import com.jess.arms.mvp.IView
+import com.shentu.wallpaper.model.entity.BasePageResponse
 import com.shentu.wallpaper.model.entity.Wallpaper
 import io.reactivex.Observable
 
@@ -10,7 +10,7 @@ import io.reactivex.Observable
 interface PictureBrowserContract {
     //对于经常使用的关于UI的方法可以定义到IView中,如显示隐藏进度条,和显示文字消息
     interface View : IView{
-        fun showPictures(pictures: MutableList<Wallpaper>)
+        fun showPictures(pictures: MutableList<Wallpaper>?)
 
         fun showNavigation()
 
@@ -19,7 +19,7 @@ interface PictureBrowserContract {
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model : IModel{
-        fun getAllSubjectPictures(id:Int):Observable<SubjectDetailEntity>
+        fun getWallPapersBySubjectId(id:Int):Observable<BasePageResponse<Wallpaper>>
     }
 
 }

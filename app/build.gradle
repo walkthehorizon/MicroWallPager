@@ -9,7 +9,7 @@ apply plugin: 'com.mob.sdk'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
-    buildToolsVersion '28.0.3'
+    buildToolsVersion rootProject.ext.android["buildToolsVersion"]
     useLibrary 'org.apache.http.legacy'
 
     compileOptions {
@@ -28,7 +28,7 @@ android {
         multiDexEnabled = true
 
         ndk{
-            abiFilters 'armeabi', 'armeabi-v7a'
+            abiFilters 'armeabi-v7a'
         }
     }
     dexOptions {
@@ -39,7 +39,7 @@ android {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "String", "Sever", '"http://47.105.40.169/wallpaper"'
+            buildConfigField "String", "Sever", '"http://47.105.40.169/wallpaper/"'
             buildConfigField "boolean", "Debug", "true"
             buildConfigField "String", "API_KEY", '"tang01tang"'
             minifyEnabled false

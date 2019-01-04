@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.shentu.wallpaper.app.Constant;
 import com.shentu.wallpaper.mvp.ui.fragment.HotPagerFragment;
 import com.shentu.wallpaper.mvp.ui.fragment.MyFragment;
 
@@ -13,12 +14,10 @@ import java.util.List;
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
 
-    private List<String> items;
     private List<Fragment> fragments;
 
     public MainPagerAdapter(FragmentManager fm) {
         super(fm);
-        items = Arrays.asList("推荐", "分类", "排行", "我的");
         fragments = Arrays.asList(HotPagerFragment.newInstance()
                 , MyFragment.Companion.newInstance());
     }
@@ -30,12 +29,12 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return items.size();
+        return Constant.MAIN_TAB_TITLES.size();
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return items.get(position);
+        return Constant.MAIN_TAB_TITLES.get(position);
     }
 }

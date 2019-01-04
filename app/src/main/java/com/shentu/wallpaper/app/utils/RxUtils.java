@@ -85,18 +85,18 @@ public class RxUtils {
      * 接收数据前进行统一处理，目标fragment/activity需实现IView
      */
     private static <T> void handleOnNext(T t, IView view) {
-        if (((BaseResponse) t).isSuccess()) {
-            //有些接口好像不统一
-            if (isDataEmpty((BaseResponse) t)) {
-                view.showEmpty();
-            } else {
+        if (t instanceof BasePageResponse) {
+            if (((BasePageResponse) t).getCount() > 0) {
                 view.showContent();
+            } else {
+                view.showEmpty();
+            }
+        } else {
+            if (((BaseResponse) t).isSuccess()) {
+                view.showContent();
+            } else {
+                view.showError();
             }
         }
-    }
-
-    private static boolean isDataEmpty(BaseResponse t) {
-        return t.getData() == null || (t.getData() instanceof BasePageResponse
-                && ((BasePageResponse) t.getData()).getCount() == 0);
     }
 }

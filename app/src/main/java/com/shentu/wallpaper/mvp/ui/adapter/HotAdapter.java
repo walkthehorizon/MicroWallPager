@@ -54,13 +54,13 @@ public class HotAdapter extends BaseMultiItemQuickAdapter<Subject, BaseViewHolde
     @Override
     protected void convert(BaseViewHolder helper, Subject item) {
         GlideArms.with(helper.itemView.getContext())
-                .load(item.owner.avatar)
+                .load(item.cover)
                 .placeholder(R.drawable.default_head)
                 .circleCrop()
                 .into((ImageView) helper.getView(R.id.iv_avatar));
-        helper.setText(R.id.tv_user_name, item.owner.nickname);
+        helper.setText(R.id.tv_user_name, "");
         helper.setText(R.id.tv_content, item.name + "：" + item.description);
-        helper.getView(R.id.tv_support).setSelected(item.supported);
+        helper.getView(R.id.tv_support).setSelected(false);
         if (item.getItemType() == Subject.ITEM_VIEW_1) {
             Transformation<Bitmap> transformation = new RoundedCornersTransformation(ConvertUtils.dp2px(5),
                     0, RoundedCornersTransformation.CornerType.ALL);

@@ -2,27 +2,21 @@ package com.shentu.wallpaper.mvp.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Message
-import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
-
+import com.shentu.wallpaper.R
 import com.shentu.wallpaper.di.component.DaggerCategoryPageComponent
 import com.shentu.wallpaper.di.module.CategoryPageModule
+import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.contract.CategoryPageContract
 import com.shentu.wallpaper.mvp.presenter.CategoryPagePresenter
-
-import com.shentu.wallpaper.R
-import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.ui.adapter.CategoryPageAdapter
 import kotlinx.android.synthetic.main.fragment_category_page.*
-import timber.log.Timber
 
 
 /**
@@ -77,7 +71,7 @@ class CategoryPageFragment : BaseFragment<CategoryPagePresenter>(), CategoryPage
         curPage = arguments?.getInt(CUR_PAGE) ?: 0
         categoryId = arguments?.getInt(CATEGORY_ID) ?: 0
 
-        mPresenter?.getCategoryList(categoryId, curPage, false)
+//        mPresenter?.getCategoryList(categoryId, curPage, false)
     }
 
 
@@ -97,7 +91,7 @@ class CategoryPageFragment : BaseFragment<CategoryPagePresenter>(), CategoryPage
 
                 override fun onPageSelected(position: Int) {
                     if (position == (viewPager.adapter as CategoryPageAdapter).data.size - 3) {
-                        mPresenter?.getCategoryList(categoryId, ++curPage, false)
+//                        mPresenter?.getCategoryList(categoryId, ++curPage, false)
                     }
                 }
             })

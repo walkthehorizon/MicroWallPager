@@ -5,12 +5,8 @@ import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.http.imageloader.ImageLoader
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
-import com.shentu.wallpaper.app.utils.RxUtils
-import com.shentu.wallpaper.model.entity.BasePageResponse
-import com.shentu.wallpaper.model.entity.Category
 import com.shentu.wallpaper.mvp.contract.CategoryContract
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
-import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import javax.inject.Inject
 
 
@@ -32,15 +28,15 @@ constructor(model: CategoryContract.Model, rootView: CategoryContract.View) :
         super.onDestroy()
     }
 
-    fun getCategorys() {
-        mModel.getCategorys()
-                .compose(RxUtils.applySchedulers(mRootView))
-                .subscribe(object :ErrorHandleSubscriber<BasePageResponse<Category>>(mErrorHandler){
-                    override fun onNext(t: BasePageResponse<Category>) {
-                        mRootView.showCategorys(t.results as MutableList<Category>?)
-                    }
-                })
-    }
+//    fun getCategorys() {
+//        mModel.getCategorys()
+//                .compose(RxUtils.applySchedulers(mRootView))
+//                .subscribe(object :ErrorHandleSubscriber<BasePageResponse<Category>>(mErrorHandler){
+//                    override fun onNext(t: BasePageResponse<Category>) {
+//                        mRootView.showCategorys(t.results as MutableList<Category>?)
+//                    }
+//                })
+//    }
 
 }
 

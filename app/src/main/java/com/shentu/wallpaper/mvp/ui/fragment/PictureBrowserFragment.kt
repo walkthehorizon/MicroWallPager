@@ -98,8 +98,8 @@ class PictureBrowserFragment : BaseFragment<PictureBrowserPresenter>(), PictureB
         activity?.finish()
     }
 
-    override fun showPictures(pictures: MutableList<Wallpaper>) {
-        vpAdapter = PictureBrowserVpAdapter(pictures)
+    override fun showPictures(pictures: MutableList<Wallpaper>?) {
+        vpAdapter = PictureBrowserVpAdapter(pictures!!)
         viewPager.adapter = vpAdapter
         onPageSelected(0)
     }
