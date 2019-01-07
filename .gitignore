@@ -41,6 +41,3 @@ captures/
 
 # MacOS
 .DS_Store
-
-#忽略自动生成的arms
-/arms
