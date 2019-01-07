@@ -1,29 +1,27 @@
 ext {
 
     android = [
-            compileSdkVersion: 28,
-            buildToolsVersion: "28.0.3",
-            minSdkVersion    : 21,
-            targetSdkVersion : 27,
-            versionCode      : 101,
-            versionName      : "1.0.1"
+            compileSdkVersion       : 28,
+            buildToolsVersion       : "28.0.3",
+            minSdkVersion           : 21,
+            targetSdkVersion        : 28,
+            versionCode             : 0,
+            versionName             : "1.0.0"
     ]
 
     version = [
             androidSupportSdkVersion: "28.0.0",
             retrofitSdkVersion      : "2.4.0",
-            dagger2SdkVersion       : "2.15",
-            glideSdkVersion         : "4.6.1",
+            dagger2SdkVersion       : "2.19",
+            glideSdkVersion         : "4.8.0",
             butterknifeSdkVersion   : "8.8.1",
             rxlifecycleSdkVersion   : "1.0",
-            rxlifecycle2SdkVersion  : "2.2.1",
+            rxlifecycle2SdkVersion  : "2.2.2",
             espressoSdkVersion      : "3.0.1",
             canarySdkVersion        : "1.5.4"
     ]
 
     dependencies = [
-            //arms
-            "arms"                     : "me.jessyan:arms:2.4.1",
             //support
             "appcompat-v7"             : "com.android.support:appcompat-v7:${version["androidSupportSdkVersion"]}",
             "design"                   : "com.android.support:design:${version["androidSupportSdkVersion"]}",
@@ -38,16 +36,14 @@ ext {
             "retrofit-converter-gson"  : "com.squareup.retrofit2:converter-gson:${version["retrofitSdkVersion"]}",
             "retrofit-adapter-rxjava"  : "com.squareup.retrofit2:adapter-rxjava:${version["retrofitSdkVersion"]}",
             "retrofit-adapter-rxjava2" : "com.squareup.retrofit2:adapter-rxjava2:${version["retrofitSdkVersion"]}",
-            "okhttp3"                  : "com.squareup.okhttp3:okhttp:3.10.0",
+            "okhttp3"                  : "com.squareup.okhttp3:okhttp:3.11.0",
             "okhttp-urlconnection"     : "com.squareup.okhttp:okhttp-urlconnection:2.0.0",
             "glide"                    : "com.github.bumptech.glide:glide:${version["glideSdkVersion"]}",
             "glide-compiler"           : "com.github.bumptech.glide:compiler:${version["glideSdkVersion"]}",
             "glide-loader-okhttp3"     : "com.github.bumptech.glide:okhttp3-integration:${version["glideSdkVersion"]}",
             "glide-transformations"    : "jp.wasabeef:glide-transformations:3.3.0",
-            "picasso"                  : "com.squareup.picasso:picasso:2.5.2",
 
             //view
-            "autolayout"               : "com.zhy:autolayout:1.4.5",
             "butterknife"              : "com.jakewharton:butterknife:${version["butterknifeSdkVersion"]}",
             "butterknife-compiler"     : "com.jakewharton:butterknife-compiler:${version["butterknifeSdkVersion"]}",
             "pickerview"               : "com.contrarywind:Android-PickerView:3.2.5",

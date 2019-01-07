@@ -70,7 +70,7 @@ constructor(model: LoginContract.Model, rootView: LoginContract.View) :
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<Boolean>>(mErrorHandler) {
                     override fun onNext(t: BaseResponse<Boolean>) {
                         ToastUtils.showShort(t.msg)
-                        if (!(t.isSuccess || t.state == StateCode.STATE_USER_EXIST)) {
+                        if (!(t.isSuccess || t.code == StateCode.STATE_USER_EXIST)) {
                             mRootView.hideLoading()
                             return
                         }
@@ -88,7 +88,7 @@ constructor(model: LoginContract.Model, rootView: LoginContract.View) :
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<User>>(mErrorHandler) {
                     override fun onNext(t: BaseResponse<User>) {
                         if(!t.isSuccess)return
-                        if (t.state == StateCode.STATE_USER_NOT_EXIST) {
+                        if (t.code == StateCode.STATE_USER_NOT_EXIST) {
                             mRootView.showVerifyDialog()
                             return
                         }

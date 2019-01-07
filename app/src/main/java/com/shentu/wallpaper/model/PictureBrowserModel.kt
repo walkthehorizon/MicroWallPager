@@ -8,6 +8,7 @@ import com.jess.arms.mvp.BaseModel
 import com.shentu.wallpaper.model.api.cache.MicroCache
 import com.shentu.wallpaper.model.api.service.MicroService
 import com.shentu.wallpaper.model.entity.BasePageResponse
+import com.shentu.wallpaper.model.entity.BaseResponse
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import io.reactivex.Observable
@@ -26,14 +27,14 @@ constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager
     @Inject
     lateinit var mApplication: Application;
 
-    override fun getWallPapersBySubjectId(id: Int): Observable<BasePageResponse<Wallpaper>> {
+    override fun getWallPapersBySubjectId(id: Int): Observable<BaseResponse<BasePageResponse<Wallpaper>>> {
         return Observable.just(mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
                 .getWallpapersBySubjectId(id, 100, 0))
-                .flatMap<BasePageResponse<Wallpaper>> { observable ->
+                .flatMap { t ->
                     mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getWallPapersBySubjectId(observable, DynamicKey(id), EvictDynamicKey(false))
-                            .map { reply -> reply.data }
+                            .getWallPapersBySubjectId(t, DynamicKey(id), EvictDynamicKey(false))
+                            .map { it.data }
                 }
 
     }

@@ -33,7 +33,7 @@ constructor(model: CategoryContract.Model, rootView: CategoryContract.View) :
 //                .compose(RxUtils.applySchedulers(mRootView))
 //                .subscribe(object :ErrorHandleSubscriber<BasePageResponse<Category>>(mErrorHandler){
 //                    override fun onNext(t: BasePageResponse<Category>) {
-//                        mRootView.showCategorys(t.results as MutableList<Category>?)
+//                        mRootView.showCategorys(t.content as MutableList<Category>?)
 //                    }
 //                })
 //    }

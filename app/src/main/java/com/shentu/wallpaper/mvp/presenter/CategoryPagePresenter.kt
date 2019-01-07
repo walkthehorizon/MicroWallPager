@@ -41,7 +41,7 @@ constructor(model: CategoryPageContract.Model, rootView: CategoryPageContract.Vi
 //                .compose(RxLifecycleUtils.bindToLifecycle<CategoryListEntity>(mRootView))
 //                .subscribe(object : ErrorHandleSubscriber<CategoryListEntity>(mErrorHandler) {
 //                    override fun onNext(t: CategoryListEntity) {
-//                        mRootView.showCategoryPicture(t.results)
+//                        mRootView.showCategoryPicture(t.content)
 //                    }
 //                })
 //    }

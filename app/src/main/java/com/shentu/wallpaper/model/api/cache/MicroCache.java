@@ -2,9 +2,9 @@ package com.shentu.wallpaper.model.api.cache;
 
 
 import com.shentu.wallpaper.model.entity.BasePageResponse;
+import com.shentu.wallpaper.model.entity.BaseResponse;
 import com.shentu.wallpaper.model.entity.Wallpaper;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -25,7 +25,7 @@ public interface MicroCache {
 //
     @ProviderKey("subject-detail-one-hour")
     @LifeCache(duration = 1 , timeUnit = TimeUnit.HOURS)
-    Observable<Reply<BasePageResponse<Wallpaper>>> getWallPapersBySubjectId(Observable<BasePageResponse<List<Wallpaper>>> ob, DynamicKey key, EvictDynamicKey dynamicKey);
+    Observable<Reply<BaseResponse<BasePageResponse<Wallpaper>>>> getWallPapersBySubjectId(Observable<BaseResponse<BasePageResponse<Wallpaper>>> ob, DynamicKey key, EvictDynamicKey dynamicKey);
 //
 //    @ProviderKey("category-list-three-hour")
 //    @LifeCache(duration = 3,timeUnit = TimeUnit.HOURS)

@@ -31,7 +31,7 @@ import java.io.Serializable
  */
 open class BaseResponse<T> : Serializable {
     val data: T? = null
-    val state: Int? = null
+    val code: Int? = null
     val msg: String? = null
 
     /**
@@ -39,5 +39,5 @@ open class BaseResponse<T> : Serializable {
      *
      * @return
      */
-    val isSuccess: Boolean get() = state == 0
+    val isSuccess: Boolean get() = code == 0
 }

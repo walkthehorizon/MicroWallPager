@@ -8,6 +8,7 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
 import com.shentu.wallpaper.app.utils.RxUtils;
 import com.shentu.wallpaper.model.entity.BasePageResponse;
+import com.shentu.wallpaper.model.entity.BaseResponse;
 import com.shentu.wallpaper.model.entity.Subject;
 import com.shentu.wallpaper.mvp.contract.HotPagerContract;
 
@@ -36,10 +37,10 @@ public class HotPagerPresenter extends BasePresenter<HotPagerContract.Model, Hot
     public void getSubjects(int subjectType, boolean clear) {
         mModel.getSubjects(subjectType, clear)
                 .compose(RxUtils.applySchedulers(mRootView,clear))
-                .subscribe(new ErrorHandleSubscriber<BasePageResponse<Subject>>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<BaseResponse<BasePageResponse<Subject>>>(mErrorHandler) {
                     @Override
-                    public void onNext(BasePageResponse<Subject> response) {
-                        mRootView.showHotSubject(response.getResults(), clear);
+                    public void onNext(BaseResponse<BasePageResponse<Subject>> response) {
+                        mRootView.showHotSubject(response.getData().getContent(), clear);
                     }
                 });
     }

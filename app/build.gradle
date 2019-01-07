@@ -128,11 +128,17 @@ dependencies {
     implementation rootProject.ext.dependencies["lifecyclemodel"]
     implementation rootProject.ext.dependencies["logger"]
     implementation rootProject.ext.dependencies["utilcode"]
+    implementation rootProject.ext.dependencies["glide-transformations"]
+    implementation rootProject.ext.dependencies["glide"]
+    implementation rootProject.ext.dependencies["glide-loader-okhttp3"]
+    kapt(rootProject.ext.dependencies["glide-compiler"]) {
+        exclude module: 'jsr305'
+    }
     //view
     kapt(rootProject.ext.dependencies["butterknife-compiler"]) {
         exclude module: 'support-annotations'
     }
-    api project(':arms')
+    implementation project(':arms')
     implementation rootProject.ext.dependencies["BRVAdapterHelper"]
     implementation rootProject.ext.dependencies["circleimageview"]
     //refresh
@@ -143,8 +149,7 @@ dependencies {
     kapt rootProject.ext.dependencies["arouter-compiler"]
     //multidex
     implementation rootProject.ext.dependencies["multidex"]
-    //glide-transformations
-    implementation rootProject.ext.dependencies["glide-transformations"]
+
     //dagger
     kapt rootProject.ext.dependencies["dagger2-compiler"]
     kapt rootProject.ext.dependencies["dagger2-android-processor"]

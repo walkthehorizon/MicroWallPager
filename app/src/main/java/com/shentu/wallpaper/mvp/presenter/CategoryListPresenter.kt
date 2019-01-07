@@ -33,7 +33,7 @@ constructor(model: CategoryListContract.Model, rootView: CategoryListContract.Vi
 //                .compose(RxLifecycleUtils.bindToLifecycle<CategoryListEntity>(mRootView))
 //                .subscribe(object : ErrorHandleSubscriber<CategoryListEntity>(mErrorHandler) {
 //                    override fun onNext(t: CategoryListEntity) {
-//                        mRootView.showCategoryList(t.results)
+//                        mRootView.showCategoryList(t.content)
 //                    }
 //                })
     }

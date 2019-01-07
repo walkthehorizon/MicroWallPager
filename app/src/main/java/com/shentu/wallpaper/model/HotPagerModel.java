@@ -8,6 +8,7 @@ import com.jess.arms.integration.IRepositoryManager;
 import com.shentu.wallpaper.app.BasePageModel;
 import com.shentu.wallpaper.model.api.service.MicroService;
 import com.shentu.wallpaper.model.entity.BasePageResponse;
+import com.shentu.wallpaper.model.entity.BaseResponse;
 import com.shentu.wallpaper.model.entity.Subject;
 import com.shentu.wallpaper.mvp.contract.HotPagerContract;
 
@@ -37,7 +38,7 @@ public class HotPagerModel extends BasePageModel implements HotPagerContract.Mod
     }
 
     @Override
-    public Observable<BasePageResponse<Subject>> getSubjects(int subjectType, boolean clear) {
+    public Observable<BaseResponse<BasePageResponse<Subject>>> getSubjects(int subjectType, boolean clear) {
         offset = clear ? 0 : (limit + offset);
         return mRepositoryManager
                 .obtainRetrofitService(MicroService.class)

@@ -9,8 +9,6 @@ import com.shentu.wallpaper.model.entity.Subject;
 import com.shentu.wallpaper.model.entity.User;
 import com.shentu.wallpaper.model.entity.Wallpaper;
 
-import java.util.List;
-
 import io.reactivex.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -24,13 +22,13 @@ public interface MicroService {
     int PAGE_LIMIT = 20;
 
     @GET("splash")
-    Observable<SplashAd> getSplash();
+    Observable<BaseResponse<SplashAd>> getSplash();
 
-    @GET("subject/list")
-    Observable<BasePageResponse<Subject>> getSubjects(@Query("subject_type") int subjectType , @Query("limit") int limit, @Query("offset") int offset);
+    @GET("subjects")
+    Observable<BaseResponse<BasePageResponse<Subject>>> getSubjects(@Query("subject_type") int subjectType , @Query("limit") int limit, @Query("offset") int offset);
 
-    @GET("subject/detail/{pk}")
-    Observable<BasePageResponse<List<Wallpaper>>> getWallpapersBySubjectId(@Path("pk") int id, @Query("limit") int limit, @Query("offset") int offset);
+    @GET("wallpapers")
+    Observable<BaseResponse<BasePageResponse<Wallpaper>>> getWallpapersBySubjectId(@Query("subject_id") int subjectId, @Query("limit") int limit, @Query("offset") int offset);
 
     @GET("category/list")
     Observable<BasePageResponse<Category>> getCategorys();
