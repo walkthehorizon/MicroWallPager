@@ -18,7 +18,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     public MainPagerAdapter(FragmentManager fm) {
         super(fm);
-        fragments = Arrays.asList(HotPagerFragment.newInstance()
+        fragments = Arrays.asList(HotPagerFragment.Companion.newInstance()
                 , MyFragment.Companion.newInstance());
     }
 

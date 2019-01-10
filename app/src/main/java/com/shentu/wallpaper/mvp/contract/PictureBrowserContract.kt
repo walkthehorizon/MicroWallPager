@@ -2,9 +2,8 @@ package com.shentu.wallpaper.mvp.contract
 
 import com.jess.arms.mvp.IModel
 import com.jess.arms.mvp.IView
-import com.shentu.wallpaper.model.entity.BasePageResponse
-import com.shentu.wallpaper.model.entity.BaseResponse
 import com.shentu.wallpaper.model.entity.Wallpaper
+import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import io.reactivex.Observable
 
 
@@ -20,7 +19,7 @@ interface PictureBrowserContract {
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model : IModel{
-        fun getWallPapersBySubjectId(id:Int):Observable<BaseResponse<BasePageResponse<Wallpaper>>>
+        fun getWallPapersBySubjectId(id:Int):Observable<WallpaperPageResponse>
     }
 
 }

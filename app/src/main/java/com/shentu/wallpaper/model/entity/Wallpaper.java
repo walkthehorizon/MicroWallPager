@@ -3,9 +3,8 @@ package com.shentu.wallpaper.model.entity;
 public class Wallpaper {
 
     public int id;
-    public String name;
-    public String describe;
-    public String small_url;
-    public String big_url;
-    public String source;
+    public String url;
+    public String origin_url;
+    public int sw;
+    public int sh;
 }

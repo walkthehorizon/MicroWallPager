@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -18,9 +18,9 @@
 
 
     <!--用于PopWindow-->
-    <style name="QMUI.Animation" parent="@android:style/Animation"/>
+    <style name="QMUI.Animation" parent="@android:style/Animation" />
 
-    <style name="QMUI.Animation.PopUpMenu"/>
+    <style name="QMUI.Animation.PopUpMenu" />
 
     <style name="QMUI.Animation.PopUpMenu.Center">
         <item name="android:windowEnterAnimation">@anim/grow_from_bottom</item>
@@ -37,7 +37,7 @@
         <item name="android:windowExitAnimation">@anim/shrink_from_topleft_to_bottomright</item>
     </style>
 
-    <style name="QMUI.Animation.PopDownMenu"/>
+    <style name="QMUI.Animation.PopDownMenu" />
 
     <style name="QMUI.Animation.PopDownMenu.Center">
         <item name="android:windowEnterAnimation">@anim/grow_from_top</item>
@@ -54,4 +54,10 @@
         <item name="android:windowExitAnimation">@anim/shrink_from_bottomleft_to_topright</item>
     </style>
 
+    <style name="Widget.MaterialComponents.CardView.CardStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="cardCornerRadius">5dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardMaxElevation">4dp</item>
+    </style>
 </resources>

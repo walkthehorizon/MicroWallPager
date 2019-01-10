@@ -4,7 +4,7 @@ ext {
             compileSdkVersion       : 28,
             buildToolsVersion       : "28.0.3",
             minSdkVersion           : 21,
-            targetSdkVersion        : 28,
+            targetSdkVersion        : 27,
             versionCode             : 0,
             versionName             : "1.0.0"
     ]
@@ -44,6 +44,7 @@ ext {
             "glide-transformations"    : "jp.wasabeef:glide-transformations:3.3.0",
 
             //view
+            "autolayout"               : "com.zhy:autolayout:1.4.5",
             "butterknife"              : "com.jakewharton:butterknife:${version["butterknifeSdkVersion"]}",
             "butterknife-compiler"     : "com.jakewharton:butterknife-compiler:${version["butterknifeSdkVersion"]}",
             "pickerview"               : "com.contrarywind:Android-PickerView:3.2.5",
@@ -60,6 +61,7 @@ ext {
             "qmui"                     : "com.qmuiteam:qmui:1.1.3",
             "circleimageview"          : "de.hdodenhof:circleimageview:2.2.0",
             "loadsir"                  : "com.kingja.loadsir:loadsir:1.3.6",
+            "glidepalette"             : "com.github.florent37:glidepalette:2.1.2",
 
             //rx1
             "rxandroid"                : "io.reactivex:rxandroid:1.2.1",

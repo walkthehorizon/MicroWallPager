@@ -6,9 +6,7 @@ import com.jess.arms.http.imageloader.ImageLoader
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.wallpaper.app.utils.RxUtils
-import com.shentu.wallpaper.model.entity.BasePageResponse
-import com.shentu.wallpaper.model.entity.BaseResponse
-import com.shentu.wallpaper.model.entity.Wallpaper
+import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
@@ -34,8 +32,8 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
     fun getPictures(id: Int) {
         mModel.getWallPapersBySubjectId(id)
                 .compose(RxUtils.applySchedulers(mRootView))
-                .subscribe(object : ErrorHandleSubscriber<BaseResponse<BasePageResponse<Wallpaper>>>(mErrorHandler) {
-                    override fun onNext(t: BaseResponse<BasePageResponse<Wallpaper>>) {
+                .subscribe(object : ErrorHandleSubscriber<WallpaperPageResponse>(mErrorHandler) {
+                    override fun onNext(t: WallpaperPageResponse) {
                         mRootView.showPictures(t.data?.content)
                     }
 

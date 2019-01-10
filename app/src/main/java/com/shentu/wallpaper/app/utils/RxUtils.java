@@ -65,7 +65,7 @@ public class RxUtils {
     public static <T> ObservableTransformer<T, T> applySchedulers(final IView view, boolean clear) {
         return observable -> {
             //隐藏进度条
-            return observable.subscribeOn(Schedulers.io())
+            return observable
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnNext(t -> {
@@ -85,18 +85,16 @@ public class RxUtils {
      * 接收数据前进行统一处理，目标fragment/activity需实现IView
      */
     private static <T> void handleOnNext(T t, IView view) {
-        if (t instanceof BasePageResponse) {
-            if (((BasePageResponse) t).getCount() > 0) {
-                view.showContent();
-            } else {
+        BaseResponse response = (BaseResponse) t;
+        BasePageResponse pageResponse = (BasePageResponse) ((BaseResponse) t).getData();
+        if (response.isSuccess()) {
+            if (pageResponse != null && pageResponse.getCount() == 0) {
                 view.showEmpty();
+            } else {
+                view.showContent();
             }
         } else {
-            if (((BaseResponse) t).isSuccess()) {
-                view.showContent();
-            } else {
-                view.showError();
-            }
+            view.showError();
         }
     }
 }

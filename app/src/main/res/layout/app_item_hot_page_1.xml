@@ -33,25 +33,34 @@
         android:id="@+id/tv_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginStart="@dimen/activity_vertical_margin"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:textColor="@color/colorSecondText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_avatar"
         tools:text="个人股热一热挺好风格豪放的合法化规划风格化风格化规范化风格" />
 
-    <ImageView
-        android:id="@+id/iv_cover"
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="12dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="2dp"
+        app:cardMaxElevation="4dp"
         app:layout_constraintDimensionRatio="h,16:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_content"
-        tools:background="@color/pink" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_content">
+
+        <ImageView
+            android:id="@+id/iv_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:background="@color/pink" />
+    </android.support.v7.widget.CardView>
 
     <View
         android:id="@+id/view_divider"
@@ -61,7 +70,7 @@
         android:background="@color/colorDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_cover" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
     <include layout="@layout/layout_item_hot_share" />
 

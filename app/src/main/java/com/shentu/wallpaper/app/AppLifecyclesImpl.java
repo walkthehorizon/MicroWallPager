@@ -17,19 +17,15 @@ package com.shentu.wallpaper.app;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.blankj.utilcode.util.CacheUtils;
-import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.Utils;
 import com.jess.arms.base.delegate.AppLifecycles;
 import com.jess.arms.utils.ArmsUtils;
+import com.kingja.loadsir.core.LoadSir;
 import com.mob.MobSDK;
-import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.Logger;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
@@ -40,12 +36,14 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.shentu.wallpaper.BuildConfig;
 import com.shentu.wallpaper.R;
+import com.shentu.wallpaper.app.page.EmptyCallback;
+import com.shentu.wallpaper.app.page.ErrorCallback;
+import com.shentu.wallpaper.app.page.LoadingCallback;
 import com.shentu.wallpaper.mvp.ui.activity.MainActivity;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
-import com.tencent.tinker.loader.app.DefaultApplicationLike;
 
 import butterknife.ButterKnife;
 import timber.log.Timber;
@@ -121,6 +119,12 @@ public class AppLifecyclesImpl  implements AppLifecycles {
         //Message msg = new Message();
         //msg.what = 0;
         //AppManager.post(msg); like EventBus
+        LoadSir.beginBuilder()
+                .addCallback(new ErrorCallback())//添加各种状态页
+                .addCallback(new EmptyCallback())
+                .addCallback(new LoadingCallback())
+                .setDefaultCallback(LoadingCallback.class)//设置默认状态页
+                .commit();
     }
 
     @Override

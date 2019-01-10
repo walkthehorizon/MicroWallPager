@@ -1,16 +1,18 @@
 package com.shentu.wallpaper.mvp.ui.adapter;
 
-import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.widget.ImageView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.load.MultiTransformation;
-import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.github.florent37.glidepalette.GlidePalette;
 import com.jess.arms.http.imageloader.glide.GlideArms;
 import com.shentu.wallpaper.R;
 import com.shentu.wallpaper.app.utils.PicUtils;
@@ -19,6 +21,7 @@ import com.shentu.wallpaper.model.entity.Subject;
 import com.shentu.wallpaper.mvp.ui.activity.PictureBrowserActivity;
 
 import java.util.List;
+import java.util.Objects;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
@@ -62,28 +65,37 @@ public class HotAdapter extends BaseMultiItemQuickAdapter<Subject, BaseViewHolde
         helper.setText(R.id.tv_content, item.name + "：" + item.description);
         helper.getView(R.id.tv_support).setSelected(false);
         if (item.getItemType() == Subject.ITEM_VIEW_1) {
-            Transformation<Bitmap> transformation = new RoundedCornersTransformation(ConvertUtils.dp2px(5),
-                    0, RoundedCornersTransformation.CornerType.ALL);
+            ImageView ivCover = helper.getView(R.id.iv_cover);
             GlideArms.with(helper.itemView.getContext())
                     .load(item.cover)
-                    .transform(transformation)
-                    .into((ImageView) helper.getView(R.id.iv_cover));
+                    .listener(GlidePalette.with(item.cover)
+                            .use(GlidePalette.Profile.VIBRANT_LIGHT)
+                            .intoCallBack(palette -> ((CardView) helper.getView(R.id.cardView)).setCardBackgroundColor(Objects.requireNonNull(palette).getLightMutedColor(Color.LTGRAY))))
+                    .transforms(new RoundedCorners(ConvertUtils.dp2px(5)), new CenterCrop())
+                    .into(ivCover);
         }
 
         if (item.getItemType() == Subject.ITEM_VIEW_2) {
-            Transformation<Bitmap> transformation = new RoundedCornersTransformation(ConvertUtils.dp2px(5),
-                    0, RoundedCornersTransformation.CornerType.ALL);
             GlideArms.with(helper.itemView.getContext())
-                    .load(PicUtils.getInstance().buildtl640(item.cover))
-                    .transform(transformation)
+                    .load(item.cover)
+                    .listener(GlidePalette.with(item.cover)
+                            .use(GlidePalette.Profile.VIBRANT_LIGHT)
+                            .intoCallBack(palette -> ((CardView) helper.getView(R.id.cardView1)).setCardBackgroundColor(Objects.requireNonNull(palette).getLightMutedColor(Color.LTGRAY))))
+                    .transforms(new CenterCrop(), new RoundedCorners(ConvertUtils.dp2px(5)))
                     .into((ImageView) helper.getView(R.id.iv_1));
             GlideArms.with(helper.itemView.getContext())
-                    .load(PicUtils.getInstance().buildtl200(item.cover.replace("type_2/1","type_2/2")))
-                    .transform(transformation)
+                    .load(item.cover_1)
+                    .listener(GlidePalette.with(item.cover_1)
+                            .use(GlidePalette.Profile.MUTED)
+                            .intoCallBack(palette -> ((CardView) helper.getView(R.id.cardView2)).setCardBackgroundColor(Objects.requireNonNull(palette).getLightMutedColor(Color.LTGRAY))))
+                    .transforms(new CenterCrop(), new RoundedCorners(ConvertUtils.dp2px(5)))
                     .into((ImageView) helper.getView(R.id.iv_2));
             GlideArms.with(helper.itemView.getContext())
-                    .load(PicUtils.getInstance().buildtl200(item.cover.replace("type_2/1","type_2/3")))
-                    .transform(transformation)
+                    .load(item.cover_2)
+                    .listener(GlidePalette.with(item.cover_2)
+                            .use(GlidePalette.Profile.VIBRANT)
+                            .intoCallBack(palette -> ((CardView) helper.getView(R.id.cardView3)).setCardBackgroundColor(Objects.requireNonNull(palette).getLightMutedColor(Color.LTGRAY))))
+                    .transforms(new CenterCrop(), new RoundedCorners(ConvertUtils.dp2px(5)))
                     .into((ImageView) helper.getView(R.id.iv_3));
         }
 

@@ -9,7 +9,7 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondText">#757575</color>
     <color name="colorNormalText">#FFFFFF</color>
-    <color name="colorActivityBackground">#f2f2f2</color>
+    <color name="colorActivityBackground">#E2E2E2</color>
 
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00000000</color>

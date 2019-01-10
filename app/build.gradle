@@ -115,13 +115,13 @@ buildscript {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api project(':arms')
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //support
-    implementation(rootProject.ext.dependencies["cardview-v7"]) {
-        exclude module: 'support-annotations'
-    }
-    implementation rootProject.ext.dependencies["design"]
     implementation rootProject.ext.dependencies["constraint-layout"]
     implementation rootProject.ext.dependencies["vector-drawable"]
+    implementation rootProject.ext.dependencies["multidex"]
+    implementation rootProject.ext.dependencies["design"]
     //tools
     implementation rootProject.ext.dependencies["progressmanager"]
     implementation rootProject.ext.dependencies["retrofit-url-manager"]
@@ -131,41 +131,33 @@ dependencies {
     implementation rootProject.ext.dependencies["glide-transformations"]
     implementation rootProject.ext.dependencies["glide"]
     implementation rootProject.ext.dependencies["glide-loader-okhttp3"]
+    implementation rootProject.ext.dependencies["glidepalette"]
+    implementation rootProject.ext.dependencies["loadsir"]
     kapt(rootProject.ext.dependencies["glide-compiler"]) {
         exclude module: 'jsr305'
     }
-    //view
     kapt(rootProject.ext.dependencies["butterknife-compiler"]) {
         exclude module: 'support-annotations'
     }
-    implementation project(':arms')
-    implementation rootProject.ext.dependencies["BRVAdapterHelper"]
-    implementation rootProject.ext.dependencies["circleimageview"]
-    //refresh
-    implementation rootProject.ext.dependencies["SmartRefreshLayout"]
-    implementation rootProject.ext.dependencies["SmartRefreshHeader"]
-    //arouter
     implementation rootProject.ext.dependencies["arouter"]
     kapt rootProject.ext.dependencies["arouter-compiler"]
-    //multidex
-    implementation rootProject.ext.dependencies["multidex"]
-
-    //dagger
     kapt rootProject.ext.dependencies["dagger2-compiler"]
     kapt rootProject.ext.dependencies["dagger2-android-processor"]
-    //photoview
+    implementation rootProject.ext.dependencies["eventbus"]
+    //view
+    implementation rootProject.ext.dependencies["BRVAdapterHelper"]
+    implementation rootProject.ext.dependencies["circleimageview"]
+    implementation rootProject.ext.dependencies["SmartRefreshLayout"]
+    implementation rootProject.ext.dependencies["SmartRefreshHeader"]
     implementation rootProject.ext.dependencies["photoview"]
-    //material-dialogs
     implementation rootProject.ext.dependencies["material-dialogs"]
     //bugly
     implementation rootProject.ext.dependencies["bugly-upgrade"]
     implementation rootProject.ext.dependencies["bugly-tinker"]
-    implementation rootProject.ext.dependencies["eventbus"]
 
     //test
     testImplementation rootProject.ext.dependencies["junit"]
     debugImplementation rootProject.ext.dependencies["canary-debug"]
     releaseImplementation rootProject.ext.dependencies["canary-release"]
     testImplementation rootProject.ext.dependencies["canary-release"]
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
