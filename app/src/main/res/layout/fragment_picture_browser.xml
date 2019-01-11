@@ -38,7 +38,7 @@
         android:visibility="invisible">
 
         <ImageView
-            android:id="@+id/iv_collect"
+            android:id="@+id/ivCollect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -46,11 +46,11 @@
             android:src="@drawable/bg_wallpaper_collect" />
 
         <android.support.design.button.MaterialButton
+            android:id="@+id/mbLoadOrigin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="加载原图"
-            android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
             android:textColor="@color/colorDivider"
             app:backgroundTint="@color/transparent"
             app:cornerRadius="3dp"
@@ -58,6 +58,7 @@
             app:strokeWidth="1dp" />
 
         <ImageView
+            android:id="@+id/ivDownload"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"

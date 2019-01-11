@@ -10,6 +10,8 @@ import io.reactivex.Observable;
 public interface SplashContract {
     interface View extends IView {
         void showSplash(SplashAd splashAd);
+
+        void toMainPage();
     }
 
     interface Model extends IModel {

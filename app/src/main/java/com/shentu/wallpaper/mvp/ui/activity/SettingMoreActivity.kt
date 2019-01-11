@@ -40,7 +40,7 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
                 .load(R.drawable.ic_launcher)
                 .transform(RoundedCornersTransformation(ConvertUtils.dp2px(12.0f), 0, RoundedCornersTransformation.CornerType.ALL))
                 .into(mIvCover)
-        mTvVersion.text = "微梦美图："+BuildConfig.VERSION_NAME
+        mTvVersion.text = "看个够："+BuildConfig.VERSION_NAME
         mbLogout.setOnClickListener {
             //            HkUserManager.getInstance().clear()
         }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">微梦美图</string>
+    <string name="app_name">看个够</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_recommend">推荐</string>
     <string name="title_category">分类</string>

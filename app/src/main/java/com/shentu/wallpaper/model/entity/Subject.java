@@ -16,9 +16,14 @@ public class Subject implements MultiItemEntity {
     public int bgColor;
     public String cover_1;
     public String cover_2;
+    public int type;
+
+    public Subject() {
+        type = ITEM_VIEW_2;
+    }
 
     @Override
     public int getItemType() {
-        return ITEM_VIEW_2;
+        return type;
     }
 }

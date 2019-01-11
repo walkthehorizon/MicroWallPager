@@ -28,7 +28,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/mIvCover"
         android:gravity="center"
-        tools:text = "微梦美图：1.0.0"
+        tools:text = "看个够：1.0.0"
         android:layout_height="wrap_content" />
 
     <android.support.design.button.MaterialButton

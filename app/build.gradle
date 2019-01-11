@@ -133,6 +133,7 @@ dependencies {
     implementation rootProject.ext.dependencies["glide-loader-okhttp3"]
     implementation rootProject.ext.dependencies["glidepalette"]
     implementation rootProject.ext.dependencies["loadsir"]
+    implementation rootProject.ext.dependencies["filedownloader"]
     kapt(rootProject.ext.dependencies["glide-compiler"]) {
         exclude module: 'jsr305'
     }

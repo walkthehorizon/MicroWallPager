@@ -25,6 +25,7 @@ import com.blankj.utilcode.util.Utils;
 import com.jess.arms.base.delegate.AppLifecycles;
 import com.jess.arms.utils.ArmsUtils;
 import com.kingja.loadsir.core.LoadSir;
+import com.liulishuo.filedownloader.FileDownloader;
 import com.mob.MobSDK;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -125,6 +126,7 @@ public class AppLifecyclesImpl  implements AppLifecycles {
                 .addCallback(new LoadingCallback())
                 .setDefaultCallback(LoadingCallback.class)//设置默认状态页
                 .commit();
+        FileDownloader.setup(application);
     }
 
     @Override

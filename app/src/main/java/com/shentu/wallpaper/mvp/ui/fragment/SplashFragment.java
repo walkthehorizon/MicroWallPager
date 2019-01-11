@@ -9,7 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.glide.GlideArms;
@@ -77,15 +81,7 @@ public class SplashFragment extends BaseFragment<SplashPresenter> implements Spl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Objects.requireNonNull(mPresenter).getAd();
-        Observable.timer(3, TimeUnit.SECONDS)
-                .compose(RxUtils.applyClearSchedulers(this))
-                .subscribe(new ErrorHandleSubscriber<Long>(appComponent.rxErrorHandler()) {
-                    @Override
-                    public void onNext(Long aLong) {
-                        launchActivity(new Intent(getActivity(), MainActivity.class));
-                        killMyself();
-                    }
-                });
+
     }
 
     @Override
@@ -114,9 +110,37 @@ public class SplashFragment extends BaseFragment<SplashPresenter> implements Spl
     public void showSplash(SplashAd splashAd) {
         Timber.e("showSplash");
         GlideArms.with(Objects.requireNonNull(getContext()))
-                .load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1546421628554&di=2abcebb30c81d5c978ff89de66d40c39&imgtype=0&src=http%3A%2F%2Fd.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Fd53f8794a4c27d1ec1f6bc5416d5ad6edcc43849.jpg")
+                .load(splashAd.cover_url)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .listener(listener)
                 .centerCrop()
                 .into(mIvSplash);
     }
+
+    @Override
+    public void toMainPage() {
+        Observable.timer(2, TimeUnit.SECONDS)
+                .compose(RxUtils.applyClearSchedulers(this))
+                .subscribe(new ErrorHandleSubscriber<Long>(appComponent.rxErrorHandler()) {
+                    @Override
+                    public void onNext(Long aLong) {
+                        launchActivity(new Intent(getActivity(), MainActivity.class));
+                        killMyself();
+                    }
+                });
+    }
+
+    private RequestListener listener = new RequestListener() {
+        @Override
+        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
+            toMainPage();
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(Object resource, Object model, Target target, DataSource dataSource, boolean isFirstResource) {
+            toMainPage();
+            return false;
+        }
+    };
 }

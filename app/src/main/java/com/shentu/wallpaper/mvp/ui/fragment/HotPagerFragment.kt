@@ -2,11 +2,11 @@ package com.shentu.wallpaper.mvp.ui.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.util.SparseIntArray
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -36,12 +36,11 @@ import com.shentu.wallpaper.mvp.ui.adapter.HotAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.HotPageRvDecoration
 import com.shentu.wallpaper.mvp.ui.widget.CustomPopWindow
 import com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
-import java.util.*
 
 
 class HotPagerFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerContract.View, OnRefreshListener, OnLoadMoreListener {
 
-    @BindView(R.id.rv_hot)
+    @BindView(R.id.rvHot)
     lateinit var rvHot: RecyclerView
     @BindView(R.id.refresh_layout)
     lateinit var refreshLayout: SmartRefreshLayout
@@ -80,17 +79,17 @@ class HotPagerFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerCont
 
         hotAdapter = HotAdapter(null)
         rvHot.layoutManager = LinearLayoutManager(context)
-        rvHot.addItemDecoration(HotPageRvDecoration(12))
+        rvHot.addItemDecoration(HotPageRvDecoration(8))
         rvHot.adapter = hotAdapter
         refreshLayout.setOnRefreshListener(this)
         refreshLayout.setOnLoadMoreListener(this)
-        toolbar.setTitle(resources.getString(R.string.app_name))
-        toolbar.setRightIcon(R.drawable.ic_more_horiz_white_24dp)
-        toolbar.setOnClickListener(object : DefaultToolbar.OnClickListenerImpl() {
-            override fun onClickRightIcon() {
-                showFilterPop()
-            }
-        })
+//        toolbar.setTitle(resources.getString(R.string.app_name))
+//        toolbar.setRightIcon(R.drawable.ic_more_horiz_white_24dp)
+//        toolbar.setOnClickListener(object : DefaultToolbar.OnClickListenerImpl() {
+//            override fun onClickRightIcon() {
+//                showFilterPop()
+//            }
+//        })
         val lp = toolbar.layoutParams as AppBarLayout.LayoutParams
         lp.topMargin = BarUtils.getStatusBarHeight()
         toolbar.layoutParams = lp
@@ -150,12 +149,10 @@ class HotPagerFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerCont
 
     @SuppressLint("CheckResult")
     override fun showHotSubject(subjects: List<Subject>, clear: Boolean) {
-        val random = Random()
         for (subject in subjects) {
-            val r = random.nextInt(256)
-            val g = random.nextInt(256)
-            val b = random.nextInt(256)
-            subject.bgColor = Color.rgb(r, g, b)
+            if (TextUtils.isEmpty(subject.cover_1)|| TextUtils.isEmpty(subject.cover_2)){
+                subject.type = Subject.ITEM_VIEW_1
+            }
         }
         if (clear) {
             hotAdapter!!.setNewData(subjects)

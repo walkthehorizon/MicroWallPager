@@ -10,8 +10,12 @@ import android.view.ViewGroup
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
+import com.liulishuo.filedownloader.BaseDownloadTask
+import com.liulishuo.filedownloader.FileDownloadListener
+import com.liulishuo.filedownloader.FileDownloader
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.event.SwitchNavigationEvent
+import com.shentu.wallpaper.app.utils.PathUtils
 import com.shentu.wallpaper.di.component.DaggerPictureBrowserComponent
 import com.shentu.wallpaper.di.module.PictureBrowserModule
 import com.shentu.wallpaper.model.entity.Wallpaper
@@ -43,6 +47,7 @@ class PictureBrowserFragment : BaseFragment<PictureBrowserPresenter>(), PictureB
     private lateinit var vpAdapter: PictureBrowserVpAdapter
 
     private var subjectId: Int = 0
+    private lateinit var wallpapers: MutableList<Wallpaper>
 
     companion object {
         fun newInstance(subjectId: Int): PictureBrowserFragment {
@@ -64,7 +69,7 @@ class PictureBrowserFragment : BaseFragment<PictureBrowserPresenter>(), PictureB
     }
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_picture_browser, container, false);
+        return inflater.inflate(R.layout.fragment_picture_browser, container, false)
     }
 
     override fun initData(savedInstanceState: Bundle?) {
@@ -72,6 +77,38 @@ class PictureBrowserFragment : BaseFragment<PictureBrowserPresenter>(), PictureB
         viewPager.addOnPageChangeListener(this)
         viewPager.offscreenPageLimit = 4
         mPresenter?.getPictures(subjectId)
+
+        ivDownload.setOnClickListener {
+            FileDownloader.getImpl().create(wallpapers[viewPager.currentItem].origin_url)
+                    .setPath(PathUtils.getExternalPicturesPath()).listener = object : FileDownloadListener() {
+                override fun warn(task: BaseDownloadTask?) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun paused(task: BaseDownloadTask?, soFarBytes: Int, totalBytes: Int) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun pending(task: BaseDownloadTask?, soFarBytes: Int, totalBytes: Int) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun completed(task: BaseDownloadTask?) {
+                    showMessage("文件已存储：" + task!!.targetFilePath)
+                }
+
+                override fun error(task: BaseDownloadTask?, e: Throwable?) {
+                    if (e != null) {
+                        showMessage("下载失败：" + e.message)
+                    }
+                }
+
+                override fun progress(task: BaseDownloadTask?, soFarBytes: Int, totalBytes: Int) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+            }
+        }
     }
 
     override fun setData(data: Any?) {
@@ -98,8 +135,9 @@ class PictureBrowserFragment : BaseFragment<PictureBrowserPresenter>(), PictureB
         activity?.finish()
     }
 
-    override fun showPictures(pictures: MutableList<Wallpaper>?) {
-        vpAdapter = PictureBrowserVpAdapter(pictures!!)
+    override fun showPictures(pictures: MutableList<Wallpaper>) {
+        wallpapers = pictures
+        vpAdapter = PictureBrowserVpAdapter(pictures)
         viewPager.adapter = vpAdapter
         onPageSelected(0)
     }
@@ -128,7 +166,7 @@ class PictureBrowserFragment : BaseFragment<PictureBrowserPresenter>(), PictureB
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun switchNavigation(event: SwitchNavigationEvent){
+    fun switchNavigation(event: SwitchNavigationEvent) {
         if (rl_head.visibility == View.VISIBLE) {
             hideNavigation()
         } else {

@@ -34,7 +34,7 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                 .compose(RxUtils.applySchedulers(mRootView))
                 .subscribe(object : ErrorHandleSubscriber<WallpaperPageResponse>(mErrorHandler) {
                     override fun onNext(t: WallpaperPageResponse) {
-                        mRootView.showPictures(t.data?.content)
+                        t.data?.content?.let { mRootView.showPictures(it) }
                     }
 
                     override fun onError(t: Throwable) {

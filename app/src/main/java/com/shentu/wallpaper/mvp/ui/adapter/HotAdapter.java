@@ -25,6 +25,8 @@ import java.util.Objects;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 public class HotAdapter extends BaseMultiItemQuickAdapter<Subject, BaseViewHolder> {
 
     public HotAdapter(List<Subject> data) {
@@ -61,27 +63,28 @@ public class HotAdapter extends BaseMultiItemQuickAdapter<Subject, BaseViewHolde
                 .placeholder(R.drawable.default_head)
                 .circleCrop()
                 .into((ImageView) helper.getView(R.id.iv_avatar));
-        helper.setText(R.id.tv_user_name, "");
+        helper.setText(R.id.tv_user_name, item.name);
         helper.setText(R.id.tv_content, item.name + "：" + item.description);
         helper.getView(R.id.tv_support).setSelected(false);
         if (item.getItemType() == Subject.ITEM_VIEW_1) {
-            ImageView ivCover = helper.getView(R.id.iv_cover);
             GlideArms.with(helper.itemView.getContext())
                     .load(item.cover)
                     .listener(GlidePalette.with(item.cover)
                             .use(GlidePalette.Profile.VIBRANT_LIGHT)
                             .intoCallBack(palette -> ((CardView) helper.getView(R.id.cardView)).setCardBackgroundColor(Objects.requireNonNull(palette).getLightMutedColor(Color.LTGRAY))))
-                    .transforms(new RoundedCorners(ConvertUtils.dp2px(5)), new CenterCrop())
-                    .into(ivCover);
+                    .transforms(new CenterCrop(), new RoundedCorners(ConvertUtils.dp2px(5)))
+                    .transition(withCrossFade())
+                    .into((ImageView) helper.getView(R.id.iv_cover));
         }
 
         if (item.getItemType() == Subject.ITEM_VIEW_2) {
             GlideArms.with(helper.itemView.getContext())
                     .load(item.cover)
                     .listener(GlidePalette.with(item.cover)
-                            .use(GlidePalette.Profile.VIBRANT_LIGHT)
+                            .use(GlidePalette.Profile.MUTED_LIGHT)
                             .intoCallBack(palette -> ((CardView) helper.getView(R.id.cardView1)).setCardBackgroundColor(Objects.requireNonNull(palette).getLightMutedColor(Color.LTGRAY))))
                     .transforms(new CenterCrop(), new RoundedCorners(ConvertUtils.dp2px(5)))
+                    .transition(withCrossFade())
                     .into((ImageView) helper.getView(R.id.iv_1));
             GlideArms.with(helper.itemView.getContext())
                     .load(item.cover_1)

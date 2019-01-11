@@ -20,4 +20,12 @@
         <attr name="item_arrow_visible" format="boolean"/>
         <attr name="item_divider_visible" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="DefaultToolbar">
+        <attr name="tl_left_icon" format="reference" />
+        <attr name="tl_right_icon" format="reference" />
+        <attr name="tl_title" format="string" />
+        <attr name="tl_right_text" format="string" />
+        <attr name="tl_right_icon2" format="reference" />
+    </declare-styleable>
 </resources>
