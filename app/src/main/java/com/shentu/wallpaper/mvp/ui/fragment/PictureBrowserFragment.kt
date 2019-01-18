@@ -7,6 +7,8 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.blankj.utilcode.util.FileUtils
+import com.blankj.utilcode.util.PathUtils
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
@@ -14,8 +16,10 @@ import com.liulishuo.filedownloader.BaseDownloadTask
 import com.liulishuo.filedownloader.FileDownloadListener
 import com.liulishuo.filedownloader.FileDownloader
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.event.LoadOriginPictureEvent
+import com.shentu.wallpaper.app.event.LoadOriginResultEvent
 import com.shentu.wallpaper.app.event.SwitchNavigationEvent
-import com.shentu.wallpaper.app.utils.PathUtils
+import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.di.component.DaggerPictureBrowserComponent
 import com.shentu.wallpaper.di.module.PictureBrowserModule
 import com.shentu.wallpaper.model.entity.Wallpaper
@@ -25,6 +29,7 @@ import com.shentu.wallpaper.mvp.ui.activity.PictureBrowserActivity
 import com.shentu.wallpaper.mvp.ui.activity.PictureBrowserActivity.Companion.SUBJECT_ID
 import com.shentu.wallpaper.mvp.ui.adapter.PictureBrowserVpAdapter
 import kotlinx.android.synthetic.main.fragment_picture_browser.*
+import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -43,6 +48,7 @@ import org.greenrobot.eventbus.ThreadMode
  * }
  */
 class PictureBrowserFragment : BaseFragment<PictureBrowserPresenter>(), PictureBrowserContract.View, ViewPager.OnPageChangeListener {
+
 
     private lateinit var vpAdapter: PictureBrowserVpAdapter
 
@@ -63,7 +69,7 @@ class PictureBrowserFragment : BaseFragment<PictureBrowserPresenter>(), PictureB
         DaggerPictureBrowserComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
-                .pictureBrowserModule(PictureBrowserModule(this))
+                .pictureBrowserModule(PictureBrowserModule(this, mContext))
                 .build()
                 .inject(this)
     }
@@ -109,17 +115,17 @@ class PictureBrowserFragment : BaseFragment<PictureBrowserPresenter>(), PictureB
 
             }
         }
+        mbLoadOrigin.setOnClickListener {
+            mbLoadOrigin.isEnabled = false//在结果回调前禁用二次点击
+            EventBus.getDefault().post(LoadOriginPictureEvent(wallpapers[viewPager.currentItem].id))
+        }
+        ivDownload.setOnClickListener {
+            ivDownload.visibility = View.GONE
+            mPresenter?.downloadPicture(wallpapers[viewPager.currentItem].origin_url!!)
+        }
     }
 
     override fun setData(data: Any?) {
-
-    }
-
-    override fun showLoading() {
-
-    }
-
-    override fun hideLoading() {
 
     }
 
@@ -137,7 +143,8 @@ class PictureBrowserFragment : BaseFragment<PictureBrowserPresenter>(), PictureB
 
     override fun showPictures(pictures: MutableList<Wallpaper>) {
         wallpapers = pictures
-        vpAdapter = PictureBrowserVpAdapter(pictures)
+        viewPager.offscreenPageLimit = 5
+        vpAdapter = PictureBrowserVpAdapter(childFragmentManager, pictures)
         viewPager.adapter = vpAdapter
         onPageSelected(0)
     }
@@ -150,9 +157,12 @@ class PictureBrowserFragment : BaseFragment<PictureBrowserPresenter>(), PictureB
 
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "CheckResult")
     override fun onPageSelected(position: Int) {
         tvOrder.text = "${position + 1}/${vpAdapter.count}"
+        mbLoadOrigin.visibility = if (wallpapers[position].isOriginExist) View.GONE else View.VISIBLE
+        ivDownload.visibility = if (FileUtils.isFileExists(PicUtils.getInstance().getDownloadPicturePath(
+                        wallpapers[position].origin_url))) View.GONE else View.VISIBLE
     }
 
     override fun showNavigation() {
@@ -171,6 +181,20 @@ class PictureBrowserFragment : BaseFragment<PictureBrowserPresenter>(), PictureB
             hideNavigation()
         } else {
             showNavigation()
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLoadOriginResult(event: LoadOriginResultEvent) {
+        for (wallpaper in wallpapers) {
+            if (wallpaper.id == event.id) {
+                if (event.result) {
+                    mbLoadOrigin.visibility = View.GONE
+                    wallpaper.isOriginExist = true
+                } else {
+                    mbLoadOrigin.isEnabled = true
+                }
+            }
         }
     }
 }

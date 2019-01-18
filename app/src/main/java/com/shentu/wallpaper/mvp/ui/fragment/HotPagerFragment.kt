@@ -5,14 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.util.SparseIntArray
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import butterknife.BindView
 import com.blankj.utilcode.util.BarUtils
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.BaseLazyLoadFragment
@@ -20,7 +18,6 @@ import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
-import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
@@ -35,19 +32,12 @@ import com.shentu.wallpaper.mvp.presenter.HotPagerPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.HotAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.HotPageRvDecoration
 import com.shentu.wallpaper.mvp.ui.widget.CustomPopWindow
-import com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
+import kotlinx.android.synthetic.main.activity_setting_more.*
+import kotlinx.android.synthetic.main.fragment_hot_pager.*
 
 
 class HotPagerFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerContract.View, OnRefreshListener, OnLoadMoreListener {
 
-    @BindView(R.id.rvHot)
-    lateinit var rvHot: RecyclerView
-    @BindView(R.id.refresh_layout)
-    lateinit var refreshLayout: SmartRefreshLayout
-    @BindView(R.id.toolbarHot)
-    lateinit var toolbar: DefaultToolbar
-    @BindView(R.id.appbar)
-    lateinit var appBar: AppBarLayout
     private var popWindow: CustomPopWindow? = null
     private var subType = -1//主题分类
     private var typeSparse: SparseIntArray? = null
@@ -90,9 +80,9 @@ class HotPagerFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerCont
 //                showFilterPop()
 //            }
 //        })
-        val lp = toolbar.layoutParams as AppBarLayout.LayoutParams
+        val lp = toolbarHot.layoutParams as AppBarLayout.LayoutParams
         lp.topMargin = BarUtils.getStatusBarHeight()
-        toolbar.layoutParams = lp
+        toolbarHot.layoutParams = lp
     }
 
     override fun setData(data: Any?) {

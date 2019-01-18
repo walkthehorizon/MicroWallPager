@@ -1,6 +1,5 @@
 package com.shentu.wallpaper.mvp.ui.fragment
 
-import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,22 +7,15 @@ import android.support.v4.view.ViewCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.resource.bitmap.TransformationUtils.fitCenter
-import com.bumptech.glide.request.RequestListener
-import com.jess.arms.base.BaseFragment
-import com.jess.arms.http.imageloader.glide.GlideArms
-import com.jess.arms.mvp.IPresenter
-import com.shentu.wallpaper.R
-import com.shentu.wallpaper.app.utils.HkUtils
-import kotlinx.android.synthetic.main.item_rv_category_page.*
-import com.mob.commons.logcollector.e
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.utils.PicUtils
+import kotlinx.android.synthetic.main.item_rv_category_page.*
 import timber.log.Timber
-import java.util.*
 
 
 class CategoryPageItemFragment : Fragment() {

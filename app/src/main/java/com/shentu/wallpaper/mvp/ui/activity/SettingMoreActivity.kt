@@ -3,13 +3,12 @@ package com.shentu.wallpaper.mvp.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import com.blankj.utilcode.util.ConvertUtils
-import com.bumptech.glide.Glide
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
-import com.jess.arms.http.imageloader.glide.GlideArms
 import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.BuildConfig
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.di.component.DaggerSettingMoreComponent
 import com.shentu.wallpaper.di.module.SettingMoreModule
 import com.shentu.wallpaper.mvp.contract.SettingMoreContract

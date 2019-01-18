@@ -2,6 +2,7 @@ package com.shentu.wallpaper.mvp.ui.adapter;
 
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -13,8 +14,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.github.florent37.glidepalette.GlidePalette;
-import com.jess.arms.http.imageloader.glide.GlideArms;
 import com.shentu.wallpaper.R;
+import com.shentu.wallpaper.app.GlideArms;
 import com.shentu.wallpaper.app.utils.PicUtils;
 import com.shentu.wallpaper.app.utils.ShareUtils;
 import com.shentu.wallpaper.model.entity.Subject;
@@ -58,6 +59,7 @@ public class HotAdapter extends BaseMultiItemQuickAdapter<Subject, BaseViewHolde
 
     @Override
     protected void convert(BaseViewHolder helper, Subject item) {
+        helper.getView(R.id.tv_content).setVisibility(View.GONE);
         GlideArms.with(helper.itemView.getContext())
                 .load(item.cover)
                 .placeholder(R.drawable.default_head)

@@ -1,14 +1,12 @@
 package com.shentu.wallpaper.mvp.ui.adapter
 
-import android.graphics.Bitmap
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ConvertUtils
-import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.jess.arms.http.imageloader.glide.GlideArms
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.model.entity.Category
 import com.shentu.wallpaper.mvp.ui.fragment.CategoryListFragment
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation

@@ -1,14 +1,19 @@
 package com.shentu.wallpaper.mvp.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.button.MaterialButton;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.util.SpanUtils;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
@@ -16,11 +21,12 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.http.imageloader.glide.GlideArms;
 import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.IView;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 import com.shentu.wallpaper.R;
-import com.shentu.wallpaper.app.utils.RxUtils;
+import com.shentu.wallpaper.app.GlideArms;
 import com.shentu.wallpaper.di.component.DaggerSplashComponent;
 import com.shentu.wallpaper.di.module.SplashModule;
 import com.shentu.wallpaper.model.entity.SplashAd;
@@ -34,9 +40,11 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
-import timber.log.Timber;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -45,6 +53,8 @@ public class SplashFragment extends BaseFragment<SplashPresenter> implements Spl
 
     @BindView(R.id.iv_splash)
     ImageView mIvSplash;
+    @BindView(R.id.mbJump)
+    MaterialButton mbJump;
     @Inject
     AppManager appManager;
 
@@ -81,12 +91,16 @@ public class SplashFragment extends BaseFragment<SplashPresenter> implements Spl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Objects.requireNonNull(mPresenter).getAd();
-
     }
 
     @Override
     public void setData(@Nullable Object data) {
 
+    }
+
+    @OnClick(R.id.mbJump)
+    public void clickJump() {
+        toMainPage();
     }
 
     @Override
@@ -108,39 +122,60 @@ public class SplashFragment extends BaseFragment<SplashPresenter> implements Spl
 
     @Override
     public void showSplash(SplashAd splashAd) {
-        Timber.e("showSplash");
+        if (splashAd.duration == 0) {
+            toMainPage();
+            return;
+        }
         GlideArms.with(Objects.requireNonNull(getContext()))
                 .load(splashAd.cover_url)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .listener(listener)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        toMainPage();
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        startCountDown(splashAd.duration);
+                        return false;
+                    }
+                })
                 .centerCrop()
                 .into(mIvSplash);
     }
 
     @Override
     public void toMainPage() {
-        Observable.timer(2, TimeUnit.SECONDS)
-                .compose(RxUtils.applyClearSchedulers(this))
-                .subscribe(new ErrorHandleSubscriber<Long>(appComponent.rxErrorHandler()) {
+        launchActivity(new Intent(getActivity(), MainActivity.class));
+        killMyself();
+    }
+
+    @Override
+    public void startCountDown(int total) {
+        Observable.interval(0, 1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxLifecycleUtils.bindToLifecycle((IView) SplashFragment.this))
+                .doOnSubscribe(disposable -> mbJump.setVisibility(View.VISIBLE))
+                .map(aLong -> total - aLong.intValue())
+                .take(total + 1)
+                .subscribe(new ErrorHandleSubscriber<Integer>(appComponent.rxErrorHandler()) {
+                    @SuppressLint("SetTextI18n")
                     @Override
-                    public void onNext(Long aLong) {
-                        launchActivity(new Intent(getActivity(), MainActivity.class));
-                        killMyself();
+                    public void onNext(Integer integer) {
+                        mbJump.setText(new SpanUtils()
+                                .append("跳过 ")
+                                .append(String.valueOf(integer))
+                                .setForegroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
+                                .append(" S")
+                                .create());
+//                        mbJump.setText("跳过 " + integer + " S");
+                        if (integer == 0) {
+                            toMainPage();
+                        }
                     }
                 });
     }
-
-    private RequestListener listener = new RequestListener() {
-        @Override
-        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
-            toMainPage();
-            return false;
-        }
-
-        @Override
-        public boolean onResourceReady(Object resource, Object model, Target target, DataSource dataSource, boolean isFirstResource) {
-            toMainPage();
-            return false;
-        }
-    };
 }

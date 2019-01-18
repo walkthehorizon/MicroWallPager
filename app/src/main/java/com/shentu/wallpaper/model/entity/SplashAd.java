@@ -10,4 +10,5 @@ public class SplashAd extends BaseResponse {
     public String aid;
     public String cover_url;
     public String link_url;
+    public int duration;//s
 }

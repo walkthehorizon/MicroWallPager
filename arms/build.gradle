@@ -69,7 +69,7 @@ dependencies {
         exclude module: 'rxandroid'
         exclude module: 'rxlifecycle'
     }
-    api rootProject.ext.dependencies["rxpermissions2"]
+//    api rootProject.ext.dependencies["rxpermissions2"]
     api rootProject.ext.dependencies['rxerrorhandler2']
 
     //network
@@ -89,11 +89,12 @@ dependencies {
         exclude module: 'retrofit'
         exclude module: 'okio'
     }
-    api rootProject.ext.dependencies["okhttp3"]
+    implementation rootProject.ext.dependencies["okhttp3"]
     compileOnly rootProject.ext.dependencies["glide"]
-    annotationProcessor(rootProject.ext.dependencies["glide-compiler"]) {
-        exclude module: 'jsr305'
-    }
+//    implementation rootProject.ext.dependencies["glide-loader-okhttp3"]
+//    annotationProcessor(rootProject.ext.dependencies["glide-compiler"]) {
+//        exclude module: 'jsr305'
+//    }
 
     //tools
     compileOnly rootProject.ext.dependencies["javax.annotation"]

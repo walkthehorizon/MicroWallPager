@@ -9,9 +9,9 @@ import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
-import com.jess.arms.http.imageloader.glide.GlideArms
 import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.app.event.LoginSuccessEvent
 import com.shentu.wallpaper.di.component.DaggerMyComponent

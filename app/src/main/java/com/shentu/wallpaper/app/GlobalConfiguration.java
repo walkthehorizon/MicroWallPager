@@ -18,10 +18,10 @@ package com.shentu.wallpaper.app;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import com.blankj.utilcode.util.PathUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.jess.arms.base.delegate.AppLifecycles;
 import com.jess.arms.di.module.GlobalConfigModule;
@@ -58,26 +58,20 @@ import timber.log.Timber;
  * ================================================
  */
 public final class GlobalConfiguration implements ConfigModule {
-//    public static String sDomain = Api.APP_DOMAIN;
-      //cookie存储
-      private ConcurrentHashMap<String, List<Cookie>> cookieStore;
-      private GlobalHttpHandlerImpl globalHttpHandler;
+    //cookie存储
+    private ConcurrentHashMap<String, List<Cookie>> cookieStore;
+    private GlobalHttpHandlerImpl globalHttpHandler;
 
     @Override
     public void applyOptions(Context context, GlobalConfigModule.Builder builder) {
-        String cachePath = (BuildConfig.Debug ? Environment.getExternalStorageDirectory().getAbsolutePath() : context.getFilesDir()) + "/Android/data/" + BuildConfig.APPLICATION_ID;
+        String cachePath = BuildConfig.Debug ? PathUtils.getExternalAppCachePath() : PathUtils.getInternalAppCachePath();
         cookieStore = new ConcurrentHashMap<>();
         globalHttpHandler = new GlobalHttpHandlerImpl(context);
         if (!BuildConfig.LOG_DEBUG) { //Release 时,让框架不再打印 Http 请求和响应的信息
             builder.printHttpLogLevel(RequestInterceptor.Level.NONE);
         }
-        Timber.d("开始整体配置 " + cachePath);
         builder.baseurl(BuildConfig.Sever)
                 .cacheFile(new File(cachePath))
-                //强烈建议自己自定义图片加载逻辑,因为默认提供的 GlideImageLoaderStrategy 并不能满足复杂的需求
-                //请参考 https://github.com/JessYanCoding/MVPArms/wiki#3.4
-//                .imageLoaderStrategy(new GlideImageLoaderStrategy())
-
                 //想支持多 BaseUrl, 以及运行时动态切换任意一个 BaseUrl, 请使用 https://github.com/JessYanCoding/RetrofitUrlManager
                 //如果 BaseUrl 在 App 启动时不能确定, 需要请求服务器接口动态获取, 请使用以下代码
                 //以下方式是 Arms 框架自带的切换 BaseUrl 的方式, 在整个 App 生命周期内只能切换一次, 若需要无限次的切换 BaseUrl, 以及各种复杂的应用场景还是需要使用 RetrofitUrlManager 框架
@@ -87,48 +81,6 @@ public final class GlobalConfiguration implements ConfigModule {
 //                    @Override
 //                    public HttpUrl url() {
 //                        return HttpUrl.parse(sDomain);
-//                    }
-//                })
-
-                //可根据当前项目的情况以及环境为框架某些部件提供自定义的缓存策略, 具有强大的扩展性
-//                .cacheFactory(new Cache.Factory() {
-//                    @NonNull
-//                    @Override
-//                    public Cache build(CacheType type) {
-//                        switch (type.getCacheTypeId()){
-//                            case CacheType.EXTRAS_TYPE_ID:
-//                                return new IntelligentCache(500);
-//                            case CacheType.CACHE_SERVICE_CACHE_TYPE_ID:
-//                                return new Cache(type.calculateCacheSize(context));//自定义 Cache
-//                            default:
-//                                return new LruCache(200);
-//                        }
-//                    }
-//                })
-
-                //若觉得框架默认的打印格式并不能满足自己的需求, 可自行扩展自己理想的打印格式 (以下只是简单实现)
-//                .formatPrinter(new FormatPrinter() {
-//                    @Override
-//                    public void printJsonRequest(Request request, String bodyString) {
-//                        Timber.i("printJsonRequest:" + bodyString);
-//                    }
-//
-//                    @Override
-//                    public void printFileRequest(Request request) {
-//                        Timber.i("printFileRequest:" + request.url().toString());
-//                    }
-//
-//                    @Override
-//                    public void printJsonResponse(long chainMs, boolean isSuccessful, int code,
-//                                                  String headers, MediaType contentType, String bodyString,
-//                                                  List<String> segments, String message, String responseUrl) {
-//                        Timber.i("printJsonResponse:" + bodyString);
-//                    }
-//
-//                    @Override
-//                    public void printFileResponse(long chainMs, boolean isSuccessful, int code, String headers,
-//                                                  List<String> segments, String message, String responseUrl) {
-//                        Timber.i("printFileResponse:" + responseUrl);
 //                    }
 //                })
 
@@ -151,12 +103,12 @@ public final class GlobalConfiguration implements ConfigModule {
                     okhttpBuilder.cookieJar(new CookieJar() {//这里可以做cookie传递，保存等操作
                         @Override
                         public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {//可以做保存cookies操作
-                            for (int i = 0; i <cookies.size() ; i++) {
+                            for (int i = 0; i < cookies.size(); i++) {
                                 Timber.d("cookie:%s", cookies.get(i).toString());
-                                Timber.d("cookie value:%s" , cookies.get(i).value());
+                                Timber.d("cookie value:%s", cookies.get(i).value());
                             }
                             //第一个cookie的值为csrftoken，第二个是sessionid
-                            SPUtils.getInstance().put("X-CSRFToken",cookies.get(0).value());
+                            SPUtils.getInstance().put("X-CSRFToken", cookies.get(0).value());
                             cookieStore.put(url.host(), cookies);
                         }
 
@@ -166,14 +118,17 @@ public final class GlobalConfiguration implements ConfigModule {
                             return cookies != null ? cookies : new ArrayList<Cookie>();
                         }
                     });
-                    okhttpBuilder.connectTimeout(10,TimeUnit.SECONDS);
+                    okhttpBuilder.connectTimeout(10, TimeUnit.SECONDS);
                     //使用一行代码监听 Retrofit／Okhttp 上传下载进度监听,以及 Glide 加载进度监听 详细使用方法查看 https://github.com/JessYanCoding/ProgressManager
                     ProgressManager.getInstance().with(okhttpBuilder);
+                    ProgressManager.getInstance().setRefreshTime(100);
+                    Timber.e("register ProgressManager success");
                     //让 Retrofit 同时支持多个 BaseUrl 以及动态改变 BaseUrl. 详细使用请方法查看 https://github.com/JessYanCoding/RetrofitUrlManager
                     RetrofitUrlManager.getInstance().with(okhttpBuilder);
                 })
                 .rxCacheConfiguration((context1, rxCacheBuilder) -> {//这里可以自己自定义配置 RxCache 的参数
                     rxCacheBuilder.useExpiredDataIfLoaderNotAvailable(true);
+                    Timber.e("cache path：%s", cachePath);
 //                    File file = new File(cachePath, "cache");
 //                    FileUtils.createOrExistsDir(file);
 //                    rxCacheBuilder.persistence(file, new GsonSpeaker());

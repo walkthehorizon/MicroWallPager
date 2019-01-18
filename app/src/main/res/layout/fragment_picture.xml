@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rlRootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.github.piasy.biv.view.BigImageView
+        android:id="@+id/photoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:failureImage="@drawable/default_cover_vertical"
+        app:failureImageInitScaleType="fitCenter"
+        app:optimizeDisplay="true" />
+
+    <!--<com.shentu.wallpaper.mvp.ui.widget.PictureLoadingView-->
+        <!--android:id="@+id/loadingView"-->
+        <!--android:layout_width="60dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:visibility="gone" />-->
+
+</RelativeLayout>

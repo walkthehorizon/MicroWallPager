@@ -12,6 +12,8 @@ public interface SplashContract {
         void showSplash(SplashAd splashAd);
 
         void toMainPage();
+
+        void startCountDown(int total);
     }
 
     interface Model extends IModel {

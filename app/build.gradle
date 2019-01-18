@@ -3,9 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.mob.sdk'
-//apply from: 'tinker-support.gradle'
-
-
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -102,7 +99,7 @@ MobSDK {
 kapt {
     generateStubs = true
     arguments {
-        arg("moduleName", project.getName())
+        arg("AROUTER_MODULE_NAME", project.getName())
     }
 }
 
@@ -130,13 +127,13 @@ dependencies {
     implementation rootProject.ext.dependencies["utilcode"]
     implementation rootProject.ext.dependencies["glide-transformations"]
     implementation rootProject.ext.dependencies["glide"]
+    implementation rootProject.ext.dependencies["okhttp3"]
     implementation rootProject.ext.dependencies["glide-loader-okhttp3"]
+    kapt rootProject.ext.dependencies["glide-compiler"]
     implementation rootProject.ext.dependencies["glidepalette"]
     implementation rootProject.ext.dependencies["loadsir"]
     implementation rootProject.ext.dependencies["filedownloader"]
-    kapt(rootProject.ext.dependencies["glide-compiler"]) {
-        exclude module: 'jsr305'
-    }
+
     kapt(rootProject.ext.dependencies["butterknife-compiler"]) {
         exclude module: 'support-annotations'
     }
@@ -145,6 +142,7 @@ dependencies {
     kapt rootProject.ext.dependencies["dagger2-compiler"]
     kapt rootProject.ext.dependencies["dagger2-android-processor"]
     implementation rootProject.ext.dependencies["eventbus"]
+    implementation rootProject.ext.dependencies['AndPermission']
     //view
     implementation rootProject.ext.dependencies["BRVAdapterHelper"]
     implementation rootProject.ext.dependencies["circleimageview"]
@@ -155,6 +153,9 @@ dependencies {
     //bugly
     implementation rootProject.ext.dependencies["bugly-upgrade"]
     implementation rootProject.ext.dependencies["bugly-tinker"]
+
+    implementation 'com.github.piasy:BigImageViewer:1.5.6'
+//    implementation 'com.github.piasy:GlideImageLoader:1.5.6'
 
     //test
     testImplementation rootProject.ext.dependencies["junit"]

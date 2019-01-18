@@ -10,7 +10,7 @@ import com.shentu.wallpaper.mvp.ui.fragment.CategoryPageItemFragment
 class CategoryPageAdapter(private val sharePos: Int, val data: MutableList<Wallpaper>, fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
-        return CategoryPageItemFragment.newInstance(data[position].url,sharePos == position)
+        return CategoryPageItemFragment.newInstance(data[position].url!!,sharePos == position)
     }
 
     override fun getItemPosition(`object`: Any): Int {
