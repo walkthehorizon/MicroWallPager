@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.util.SparseIntArray;
 import android.view.MenuItem;
 
-import com.blankj.utilcode.util.BarUtils;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -56,7 +55,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        BarUtils.setStatusBarAlpha(this);
         super.onCreate(savedInstanceState);
     }
 

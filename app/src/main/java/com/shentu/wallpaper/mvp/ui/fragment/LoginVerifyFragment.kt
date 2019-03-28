@@ -2,22 +2,17 @@ package com.shentu.wallpaper.mvp.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Message
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
-
+import com.shentu.wallpaper.R
 import com.shentu.wallpaper.di.component.DaggerLoginVerifyComponent
 import com.shentu.wallpaper.di.module.LoginVerifyModule
 import com.shentu.wallpaper.mvp.contract.LoginVerifyContract
 import com.shentu.wallpaper.mvp.presenter.LoginVerifyPresenter
-
-import com.shentu.wallpaper.R
 
 
 class LoginVerifyFragment : BaseFragment<LoginVerifyPresenter>(), LoginVerifyContract.View {

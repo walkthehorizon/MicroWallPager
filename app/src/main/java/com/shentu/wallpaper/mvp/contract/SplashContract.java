@@ -14,6 +14,8 @@ public interface SplashContract {
         void toMainPage();
 
         void startCountDown(int total);
+
+        void showCountDownText(int time);
     }
 
     interface Model extends IModel {

@@ -100,6 +100,7 @@ kapt {
     generateStubs = true
     arguments {
         arg("AROUTER_MODULE_NAME", project.getName())
+        arg('eventBusIndex', 'com.shentu.wallpaper.app.MicroEventBusIndex')
     }
 }
 
@@ -113,6 +114,10 @@ buildscript {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     api project(':arms')
+    implementation(rootProject.ext.dependencies["support-v4"])
+    implementation(rootProject.ext.dependencies["appcompat-v7"])
+    implementation(rootProject.ext.dependencies["recyclerview-v7"])
+    implementation rootProject.ext.dependencies["annotations"]
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //support
     implementation rootProject.ext.dependencies["constraint-layout"]
@@ -142,6 +147,7 @@ dependencies {
     kapt rootProject.ext.dependencies["dagger2-compiler"]
     kapt rootProject.ext.dependencies["dagger2-android-processor"]
     implementation rootProject.ext.dependencies["eventbus"]
+    kapt rootProject.ext.dependencies["eventbus-processor"]
     implementation rootProject.ext.dependencies['AndPermission']
     //view
     implementation rootProject.ext.dependencies["BRVAdapterHelper"]

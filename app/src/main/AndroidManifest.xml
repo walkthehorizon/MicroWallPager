@@ -23,9 +23,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:icon,android:allowBackup,android:theme"
-        tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".mvp.ui.activity.SplashActivity"
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:icon,android:allowBackup,android:theme">
+        <activity
+            android:name=".mvp.ui.activity.SplashActivity"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,6 +66,11 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".mvp.ui.activity.SettingMoreActivity" />
 
+        <service android:name=".app.service.ExampleService" />
+        <activity
+            android:name=".mvp.ui.activity.SecondActivity"
+            android:process=":b" />
+        <activity android:name=".mvp.ui.activity.FirstActivity"/>
     </application>
 
 </manifest>

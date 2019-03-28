@@ -2,37 +2,28 @@ package com.shentu.wallpaper.mvp.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Message
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.app.Fragment
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.alibaba.android.arouter.launcher.ARouter
 import com.chad.library.adapter.base.BaseQuickAdapter
-
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
-import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
-
+import com.shentu.wallpaper.R
 import com.shentu.wallpaper.di.component.DaggerCategoryListComponent
 import com.shentu.wallpaper.di.module.CategoryListModule
-import com.shentu.wallpaper.mvp.contract.CategoryListContract
-import com.shentu.wallpaper.mvp.presenter.CategoryListPresenter
-
-import com.shentu.wallpaper.R
 import com.shentu.wallpaper.model.api.service.MicroService
 import com.shentu.wallpaper.model.entity.Wallpaper
+import com.shentu.wallpaper.mvp.contract.CategoryListContract
+import com.shentu.wallpaper.mvp.presenter.CategoryListPresenter
 import com.shentu.wallpaper.mvp.ui.activity.CategoryPageActivity
 import com.shentu.wallpaper.mvp.ui.adapter.CategoryListAdapter
-import com.shentu.wallpaper.mvp.ui.adapter.OnGlideScrollListener
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.RvCategoryListDecoration
 import kotlinx.android.synthetic.main.fragment_category_list.*
 import timber.log.Timber

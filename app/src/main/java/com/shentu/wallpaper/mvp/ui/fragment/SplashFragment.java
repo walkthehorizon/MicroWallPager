@@ -138,7 +138,7 @@ public class SplashFragment extends BaseFragment<SplashPresenter> implements Spl
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        startCountDown(splashAd.duration);
+                        startCountDown(splashAd.duration / 1000);
                         return false;
                     }
                 })
@@ -154,28 +154,35 @@ public class SplashFragment extends BaseFragment<SplashPresenter> implements Spl
 
     @Override
     public void startCountDown(int total) {
-        Observable.interval(0, 1, TimeUnit.SECONDS)
+        showCountDownText(total);
+        Observable.interval(1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxLifecycleUtils.bindToLifecycle((IView) SplashFragment.this))
-                .doOnSubscribe(disposable -> mbJump.setVisibility(View.VISIBLE))
-                .map(aLong -> total - aLong.intValue())
-                .take(total + 1)
+                .map(aLong -> total - aLong.intValue()-1)
+                .take(total)
                 .subscribe(new ErrorHandleSubscriber<Integer>(appComponent.rxErrorHandler()) {
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onNext(Integer integer) {
-                        mbJump.setText(new SpanUtils()
-                                .append("跳过 ")
-                                .append(String.valueOf(integer))
-                                .setForegroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
-                                .append(" S")
-                                .create());
-//                        mbJump.setText("跳过 " + integer + " S");
+                        showCountDownText(integer);
                         if (integer == 0) {
                             toMainPage();
                         }
                     }
                 });
+    }
+
+    @Override
+    public void showCountDownText(int time) {
+        mbJump.setText(new SpanUtils()
+                .append("跳过 ")
+                .append(String.valueOf(time))
+                .setForegroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
+                .append(" S")
+                .create());
+        if (mbJump.getVisibility() == View.GONE) {
+            mbJump.setVisibility(View.VISIBLE);
+        }
     }
 }

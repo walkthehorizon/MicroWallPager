@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.shentu.wallpaper.app.Constant;
-import com.shentu.wallpaper.mvp.ui.fragment.HotPagerFragment;
+import com.shentu.wallpaper.mvp.ui.home.TabHomeFragment;
 import com.shentu.wallpaper.mvp.ui.fragment.MyFragment;
 
 import java.util.Arrays;
@@ -18,7 +18,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     public MainPagerAdapter(FragmentManager fm) {
         super(fm);
-        fragments = Arrays.asList(HotPagerFragment.Companion.newInstance()
+        fragments = Arrays.asList(TabHomeFragment.Companion.newInstance()
                 , MyFragment.Companion.newInstance());
     }
 

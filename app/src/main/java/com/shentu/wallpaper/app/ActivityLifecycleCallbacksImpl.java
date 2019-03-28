@@ -19,6 +19,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
+import com.blankj.utilcode.util.BarUtils;
+
 import timber.log.Timber;
 
 /**
@@ -35,6 +37,8 @@ public class ActivityLifecycleCallbacksImpl implements Application.ActivityLifec
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         Timber.w(activity + " - onActivityCreated");
+        BarUtils.setStatusBarAlpha(activity);
+        BarUtils.setStatusBarLightMode(activity,true);
     }
 
     @Override

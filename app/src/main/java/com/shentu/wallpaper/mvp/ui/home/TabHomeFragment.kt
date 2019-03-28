@@ -1,4 +1,4 @@
-package com.shentu.wallpaper.mvp.ui.fragment
+package com.shentu.wallpaper.mvp.ui.home
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -33,10 +33,10 @@ import com.shentu.wallpaper.mvp.ui.adapter.HotAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.HotPageRvDecoration
 import com.shentu.wallpaper.mvp.ui.widget.CustomPopWindow
 import kotlinx.android.synthetic.main.activity_setting_more.*
-import kotlinx.android.synthetic.main.fragment_hot_pager.*
+import kotlinx.android.synthetic.main.fragment_tab_home.*
 
 
-class HotPagerFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerContract.View, OnRefreshListener, OnLoadMoreListener {
+class TabHomeFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerContract.View, OnRefreshListener, OnLoadMoreListener {
 
     private var popWindow: CustomPopWindow? = null
     private var subType = -1//主题分类
@@ -54,7 +54,7 @@ class HotPagerFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerCont
     }
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        loadService = LoadSir.getDefault().register(inflater.inflate(R.layout.fragment_hot_pager, container, false))
+        loadService = LoadSir.getDefault().register(inflater.inflate(R.layout.fragment_tab_home, container, false))
         return loadService!!.loadLayout
     }
 
@@ -80,9 +80,9 @@ class HotPagerFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerCont
 //                showFilterPop()
 //            }
 //        })
-        val lp = toolbarHot.layoutParams as AppBarLayout.LayoutParams
+        val lp = tvSearch.layoutParams as AppBarLayout.LayoutParams
         lp.topMargin = BarUtils.getStatusBarHeight()
-        toolbarHot.layoutParams = lp
+        tvSearch.layoutParams = lp
     }
 
     override fun setData(data: Any?) {
@@ -185,8 +185,8 @@ class HotPagerFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerCont
 
     companion object {
 
-        fun newInstance(): HotPagerFragment {
-            return HotPagerFragment()
+        fun newInstance(): TabHomeFragment {
+            return TabHomeFragment()
         }
     }
 }
