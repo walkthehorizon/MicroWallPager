@@ -74,7 +74,7 @@
         android:textColor="@color/colorPrimary"
         android:text="忘记密码?" />
 
-    <android.support.design.button.MaterialButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_login"
         android:layout_width="match_parent"
         android:layout_height="54dp"

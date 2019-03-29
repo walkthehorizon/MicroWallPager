@@ -31,7 +31,7 @@
         tools:text = "看个够：1.0.0"
         android:layout_height="wrap_content" />
 
-    <android.support.design.button.MaterialButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/mbLogout"
         android:layout_width="300dp"
         android:layout_height="60dp"

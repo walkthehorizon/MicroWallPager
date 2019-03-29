@@ -2,23 +2,23 @@
 <resources>
     <declare-styleable name="VerificationCodeInput">
         <attr name="box" format="integer" />
-        <attr name="child_h_padding" format="dimension"/>
-        <attr name="child_v_padding" format="dimension"/>
-        <attr name="child_width" format="dimension"/>
-        <attr name="child_height" format="dimension"/>
-        <attr name="padding" format="dimension"/>
-        <attr name="box_bg_focus" format="reference"/>
-        <attr name="box_bg_normal" format="reference"/>
-        <attr name="inputType" format="string"/>
+        <attr name="child_h_padding" format="dimension" />
+        <attr name="child_v_padding" format="dimension" />
+        <attr name="child_width" format="dimension" />
+        <attr name="child_height" format="dimension" />
+        <attr name="padding" format="dimension" />
+        <attr name="box_bg_focus" format="reference" />
+        <attr name="box_bg_normal" format="reference" />
+        <attr name="inputType" format="string" />
     </declare-styleable>
 
     <!-- RoundWidget end -->
 
     <declare-styleable name="RippleItemView">
-        <attr name="item_icon" format="reference"/>
-        <attr name="item_title" format="string"/>
-        <attr name="item_arrow_visible" format="boolean"/>
-        <attr name="item_divider_visible" format="boolean"/>
+        <attr name="item_icon" format="reference" />
+        <attr name="item_title" format="string" />
+        <attr name="item_arrow_visible" format="boolean" />
+        <attr name="item_divider_visible" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="DefaultToolbar">
@@ -27,5 +27,9 @@
         <attr name="tl_title" format="string" />
         <attr name="tl_right_text" format="string" />
         <attr name="tl_right_icon2" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="ArcImageView">
+        <attr name="arc_height" format="dimension" />
     </declare-styleable>
 </resources>

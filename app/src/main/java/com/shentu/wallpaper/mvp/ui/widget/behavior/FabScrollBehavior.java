@@ -1,9 +1,9 @@
 package com.shentu.wallpaper.mvp.ui.widget.behavior;
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.ViewCompat;
+import androidx.annotation.NonNull;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.core.view.ViewCompat;
 import android.view.View;
 
 public class FabScrollBehavior extends FloatingActionButton.Behavior {

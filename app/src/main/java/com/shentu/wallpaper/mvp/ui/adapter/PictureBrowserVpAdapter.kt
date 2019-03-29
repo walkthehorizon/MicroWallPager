@@ -1,15 +1,14 @@
 package com.shentu.wallpaper.mvp.ui.adapter
 
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.ui.fragment.PictureFragment
 
-class PictureBrowserVpAdapter(fm: FragmentManager?, private val wallpapers: MutableList<Wallpaper>) : FragmentStatePagerAdapter(fm) {
+class PictureBrowserVpAdapter(fm: FragmentManager, private val wallpapers: MutableList<Wallpaper>) : FragmentStatePagerAdapter(fm) {
 
-    override fun getItem(p0: Int): Fragment {
+    override fun getItem(p0: Int): androidx.fragment.app.Fragment {
         return PictureFragment.newInstance(wallpapers[p0])
     }
 

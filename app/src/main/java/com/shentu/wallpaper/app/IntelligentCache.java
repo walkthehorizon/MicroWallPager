@@ -15,7 +15,7 @@
  */
 package com.shentu.wallpaper.app;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.integration.cache.LruCache;

@@ -2,8 +2,6 @@ package com.shentu.wallpaper.mvp.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.blankj.utilcode.util.ScreenUtils;
@@ -15,6 +13,9 @@ import com.shentu.wallpaper.mvp.ui.fragment.SplashFragment;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 import com.yanzhenjie.permission.RequestExecutor;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class SplashActivity extends BaseActivity {
 

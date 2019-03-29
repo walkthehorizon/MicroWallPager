@@ -1,8 +1,8 @@
 package com.shentu.wallpaper.mvp.ui.adapter.decoration;
 
 import android.graphics.Rect;
-import android.support.annotation.Dimension;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Dimension;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.blankj.utilcode.util.ConvertUtils;

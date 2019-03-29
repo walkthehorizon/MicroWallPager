@@ -17,7 +17,6 @@ package com.jess.arms.di.module;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.jess.arms.http.GlobalHttpHandler;
@@ -32,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import androidx.annotation.Nullable;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;

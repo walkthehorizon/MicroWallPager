@@ -2,9 +2,9 @@ package com.shentu.wallpaper.mvp.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.GridLayoutManager
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,7 +75,7 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryList
 
     override fun initData(savedInstanceState: Bundle?) {
         categoryId = arguments?.getInt(CATEGORY_ID)!!
-        rvCategoryList.layoutManager = GridLayoutManager(context, 3)
+        rvCategoryList.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 3)
         rvCategoryList.addItemDecoration(RvCategoryListDecoration(2))
 //        rvCategoryList.addOnScrollListener(OnGlideScrollListener())
         smartRefresh.setOnRefreshListener(this)

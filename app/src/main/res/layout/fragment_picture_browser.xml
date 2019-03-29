@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -45,7 +45,7 @@
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:src="@drawable/bg_wallpaper_collect" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/mbLoadOrigin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

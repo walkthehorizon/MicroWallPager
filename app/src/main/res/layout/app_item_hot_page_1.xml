@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/iv_avatar"
         tools:text="个人股热一热挺好风格豪放的合法化规划风格化风格化规范化风格" />
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:background="@color/pink" />
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <View
         android:id="@+id/view_divider"
@@ -73,4 +73,4 @@
 
     <include layout="@layout/layout_item_hot_share" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

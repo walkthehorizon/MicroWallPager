@@ -1,41 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
-        android:background="@color/white"
         android:layout_width="match_parent"
-        app:elevation="0dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:elevation="0dp">
 
-        <TextView
-            android:id="@+id/tvSearch"
-            android:text="搜索壁纸"
-            android:textColor="@color/colorIcon"
-            android:paddingStart="8dp"
-            android:gravity="center_vertical|start"
-            android:drawableStart="@drawable/ic_search_black_24dp"
-            app:layout_scrollFlags="enterAlways|scroll"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:background="@drawable/bg_home_search"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="32dp" />
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            app:layout_scrollFlags="scroll">
 
-        <android.support.v4.view.ViewPager
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <android.support.design.widget.TabLayout.SlidingTabIndicator
+            <com.shentu.wallpaper.mvp.ui.widget.ArcImageView
+                android:id="@+id/arc1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:alpha="0"
+                app:arc_height="20dp"
+                app:layout_constraintDimensionRatio="H,16:8"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.shentu.wallpaper.mvp.ui.widget.ArcImageView
+                android:id="@+id/arc2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:alpha="0"
+                app:arc_height="20dp"
+                app:layout_constraintDimensionRatio="H,16:8"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.shentu.wallpaper.mvp.ui.widget.loopviewpager.LoopViewPager
+                android:id="@+id/bannerPager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="80dp"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:clipToPadding="true"
+                app:layout_constraintDimensionRatio="H,733:313"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_scrollFlags="scroll" />
+
+            <me.relex.circleindicator.CircleIndicator
+                android:id="@+id/circleIndicator"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="20dp"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/bannerPager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_scrollFlags="scroll" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </android.support.design.widget.TabLayout.SlidingTabIndicator>
-        </android.support.v4.view.ViewPager>
-
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/refreshLayout"
@@ -44,10 +69,26 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvHot"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-</android.support.design.widget.CoordinatorLayout>
+
+    <TextView
+        android:id="@+id/tvSearch"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:background="@drawable/bg_home_search"
+        android:drawableStart="@drawable/ic_search_black_24dp"
+        android:gravity="center_vertical|start"
+        android:paddingStart="8dp"
+        android:text="搜索壁纸"
+        android:textColor="@color/colorIcon"
+        app:layout_constraintBottom_toTopOf="@id/bannerPager"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

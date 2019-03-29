@@ -3,16 +3,13 @@ package com.shentu.wallpaper.app.utils;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Environment;
-import android.support.design.internal.BottomNavigationItemView;
-import android.support.design.internal.BottomNavigationMenuView;
-import android.support.design.widget.BottomNavigationView;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.blankj.utilcode.util.SPUtils;
-import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.model.Headers;
-import com.bumptech.glide.load.model.LazyHeaders;
 import com.shentu.wallpaper.BuildConfig;
 import com.shentu.wallpaper.app.HkApplication;
 
@@ -20,8 +17,6 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import timber.log.Timber;
 
 public class HkUtils {
 

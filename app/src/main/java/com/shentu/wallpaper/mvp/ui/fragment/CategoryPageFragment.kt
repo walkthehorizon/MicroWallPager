@@ -2,7 +2,7 @@ package com.shentu.wallpaper.mvp.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.view.ViewPager
+import androidx.viewpager.widget.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -80,7 +80,7 @@ class CategoryPageFragment : BaseFragment<CategoryPagePresenter>(), CategoryPage
             viewPager.adapter = CategoryPageAdapter(curPos, wallpapers, childFragmentManager)
             viewPager.offscreenPageLimit = 2
             viewPager.currentItem = curPos
-            viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            viewPager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 
                 }

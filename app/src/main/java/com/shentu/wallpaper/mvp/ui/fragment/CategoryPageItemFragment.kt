@@ -2,8 +2,8 @@ package com.shentu.wallpaper.mvp.ui.fragment
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.view.ViewCompat
+import androidx.fragment.app.Fragment
+import androidx.core.view.ViewCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.item_rv_category_page.*
 import timber.log.Timber
 
 
-class CategoryPageItemFragment : Fragment() {
+class CategoryPageItemFragment : androidx.fragment.app.Fragment() {
 
     lateinit var picUrl: String
     var isShare: Boolean = false
