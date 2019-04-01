@@ -152,16 +152,18 @@ public class LoopViewPager extends ViewPager {
                 for (int i = 0; i < mOnPageChangeListeners.size(); i++) {
                     OnPageChangeListener listener = mOnPageChangeListeners.get(i);
                     if (listener != null) {
-                        if (realPosition != mAdapter.getRealCount() - 1) {
-                            listener.onPageScrolled(realPosition, positionOffset,
-                                    positionOffsetPixels);
-                        } else {
-                            if (positionOffset > .5) {
-                                listener.onPageScrolled(0, 0, 0);
-                            } else {
-                                listener.onPageScrolled(realPosition, 0, 0);
-                            }
-                        }
+                        listener.onPageScrolled(realPosition, positionOffset,
+                                positionOffsetPixels);
+//                        if (realPosition != mAdapter.getRealCount() - 1) {
+//                            listener.onPageScrolled(realPosition, positionOffset,
+//                                    positionOffsetPixels);
+//                        } else {
+//                            if (positionOffset > .5) {
+//                                listener.onPageScrolled(0, positionOffset, positionOffsetPixels);
+//                            } else {
+//                                listener.onPageScrolled(realPosition, positionOffset, positionOffsetPixels);
+//                            }
+//                        }
                     }
                 }
             }

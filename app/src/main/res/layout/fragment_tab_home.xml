@@ -22,19 +22,19 @@
                 android:id="@+id/arc1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:alpha="0"
+                android:src="@color/white"
                 app:arc_height="20dp"
                 app:layout_constraintDimensionRatio="H,16:8"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.shentu.wallpaper.mvp.ui.widget.ArcImageView
-                android:id="@+id/arc2"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:alpha="0"
-                app:arc_height="20dp"
-                app:layout_constraintDimensionRatio="H,16:8"
-                app:layout_constraintTop_toTopOf="parent" />
+            <!--<com.shentu.wallpaper.mvp.ui.widget.ArcImageView-->
+                <!--android:id="@+id/arc2"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:alpha="0"-->
+                <!--app:arc_height="20dp"-->
+                <!--app:layout_constraintDimensionRatio="H,16:8"-->
+                <!--app:layout_constraintTop_toTopOf="parent" />-->
 
             <com.shentu.wallpaper.mvp.ui.widget.loopviewpager.LoopViewPager
                 android:id="@+id/bannerPager"

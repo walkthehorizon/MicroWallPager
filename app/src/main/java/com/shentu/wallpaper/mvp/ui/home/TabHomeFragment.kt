@@ -1,7 +1,9 @@
 package com.shentu.wallpaper.mvp.ui.home
 
+import android.animation.ArgbEvaluator
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.SparseIntArray
@@ -93,7 +95,7 @@ class TabHomeFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerContr
 //            }
 //        })
         adapter = HomeBannerAdapter(banners)
-        bannerPager.offscreenPageLimit = banners.size + 2
+        bannerPager.offscreenPageLimit = banners.size
         bannerPager.pageMargin = ConvertUtils.dp2px(12.0f)
         bannerPager.adapter = adapter
         bannerPager.addOnPageChangeListener(this)
@@ -207,11 +209,10 @@ class TabHomeFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerContr
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-
-//        Timber.e("position:$position  offest:$positionOffset  pixel:$positionOffsetPixels")
-//
-//        arc1.alpha = positionOffset
-//        arc2.alpha = 1 - positionOffset
+        Timber.e("position:$position  offest:$positionOffset  pixel:$positionOffsetPixels")
+        val evaluate = ArgbEvaluator().evaluate(positionOffset, Color.parseColor(banners[position].color),
+                Color.parseColor(banners[if (position == bannerPager.adapter!!.count - 1) 0 else position + 1].color)) as Int
+        arc1.setColorFilter(evaluate)
     }
 
     override fun onPageSelected(position: Int) {
