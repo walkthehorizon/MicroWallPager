@@ -2,7 +2,7 @@ package com.shentu.wallpaper.model
 
 import android.app.Application
 import com.google.gson.Gson
-import com.jess.arms.di.scope.FragmentScope
+import com.jess.arms.di.scope.ActivityScope
 import com.jess.arms.integration.IRepositoryManager
 import com.jess.arms.mvp.BaseModel
 import com.shentu.wallpaper.model.api.cache.MicroCache
@@ -15,7 +15,7 @@ import io.rx_cache2.EvictDynamicKey
 import javax.inject.Inject
 
 
-@FragmentScope
+@ActivityScope
 class PictureBrowserModel
 @Inject
 constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager), PictureBrowserContract.Model {
@@ -23,7 +23,7 @@ constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager
     @Inject
     lateinit var mGson: Gson;
     @Inject
-    lateinit var mApplication: Application;
+    lateinit var mApplication: Application
 
     override fun getWallPapersBySubjectId(id: Int): Observable<WallpaperPageResponse> {
         return Observable.just(mRepositoryManager

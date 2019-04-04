@@ -3,7 +3,7 @@ package com.shentu.wallpaper.mvp.presenter
 import android.app.Application
 import android.content.Context
 import com.blankj.utilcode.util.FileUtils
-import com.jess.arms.di.scope.FragmentScope
+import com.jess.arms.di.scope.ActivityScope
 import com.jess.arms.http.imageloader.ImageLoader
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
@@ -25,7 +25,7 @@ import java.io.File
 import javax.inject.Inject
 
 
-@FragmentScope
+@ActivityScope
 class PictureBrowserPresenter
 @Inject
 constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContract.View) :
@@ -38,8 +38,8 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
     lateinit var mImageLoader: ImageLoader
     @Inject
     lateinit var mAppManager: AppManager
-    @Inject
-    lateinit var context: Context
+//    @Inject
+//    lateinit var context: Context
 
 
     fun getPictures(id: Int) {
@@ -61,7 +61,7 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
         Observable.create(ObservableOnSubscribe<MutableList<Wallpaper>> {
             for (wallpaper in wallpapers) {
                 val file: File? = try {
-                    GlideArms.with(context).downloadOnly().load(wallpaper.origin_url).onlyRetrieveFromCache(true).submit().get()
+                    GlideArms.with(mRootView as Context).downloadOnly().load(wallpaper.origin_url).onlyRetrieveFromCache(true).submit().get()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     null

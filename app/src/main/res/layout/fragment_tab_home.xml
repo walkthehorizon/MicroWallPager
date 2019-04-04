@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/coordinator"
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -24,20 +25,13 @@
                 android:layout_height="0dp"
                 android:src="@color/white"
                 app:arc_height="20dp"
-                app:layout_constraintDimensionRatio="H,16:8"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!--<com.shentu.wallpaper.mvp.ui.widget.ArcImageView-->
-                <!--android:id="@+id/arc2"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:alpha="0"-->
-                <!--app:arc_height="20dp"-->
-                <!--app:layout_constraintDimensionRatio="H,16:8"-->
-                <!--app:layout_constraintTop_toTopOf="parent" />-->
+                app:layout_constraintDimensionRatio="H,16:8.5"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:tint="@color/green" />
 
             <com.shentu.wallpaper.mvp.ui.widget.loopviewpager.LoopViewPager
                 android:id="@+id/bannerPager"
+                tools:background="@color/red"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -76,12 +70,19 @@
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
+    <View
+        android:id="@+id/bgSearch"
+        tools:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="76dp">
+    </View>
+
     <TextView
         android:id="@+id/tvSearch"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="36dp"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:background="@drawable/bg_home_search"
         android:drawableStart="@drawable/ic_search_black_24dp"

@@ -1,11 +1,9 @@
 package com.shentu.wallpaper.mvp.ui.adapter;
 
 import android.graphics.Color;
-import androidx.cardview.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.load.MultiTransformation;
@@ -24,6 +22,7 @@ import com.shentu.wallpaper.mvp.ui.activity.PictureBrowserActivity;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.cardview.widget.CardView;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
@@ -38,10 +37,7 @@ public class HotAdapter extends BaseMultiItemQuickAdapter<Subject, BaseViewHolde
 
         this.setOnItemClickListener((adapter, view, position) -> {
             Subject subject = (Subject) adapter.getData().get(position);
-            ARouter.getInstance()
-                    .build("/picture/browser/activity")
-                    .withInt(PictureBrowserActivity.SUBJECT_ID, subject.id)
-                    .navigation();
+            PictureBrowserActivity.Companion.open(mContext,subject.id);
         });
 
         this.setOnItemChildClickListener((adapter, view, position) -> {

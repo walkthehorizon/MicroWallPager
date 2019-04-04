@@ -15,4 +15,5 @@ class Wallpaper : Serializable {
      */
     var isOriginExist: Boolean = false
 
+
 }

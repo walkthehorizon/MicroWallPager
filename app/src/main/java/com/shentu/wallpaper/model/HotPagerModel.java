@@ -10,7 +10,8 @@ import com.shentu.wallpaper.model.api.service.MicroService;
 import com.shentu.wallpaper.model.entity.BasePageResponse;
 import com.shentu.wallpaper.model.entity.BaseResponse;
 import com.shentu.wallpaper.model.entity.Subject;
-import com.shentu.wallpaper.mvp.contract.HotPagerContract;
+import com.shentu.wallpaper.model.response.WallpaperPageResponse;
+import com.shentu.wallpaper.mvp.contract.TabHomeContract;
 
 import javax.inject.Inject;
 
@@ -18,7 +19,7 @@ import io.reactivex.Observable;
 
 
 @FragmentScope
-public class HotPagerModel extends BasePageModel implements HotPagerContract.Model {
+public class HotPagerModel extends BasePageModel implements TabHomeContract.Model {
 
     @Inject
     Gson mGson;
@@ -43,6 +44,13 @@ public class HotPagerModel extends BasePageModel implements HotPagerContract.Mod
         return mRepositoryManager
                 .obtainRetrofitService(MicroService.class)
                 .getSubjects(subjectType,limit, offset);
+    }
+
+    @Override
+    public Observable<WallpaperPageResponse> getRecommends(boolean clear) {
+        offset = clear ? 0 : (limit + offset);
+        return mRepositoryManager.obtainRetrofitService(MicroService.class)
+                .getRecommendWallpapers(limit,offset);
     }
 
 }

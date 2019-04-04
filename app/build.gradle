@@ -157,6 +157,7 @@ dependencies {
     implementation rootProject.ext.dependencies["SmartRefreshHeader"]
     implementation rootProject.ext.dependencies["photoview"]
     implementation rootProject.ext.dependencies["material-dialogs"]
+    implementation rootProject.ext.dependencies["flexbox"]
     //bugly
     implementation rootProject.ext.dependencies["bugly-upgrade"]
     implementation rootProject.ext.dependencies["bugly-tinker"]

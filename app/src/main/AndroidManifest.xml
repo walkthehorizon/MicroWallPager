@@ -65,12 +65,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".mvp.ui.activity.SettingMoreActivity" />
-
-        <service android:name=".app.service.ExampleService" />
-        <activity
-            android:name=".mvp.ui.activity.SecondActivity"
-            android:process=":b" />
-        <activity android:name=".mvp.ui.activity.FirstActivity"/>
     </application>
 
 </manifest>

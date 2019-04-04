@@ -25,20 +25,25 @@ public interface MicroService {
     Observable<SplashAdResponse> getSplash();
 
     @GET("subjects")
-    Observable<BaseResponse<BasePageResponse<Subject>>> getSubjects(@Query("subject_type") int subjectType , @Query("limit") int limit, @Query("offset") int offset);
+    Observable<BaseResponse<BasePageResponse<Subject>>> getSubjects(@Query("subject_type") int subjectType, @Query("limit") int limit, @Query("offset") int offset);
 
     @GET("wallpapers")
     Observable<WallpaperPageResponse> getWallpapersBySubjectId(@Query("subject_id") int subjectId, @Query("limit") int limit, @Query("offset") int offset);
+
+    @GET("recommend")
+    Observable<WallpaperPageResponse> getRecommendWallpapers(
+            @Query("limit") int limit,
+            @Query("offset") int offset);
 
     @GET("category/list")
     Observable<BasePageResponse<Category>> getCategorys();
 
     @GET("category/list/{id}")
-    Observable<BaseResponse<Category>> getCategoryById(@Path("id")int id, @Query("limit") int limit, @Query("offset") int offset);
+    Observable<BaseResponse<Category>> getCategoryById(@Path("id") int id, @Query("limit") int limit, @Query("offset") int offset);
 
     @FormUrlEncoded
     @POST("account/register/")
-    Observable<BaseResponse<Boolean>> getRegisterAccount(@Field("phone") String phone,@Field("password") String password);
+    Observable<BaseResponse<Boolean>> getRegisterAccount(@Field("phone") String phone, @Field("password") String password);
 
     @FormUrlEncoded
     @POST("account/login/")

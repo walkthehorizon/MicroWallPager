@@ -5,14 +5,15 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.SparseIntArray
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.ConvertUtils
+import com.google.android.material.appbar.AppBarLayout
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.BaseLazyLoadFragment
 import com.jess.arms.utils.ArmsUtils
@@ -26,27 +27,26 @@ import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.page.EmptyCallback
 import com.shentu.wallpaper.app.page.ErrorCallback
 import com.shentu.wallpaper.di.component.DaggerHotPagerComponent
-import com.shentu.wallpaper.di.module.HotPagerModule
+import com.shentu.wallpaper.di.module.TabHomeModule
 import com.shentu.wallpaper.model.entity.Banner
-import com.shentu.wallpaper.model.entity.Subject
-import com.shentu.wallpaper.mvp.contract.HotPagerContract
-import com.shentu.wallpaper.mvp.presenter.HotPagerPresenter
+import com.shentu.wallpaper.model.entity.Wallpaper
+import com.shentu.wallpaper.mvp.contract.TabHomeContract
+import com.shentu.wallpaper.mvp.presenter.TabHomePresenter
 import com.shentu.wallpaper.mvp.ui.adapter.HomeBannerAdapter
-import com.shentu.wallpaper.mvp.ui.adapter.HotAdapter
-import com.shentu.wallpaper.mvp.ui.adapter.decoration.HotPageRvDecoration
+import com.shentu.wallpaper.mvp.ui.adapter.RecommendAdapter
 import com.shentu.wallpaper.mvp.ui.widget.CustomPopWindow
 import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
 import timber.log.Timber
 
 
-class TabHomeFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerContract.View
+class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContract.View
         , OnRefreshListener, OnLoadMoreListener, ViewPager.OnPageChangeListener, ViewPager.PageTransformer {
 
     private var popWindow: CustomPopWindow? = null
     private var subType = -1//主题分类
     private var typeSparse: SparseIntArray? = null
-    private var hotAdapter: HotAdapter? = null
+    private lateinit var recommendAdapter: RecommendAdapter
     private var loadService: LoadService<*>? = null
     private lateinit var adapter: HomeBannerAdapter
     private val banners: List<Banner> = listOf(
@@ -62,7 +62,7 @@ class TabHomeFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerContr
         DaggerHotPagerComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
-                .hotPagerModule(HotPagerModule(this))
+                .tabHomeModule(TabHomeModule(this))
                 .build()
                 .inject(this)
     }
@@ -72,6 +72,7 @@ class TabHomeFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerContr
         return loadService!!.loadLayout
     }
 
+    @SuppressLint("WrongConstant")
     override fun initData(savedInstanceState: Bundle?) {
         loadService?.showSuccess()
         //初始化筛选项
@@ -81,10 +82,12 @@ class TabHomeFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerContr
         typeSparse!!.append(R.id.mTvCos, 2)
         typeSparse!!.append(R.id.mTvGirl, 3)
 
-        hotAdapter = HotAdapter(null)
-        rvHot.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
-        rvHot.addItemDecoration(HotPageRvDecoration(8))
-        rvHot.adapter = hotAdapter
+        recommendAdapter = RecommendAdapter(mContext, null)
+        rvHot.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+
+//        rvHot.addItemDecoration(HotPageRvDecoration(8))
+        rvHot.adapter = recommendAdapter
+
         refreshLayout.setOnRefreshListener(this)
         refreshLayout.setOnLoadMoreListener(this)
 //        toolbar.setTitle(resources.getString(R.string.app_name))
@@ -102,6 +105,11 @@ class TabHomeFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerContr
         bannerPager.setPageTransformer(true, this)
 //        bannerPager.setCurrentItem(adapter.getFirstPosition(, false)
         circleIndicator.setViewPager(bannerPager)
+
+        appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, i ->
+            //            Timber.e("current:$i total:${appBarLayout.totalScrollRange} p:${i * 1.0f / appBarLayout.totalScrollRange}")
+            bgSearch.setBackgroundColor(ArgbEvaluator().evaluate(Math.abs(i) * 1.0f / appBarLayout.totalScrollRange, Color.TRANSPARENT, Color.WHITE) as Int)
+        })
     }
 
     override fun setData(data: Any?) {
@@ -147,26 +155,32 @@ class TabHomeFragment : BaseLazyLoadFragment<HotPagerPresenter>(), HotPagerContr
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
-        assert(mPresenter != null)
-        mPresenter!!.getSubjects(subType, false)
+        mPresenter?.getRecommends(false)
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
-        assert(mPresenter != null)
-        mPresenter!!.getSubjects(subType, true)
+        mPresenter?.getRecommends(true)
     }
 
-    @SuppressLint("CheckResult")
-    override fun showHotSubject(subjects: List<Subject>, clear: Boolean) {
-        for (subject in subjects) {
-            if (TextUtils.isEmpty(subject.cover_1) || TextUtils.isEmpty(subject.cover_2)) {
-                subject.type = Subject.ITEM_VIEW_1
-            }
-        }
+//    @SuppressLint("CheckResult")
+//    override fun showHotSubject(subjects: List<Subject>, clear: Boolean) {
+//        for (subject in subjects) {
+//            if (TextUtils.isEmpty(subject.cover_1) || TextUtils.isEmpty(subject.cover_2)) {
+//                subject.type = Subject.ITEM_VIEW_1
+//            }
+//        }
+//        if (clear) {
+//            hotAdapter!!.setNewData(subjects)
+//        } else {
+//            hotAdapter!!.addData(subjects)
+//        }
+//    }
+
+    override fun showRecommends(wallpapers: MutableList<Wallpaper>, clear: Boolean) {
         if (clear) {
-            hotAdapter!!.setNewData(subjects)
+            recommendAdapter.setNewData(wallpapers)
         } else {
-            hotAdapter!!.addData(subjects)
+            recommendAdapter.addData(wallpapers)
         }
     }
 
