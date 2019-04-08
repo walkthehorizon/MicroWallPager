@@ -17,9 +17,6 @@ package com.jess.arms.base;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +31,9 @@ import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 
@@ -110,4 +110,8 @@ public abstract class BaseFragment<P extends IPresenter> extends Fragment implem
         return true;
     }
 
+    @Override
+    public void setData(@Nullable Object data) {
+        //默认实现，啥也不做
+    }
 }

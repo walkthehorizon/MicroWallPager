@@ -24,7 +24,6 @@ class HomeBannerAdapter(private val banners: List<Banner>) : PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val ivBanner = ImageView(container.context)
-        ivBanner.id = 8880 + position
         container.addView(ivBanner, -1, -1)
         ivBanner.setOnClickListener { ToastUtils.showShort(position) }
         GlideArms.with(container.context)

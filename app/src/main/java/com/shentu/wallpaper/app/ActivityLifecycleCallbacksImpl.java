@@ -38,7 +38,7 @@ public class ActivityLifecycleCallbacksImpl implements Application.ActivityLifec
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         Timber.w(activity + " - onActivityCreated");
         BarUtils.setStatusBarAlpha(activity);
-        BarUtils.setStatusBarLightMode(activity,true);
+//        BarUtils.setStatusBarLightMode(activity,false);
     }
 
     @Override

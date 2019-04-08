@@ -3,7 +3,7 @@ package com.shentu.wallpaper.mvp.ui.adapter
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.palette.graphics.Palette
@@ -29,18 +29,30 @@ class RecommendAdapter(context: Context, data: List<Wallpaper>?) : BaseQuickAdap
     private val wallpaperList: RecommendWallpaperList = RecommendWallpaperList()
 
     init {
-        setOnItemClickListener { _, _, _ -> PictureBrowserActivity.open(context,  wallpaperList) }
+        setOnItemClickListener { _, _, _ -> PictureBrowserActivity.open(context, wallpaperList) }
     }
 
     override fun convert(helper: BaseViewHolder, item: Wallpaper) {
+        val cardView:CardView = helper.getView(R.id.cardView)
+        val ivPicture:ImageView = helper.getView(R.id.ivPicture)
+        val lp: ViewGroup.LayoutParams = ivPicture.layoutParams
+        if (helper.layoutPosition == 0) {
+            lp.height = ConvertUtils.dp2px(100.0f)
+            ivPicture.layoutParams = lp
+        } else {
+            lp.height = ConvertUtils.dp2px(300.0f)
+            ivPicture.layoutParams = lp
+        }
         GlideArms.with(helper.itemView.context)
                 .load(item.url)
                 .listener(GlidePalette.with(item.url)
                         .use(VIBRANT_LIGHT)
-                        .intoCallBack { palette -> (helper.getView<View>(R.id.cardView) as CardView).setCardBackgroundColor(Objects.requireNonNull<Palette>(palette).getLightMutedColor(Color.LTGRAY)) })
+                        .intoCallBack { palette -> (cardView)
+                                .setCardBackgroundColor(Objects.requireNonNull<Palette>(palette)
+                                        .getLightVibrantColor(Color.WHITE)) })
                 .transform(MultiTransformation<Bitmap>(CenterCrop(), RoundedCorners(ConvertUtils.dp2px(5f))))
                 .transition(withCrossFade())
-                .into(helper.getView<View>(R.id.ivPicture) as ImageView)
+                .into(ivPicture)
     }
 
     override fun setNewData(data: MutableList<Wallpaper>?) {

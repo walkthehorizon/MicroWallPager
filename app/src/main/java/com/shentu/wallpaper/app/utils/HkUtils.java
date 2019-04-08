@@ -3,13 +3,13 @@ package com.shentu.wallpaper.app.utils;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Environment;
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.blankj.utilcode.util.SPUtils;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.shentu.wallpaper.BuildConfig;
 import com.shentu.wallpaper.app.HkApplication;
 
@@ -146,9 +146,4 @@ public class HkUtils {
         }
     }
 
-
-
-    public void optimalGlideScrollWithRv(){
-
-    }
 }

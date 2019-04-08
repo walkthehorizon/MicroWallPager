@@ -3,6 +3,7 @@ package com.shentu.wallpaper.mvp.ui.home
 import android.animation.ArgbEvaluator
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.SparseIntArray
@@ -12,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager.widget.ViewPager
+import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.google.android.material.appbar.AppBarLayout
 import com.jess.arms.di.component.AppComponent
@@ -34,6 +36,7 @@ import com.shentu.wallpaper.mvp.contract.TabHomeContract
 import com.shentu.wallpaper.mvp.presenter.TabHomePresenter
 import com.shentu.wallpaper.mvp.ui.adapter.HomeBannerAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.RecommendAdapter
+import com.shentu.wallpaper.mvp.ui.adapter.decoration.RandomRecommendDecoration
 import com.shentu.wallpaper.mvp.ui.widget.CustomPopWindow
 import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
@@ -41,7 +44,7 @@ import timber.log.Timber
 
 
 class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContract.View
-        , OnRefreshListener, OnLoadMoreListener, ViewPager.OnPageChangeListener, ViewPager.PageTransformer {
+        , OnRefreshListener, OnLoadMoreListener, ViewPager.OnPageChangeListener {
 
     private var popWindow: CustomPopWindow? = null
     private var subType = -1//主题分类
@@ -84,8 +87,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
 
         recommendAdapter = RecommendAdapter(mContext, null)
         rvHot.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-
-//        rvHot.addItemDecoration(HotPageRvDecoration(8))
+        rvHot.addItemDecoration(RandomRecommendDecoration(ConvertUtils.dp2px(12.0f)))
         rvHot.adapter = recommendAdapter
 
         refreshLayout.setOnRefreshListener(this)
@@ -102,19 +104,30 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
         bannerPager.pageMargin = ConvertUtils.dp2px(12.0f)
         bannerPager.adapter = adapter
         bannerPager.addOnPageChangeListener(this)
-        bannerPager.setPageTransformer(true, this)
 //        bannerPager.setCurrentItem(adapter.getFirstPosition(, false)
         circleIndicator.setViewPager(bannerPager)
 
         appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, i ->
             //            Timber.e("current:$i total:${appBarLayout.totalScrollRange} p:${i * 1.0f / appBarLayout.totalScrollRange}")
-            bgSearch.setBackgroundColor(ArgbEvaluator().evaluate(Math.abs(i) * 1.0f / appBarLayout.totalScrollRange, Color.TRANSPARENT, Color.WHITE) as Int)
+            val percent: Float = Math.abs(i) * 1.0f / appBarLayout.totalScrollRange//向上滚动，增大
+            bgSearch.setBackgroundColor(ArgbEvaluator().evaluate(percent, Color.TRANSPARENT, Color.WHITE) as Int)
+            if (percent - 0.5f > 0) {
+                activity?.let { BarUtils.setStatusBarLightMode(it, true) }
+                val color = Color.parseColor("#666666")
+                tvSearch.setTextColor(color)
+                tvSearch.supportBackgroundTintList = ColorStateList.valueOf(Color.parseColor("#F5F5F5"))
+                tvSearch.supportCompoundDrawablesTintList = ColorStateList.valueOf(color)
+            } else {
+                activity?.let { BarUtils.setStatusBarLightMode(it, false) }
+                val color = Color.parseColor("#AAFDFDFD")
+                tvSearch.setTextColor(color)
+                tvSearch.supportBackgroundTintList = ColorStateList.valueOf(Color.parseColor("#4FF5F5F5"))
+                tvSearch.supportCompoundDrawablesTintList = ColorStateList.valueOf(color)
+            }
+            arc1.alpha = Math.max(1.0f - percent * 3, 0f)//双倍速度隐藏与显示，效果更好
         })
     }
 
-    override fun setData(data: Any?) {
-
-    }
 
     override fun lazyLoadData() {
         refreshLayout.autoRefresh()
@@ -151,7 +164,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     }
 
     override fun killMyself() {
-
+        activity?.finish()
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
@@ -217,9 +230,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     }
 
     override fun onPageScrollStateChanged(state: Int) {
-//        if (state == ViewPager.SCROLL_STATE_IDLE) {
-//            arc1.setImageResource(Color.parseColor(banners[viewPager.currentItem].color))
-//        }
+//
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -234,25 +245,8 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     }
 
     companion object {
-
         fun newInstance(): TabHomeFragment {
             return TabHomeFragment()
         }
-    }
-
-    override fun transformPage(page: View, position: Float) {
-        Timber.e("%s%s", page.id, "position:$position")
-//        if (position < -1 || position > 1) {
-//
-//        } else {
-//            if (-1 <= position && position < 0) {
-//                arc1.alpha = 1 + position - 0f * position
-//            } else if (0 < position && position <= 1) {
-//                arc1.alpha = 1 - position + 0f * position
-//            } else {
-//                arc1.alpha = 1f
-//                arc2.alpha = 0f
-//            }
-//        }
     }
 }

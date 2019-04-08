@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.blankj.utilcode.util.SPUtils;
-import com.jess.arms.utils.ArmsUtils;
 import com.shentu.wallpaper.model.entity.User;
 import com.shentu.wallpaper.mvp.ui.activity.LoginActivity;
 
