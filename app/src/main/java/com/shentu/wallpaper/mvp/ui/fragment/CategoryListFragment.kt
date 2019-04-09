@@ -2,12 +2,11 @@ package com.shentu.wallpaper.mvp.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.core.app.ActivityOptionsCompat
-import androidx.core.view.ViewCompat
-import androidx.recyclerview.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.ViewCompat
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
@@ -97,12 +96,12 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryList
         }
     }
 
-    override fun onRefresh(refreshLayout: RefreshLayout?) {
+    override fun onRefresh(refreshLayout: RefreshLayout) {
         page = 0
         mPresenter?.getCategoryList(categoryId, page,true)
     }
 
-    override fun onLoadMore(refreshLayout: RefreshLayout?) {
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
         mPresenter?.getCategoryList(categoryId, ++page,false)
     }
 

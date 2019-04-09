@@ -11,6 +11,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.BarUtils
@@ -18,8 +19,10 @@ import com.blankj.utilcode.util.ConvertUtils
 import com.google.android.material.appbar.AppBarLayout
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.BaseLazyLoadFragment
+import com.jess.arms.mvp.IView
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
+import com.jess.arms.utils.RxLifecycleUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.scwang.smartrefresh.layout.api.RefreshLayout
@@ -38,9 +41,15 @@ import com.shentu.wallpaper.mvp.ui.adapter.HomeBannerAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.RecommendAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.RandomRecommendDecoration
 import com.shentu.wallpaper.mvp.ui.widget.CustomPopWindow
+import com.trello.rxlifecycle2.android.FragmentEvent
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 
 class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContract.View
@@ -51,7 +60,9 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     private var typeSparse: SparseIntArray? = null
     private lateinit var recommendAdapter: RecommendAdapter
     private var loadService: LoadService<*>? = null
-    private lateinit var adapter: HomeBannerAdapter
+    private lateinit var bannerAdapter: HomeBannerAdapter
+    private var isLoading: Boolean = false
+    private lateinit var appComponent: AppComponent
     private val banners: List<Banner> = listOf(
             Banner("http://c3.res.meizu.com/fileserver/operation/speical/logo/239/1e04b673beda485d9c7befba71aca774.png", "#780000"),
             Banner("http://c3.res.meizu.com/fileserver/operation/speical/logo/239/15802f27083a448ea21ff96bbcce3369.jpg", "#1848C0"),
@@ -68,6 +79,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
                 .tabHomeModule(TabHomeModule(this))
                 .build()
                 .inject(this)
+        this.appComponent = appComponent
     }
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -92,20 +104,6 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
 
         refreshLayout.setOnRefreshListener(this)
         refreshLayout.setOnLoadMoreListener(this)
-//        toolbar.setTitle(resources.getString(R.string.app_name))
-//        toolbar.setRightIcon(R.drawable.ic_more_horiz_white_24dp)
-//        toolbar.setOnClickListener(object : DefaultToolbar.OnClickListenerImpl() {
-//            override fun onClickRightIcon() {
-//                showFilterPop()
-//            }
-//        })
-        adapter = HomeBannerAdapter(banners)
-        bannerPager.offscreenPageLimit = banners.size
-        bannerPager.pageMargin = ConvertUtils.dp2px(12.0f)
-        bannerPager.adapter = adapter
-        bannerPager.addOnPageChangeListener(this)
-//        bannerPager.setCurrentItem(adapter.getFirstPosition(, false)
-        circleIndicator.setViewPager(bannerPager)
 
         appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, i ->
             //            Timber.e("current:$i total:${appBarLayout.totalScrollRange} p:${i * 1.0f / appBarLayout.totalScrollRange}")
@@ -126,8 +124,22 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
             }
             arc1.alpha = Math.max(1.0f - percent * 3, 0f)//双倍速度隐藏与显示，效果更好
         })
-    }
 
+        rvHot.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val manager: StaggeredGridLayoutManager = (recyclerView.layoutManager) as StaggeredGridLayoutManager
+                val into = manager.findLastVisibleItemPositions(null)
+                val total = manager.itemCount
+                if (total - into[0] < 12 && !isLoading) {
+                    isLoading = true
+                    mPresenter?.getRecommends(false)
+                    Timber.e("auto load more...")
+                }
+            }
+        })
+        showBanners(banners as MutableList)
+    }
 
     override fun lazyLoadData() {
         refreshLayout.autoRefresh()
@@ -175,6 +187,16 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
         mPresenter?.getRecommends(true)
     }
 
+    override fun showBanners(banners: MutableList<Banner>) {
+        bannerAdapter = HomeBannerAdapter(banners)
+        bannerPager.offscreenPageLimit = banners.size
+        bannerPager.pageMargin = ConvertUtils.dp2px(12.0f)
+        bannerPager.adapter = bannerAdapter
+        bannerPager.addOnPageChangeListener(this)
+        circleIndicator.setViewPager(bannerPager)
+        startCountDown()
+    }
+
 //    @SuppressLint("CheckResult")
 //    override fun showHotSubject(subjects: List<Subject>, clear: Boolean) {
 //        for (subject in subjects) {
@@ -193,6 +215,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
         if (clear) {
             recommendAdapter.setNewData(wallpapers)
         } else {
+            isLoading = false
             recommendAdapter.addData(wallpapers)
         }
     }
@@ -242,6 +265,19 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
 
     override fun onPageSelected(position: Int) {
 //        arc1.setImageResource(Color.parseColor(banners[position].color))
+    }
+
+    private fun startCountDown() {
+        Observable.interval(5, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(RxLifecycleUtils.bindUntilEvent(this@TabHomeFragment as IView, FragmentEvent.DESTROY))
+                .subscribe(object : ErrorHandleSubscriber<Long>(appComponent.rxErrorHandler()) {
+                    override fun onNext(t: Long) {
+                        Timber.e("timer:$t")
+                        bannerPager.currentItem = (t % bannerAdapter.count).toInt()
+                    }
+                })
     }
 
     companion object {

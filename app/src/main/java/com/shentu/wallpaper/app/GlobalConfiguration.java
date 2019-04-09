@@ -18,8 +18,6 @@ package com.shentu.wallpaper.app;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.blankj.utilcode.util.PathUtils;
 import com.blankj.utilcode.util.SPUtils;
@@ -34,9 +32,13 @@ import com.squareup.leakcanary.RefWatcher;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import me.jessyan.progressmanager.ProgressManager;
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager;
 import okhttp3.Cookie;
@@ -157,7 +159,7 @@ public final class GlobalConfiguration implements ConfigModule {
         lifecycles.add(new FragmentManager.FragmentLifecycleCallbacks() {
 
             @Override
-            public void onFragmentCreated(FragmentManager fm, Fragment f, Bundle savedInstanceState) {
+            public void onFragmentCreated(@NonNull FragmentManager fm, @NonNull Fragment f, Bundle savedInstanceState) {
                 // 在配置变化的时候将这个 Fragment 保存下来,在 Activity 由于配置变化重建时重复利用已经创建的 Fragment。
                 // https://developer.android.com/reference/android/app/Fragment.html?hl=zh-cn#setRetainInstance(boolean)
                 // 如果在 XML 中使用 <Fragment/> 标签,的方式创建 Fragment 请务必在标签中加上 android:id 或者 android:tag 属性,否则 setRetainInstance(true) 无效
@@ -166,11 +168,11 @@ public final class GlobalConfiguration implements ConfigModule {
             }
 
             @Override
-            public void onFragmentDestroyed(FragmentManager fm, Fragment f) {
-                ((RefWatcher) ArmsUtils
+            public void onFragmentDestroyed(@NonNull FragmentManager fm, @NonNull Fragment f) {
+                ((RefWatcher) Objects.requireNonNull(ArmsUtils
                         .obtainAppComponentFromContext(f.getActivity())
                         .extras()
-                        .get(IntelligentCache.KEY_KEEP + RefWatcher.class.getName()))
+                        .get(IntelligentCache.KEY_KEEP + RefWatcher.class.getName())))
                         .watch(f);
             }
         });

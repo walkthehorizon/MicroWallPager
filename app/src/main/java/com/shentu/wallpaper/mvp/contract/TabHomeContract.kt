@@ -2,10 +2,7 @@ package com.shentu.wallpaper.mvp.contract
 
 import com.jess.arms.mvp.IModel
 import com.jess.arms.mvp.IView
-import com.shentu.wallpaper.model.entity.BasePageResponse
-import com.shentu.wallpaper.model.entity.BaseResponse
-import com.shentu.wallpaper.model.entity.Subject
-import com.shentu.wallpaper.model.entity.Wallpaper
+import com.shentu.wallpaper.model.entity.*
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 
 import io.reactivex.Observable
@@ -19,6 +16,8 @@ interface TabHomeContract {
         fun showFilterPop()
 
         fun showRecommends(wallpapers: MutableList<Wallpaper>, clear: Boolean)
+
+        fun showBanners(banners:MutableList<Banner>)
     }
 
     interface Model : IModel {

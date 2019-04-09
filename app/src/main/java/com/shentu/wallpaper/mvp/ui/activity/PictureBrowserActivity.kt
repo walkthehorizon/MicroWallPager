@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.core.app.ActivityOptionsCompat
 import androidx.viewpager.widget.ViewPager
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -48,6 +49,9 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     @JvmField
     @Autowired
     var wallpaperList: RecommendWallpaperList = RecommendWallpaperList()
+    @JvmField
+    @Autowired
+    var current = 0
 
     lateinit var wallpapers: MutableList<Wallpaper>
     lateinit var vpAdapter: PictureBrowserVpAdapter
@@ -83,6 +87,10 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     private fun initViewPager() {
         viewPager.addOnPageChangeListener(this)
         viewPager.offscreenPageLimit = 4
+        vpAdapter = PictureBrowserVpAdapter(supportFragmentManager, wallpapers)
+        viewPager.adapter = vpAdapter
+        viewPager.currentItem = current
+        onPageSelected(current)
 
         ivDownload.setOnClickListener {
             FileDownloader.getImpl().create(wallpapers[viewPager.currentItem].origin_url)
@@ -122,10 +130,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
     override fun showPictures(pictures: MutableList<Wallpaper>) {
         wallpapers = pictures
-        viewPager.offscreenPageLimit = 5
-        vpAdapter = PictureBrowserVpAdapter(supportFragmentManager, pictures)
-        viewPager.adapter = vpAdapter
-        onPageSelected(0)
+        initViewPager()
     }
 
     override fun onPageScrollStateChanged(state: Int) {
@@ -186,11 +191,13 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                     .navigation(context)
         }
 
-        fun open(context: Context, wallpaperList: RecommendWallpaperList) {
+        fun open(context: Context, wallpaperList: RecommendWallpaperList , current:Int , compat:ActivityOptionsCompat) {
             ARouter.getInstance()
                     .build("/picture/browser/activity")
                     .withInt("type", 1)
                     .withSerializable("wallpaperList", wallpaperList)
+                    .withInt("current",current)
+                    .withOptionsCompat(compat)
                     .navigation(context)
         }
     }

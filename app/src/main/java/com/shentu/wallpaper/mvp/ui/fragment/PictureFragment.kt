@@ -49,45 +49,18 @@ class PictureFragment : BaseFragment<IPresenter>() {
     override fun initData(savedInstanceState: Bundle?) {
         wallpaper = arguments!!["wallpaper"] as Wallpaper
         photoView.setImageViewFactory(GlideImageViewFactory())
-//        photoView.setOnPhotoTapListener { _, _, _ ->
-//            EventBusManager.getInstance().post(SwitchNavigationEvent())
-//        }
-//        photoView.setOnOutsidePhotoTapListener {
-//            EventBusManager.getInstance().post(SwitchNavigationEvent())
-//        }
-//        photoView.minimumScale = 1f
-//        photoView.maximumScale = 6.0f
-//        photoView.mediumScale = 3f
-
         photoView.setOnClickListener {
             EventBusManager.getInstance().post(SwitchNavigationEvent())
         }
 
         //若原图存在直接加载原图
-//        val picturePath: String? = if (wallpaper.isOriginExist) wallpaper.origin_url else wallpaper.url
-        if (wallpaper.isOriginExist) {
-            context?.let {
-                photoView.showImage(Uri.parse(wallpaper.origin_url))
-//                GlideArms.with(it)
-//                        .load(wallpaper.origin_url)
-//                        .transition(withCrossFade())
-//                        .onlyRetrieveFromCache(true)
-//                        .diskCacheStrategy(DiskCacheStrategy.DATA)
-//                        .fitCenter()
-//                        .fallback(R.drawable.default_cover_vertical)
-//                        .into(photoView)
-            }
-        } else {
-            context?.let {
-                photoView.showImage(Uri.parse(wallpaper.url))
-//                GlideArms.with(it)
-//                        .load(wallpaper.url)
-//                        .transition(withCrossFade())
-//                        .fitCenter()
-//                        .fallback(R.drawable.default_cover_vertical)
-//                        .into(photoView)
-            }
+        context?.let {
+            photoView.showImage(if (wallpaper.isOriginExist)
+                Uri.parse(wallpaper.origin_url)
+            else
+                Uri.parse(wallpaper.url))
         }
+
     }
 
     override fun setData(data: Any?) {
@@ -100,14 +73,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
         if (event.id != wallpaper.id) {
             return
         }
-        //ProgressManager.getInstance().addResponseListener(wallpaper.origin_url, getGlideListener(loadingView, wallpaper))
         context?.let {
-            //            GlideArms.with(it)
-//                    .load(wallpaper.origin_url)
-//                    .fitCenter()
-//                    .transition(withCrossFade())
-//                    .diskCacheStrategy(DiskCacheStrategy.DATA)//仅缓存原数据
-//                    .into(photoView)
             photoView.setProgressIndicator(ProgressPieIndicator())
             photoView.setImageLoaderCallback(getImageLoadCallback())
             photoView.showImage(Uri.parse(wallpaper.origin_url))
@@ -144,33 +110,4 @@ class PictureFragment : BaseFragment<IPresenter>() {
             }
         }
     }
-
-//    private fun getGlideListener(loadingView: PictureLoadingView, wallpaper: Wallpaper): ProgressListener {
-//        return object : ProgressListener {
-//            override fun onProgress(progressInfo: ProgressInfo?) {
-//                if (progressInfo?.isFinish!!) {
-//                    loadingView.loadCompleted()
-//                    wallpaper.isOriginExist = true
-//                    EventBus.getDefault().post(LoadOriginResultEvent(wallpaper.id, true))
-//                    return
-//                }
-////                Timber.e("id：" + progressInfo.id + "下载进度：" + (progressInfo.percent.toDouble() / 100))
-//                loadingView.setProgress(progressInfo.percent.toDouble() / 100)
-//            }
-//
-//            @SuppressLint("CheckResult")
-//            override fun onError(id: Long, e: Exception?) {
-//                Completable.fromAction {}
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe({
-//                            EventBus.getDefault().post(LoadOriginResultEvent(wallpaper.id, false))
-//                            loadingView.loadFaild()
-//                        }, {
-//                            it.printStackTrace()
-//                            EventBus.getDefault().post(LoadOriginResultEvent(wallpaper.id, false))
-//                        })
-//            }
-//        }
-//    }
 }

@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityOptionsCompat
 import androidx.palette.graphics.Palette
 import com.blankj.utilcode.util.ConvertUtils
 import com.bumptech.glide.load.MultiTransformation
@@ -13,6 +14,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseQuickAdapter.OnItemClickListener
 import com.chad.library.adapter.base.BaseViewHolder
 import com.github.florent37.glidepalette.BitmapPalette.Profile.VIBRANT_LIGHT
 import com.github.florent37.glidepalette.GlidePalette
@@ -29,12 +31,17 @@ class RecommendAdapter(context: Context, data: List<Wallpaper>?) : BaseQuickAdap
     private val wallpaperList: RecommendWallpaperList = RecommendWallpaperList()
 
     init {
-        setOnItemClickListener { _, _, _ -> PictureBrowserActivity.open(context, wallpaperList) }
+        onItemClickListener = OnItemClickListener { _, view, position ->
+            val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
+                    , view.width/2,view.height/2
+                    , 0, 0)
+            PictureBrowserActivity.open(context, wallpaperList, position, compat)
+        }
     }
 
     override fun convert(helper: BaseViewHolder, item: Wallpaper) {
-        val cardView:CardView = helper.getView(R.id.cardView)
-        val ivPicture:ImageView = helper.getView(R.id.ivPicture)
+        val cardView: CardView = helper.getView(R.id.cardView)
+        val ivPicture: ImageView = helper.getView(R.id.ivPicture)
         val lp: ViewGroup.LayoutParams = ivPicture.layoutParams
         if (helper.layoutPosition == 0) {
             lp.height = ConvertUtils.dp2px(100.0f)
@@ -47,9 +54,11 @@ class RecommendAdapter(context: Context, data: List<Wallpaper>?) : BaseQuickAdap
                 .load(item.url)
                 .listener(GlidePalette.with(item.url)
                         .use(VIBRANT_LIGHT)
-                        .intoCallBack { palette -> (cardView)
-                                .setCardBackgroundColor(Objects.requireNonNull<Palette>(palette)
-                                        .getLightVibrantColor(Color.WHITE)) })
+                        .intoCallBack { palette ->
+                            (cardView)
+                                    .setCardBackgroundColor(Objects.requireNonNull<Palette>(palette)
+                                            .getLightVibrantColor(Color.WHITE))
+                        })
                 .transform(MultiTransformation<Bitmap>(CenterCrop(), RoundedCorners(ConvertUtils.dp2px(5f))))
                 .transition(withCrossFade())
                 .into(ivPicture)

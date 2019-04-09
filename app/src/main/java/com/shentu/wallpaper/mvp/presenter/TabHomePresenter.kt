@@ -49,6 +49,7 @@ constructor(model: TabHomeContract.Model, rootView: TabHomeContract.View) : Base
                 })
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
     }

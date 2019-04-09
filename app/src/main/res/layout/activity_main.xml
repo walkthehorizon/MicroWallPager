@@ -6,20 +6,18 @@
     android:layout_height="match_parent">
 
     <com.shentu.wallpaper.mvp.ui.widget.NoScrollViewPager
-        android:id="@+id/main_viewpager"
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation_view"
+        android:id="@+id/navigationView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
-        android:background="?android:attr/windowBackground"
-        app:layout_anchor="@id/main_viewpager"
-        app:layout_anchorGravity="bottom"
-        app:layout_behavior="com.shentu.wallpaper.mvp.ui.widget.behavior.NavigationBehavior"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="@color/colorActivityBackground"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
         app:menu="@menu/navigation" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

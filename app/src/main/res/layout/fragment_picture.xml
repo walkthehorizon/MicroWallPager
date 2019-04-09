@@ -13,11 +13,4 @@
         app:failureImageInitScaleType="fitCenter"
         app:optimizeDisplay="true" />
 
-    <!--<com.shentu.wallpaper.mvp.ui.widget.PictureLoadingView-->
-        <!--android:id="@+id/loadingView"-->
-        <!--android:layout_width="60dp"-->
-        <!--android:layout_height="60dp"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:visibility="gone" />-->
-
 </RelativeLayout>

@@ -17,14 +17,15 @@
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/refreshLayout"
-        app:layout_constraintTop_toBottomOf="@+id/bgSearch"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/bgSearch"
+        app:srlEnablePreviewInEditMode="true">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/coordinator"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appbar"
@@ -73,6 +74,7 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
     <View
@@ -84,16 +86,17 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvSearch"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="34dp"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:background="@drawable/bg_home_search"
         android:drawableStart="@drawable/ic_search_black_24dp"
+        android:drawableTint="@color/white"
         android:gravity="center_vertical|start"
         android:paddingStart="8dp"
         android:text="搜索壁纸"
-        android:drawableTint="@color/white"
         android:textColor="@color/white"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
