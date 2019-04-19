@@ -44,7 +44,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.ui.activity.CategoryListActivity"
+            android:name=".mvp.ui.activity.CategoryDetailActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

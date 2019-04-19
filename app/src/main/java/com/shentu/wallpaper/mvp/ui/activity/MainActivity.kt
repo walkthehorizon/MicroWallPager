@@ -2,7 +2,6 @@ package com.shentu.wallpaper.mvp.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.SparseIntArray
 import android.view.MenuItem
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -18,14 +17,11 @@ import com.shentu.wallpaper.mvp.presenter.MainPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.MainPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
-import javax.inject.Inject
 
 
 class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager.OnPageChangeListener
         , BottomNavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemReselectedListener {
 
-    @Inject
-    lateinit var itemIds: SparseIntArray
 
     private var mainPagerAdapter: MainPagerAdapter? = null
     private var lastPos: Int = 0//上一个位置
@@ -37,10 +33,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
                 .mainModule(MainModule(this))
                 .build()
                 .inject(this)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {
@@ -79,11 +71,15 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
         if (position == lastPos) {
             return
         }
-        if (position < 0 || position >= itemIds!!.size()) {
+        if (position < 0 || position >= viewPager.adapter!!.count) {
             return
         }
         lastPos = position
-        navigationView!!.selectedItemId = itemIds!!.get(position)
+        when (position) {
+            0 -> navigationView!!.selectedItemId = R.id.navigation_hot
+            1 -> navigationView!!.selectedItemId = R.id.navigation_category
+            2 -> navigationView!!.selectedItemId = R.id.navigation_my
+        }
     }
 
     override fun onPageScrollStateChanged(state: Int) {
@@ -91,12 +87,17 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val pos = itemIds!!.indexOfValue(item.itemId)
-        if (pos == -1 || pos == lastPos) {
-            return false
+        when (item.itemId) {
+            R.id.navigation_hot -> {
+                viewPager.currentItem = 0;lastPos = 0
+            }
+            R.id.navigation_category -> {
+                viewPager.currentItem = 1;lastPos = 1
+            }
+            R.id.navigation_my -> {
+                viewPager.currentItem = 2;lastPos = 2
+            }
         }
-        viewPager!!.currentItem = pos
-        lastPos = pos
         return true
     }
 

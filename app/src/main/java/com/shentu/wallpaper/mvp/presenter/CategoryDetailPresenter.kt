@@ -5,16 +5,16 @@ import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.http.imageloader.ImageLoader
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
-import com.shentu.wallpaper.mvp.contract.CategoryListContract
+import com.shentu.wallpaper.mvp.contract.CategoryDetailContract
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import javax.inject.Inject
 
 
 @FragmentScope
-class CategoryListPresenter
+class CategoryDetailPresenter
 @Inject
-constructor(model: CategoryListContract.Model, rootView: CategoryListContract.View) :
-        BasePresenter<CategoryListContract.Model, CategoryListContract.View>(model, rootView) {
+constructor(model: CategoryDetailContract.Model, rootView: CategoryDetailContract.View) :
+        BasePresenter<CategoryDetailContract.Model, CategoryDetailContract.View>(model, rootView) {
     @Inject
     lateinit var mErrorHandler: RxErrorHandler
     @Inject

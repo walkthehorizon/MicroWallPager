@@ -1,18 +1,16 @@
 package com.shentu.wallpaper.mvp.ui.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Window
+import androidx.appcompat.app.AppCompatActivity
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.shentu.wallpaper.R
-import com.shentu.wallpaper.mvp.ui.fragment.CategoryListFragment
-import retrofit2.http.Path
+import com.shentu.wallpaper.mvp.ui.fragment.CategoryDetailFragment
 
 
-@Route(path = "/category/list/activity")
-class CategoryListActivity: AppCompatActivity() {
+@Route(path = "activity/category/detail")
+class CategoryDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 //        BarUtils.setStatusBarAlpha(this)
@@ -21,10 +19,10 @@ class CategoryListActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category_list)
 
-        val id:Int = intent.getIntExtra(CategoryListFragment.CATEGORY_ID,0)
+        val id: Int = intent.getIntExtra(CategoryDetailFragment.CATEGORY_ID, 0)
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.container, CategoryListFragment.newInstance(id))
+                .replace(R.id.container, CategoryDetailFragment.newInstance(id))
                 .commit()
     }
 

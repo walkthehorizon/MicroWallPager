@@ -19,8 +19,8 @@ import com.shentu.wallpaper.di.component.DaggerCategoryListComponent
 import com.shentu.wallpaper.di.module.CategoryListModule
 import com.shentu.wallpaper.model.api.service.MicroService
 import com.shentu.wallpaper.model.entity.Wallpaper
-import com.shentu.wallpaper.mvp.contract.CategoryListContract
-import com.shentu.wallpaper.mvp.presenter.CategoryListPresenter
+import com.shentu.wallpaper.mvp.contract.CategoryDetailContract
+import com.shentu.wallpaper.mvp.presenter.CategoryDetailPresenter
 import com.shentu.wallpaper.mvp.ui.activity.CategoryPageActivity
 import com.shentu.wallpaper.mvp.ui.adapter.CategoryListAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.RvCategoryListDecoration
@@ -41,7 +41,7 @@ import timber.log.Timber
  * }
  * }
  */
-class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryListContract.View, OnRefreshListener, OnLoadMoreListener {
+class CategoryDetailFragment : BaseFragment<CategoryDetailPresenter>(), CategoryDetailContract.View, OnRefreshListener, OnLoadMoreListener {
 
     private var page = 0
     private var categoryId: Int = 0
@@ -49,8 +49,8 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryList
     companion object {
         const val CATEGORY_ID: String = "category_id"
 
-        fun newInstance(id: Int): CategoryListFragment {
-            val fragment = CategoryListFragment()
+        fun newInstance(id: Int): CategoryDetailFragment {
+            val fragment = CategoryDetailFragment()
             val bundle = Bundle()
             bundle.putInt(CATEGORY_ID, id)
             fragment.arguments = bundle

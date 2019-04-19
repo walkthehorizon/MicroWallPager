@@ -21,7 +21,7 @@ public interface MicroCache {
 
 //    @ProviderKey("home-category-one-day")
 //    @LifeCache(duration = 1,timeUnit = TimeUnit.DAYS)
-//    Observable<Reply<CategorysEntity>> getCategorys(Observable<CategorysEntity> observable, EvictProvider evictProvider);
+//    Observable<Reply<CategorysEntity>> getCategories(Observable<CategorysEntity> observable, EvictProvider evictProvider);
 //
     @ProviderKey("subject-detail-one-hour")
     @LifeCache(duration = 1 , timeUnit = TimeUnit.HOURS)

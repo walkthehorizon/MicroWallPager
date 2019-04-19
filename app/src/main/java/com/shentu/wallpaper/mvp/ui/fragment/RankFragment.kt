@@ -7,18 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.blankj.utilcode.util.BarUtils
-
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
-
+import com.shentu.wallpaper.R
+import com.shentu.wallpaper.di.component.DaggerRankComponent
 import com.shentu.wallpaper.di.module.RankModule
 import com.shentu.wallpaper.mvp.contract.RankContract
 import com.shentu.wallpaper.mvp.presenter.RankPresenter
-
-import com.shentu.wallpaper.R
-import com.shentu.wallpaper.di.component.DaggerRankComponent
-import kotlinx.android.synthetic.main.fragment_category.*
+import kotlinx.android.synthetic.main.fragment_rank.*
 
 
 /**

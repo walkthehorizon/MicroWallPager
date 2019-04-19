@@ -257,7 +257,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-        Timber.e("position:$position  offest:$positionOffset  pixel:$positionOffsetPixels")
+        //Timber.e("position:$position  offest:$positionOffset  pixel:$positionOffsetPixels")
         val evaluate = ArgbEvaluator().evaluate(positionOffset, Color.parseColor(banners[position].color),
                 Color.parseColor(banners[if (position == bannerPager.adapter!!.count - 1) 0 else position + 1].color)) as Int
         arc1.setColorFilter(evaluate)

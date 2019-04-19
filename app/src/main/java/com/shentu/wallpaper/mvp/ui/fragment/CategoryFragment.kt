@@ -1,19 +1,24 @@
 package com.shentu.wallpaper.mvp.ui.fragment
 
 
-
 import android.content.Intent
 import android.os.Bundle
-import androidx.recyclerview.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import com.blankj.utilcode.util.BarUtils
+import androidx.recyclerview.widget.GridLayoutManager
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
+import com.kingja.loadsir.core.LoadService
+import com.kingja.loadsir.core.LoadSir
+import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.page.EmptyCallback
+import com.shentu.wallpaper.app.page.ErrorCallback
+import com.shentu.wallpaper.app.page.LoadingCallback
 import com.shentu.wallpaper.di.component.DaggerCategoryComponent
 import com.shentu.wallpaper.di.module.CategoryModule
 import com.shentu.wallpaper.model.entity.Category
@@ -24,25 +29,13 @@ import com.shentu.wallpaper.mvp.ui.adapter.decoration.RvCategoryDecoration
 import kotlinx.android.synthetic.main.fragment_category.*
 
 
-/**
- * 如果没presenter
- * 你可以这样写
- *
- * @FragmentScope(請注意命名空間) class NullObjectPresenterByFragment
- * @Inject constructor() : IPresenter {
- * override fun onStart() {
- * }
- *
- * override fun onDestroy() {
- * }
- * }
- */
-class CategoryFragment : BaseFragment<CategoryPresenter>(), CategoryContract.View {
+class CategoryFragment : BaseFragment<CategoryPresenter>(), CategoryContract.View, OnRefreshListener, OnLoadMoreListener {
+
+    private lateinit var loadService: LoadService<Any>
 
     companion object {
         fun newInstance(): CategoryFragment {
-            val fragment = CategoryFragment()
-            return fragment
+            return CategoryFragment()
         }
     }
 
@@ -56,35 +49,38 @@ class CategoryFragment : BaseFragment<CategoryPresenter>(), CategoryContract.Vie
                 .inject(this)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        //填充statusBar
-        val lp = statusView.layoutParams as LinearLayout.LayoutParams
-        lp.height = BarUtils.getStatusBarHeight()
-        statusView.layoutParams = lp
-    }
-
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_category, container, false);
+        val rootView = inflater.inflate(R.layout.fragment_category, container, false)
+        loadService = LoadSir.getDefault().register(rootView) { loadService.showCallback(LoadingCallback::class.java) }
+        return loadService.loadLayout
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-        rvCategory.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 3)
+        rvCategory.layoutManager = GridLayoutManager(context, 3)
         rvCategory.addItemDecoration(RvCategoryDecoration(12))
         rvCategory.setHasFixedSize(true)
-//        mPresenter?.getCategorys()
+        rvCategory.adapter = CategoryAdapter(null)
+        mPresenter?.getCategories(true)
     }
 
-    override fun setData(data: Any?) {
-
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+        mPresenter?.getCategories(true)
     }
 
-    override fun showLoading() {
-
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
+        mPresenter?.getCategories(false)
     }
 
-    override fun hideLoading() {
+    override fun showEmpty() {
+        loadService.showCallback(EmptyCallback::class.java)
+    }
 
+    override fun showContent() {
+        loadService.showSuccess()
+    }
+
+    override fun showError() {
+        loadService.showCallback(ErrorCallback::class.java)
     }
 
     override fun showMessage(message: String) {
@@ -99,7 +95,11 @@ class CategoryFragment : BaseFragment<CategoryPresenter>(), CategoryContract.Vie
         activity?.finish()
     }
 
-    override fun showCategorys(results: MutableList<Category>?) {
-        rvCategory.adapter = CategoryAdapter(results)
+    override fun showCategories(results: MutableList<Category>?, clear: Boolean) {
+        if (clear) {
+            (rvCategory.adapter as CategoryAdapter).setNewData(results)
+        } else {
+            results?.let { (rvCategory.adapter as CategoryAdapter).addData(it) }
+        }
     }
 }

@@ -31,8 +31,8 @@ import java.io.Serializable
  */
 open class BaseResponse<T> : Serializable {
     val data: T? = null
-    val code: Int? = null
-    val msg: String? = null
+    val code: Int = -1
+    val msg: String = ""
 
     /**
      * 请求是否成功

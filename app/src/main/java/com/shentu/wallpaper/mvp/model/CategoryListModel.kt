@@ -5,14 +5,14 @@ import com.google.gson.Gson
 import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.integration.IRepositoryManager
 import com.shentu.wallpaper.app.BasePageModel
-import com.shentu.wallpaper.mvp.contract.CategoryListContract
+import com.shentu.wallpaper.mvp.contract.CategoryDetailContract
 import javax.inject.Inject
 
 
 @FragmentScope
 class CategoryListModel
 @Inject
-constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryManager), CategoryListContract.Model {
+constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryManager), CategoryDetailContract.Model {
 
 
     @Inject

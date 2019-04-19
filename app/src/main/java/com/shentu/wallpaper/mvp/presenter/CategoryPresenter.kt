@@ -5,8 +5,11 @@ import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.http.imageloader.ImageLoader
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
+import com.shentu.wallpaper.app.utils.RxUtils
+import com.shentu.wallpaper.model.response.CategoryPageResponse
 import com.shentu.wallpaper.mvp.contract.CategoryContract
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import javax.inject.Inject
 
 
@@ -24,19 +27,15 @@ constructor(model: CategoryContract.Model, rootView: CategoryContract.View) :
     @Inject
     lateinit var mAppManager: AppManager
 
-    override fun onDestroy() {
-        super.onDestroy()
+    fun getCategories(clear: Boolean) {
+        mModel.getCategories()
+                .compose(RxUtils.applySchedulers(mRootView, clear))
+                .subscribe(object : ErrorHandleSubscriber<CategoryPageResponse>(mErrorHandler) {
+                    override fun onNext(t: CategoryPageResponse) {
+                        mRootView.showCategories(t.data?.content, clear)
+                    }
+                })
     }
-
-//    fun getCategorys() {
-//        mModel.getCategorys()
-//                .compose(RxUtils.applySchedulers(mRootView))
-//                .subscribe(object :ErrorHandleSubscriber<BasePageResponse<Category>>(mErrorHandler){
-//                    override fun onNext(t: BasePageResponse<Category>) {
-//                        mRootView.showCategorys(t.content as MutableList<Category>?)
-//                    }
-//                })
-//    }
 
 }
 
