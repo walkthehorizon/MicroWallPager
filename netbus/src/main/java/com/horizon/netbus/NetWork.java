@@ -1,4 +1,4 @@
-package com.shentu.netbus;
+package com.horizon.netbus;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

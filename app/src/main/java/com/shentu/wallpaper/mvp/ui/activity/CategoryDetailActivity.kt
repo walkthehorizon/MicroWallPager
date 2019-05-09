@@ -9,7 +9,7 @@ import com.shentu.wallpaper.R
 import com.shentu.wallpaper.mvp.ui.fragment.CategoryDetailFragment
 
 
-@Route(path = "activity/category/detail")
+@Route(path = "/activity/category/detail")
 class CategoryDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

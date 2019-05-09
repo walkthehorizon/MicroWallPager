@@ -1,4 +1,4 @@
-package com.shentu.netbus;
+package com.horizon.netbus;
 
 public enum NetType {
     AUTO,

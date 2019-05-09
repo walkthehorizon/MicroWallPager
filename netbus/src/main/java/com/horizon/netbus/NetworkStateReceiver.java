@@ -1,12 +1,12 @@
-package com.shentu.netbus;
+package com.horizon.netbus;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.shentu.netbus.utils.Constant;
-import com.shentu.netbus.utils.NetworkUtils;
+import com.horizon.netbus.utils.Constant;
+import com.horizon.netbus.utils.NetworkUtils;
 
 class NetworkStateReceiver extends BroadcastReceiver {
     private NetType netType;

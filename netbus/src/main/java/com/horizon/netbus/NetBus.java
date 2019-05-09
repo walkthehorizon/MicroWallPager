@@ -1,4 +1,4 @@
-package com.shentu.netbus;
+package com.horizon.netbus;
 
 import android.app.Application;
 import android.content.Context;

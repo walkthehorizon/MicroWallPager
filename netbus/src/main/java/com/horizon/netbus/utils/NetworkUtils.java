@@ -1,4 +1,4 @@
-package com.shentu.netbus.utils;
+package com.horizon.netbus.utils;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.shentu.netbus.NetBus;
-import com.shentu.netbus.NetType;
+import com.horizon.netbus.NetBus;
+import com.horizon.netbus.NetType;
 
 public class NetworkUtils {
     /**
