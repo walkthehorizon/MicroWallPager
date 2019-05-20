@@ -8,7 +8,7 @@
     <color name="colorIcon">#A8A8A8</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondText">#757575</color>
-    <color name="colorNormalText">#FFFFFF</color>
+    <color name="colorNormalText">#FF666666</color>
     <color name="colorActivityBackground">#EFEFEF</color>
 
     <color name="white">#FFFFFF</color>

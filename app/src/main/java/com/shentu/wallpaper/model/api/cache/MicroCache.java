@@ -2,12 +2,14 @@ package com.shentu.wallpaper.model.api.cache;
 
 
 import com.shentu.wallpaper.model.response.SplashAdResponse;
+import com.shentu.wallpaper.model.response.SubjectPageResponse;
 import com.shentu.wallpaper.model.response.WallpaperPageResponse;
 
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.rx_cache2.DynamicKey;
+import io.rx_cache2.DynamicKeyGroup;
 import io.rx_cache2.EvictDynamicKey;
 import io.rx_cache2.EvictProvider;
 import io.rx_cache2.LifeCache;
@@ -26,8 +28,16 @@ public interface MicroCache {
     @ProviderKey("subject-detail-one-hour")
     @LifeCache(duration = 1 , timeUnit = TimeUnit.HOURS)
     Observable<Reply<WallpaperPageResponse>> getWallPapersBySubjectId(Observable<WallpaperPageResponse> ob, DynamicKey key, EvictDynamicKey dynamicKey);
-//
-//    @ProviderKey("category-list-three-hour")
-//    @LifeCache(duration = 3,timeUnit = TimeUnit.HOURS)
-//    Observable<Reply<CategoryListEntity>> getCategoryList(Observable<CategoryListEntity> ob , DynamicKeyGroup filter, EvictDynamicKeyGroup evict);
+
+    @ProviderKey("category-list-one-hour")
+    @LifeCache(duration = 1, timeUnit = TimeUnit.HOURS)
+    Observable<Reply<WallpaperPageResponse>>
+    getCategoryWallpapers(Observable<WallpaperPageResponse> ob,
+                          DynamicKeyGroup filter);
+
+    @ProviderKey("subject-search-one-day")
+    @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
+    Observable<Reply<SubjectPageResponse>>
+    searchKey(Observable<SubjectPageResponse> ob,
+              DynamicKeyGroup filter);
 }

@@ -15,6 +15,9 @@
  */
 package com.shentu.wallpaper.app.utils;
 
+import android.text.TextUtils;
+
+import com.blankj.utilcode.util.ToastUtils;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.utils.RxLifecycleUtils;
 import com.shentu.wallpaper.model.entity.BasePageResponse;
@@ -50,9 +53,10 @@ public class RxUtils {
         return observable -> {
             //隐藏进度条
             return observable.subscribeOn(Schedulers.io())
-                    .doOnSubscribe(disposable -> view.showLoading())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe(disposable -> view.showLoading())
+                    .doFinally(view::hideLoading)
                     .doOnNext(t -> handleOnNext(t, view))
                     .doOnError(throwable -> {
                         view.showError();
@@ -86,14 +90,22 @@ public class RxUtils {
      */
     private static <T> void handleOnNext(T t, IView view) {
         BaseResponse response = (BaseResponse) t;
-        BasePageResponse pageResponse = (BasePageResponse) ((BaseResponse) t).getData();
         if (response.isSuccess()) {
+            //检查是否为列表
+            BasePageResponse pageResponse = null;
+            if (((BaseResponse) t).getData() instanceof BasePageResponse) {
+                pageResponse = (BasePageResponse) ((BaseResponse) t).getData();
+            }
             if (pageResponse != null && pageResponse.getCount() == 0) {
                 view.showEmpty();
-            } else {
-                view.showContent();
+                return;
             }
+            if (pageResponse != null && TextUtils.isEmpty(pageResponse.getNext())) {
+                view.showNOMoreData();
+            }
+            view.showContent();
         } else {
+            ToastUtils.showShort(((BaseResponse) t).getMsg());
             view.showError();
         }
     }

@@ -1,22 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
     android:background="?android:attr/selectableItemBackground"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/iv_cover"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:id="@+id/ivCover"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:background="@color/red"
+        app:layout_constraintDimensionRatio="H,16:9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_name"
-        tools:text = "CosPlay"
-        android:layout_marginTop="12dp"
-        android:textColor="@color/colorPrimaryText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="CosPlay" />
+</androidx.constraintlayout.widget.ConstraintLayout>

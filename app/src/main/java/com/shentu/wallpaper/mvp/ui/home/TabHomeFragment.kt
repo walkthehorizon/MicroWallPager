@@ -37,6 +37,7 @@ import com.shentu.wallpaper.model.entity.Banner
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.contract.TabHomeContract
 import com.shentu.wallpaper.mvp.presenter.TabHomePresenter
+import com.shentu.wallpaper.mvp.ui.activity.SearchActivity
 import com.shentu.wallpaper.mvp.ui.adapter.HomeBannerAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.RecommendAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.RandomRecommendDecoration
@@ -97,7 +98,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
         typeSparse!!.append(R.id.mTvCos, 2)
         typeSparse!!.append(R.id.mTvGirl, 3)
 
-        recommendAdapter = RecommendAdapter(mContext, null)
+        recommendAdapter = RecommendAdapter(mContext, ArrayList())
         rvHot.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         rvHot.addItemDecoration(RandomRecommendDecoration(ConvertUtils.dp2px(12.0f)))
         rvHot.adapter = recommendAdapter
@@ -124,7 +125,9 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
             }
             arc1.alpha = Math.max(1.0f - percent * 3, 0f)//双倍速度隐藏与显示，效果更好
         })
-
+        tvSearch.setOnClickListener {
+            SearchActivity.open()
+        }
         rvHot.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -140,6 +143,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
         })
         showBanners(banners as MutableList)
     }
+
 
     override fun lazyLoadData() {
         refreshLayout.autoRefresh()
@@ -274,7 +278,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
                 .compose(RxLifecycleUtils.bindUntilEvent(this@TabHomeFragment as IView, FragmentEvent.DESTROY))
                 .subscribe(object : ErrorHandleSubscriber<Long>(appComponent.rxErrorHandler()) {
                     override fun onNext(t: Long) {
-                        Timber.e("timer:$t")
+//                        Timber.e("timer:$t")
                         bannerPager.currentItem = (t % bannerAdapter.count).toInt()
                     }
                 })

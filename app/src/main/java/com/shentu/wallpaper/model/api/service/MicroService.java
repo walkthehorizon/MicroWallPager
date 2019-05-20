@@ -7,6 +7,7 @@ import com.shentu.wallpaper.model.entity.Subject;
 import com.shentu.wallpaper.model.entity.User;
 import com.shentu.wallpaper.model.response.CategoryPageResponse;
 import com.shentu.wallpaper.model.response.SplashAdResponse;
+import com.shentu.wallpaper.model.response.SubjectPageResponse;
 import com.shentu.wallpaper.model.response.WallpaperPageResponse;
 
 import io.reactivex.Observable;
@@ -21,36 +22,58 @@ public interface MicroService {
     int PAGE_LIMIT = 20;
 
     @GET("splash")
-    Observable<SplashAdResponse> getSplash();
+    Observable<SplashAdResponse>
+    getSplash();
 
     @GET("subjects")
-    Observable<BaseResponse<BasePageResponse<Subject>>> getSubjects(@Query("subject_type") int subjectType, @Query("limit") int limit, @Query("offset") int offset);
+    Observable<BaseResponse<BasePageResponse<Subject>>>
+    getSubjects(@Query("subject_type") int subjectType,
+                @Query("limit") int limit,
+                @Query("offset") int offset);
 
     @GET("wallpapers")
-    Observable<WallpaperPageResponse> getWallpapersBySubjectId(@Query("subject_id") int subjectId, @Query("limit") int limit, @Query("offset") int offset);
+    Observable<WallpaperPageResponse>
+    getSubjectWallpapers(@Query("subject_id") int subjectId,
+                         @Query("limit") int limit,
+                         @Query("offset") int offset);
 
     @GET("wallpapers")
-    Observable<WallpaperPageResponse> getWallpapersByCategoryId(@Query("category_id") int categoryId, @Query("limit") int limit, @Query("offset") int offset);
+    Observable<WallpaperPageResponse>
+    getCategoryWallpapers(@Query("category_id") int categoryId,
+                          @Query("limit") int limit,
+                          @Query("offset") int offset);
 
     /**
      * 获取推荐的WallPaper
      */
     @GET("recommend")
-    Observable<WallpaperPageResponse> getRecommendWallpapers(
-            @Query("limit") int limit,
-            @Query("offset") int offset);
+    Observable<WallpaperPageResponse>
+    getRecommendWallpapers(@Query("limit") int limit,
+                           @Query("offset") int offset);
 
     @GET("categories")
-    Observable<CategoryPageResponse> getCategories();
+    Observable<CategoryPageResponse>
+    getCategories();
 
     @FormUrlEncoded
     @POST("account/register/")
-    Observable<BaseResponse<Boolean>> getRegisterAccount(@Field("phone") String phone, @Field("password") String password);
+    Observable<BaseResponse<Boolean>>
+    getRegisterAccount(@Field("phone") String phone,
+                       @Field("password") String password);
 
     @FormUrlEncoded
     @POST("account/login/")
-    Observable<BaseResponse<User>> getLoginAccount(@Field("phone") String phone, @Field("password") String password);
+    Observable<BaseResponse<User>>
+    getLoginAccount(@Field("phone") String phone,
+                    @Field("password") String password);
 
     @POST("account/logout/")
-    Observable<BaseResponse<Boolean>> getLogoutAccount();
+    Observable<BaseResponse<Boolean>>
+    getLogoutAccount();
+
+    @GET("subjects/")
+    Observable<SubjectPageResponse>
+    searchKey(@Query("key") String key,
+              @Query("limit") int limit,
+              @Query("offset") int offset);
 }

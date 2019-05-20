@@ -3,28 +3,33 @@ package com.shentu.wallpaper.mvp.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityOptionsCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import android.view.Window;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.blankj.utilcode.util.ScreenUtils;
+import com.jess.arms.base.BaseActivity;
+import com.jess.arms.di.component.AppComponent;
 import com.shentu.wallpaper.R;
 import com.shentu.wallpaper.mvp.ui.fragment.CategoryPageFragment;
 
-import timber.log.Timber;
-
 @Route(path = "/category/page/activity")
-public class CategoryPageActivity extends AppCompatActivity {
+public class CategoryPageActivity extends BaseActivity {
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Timber.e("Time:"+System.currentTimeMillis());
+    public void setupActivityComponent(@NonNull AppComponent appComponent) {
         ScreenUtils.setFullScreen(this);
-        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        setContentView(R.layout.activity_category_page);
+    }
+
+    @Override
+    public int initView(@Nullable Bundle savedInstanceState) {
+        return R.layout.activity_category_page;
+    }
+
+    @Override
+    public void initData(@Nullable Bundle savedInstanceState) {
         supportPostponeEnterTransition();//延缓执行共享元素动画
         int curPos = getIntent().getIntExtra(CategoryPageFragment.Companion.getCUR_POS(), 0);
         int curPage = getIntent().getIntExtra(CategoryPageFragment.Companion.getCUR_PAGE(), 0);
@@ -37,7 +42,7 @@ public class CategoryPageActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public static void open(Context context,int categoryId, int page, int pos , ActivityOptionsCompat options){
+    public static void open(Context context, int categoryId, int page, int pos, ActivityOptionsCompat options) {
         Intent intent = new Intent(context,CategoryPageActivity.class);
         intent.putExtra(CategoryPageFragment.Companion.getCATEGORY_ID(),categoryId);
         intent.putExtra(CategoryPageFragment.Companion.getCUR_PAGE(),page);

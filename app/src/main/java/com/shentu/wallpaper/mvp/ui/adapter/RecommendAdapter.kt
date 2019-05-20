@@ -20,15 +20,15 @@ import com.github.florent37.glidepalette.BitmapPalette.Profile.VIBRANT_LIGHT
 import com.github.florent37.glidepalette.GlidePalette
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.GlideArms
-import com.shentu.wallpaper.model.entity.RecommendWallpaperList
 import com.shentu.wallpaper.model.entity.Wallpaper
+import com.shentu.wallpaper.model.entity.WallpaperList
 import com.shentu.wallpaper.mvp.ui.activity.PictureBrowserActivity
 import java.util.*
 
-class RecommendAdapter(context: Context, data: List<Wallpaper>?) : BaseQuickAdapter<Wallpaper
+class RecommendAdapter(context: Context, data: MutableList<Wallpaper>) : BaseQuickAdapter<Wallpaper
         , BaseViewHolder>(R.layout.item_rv_recommend, data) {
 
-    private val wallpaperList: RecommendWallpaperList = RecommendWallpaperList()
+    private val wallpaperList: WallpaperList = WallpaperList()
 
     init {
         onItemClickListener = OnItemClickListener { _, view, position ->
@@ -65,7 +65,8 @@ class RecommendAdapter(context: Context, data: List<Wallpaper>?) : BaseQuickAdap
     }
 
     override fun setNewData(data: MutableList<Wallpaper>?) {
-        wallpaperList.wallpapers = data
+        wallpaperList.wallpapers = data!!
         super.setNewData(data)
     }
+
 }

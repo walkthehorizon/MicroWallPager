@@ -5,4 +5,12 @@
     <dimen name="activity_divider_height">0.5dp</dimen>
 
     <dimen name="default_toolbar_height">50dp</dimen>
+
+    <dimen name="sp_10">10sp</dimen>
+    <dimen name="sp_11">11sp</dimen>
+    <dimen name="sp_12">12sp</dimen>
+    <dimen name="sp_14">14sp</dimen>
+    <dimen name="sp_15">15sp</dimen>
+    <dimen name="sp_16">16sp</dimen>
+
 </resources>

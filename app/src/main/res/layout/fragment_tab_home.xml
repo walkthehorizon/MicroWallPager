@@ -91,12 +91,14 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:background="@drawable/bg_home_search"
-        android:drawableStart="@drawable/ic_search_black_24dp"
-        android:drawableTint="@color/white"
+        android:drawableStart="@drawable/ic_search_white_24dp"
         android:gravity="center_vertical|start"
         android:paddingStart="8dp"
-        android:text="搜索壁纸"
-        android:textColor="@color/white"
+        android:paddingEnd="8dp"
+        android:drawablePadding="10dp"
+        android:textSize="@dimen/sp_15"
+        android:text="@string/action_search"
+        android:textColor="@color/colorIcon"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

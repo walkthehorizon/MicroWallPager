@@ -19,6 +19,10 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import com.blankj.utilcode.util.PathUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.jess.arms.base.delegate.AppLifecycles;
@@ -36,9 +40,6 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import me.jessyan.progressmanager.ProgressManager;
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager;
 import okhttp3.Cookie;
@@ -110,6 +111,7 @@ public final class GlobalConfiguration implements ConfigModule {
                                 Timber.d("cookie value:%s", cookies.get(i).value());
                             }
                             //第一个cookie的值为csrftoken，第二个是sessionid
+                            //每次进行登录都会产生一个相应的csrftoken，保存这个值才可进行后续的注销登录
                             SPUtils.getInstance().put("X-CSRFToken", cookies.get(0).value());
                             cookieStore.put(url.host(), cookies);
                         }

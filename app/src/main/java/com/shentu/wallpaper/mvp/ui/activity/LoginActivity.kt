@@ -1,24 +1,25 @@
 package com.shentu.wallpaper.mvp.ui.activity
 
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.blankj.utilcode.util.BarUtils
-import com.blankj.utilcode.util.ScreenUtils
+import com.jess.arms.base.BaseActivity
+import com.jess.arms.di.component.AppComponent
+import com.jess.arms.mvp.IPresenter
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.mvp.ui.fragment.LoginFragment
 
-class LoginActivity: AppCompatActivity(){
-    override fun onCreate(savedInstanceState: Bundle?) {
-//        ScreenUtils.setFullScreen(this)
-        BarUtils.setStatusBarColor(this,Color.TRANSPARENT)
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+class LoginActivity : BaseActivity<IPresenter>() {
+    override fun setupActivityComponent(appComponent: AppComponent) {
 
+    }
+
+    override fun initView(savedInstanceState: Bundle?): Int {
+        return R.layout.activity_login
+    }
+
+    override fun initData(savedInstanceState: Bundle?) {
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.container,LoginFragment.newInstance())
+                .replace(R.id.container, LoginFragment.newInstance())
                 .commit()
     }
 }

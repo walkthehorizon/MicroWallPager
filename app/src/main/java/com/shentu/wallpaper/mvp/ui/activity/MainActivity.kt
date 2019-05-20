@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.viewpager.widget.ViewPager
+import com.blankj.utilcode.util.BarUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
@@ -33,6 +34,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
                 .mainModule(MainModule(this))
                 .build()
                 .inject(this)
+        BarUtils.setStatusBarAlpha(this)
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {
@@ -89,13 +91,13 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.navigation_hot -> {
-                viewPager.currentItem = 0;lastPos = 0
+                viewPager.setCurrentItem(0, false);lastPos = 0
             }
             R.id.navigation_category -> {
-                viewPager.currentItem = 1;lastPos = 1
+                viewPager.setCurrentItem(1, false);lastPos = 1
             }
             R.id.navigation_my -> {
-                viewPager.currentItem = 2;lastPos = 2
+                viewPager.setCurrentItem(2, false);lastPos = 2
             }
         }
         return true

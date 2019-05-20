@@ -2,6 +2,8 @@ package com.shentu.wallpaper.mvp.ui.adapter
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.text.TextUtils
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ConvertUtils
 import com.bumptech.glide.load.MultiTransformation
@@ -12,12 +14,11 @@ import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.model.entity.Category
 import com.shentu.wallpaper.mvp.ui.fragment.CategoryDetailFragment
+import jp.wasabeef.glide.transformations.BlurTransformation
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
-import java.util.*
+import kotlin.random.Random
 
-class CategoryAdapter(data: MutableList<Category>?) : BaseQuickAdapter<Category, BaseViewHolder>(R.layout.app_item_wallpaper_category, data) {
-
-    private var random: Random = Random()
+class CategoryAdapter(data: MutableList<Category>) : BaseQuickAdapter<Category, BaseViewHolder>(R.layout.app_item_wallpaper_category, data) {
 
     init {
         setOnItemClickListener { adapter, _, position ->
@@ -30,11 +31,13 @@ class CategoryAdapter(data: MutableList<Category>?) : BaseQuickAdapter<Category,
 
     override fun convert(helper: BaseViewHolder, item: Category) {
         GlideArms.with(helper.itemView.context)
-                .load(item.logo)
-                .transform(MultiTransformation<Bitmap>(CenterCrop(), RoundedCornersTransformation(ConvertUtils.dp2px(5.0f), 0, RoundedCornersTransformation.CornerType.ALL)))
-                .placeholder(Color.argb(255, random.nextInt(256), random.nextInt(256)
-                        , random.nextInt(256)))
-                .into(helper.getView(R.id.iv_cover))
+                .load(if (TextUtils.isEmpty(item.logo))
+                    ColorDrawable(Color.argb(255, Random.nextInt(256)
+                            , Random.nextInt(256), Random.nextInt(256))) else item.logo)
+                .transform(MultiTransformation<Bitmap>(BlurTransformation(25, 3),
+                        CenterCrop(), RoundedCornersTransformation(ConvertUtils.dp2px(5.0f),
+                        0, RoundedCornersTransformation.CornerType.ALL)))
+                .into(helper.getView(R.id.ivCover))
         helper.setText(R.id.tv_name, item.name)
     }
 

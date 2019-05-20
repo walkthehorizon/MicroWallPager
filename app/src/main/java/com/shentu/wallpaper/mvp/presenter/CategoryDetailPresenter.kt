@@ -5,8 +5,12 @@ import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.http.imageloader.ImageLoader
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
+import com.shentu.wallpaper.app.utils.RxUtils
+import com.shentu.wallpaper.model.entity.Wallpaper
+import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.CategoryDetailContract
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import javax.inject.Inject
 
 
@@ -24,21 +28,18 @@ constructor(model: CategoryDetailContract.Model, rootView: CategoryDetailContrac
     @Inject
     lateinit var mAppManager: AppManager
 
-    fun getCategoryList(id: Int, page: Int, clear: Boolean) {
-//        mModel.getCategoryList(id, page, clear)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .doOnSubscribe { mRootView.showLoading() }
-//                .doFinally { mRootView.hideLoading() }
-//                .compose(RxLifecycleUtils.bindToLifecycle<CategoryListEntity>(mRootView))
-//                .subscribe(object : ErrorHandleSubscriber<CategoryListEntity>(mErrorHandler) {
-//                    override fun onNext(t: CategoryListEntity) {
-//                        mRootView.showCategoryList(t.content)
-//                    }
-//                })
-    }
-
-    override fun onDestroy() {
-        super.onDestroy();
+    fun getCategoryList(id: Int, clear: Boolean) {
+        mModel.getCategoryWallpapers(id, clear)
+                .compose(RxUtils.applySchedulers(mRootView))
+                .doOnSubscribe { mRootView.showLoading() }
+                .doFinally { mRootView.hideLoading() }
+                .subscribe(object : ErrorHandleSubscriber<WallpaperPageResponse>(mErrorHandler) {
+                    override fun onNext(t: WallpaperPageResponse) {
+                        if (!t.isSuccess) {
+                            return
+                        }
+                        mRootView.showCategoryList(t.data?.content as MutableList<Wallpaper>)
+                    }
+                })
     }
 }

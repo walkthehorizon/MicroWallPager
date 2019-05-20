@@ -7,17 +7,16 @@
 
     <com.shentu.wallpaper.mvp.ui.widget.NoScrollViewPager
         android:id="@+id/viewPager"
+        android:layout_marginBottom="50dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"/>
+        android:background="@color/white"
+        android:layout_height="match_parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigationView"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
-        android:background="@color/colorActivityBackground"
-        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
         app:menu="@menu/navigation" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

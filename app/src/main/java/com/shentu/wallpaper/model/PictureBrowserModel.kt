@@ -28,7 +28,7 @@ constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager
     override fun getWallPapersBySubjectId(id: Int): Observable<WallpaperPageResponse> {
         return Observable.just(mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
-                .getWallpapersBySubjectId(id, 100, 0))
+                .getSubjectWallpapers(id, 100, 0))
                 .flatMap { t ->
                     mRepositoryManager.obtainCacheService(MicroCache::class.java)
                             .getWallPapersBySubjectId(t, DynamicKey(id), EvictDynamicKey(false))

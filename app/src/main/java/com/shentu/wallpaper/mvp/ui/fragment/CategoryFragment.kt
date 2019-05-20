@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.recyclerview.widget.GridLayoutManager
+import com.blankj.utilcode.util.BarUtils
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
@@ -56,10 +58,14 @@ class CategoryFragment : BaseFragment<CategoryPresenter>(), CategoryContract.Vie
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-        rvCategory.layoutManager = GridLayoutManager(context, 3)
+        val lp = smartRefresh.layoutParams as FrameLayout.LayoutParams
+        lp.topMargin = BarUtils.getStatusBarHeight()
+        smartRefresh.layoutParams = lp
+
+        rvCategory.layoutManager = GridLayoutManager(context, 2)
         rvCategory.addItemDecoration(RvCategoryDecoration(12))
         rvCategory.setHasFixedSize(true)
-        rvCategory.adapter = CategoryAdapter(null)
+        rvCategory.adapter = CategoryAdapter(arrayListOf())
         mPresenter?.getCategories(true)
     }
 

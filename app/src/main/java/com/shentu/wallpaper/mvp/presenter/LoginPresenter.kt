@@ -39,7 +39,7 @@ constructor(model: LoginContract.Model, rootView: LoginContract.View) :
     lateinit var mAppManager: AppManager
 
     @Inject
-    lateinit var gson:Gson
+    lateinit var gson: Gson
 
 //    fun sendCode(context: Context) {
 //        val page = RegisterPage()
@@ -66,7 +66,7 @@ constructor(model: LoginContract.Model, rootView: LoginContract.View) :
         mModel.registerAccount(phone, password)
                 .compose(RxUtils.applySchedulers(mRootView))
                 .doOnSubscribe { mRootView.showLoading() }
-                .doOnError{mRootView.hideLoading()}
+                .doOnError { mRootView.hideLoading() }
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<Boolean>>(mErrorHandler) {
                     override fun onNext(t: BaseResponse<Boolean>) {
                         ToastUtils.showShort(t.msg)
@@ -82,12 +82,14 @@ constructor(model: LoginContract.Model, rootView: LoginContract.View) :
     fun loginAccount(phone: String, password: String) {
         if (!(checkPhone(phone) && checkPassword(password))) return
         mModel.loginAccount(phone, password)
-                .compose(RxUtils.applyClearSchedulers(mRootView))
-                .doOnNext{mRootView.hideLoading()}
-                .doOnError{mRootView.hideLoading()}
+                .compose(RxUtils.applySchedulers(mRootView))
+                .doOnSubscribe { mRootView.showLoading() }
+                .doFinally { mRootView.hideLoading() }
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<User>>(mErrorHandler) {
                     override fun onNext(t: BaseResponse<User>) {
-                        if(!t.isSuccess)return
+                        if (!t.isSuccess) {
+                            return
+                        }
                         if (t.code == StateCode.STATE_USER_NOT_EXIST) {
                             mRootView.showVerifyDialog()
                             return

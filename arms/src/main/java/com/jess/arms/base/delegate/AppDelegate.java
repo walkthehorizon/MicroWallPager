@@ -22,6 +22,7 @@ import android.content.ComponentCallbacks2;
 import android.content.ContentProvider;
 import android.content.Context;
 import android.content.res.Configuration;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -88,7 +89,6 @@ public class AppDelegate implements App, AppLifecycles {
 
     @Override
     public void attachBaseContext(@NonNull Context base) {
-
         //遍历 mAppLifecycles, 执行所有已注册的 AppLifecycles 的 attachBaseContext() 方法 (框架外部, 开发者扩展的逻辑)
         for (AppLifecycles lifecycle : mAppLifecycles) {
             lifecycle.attachBaseContext(base);

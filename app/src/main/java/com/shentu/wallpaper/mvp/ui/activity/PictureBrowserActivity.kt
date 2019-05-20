@@ -26,8 +26,8 @@ import com.shentu.wallpaper.app.event.SwitchNavigationEvent
 import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.di.component.DaggerPictureBrowserComponent
 import com.shentu.wallpaper.di.module.PictureBrowserModule
-import com.shentu.wallpaper.model.entity.RecommendWallpaperList
 import com.shentu.wallpaper.model.entity.Wallpaper
+import com.shentu.wallpaper.model.entity.WallpaperList
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import com.shentu.wallpaper.mvp.presenter.PictureBrowserPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.PictureBrowserVpAdapter
@@ -39,31 +39,31 @@ import org.greenrobot.eventbus.ThreadMode
 @Route(path = "/picture/browser/activity")
 class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureBrowserContract.View, ViewPager.OnPageChangeListener {
 
-    @JvmField
     @Autowired
+    @JvmField
     var subjectId: Int = -1
     //1、wallpaper2、subject
-    @JvmField
     @Autowired
+    @JvmField
     var type: Int = -1
-    @JvmField
     @Autowired
-    var wallpaperList: RecommendWallpaperList = RecommendWallpaperList()
     @JvmField
+    var wallpaperList: WallpaperList = WallpaperList(ArrayList())
     @Autowired
-    var current = 0
+    @JvmField
+    var current: Int = 0
 
     lateinit var wallpapers: MutableList<Wallpaper>
     lateinit var vpAdapter: PictureBrowserVpAdapter
 
     override fun setupActivityComponent(appComponent: AppComponent) {
-        ScreenUtils.setFullScreen(this)
         DaggerPictureBrowserComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
                 .pictureBrowserModule(PictureBrowserModule(this))
                 .build()
                 .inject(this)
+        ScreenUtils.setFullScreen(this)
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {
@@ -191,11 +191,11 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                     .navigation(context)
         }
 
-        fun open(context: Context, wallpaperList: RecommendWallpaperList , current:Int , compat:ActivityOptionsCompat) {
+        fun open(context: Context, wallpapers: WallpaperList, current: Int, compat: ActivityOptionsCompat) {
             ARouter.getInstance()
                     .build("/picture/browser/activity")
                     .withInt("type", 1)
-                    .withSerializable("wallpaperList", wallpaperList)
+                    .withSerializable("wallpaperList", wallpapers)
                     .withInt("current",current)
                     .withOptionsCompat(compat)
                     .navigation(context)

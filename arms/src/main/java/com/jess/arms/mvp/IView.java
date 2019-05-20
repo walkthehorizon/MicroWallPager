@@ -17,6 +17,7 @@ package com.jess.arms.mvp;
 
 import android.app.Activity;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 
 import com.jess.arms.utils.ArmsUtils;
@@ -76,6 +77,13 @@ public interface IView {
      * */
 
     default void showEmpty(){
+
+    }
+
+    /**
+     * 没有更多数据
+     */
+    default void showNOMoreData() {
 
     }
 
