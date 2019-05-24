@@ -29,4 +29,6 @@
 
     <string name="action_search">搜索壁纸</string>
 
+    <string name="search_transitionName">search</string>
+
 </resources>

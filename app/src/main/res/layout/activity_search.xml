@@ -11,14 +11,16 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/default_toolbar_height"
-        android:background="@color/white">
+        android:background="@color/white"
+        app:tl_left_tint="@color/colorNormalText"
+        app:tl_left_icon="@drawable/ic_arrow_back_white_24dp">
 
         <EditText
             android:id="@+id/etSearch"
             android:layout_width="match_parent"
             android:layout_height="34dp"
-            android:layout_centerInParent="true"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="50dp"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:background="@drawable/bg_home_search"
             android:drawableStart="@drawable/ic_search_black_24dp"
@@ -30,9 +32,10 @@
             android:maxLines="1"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:textColorHint="@color/colorNormalText"
             android:textColor="@color/colorNormalText"
-            android:textSize="@dimen/sp_15" />
+            android:textColorHint="@color/colorNormalText"
+            android:textSize="@dimen/sp_15"
+            android:transitionName="@string/search_transitionName" />
 
     </com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar>
 

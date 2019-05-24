@@ -110,6 +110,7 @@ ext {
             "bugly-tinker"             : "com.tencent.tinker:tinker-android-lib:1.9.6",
             "filedownloader"           : "com.liulishuo.filedownloader:library:1.7.5",
             "AndPermission"            : "com.yanzhenjie:permission:2.0.0-rc12",
+            "pgyersdk"                 : "com.pgyersdk:sdk:3.0.4",
 
             //test
             "junit"                    : "junit:junit:4.12",

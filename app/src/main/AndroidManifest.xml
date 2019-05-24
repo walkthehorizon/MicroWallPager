@@ -23,7 +23,12 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon,android:allowBackup,android:theme">
-        <activity android:name=".mvp.ui.activity.SearchActivity"></activity>
+        <activity android:name="com.pgyersdk.feedback.FeedbackActivity" />
+        <meta-data
+            android:name="PGYER_APPID"
+            android:value="ceee8517a59b9333ae6520a9e98b98fc"></meta-data>
+
+        <activity android:name=".mvp.ui.activity.SearchActivity" />
         <activity
             android:name=".mvp.ui.activity.SplashActivity"
             android:theme="@style/AppTheme.Launcher">

@@ -56,12 +56,9 @@ public class RxUtils {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe(disposable -> view.showLoading())
-                    .doFinally(view::hideLoading)
                     .doOnNext(t -> handleOnNext(t, view))
-                    .doOnError(throwable -> {
-                        view.showError();
-                        view.hideLoading();
-                    })
+                    .doOnError(throwable -> view.showError())
+                    .doFinally(view::hideLoading)
                     .compose(RxLifecycleUtils.bindToLifecycle(view));
         };
     }
@@ -72,12 +69,10 @@ public class RxUtils {
             return observable
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext(t -> {
-                        handleOnNext(t, view);
-                        view.hideRefresh(clear);
-                    })
-                    .doOnError(throwable -> {
-                        view.showError();
+                    .doOnSubscribe(disposable -> view.showLoading())
+                    .doOnNext(t -> handleOnNext(t, view))
+                    .doOnError(throwable -> view.showError())
+                    .doFinally(() -> {
                         view.hideRefresh(clear);
                         view.hideLoading();
                     })

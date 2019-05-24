@@ -8,6 +8,7 @@ import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -53,7 +54,6 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
         BarUtils.setStatusBarLightMode(this, true)
         window.statusBarColor = Color.WHITE
     }
-
 
     override fun initView(savedInstanceState: Bundle?): Int {
         return R.layout.activity_search
@@ -172,12 +172,14 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
     }
 
     override fun killMyself() {
-        finish()
+        finishAfterTransition()
     }
 
     companion object {
-        fun open() {
-            ARouter.getInstance().build("/activity/search")
+        fun open(compat: ActivityOptionsCompat) {
+            ARouter.getInstance()
+                    .build("/activity/search")
+                    .withOptionsCompat(compat)
                     .navigation()
         }
     }

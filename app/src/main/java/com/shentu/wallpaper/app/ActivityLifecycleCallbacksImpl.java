@@ -19,6 +19,9 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
+import com.shentu.wallpaper.R;
+import com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar;
+
 import timber.log.Timber;
 
 /**
@@ -41,7 +44,18 @@ public class ActivityLifecycleCallbacksImpl implements Application.ActivityLifec
 
     @Override
     public void onActivityStarted(Activity activity) {
-//        Timber.w(activity + " - onActivityStarted");
+        Timber.w(activity + " - onActivityStarted");
+        if (activity.findViewById(R.id.toolbar) != null) {
+            DefaultToolbar toolbar = activity.findViewById(R.id.toolbar);
+            toolbar.addOnClickListener(new DefaultToolbar.OnClickListener() {
+                @Override
+                public void onClickLeftIcon() {
+                    if (toolbar.getLeftIcon() == R.drawable.ic_arrow_back_white_24dp) {
+                        activity.onBackPressed();
+                    }
+                }
+            });
+        }
 //        if (!activity.getIntent().getBooleanExtra("isInitToolbar", false)) {
 //            //由于加强框架的兼容性,故将 setContentView 放到 onActivityCreated 之后,onActivityStarted 之前执行
 //            //而 findViewById 必须在 Activity setContentView() 后才有效,所以将以下代码从之前的 onActivityCreated 中移动到 onActivityStarted 中执行

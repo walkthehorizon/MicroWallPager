@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorActivityBackground"
@@ -50,7 +49,7 @@
     </RelativeLayout>
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
-        android:id="@+id/item_collect"
+        android:id="@+id/itCollect"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_below="@+id/rlHead"
@@ -61,48 +60,48 @@
         app:item_title="我的收藏" />
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
-        android:id="@+id/item_browser"
+        android:id="@+id/itBrowser"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@+id/item_collect"
+        android:layout_below="@+id/itCollect"
         app:item_arrow_visible="true"
         app:item_icon="@drawable/ic_pets_pink_24dp"
         app:item_title="浏览记录" />
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
-        android:id="@+id/item_update"
+        android:id="@+id/itUpdate"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@+id/item_browser"
+        android:layout_below="@+id/itBrowser"
         android:layout_marginTop="12dp"
         app:item_icon="@drawable/ic_update_black_24dp"
         app:item_title="检查更新" />
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
-        android:id="@+id/item_cache"
+        android:id="@+id/itCache"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@+id/item_update"
+        android:layout_below="@+id/itUpdate"
         app:item_arrow_visible="false"
         app:item_icon="@drawable/ic_delete_forever_black_24dp"
         app:item_title="清除缓存" />
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
-        android:id="@+id/item_feedback"
+        android:id="@+id/itFeedback"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@+id/item_cache"
+        android:layout_below="@+id/itCache"
         android:layout_marginTop="12dp"
         app:item_arrow_visible="true"
         app:item_icon="@drawable/ic_feedback_black_24dp"
         app:item_title="意见反馈" />
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
-        android:id="@+id/item_more"
+        android:id="@+id/itMore"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@+id/item_feedback"
+        android:layout_below="@+id/itFeedback"
         app:item_arrow_visible="true"
         app:item_icon="@drawable/ic_more_horiz_pink_24dp"
         app:item_title="更多设置" />

@@ -1,7 +1,6 @@
 package com.shentu.wallpaper.mvp.ui.home
 
 import android.animation.ArgbEvaluator
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -11,6 +10,8 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager.widget.ViewPager
@@ -64,6 +65,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     private lateinit var bannerAdapter: HomeBannerAdapter
     private var isLoading: Boolean = false
     private lateinit var appComponent: AppComponent
+    private var isLightMode = false
     private val banners: List<Banner> = listOf(
             Banner("http://c3.res.meizu.com/fileserver/operation/speical/logo/239/1e04b673beda485d9c7befba71aca774.png", "#780000"),
             Banner("http://c3.res.meizu.com/fileserver/operation/speical/logo/239/15802f27083a448ea21ff96bbcce3369.jpg", "#1848C0"),
@@ -84,13 +86,11 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     }
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        loadService = LoadSir.getDefault().register(inflater.inflate(R.layout.fragment_tab_home, container, false))
-        return loadService!!.loadLayout
+        return inflater.inflate(R.layout.fragment_tab_home, container, false)
     }
 
-    @SuppressLint("WrongConstant")
     override fun initData(savedInstanceState: Bundle?) {
-        loadService?.showSuccess()
+        loadService = LoadSir.getDefault().register(rvHot)
         //初始化筛选项
         typeSparse = SparseIntArray()
         typeSparse!!.append(R.id.mTvDefault, -1)
@@ -111,13 +111,19 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
             val percent: Float = Math.abs(i) * 1.0f / appBarLayout.totalScrollRange//向上滚动，增大
             bgSearch.setBackgroundColor(ArgbEvaluator().evaluate(percent, Color.TRANSPARENT, Color.WHITE) as Int)
             if (percent - 0.5f > 0) {
-                activity?.let { BarUtils.setStatusBarLightMode(it, true) }
+                activity?.let {
+                    isLightMode = true
+                    BarUtils.setStatusBarLightMode(it, true)
+                }
                 val color = Color.parseColor("#666666")
                 tvSearch.setTextColor(color)
                 tvSearch.supportBackgroundTintList = ColorStateList.valueOf(Color.parseColor("#F5F5F5"))
                 tvSearch.supportCompoundDrawablesTintList = ColorStateList.valueOf(color)
             } else {
-                activity?.let { BarUtils.setStatusBarLightMode(it, false) }
+                activity?.let {
+                    isLightMode = false
+                    BarUtils.setStatusBarLightMode(it, false)
+                }
                 val color = Color.parseColor("#AAFDFDFD")
                 tvSearch.setTextColor(color)
                 tvSearch.supportBackgroundTintList = ColorStateList.valueOf(Color.parseColor("#4FF5F5F5"))
@@ -125,8 +131,13 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
             }
             arc1.alpha = Math.max(1.0f - percent * 3, 0f)//双倍速度隐藏与显示，效果更好
         })
+        ViewCompat.setTransitionName(tvSearch, getString(R.string.search_transitionName))
         tvSearch.setOnClickListener {
-            SearchActivity.open()
+            val compact: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this.activity!!, tvSearch, getString(R.string.search_transitionName)
+            )
+            startActivity(Intent(mContext, SearchActivity::class.java), compact.toBundle())
+//            SearchActivity.open(compact)
         }
         rvHot.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -282,6 +293,10 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
                         bannerPager.currentItem = (t % bannerAdapter.count).toInt()
                     }
                 })
+    }
+
+    fun getIsLightMode(): Boolean {
+        return isLightMode
     }
 
     companion object {

@@ -10,6 +10,9 @@
     <com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
+        app:tl_title="更多设置"
+        app:tl_left_icon="@drawable/ic_arrow_back_white_24dp"
+        android:background="@color/colorPrimary"
         android:layout_height="wrap_content" />
 
     <ImageView

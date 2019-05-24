@@ -6,8 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowAnimationStyle">@style/AnimaActivity</item>
+        <!--<item name="android:windowAnimationStyle">@style/AnimaActivity</item>-->
         <item name="android:windowBackground">@color/colorActivityBackground</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="AppTheme.Launcher">

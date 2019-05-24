@@ -23,10 +23,12 @@
 
     <declare-styleable name="DefaultToolbar">
         <attr name="tl_left_icon" format="reference" />
+        <attr name="tl_left_tint" format="color" />
         <attr name="tl_right_icon" format="reference" />
         <attr name="tl_title" format="string" />
         <attr name="tl_right_text" format="string" />
         <attr name="tl_right_icon2" format="reference" />
+        <attr name="tl_end_text_size" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="ArcImageView">

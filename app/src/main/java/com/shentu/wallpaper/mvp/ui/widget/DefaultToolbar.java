@@ -1,8 +1,9 @@
 package com.shentu.wallpaper.mvp.ui.widget;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import androidx.annotation.Nullable;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.shentu.wallpaper.R;
 
@@ -37,6 +40,9 @@ public class DefaultToolbar extends BaseRelativeLayout implements View.OnClickLi
     private int rightIcon;
     private int rightIcon2;
     private String rightText;
+    private float endTextSize;
+    private int startIconColor;
+
 
     public DefaultToolbar(Context context) {
         this(context, null);
@@ -51,10 +57,12 @@ public class DefaultToolbar extends BaseRelativeLayout implements View.OnClickLi
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DefaultToolbar);
         tlTitle = a.getString(R.styleable.DefaultToolbar_tl_title);
-        leftIcon = a.getResourceId(R.styleable.DefaultToolbar_tl_left_icon, -1);
+        leftIcon = a.getResourceId(R.styleable.DefaultToolbar_tl_left_icon, R.drawable.ic_arrow_back_white_24dp);
         rightIcon = a.getResourceId(R.styleable.DefaultToolbar_tl_right_icon, -1);
         rightText = a.getString(R.styleable.DefaultToolbar_tl_right_text);
         rightIcon2 = a.getResourceId(R.styleable.DefaultToolbar_tl_right_icon2, -1);
+        endTextSize = a.getDimension(R.styleable.DefaultToolbar_tl_end_text_size, 16);
+        startIconColor = a.getColor(R.styleable.DefaultToolbar_tl_left_tint, Color.WHITE);
         a.recycle();
 
         setTitle(tlTitle);
@@ -74,6 +82,14 @@ public class DefaultToolbar extends BaseRelativeLayout implements View.OnClickLi
 
     }
 
+    public ImageView getLeftIconView() {
+        return mIvStart;
+    }
+
+    public int getLeftIcon() {
+        return leftIcon;
+    }
+
     public void setRightIcon2(int icon) {
         if (icon != -1) {
             mIvEnd2.setVisibility(VISIBLE);
@@ -85,6 +101,7 @@ public class DefaultToolbar extends BaseRelativeLayout implements View.OnClickLi
     private void setLeftIcon(int icon) {
         if (icon != -1) {
             mIvStart.setVisibility(VISIBLE);
+            mIvStart.setImageTintList(ColorStateList.valueOf(startIconColor));
             mIvStart.setImageResource(icon);
             mIvStart.setOnClickListener(this);
         }
@@ -102,6 +119,7 @@ public class DefaultToolbar extends BaseRelativeLayout implements View.OnClickLi
         if (!TextUtils.isEmpty(str)) {
             tvRight.setVisibility(VISIBLE);
             tvRight.setText(str);
+            tvRight.setTextSize(endTextSize);
             tvRight.setOnClickListener(this);
         }
     }

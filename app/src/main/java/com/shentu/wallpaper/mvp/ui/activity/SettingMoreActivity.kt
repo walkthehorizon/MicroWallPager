@@ -9,12 +9,15 @@ import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.BuildConfig
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.GlideArms
+import com.shentu.wallpaper.app.HkUserManager
+import com.shentu.wallpaper.app.event.LogoutEvent
 import com.shentu.wallpaper.di.component.DaggerSettingMoreComponent
 import com.shentu.wallpaper.di.module.SettingMoreModule
 import com.shentu.wallpaper.mvp.contract.SettingMoreContract
 import com.shentu.wallpaper.mvp.presenter.SettingMorePresenter
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.activity_setting_more.*
+import org.greenrobot.eventbus.EventBus
 
 
 class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreContract.View {
@@ -41,9 +44,9 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
                 .into(mIvCover)
         mTvVersion.text = "看个够："+BuildConfig.VERSION_NAME
         mbLogout.setOnClickListener {
-            //            HkUserManager.getInstance().clear()
+            HkUserManager.getInstance().clear()
+            EventBus.getDefault().post(LogoutEvent())
         }
-
     }
 
 

@@ -13,9 +13,8 @@
         android:layout_height="@dimen/default_toolbar_height"
         android:layout_centerVertical="true"
         android:padding="12dp"
-        android:tint="@color/white"
         android:visibility="gone"
-        tools:src="@drawable/ic_arrow_back_black_24dp" />
+        android:src="@drawable/ic_arrow_back_white_24dp" />
 
     <TextView
         android:id="@+id/toolbar_title"

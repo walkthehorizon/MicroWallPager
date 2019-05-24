@@ -150,6 +150,7 @@ dependencies {
     implementation rootProject.ext.dependencies["eventbus"]
     kapt rootProject.ext.dependencies["eventbus-processor"]
     implementation rootProject.ext.dependencies['AndPermission']
+    implementation rootProject.ext.dependencies['pgyersdk']
     //view
     implementation rootProject.ext.dependencies["BRVAdapterHelper"]
     implementation rootProject.ext.dependencies["circleimageview"]
