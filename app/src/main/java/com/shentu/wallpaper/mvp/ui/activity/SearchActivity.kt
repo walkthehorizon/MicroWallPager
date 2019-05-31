@@ -4,7 +4,9 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
@@ -38,7 +40,8 @@ import com.shentu.wallpaper.mvp.ui.adapter.decoration.HotPageRvDecoration
 import kotlinx.android.synthetic.main.activity_search.*
 
 @Route(path = "/activity/search")
-class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
+class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, TextWatcher {
+
 
     private var curKey = ""
     private val hotAdapter: HotAdapter = HotAdapter(ArrayList())
@@ -89,6 +92,7 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
                 return false
             }
         })
+        etSearch.addTextChangedListener(this)
         rvData.layoutManager = LinearLayoutManager(this)
         rvData.addItemDecoration(HotPageRvDecoration(12))
         rvData.adapter = hotAdapter
@@ -119,6 +123,10 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
         } else {
             smartRefresh.finishLoadMore()
         }
+    }
+
+    override fun showLoading() {
+        loadService.showCallback(LoadingCallback::class.java)
     }
 
     override fun showEmpty() {
@@ -155,12 +163,28 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
                 chip.text = key
                 chip.setOnClickListener {
                     curKey = chip.text.toString()
+                    etSearch.setText(curKey)
+                    etSearch.setSelection(etSearch.length())
                     loadData(true)
                 }
                 chipGroup?.addView(chip, lp)
             }
         }
         loadService.showCallback(SearchHistoryCallback::class.java)
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+    }
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+    }
+
+    override fun afterTextChanged(s: Editable?) {
+        if (TextUtils.isEmpty(s)) {
+            showHistory()
+        }
     }
 
     override fun showMessage(message: String) {

@@ -22,6 +22,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:focusable="true"
             android:background="@drawable/bg_home_search"
             android:drawableStart="@drawable/ic_search_black_24dp"
             android:drawablePadding="10dp"
@@ -40,6 +41,7 @@
     </com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar>
 
     <FrameLayout
+        android:layout_marginTop="@dimen/activity_divider_height"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">

@@ -6,6 +6,7 @@ import com.jess.arms.http.imageloader.ImageLoader
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.wallpaper.app.utils.RxUtils
+import com.shentu.wallpaper.model.response.BannerPageResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.TabHomeContract
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
@@ -49,8 +50,16 @@ constructor(model: TabHomeContract.Model, rootView: TabHomeContract.View) : Base
                 })
     }
 
-
-    override fun onDestroy() {
-        super.onDestroy()
+    fun getBannes() {
+        mModel.getBanners()
+                .compose(RxUtils.applyClearSchedulers(mRootView))
+                .subscribe(object : ErrorHandleSubscriber<BannerPageResponse>(mErrorHandler) {
+                    override fun onNext(t: BannerPageResponse) {
+                        if (!t.isSuccess) {
+                            return
+                        }
+                        t.data?.content?.let { mRootView.showBanners(it) }
+                    }
+                })
     }
 }

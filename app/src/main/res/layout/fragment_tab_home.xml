@@ -47,7 +47,7 @@
                         android:layout_marginStart="@dimen/activity_horizontal_margin"
                         android:layout_marginEnd="@dimen/activity_horizontal_margin"
                         android:clipToPadding="true"
-                        app:layout_constraintDimensionRatio="H,733:313"
+                        app:layout_constraintDimensionRatio="H,900:383"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_scrollFlags="scroll"

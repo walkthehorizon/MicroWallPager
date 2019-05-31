@@ -1,6 +1,7 @@
 package com.shentu.wallpaper.mvp.ui.home
 
 import android.animation.ArgbEvaluator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -66,14 +67,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     private var isLoading: Boolean = false
     private lateinit var appComponent: AppComponent
     private var isLightMode = false
-    private val banners: List<Banner> = listOf(
-            Banner("http://c3.res.meizu.com/fileserver/operation/speical/logo/239/1e04b673beda485d9c7befba71aca774.png", "#780000"),
-            Banner("http://c3.res.meizu.com/fileserver/operation/speical/logo/239/15802f27083a448ea21ff96bbcce3369.jpg", "#1848C0"),
-            Banner("http://c5.res.meizu.com/fileserver/operation/speical/logo/239/2bdcd0d1b8a3477084a2200d8f0d5ddc.jpg", "#F0F0F0"),
-            Banner("http://c6.res.meizu.com/fileserver/operation/speical/logo/239/8d961eb8ce1a421f895eb0d7870ede60.jpg", "#1860A8"),
-            Banner("http://c3.res.meizu.com/fileserver/operation/speical/logo/239/322d65d6a7a3464a87499c9bb7f390ca.jpg", "#183030"),
-            Banner("http://c6.res.meizu.com/fileserver/operation/speical/logo/239/869d2af5e3234ea9887d4c5cd34ce6c6.jpg", "#F0D8D8"),
-            Banner("http://c3.res.meizu.com/fileserver/operation/speical/logo/239/898f813dfce74d37b102e12a364457d8.jpg", "#48F0FF"))
+    private var banners: MutableList<Banner> = arrayListOf()
 
     override fun setupFragmentComponent(appComponent: AppComponent) {
         DaggerHotPagerComponent //如找不到该类,请编译一下项目
@@ -152,7 +146,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
                 }
             }
         })
-        showBanners(banners as MutableList)
+        mPresenter?.getBannes()
     }
 
 
@@ -203,6 +197,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     }
 
     override fun showBanners(banners: MutableList<Banner>) {
+        this.banners = banners;
         bannerAdapter = HomeBannerAdapter(banners)
         bannerPager.offscreenPageLimit = banners.size
         bannerPager.pageMargin = ConvertUtils.dp2px(12.0f)
@@ -271,8 +266,12 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
 //
     }
 
+    @SuppressLint("Range")
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
         //Timber.e("position:$position  offest:$positionOffset  pixel:$positionOffsetPixels")
+        if (banners.size < 1) {
+            return
+        }
         val evaluate = ArgbEvaluator().evaluate(positionOffset, Color.parseColor(banners[position].color),
                 Color.parseColor(banners[if (position == bannerPager.adapter!!.count - 1) 0 else position + 1].color)) as Int
         arc1.setColorFilter(evaluate)

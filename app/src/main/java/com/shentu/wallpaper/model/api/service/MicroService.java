@@ -5,6 +5,7 @@ import com.shentu.wallpaper.model.entity.BasePageResponse;
 import com.shentu.wallpaper.model.entity.BaseResponse;
 import com.shentu.wallpaper.model.entity.Subject;
 import com.shentu.wallpaper.model.entity.User;
+import com.shentu.wallpaper.model.response.BannerPageResponse;
 import com.shentu.wallpaper.model.response.CategoryPageResponse;
 import com.shentu.wallpaper.model.response.SplashAdResponse;
 import com.shentu.wallpaper.model.response.SubjectPageResponse;
@@ -76,4 +77,8 @@ public interface MicroService {
     searchKey(@Query("key") String key,
               @Query("limit") int limit,
               @Query("offset") int offset);
+
+    @GET("banner/")
+    Observable<BannerPageResponse>
+    getBanners();
 }

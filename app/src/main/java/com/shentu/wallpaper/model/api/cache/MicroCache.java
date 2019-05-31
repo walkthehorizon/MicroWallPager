@@ -1,6 +1,7 @@
 package com.shentu.wallpaper.model.api.cache;
 
 
+import com.shentu.wallpaper.model.response.BannerPageResponse;
 import com.shentu.wallpaper.model.response.SplashAdResponse;
 import com.shentu.wallpaper.model.response.SubjectPageResponse;
 import com.shentu.wallpaper.model.response.WallpaperPageResponse;
@@ -40,4 +41,9 @@ public interface MicroCache {
     Observable<Reply<SubjectPageResponse>>
     searchKey(Observable<SubjectPageResponse> ob,
               DynamicKeyGroup filter);
+
+    @ProviderKey("banner-one-day")
+    @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
+    Observable<Reply<BannerPageResponse>>
+    getBanners(Observable<BannerPageResponse> ob, EvictProvider evictProvider);
 }
