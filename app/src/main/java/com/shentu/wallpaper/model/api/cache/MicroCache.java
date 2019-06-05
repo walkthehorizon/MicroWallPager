@@ -42,8 +42,8 @@ public interface MicroCache {
     searchKey(Observable<SubjectPageResponse> ob,
               DynamicKeyGroup filter);
 
-    @ProviderKey("banner-one-day")
-    @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
+    @ProviderKey("banner-two-hour")
+    @LifeCache(duration = 2, timeUnit = TimeUnit.HOURS)
     Observable<Reply<BannerPageResponse>>
-    getBanners(Observable<BannerPageResponse> ob, EvictProvider evictProvider);
+    getBanners(Observable<BannerPageResponse> ob);
 }

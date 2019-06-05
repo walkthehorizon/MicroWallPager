@@ -8,4 +8,6 @@ public class Constant {
     public static String LAST_LOGIN_ACCOUNT = "last_login_account";
 
     public static List<String> MAIN_TAB_TITLES = Arrays.asList("推荐", "我的");
+
+    public static int BANNER_COUNT = 5;
 }

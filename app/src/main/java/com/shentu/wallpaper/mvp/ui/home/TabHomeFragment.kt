@@ -7,10 +7,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.SparseIntArray
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -21,18 +18,18 @@ import com.blankj.utilcode.util.ConvertUtils
 import com.google.android.material.appbar.AppBarLayout
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.BaseLazyLoadFragment
-import com.jess.arms.mvp.IView
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
-import com.jess.arms.utils.RxLifecycleUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.page.EmptyCallback
 import com.shentu.wallpaper.app.page.ErrorCallback
+import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.di.component.DaggerHotPagerComponent
 import com.shentu.wallpaper.di.module.TabHomeModule
 import com.shentu.wallpaper.model.entity.Banner
@@ -44,14 +41,10 @@ import com.shentu.wallpaper.mvp.ui.adapter.HomeBannerAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.RecommendAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.RandomRecommendDecoration
 import com.shentu.wallpaper.mvp.ui.widget.CustomPopWindow
-import com.trello.rxlifecycle2.android.FragmentEvent
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 
@@ -63,11 +56,13 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     private var typeSparse: SparseIntArray? = null
     private lateinit var recommendAdapter: RecommendAdapter
     private var loadService: LoadService<*>? = null
-    private lateinit var bannerAdapter: HomeBannerAdapter
+    private var bannerAdapter: HomeBannerAdapter? = null
     private var isLoading: Boolean = false
     private lateinit var appComponent: AppComponent
     private var isLightMode = false
     private var banners: MutableList<Banner> = arrayListOf()
+    private var countdown: Boolean = true
+    private var historyBanner = Banner()
 
     override fun setupFragmentComponent(appComponent: AppComponent) {
         DaggerHotPagerComponent //如找不到该类,请编译一下项目
@@ -141,14 +136,17 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
                 val total = manager.itemCount
                 if (total - into[0] < 12 && !isLoading) {
                     isLoading = true
-                    mPresenter?.getRecommends(false)
-                    Timber.e("auto load more...")
+                    mPresenter?.getData(false)
+//                    Timber.e("auto load more...")
                 }
             }
         })
-        mPresenter?.getBannes()
     }
 
+    override fun onResume() {
+        super.onResume()
+        startCountDown()
+    }
 
     override fun lazyLoadData() {
         refreshLayout.autoRefresh()
@@ -189,40 +187,42 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
-        mPresenter?.getRecommends(false)
+        mPresenter?.getData(false)
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
-        mPresenter?.getRecommends(true)
+        mPresenter?.getData(true)
     }
 
     override fun showBanners(banners: MutableList<Banner>) {
-        this.banners = banners;
-        bannerAdapter = HomeBannerAdapter(banners)
-        bannerPager.offscreenPageLimit = banners.size
-        bannerPager.pageMargin = ConvertUtils.dp2px(12.0f)
-        bannerPager.adapter = bannerAdapter
-        bannerPager.addOnPageChangeListener(this)
-        circleIndicator.setViewPager(bannerPager)
-        startCountDown()
+        if (banners.size > Constant.BANNER_COUNT) {
+            historyBanner = banners.removeAt(banners.size - 1)
+        }
+        this.banners = banners
+        if (bannerAdapter == null) {
+            bannerAdapter = HomeBannerAdapter(banners)
+            bannerPager.offscreenPageLimit = banners.size
+            bannerPager.pageMargin = ConvertUtils.dp2px(12.0f)
+            bannerPager.adapter = bannerAdapter
+            bannerPager.addOnPageChangeListener(this)
+            circleIndicator.setViewPager(bannerPager)
+            bannerPager.setOnTouchListener { _, event ->
+                if (event?.action == MotionEvent.ACTION_MOVE) {
+                    countdown = false
+                }
+                if (event?.action == MotionEvent.ACTION_UP) {
+                    countdown = true
+                }
+                false
+            }
+        } else {
+            bannerAdapter!!.notifyDataSetChanged()
+        }
     }
-
-//    @SuppressLint("CheckResult")
-//    override fun showHotSubject(subjects: List<Subject>, clear: Boolean) {
-//        for (subject in subjects) {
-//            if (TextUtils.isEmpty(subject.cover_1) || TextUtils.isEmpty(subject.cover_2)) {
-//                subject.type = Subject.ITEM_VIEW_1
-//            }
-//        }
-//        if (clear) {
-//            hotAdapter!!.setNewData(subjects)
-//        } else {
-//            hotAdapter!!.addData(subjects)
-//        }
-//    }
 
     override fun showRecommends(wallpapers: MutableList<Wallpaper>, clear: Boolean) {
         if (clear) {
+            wallpapers.add(0, Wallpaper(historyBanner.imageUrl))
             recommendAdapter.setNewData(wallpapers)
         } else {
             isLoading = false
@@ -272,9 +272,13 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
         if (banners.size < 1) {
             return
         }
-        val evaluate = ArgbEvaluator().evaluate(positionOffset, Color.parseColor(banners[position].color),
-                Color.parseColor(banners[if (position == bannerPager.adapter!!.count - 1) 0 else position + 1].color)) as Int
-        arc1.setColorFilter(evaluate)
+        try {
+            val evaluate = ArgbEvaluator().evaluate(positionOffset, Color.parseColor(banners[position].color),
+                    Color.parseColor(banners[if (position == bannerPager.adapter!!.count - 1) 0 else position + 1].color)) as Int
+            arc1.setColorFilter(evaluate)
+        } catch (e: NumberFormatException) {
+            e.message?.let { showMessage(it) }
+        }
     }
 
     override fun onPageSelected(position: Int) {
@@ -282,14 +286,16 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     }
 
     private fun startCountDown() {
-        Observable.interval(5, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .compose(RxLifecycleUtils.bindUntilEvent(this@TabHomeFragment as IView, FragmentEvent.DESTROY))
+        Observable.interval(8, 8, TimeUnit.SECONDS)
+                .compose(RxUtils.applyClearSchedulers(this))
                 .subscribe(object : ErrorHandleSubscriber<Long>(appComponent.rxErrorHandler()) {
                     override fun onNext(t: Long) {
-//                        Timber.e("timer:$t")
-                        bannerPager.currentItem = (t % bannerAdapter.count).toInt()
+                        if (!countdown || bannerAdapter != null) {
+                            return
+                        }
+                        bannerPager.currentItem =
+                                if (bannerAdapter!!.count - bannerPager.currentItem < 1) 0
+                                else bannerPager.currentItem + 1
                     }
                 })
     }

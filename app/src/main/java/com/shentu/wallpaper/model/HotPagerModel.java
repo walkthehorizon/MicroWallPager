@@ -6,6 +6,8 @@ import com.google.gson.Gson;
 import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.integration.IRepositoryManager;
 import com.shentu.wallpaper.app.BasePageModel;
+import com.shentu.wallpaper.app.Constant;
+import com.shentu.wallpaper.model.api.cache.MicroCache;
 import com.shentu.wallpaper.model.api.service.MicroService;
 import com.shentu.wallpaper.model.entity.BasePageResponse;
 import com.shentu.wallpaper.model.entity.BaseResponse;
@@ -19,6 +21,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
+import io.rx_cache2.Reply;
 
 
 @FragmentScope
@@ -59,8 +64,12 @@ public class HotPagerModel extends BasePageModel implements TabHomeContract.Mode
     @NotNull
     @Override
     public Observable<BannerPageResponse> getBanners() {
-        return mRepositoryManager
+        return Observable.just(mRepositoryManager
                 .obtainRetrofitService(MicroService.class)
-                .getBanners();
+                .getBanners(Constant.BANNER_COUNT + 1, 0))
+                .flatMap((Function<Observable<BannerPageResponse>, ObservableSource<BannerPageResponse>>)
+                        ob -> mRepositoryManager.obtainCacheService(MicroCache.class)
+                                .getBanners(ob)
+                                .map(Reply::getData));
     }
 }

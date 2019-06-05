@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import com.blankj.utilcode.util.BarUtils
-import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
+import com.jess.arms.mvp.BaseLazyLoadFragment
 import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
@@ -20,7 +20,6 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.page.EmptyCallback
 import com.shentu.wallpaper.app.page.ErrorCallback
-import com.shentu.wallpaper.app.page.LoadingCallback
 import com.shentu.wallpaper.di.component.DaggerCategoryComponent
 import com.shentu.wallpaper.di.module.CategoryModule
 import com.shentu.wallpaper.model.entity.Category
@@ -29,9 +28,10 @@ import com.shentu.wallpaper.mvp.presenter.CategoryPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.CategoryAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.RvCategoryDecoration
 import kotlinx.android.synthetic.main.fragment_category.*
+import kotlinx.android.synthetic.main.fragment_tab_home.*
 
 
-class CategoryFragment : BaseFragment<CategoryPresenter>(), CategoryContract.View, OnRefreshListener, OnLoadMoreListener {
+class CategoryFragment : BaseLazyLoadFragment<CategoryPresenter>(), CategoryContract.View, OnRefreshListener, OnLoadMoreListener {
 
     private lateinit var loadService: LoadService<Any>
 
@@ -53,11 +53,18 @@ class CategoryFragment : BaseFragment<CategoryPresenter>(), CategoryContract.Vie
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val rootView = inflater.inflate(R.layout.fragment_category, container, false)
-        loadService = LoadSir.getDefault().register(rootView) { loadService.showCallback(LoadingCallback::class.java) }
+        loadService = LoadSir.getDefault().register(rootView) {
+            showContent()
+            refreshLayout.autoRefresh()
+        }
         return loadService.loadLayout
     }
 
     override fun initData(savedInstanceState: Bundle?) {
+
+    }
+
+    override fun lazyLoadData() {
         val lp = smartRefresh.layoutParams as FrameLayout.LayoutParams
         lp.topMargin = BarUtils.getStatusBarHeight()
         smartRefresh.layoutParams = lp
@@ -66,6 +73,7 @@ class CategoryFragment : BaseFragment<CategoryPresenter>(), CategoryContract.Vie
         rvCategory.addItemDecoration(RvCategoryDecoration(12))
         rvCategory.setHasFixedSize(true)
         rvCategory.adapter = CategoryAdapter(arrayListOf())
+
         mPresenter?.getCategories(true)
     }
 

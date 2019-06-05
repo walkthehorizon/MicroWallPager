@@ -9,6 +9,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.palette.graphics.Palette
 import com.blankj.utilcode.util.ConvertUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -16,7 +17,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withC
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseQuickAdapter.OnItemClickListener
 import com.chad.library.adapter.base.BaseViewHolder
-import com.github.florent37.glidepalette.BitmapPalette.Profile.VIBRANT_LIGHT
+import com.github.florent37.glidepalette.BitmapPalette.Profile.MUTED_LIGHT
 import com.github.florent37.glidepalette.GlidePalette
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.GlideArms
@@ -32,8 +33,12 @@ class RecommendAdapter(context: Context, data: MutableList<Wallpaper>) : BaseQui
 
     init {
         onItemClickListener = OnItemClickListener { _, view, position ->
+            if (position == 0) {//主题列表
+                ToastUtils.showShort("主题")
+                return@OnItemClickListener
+            }
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
-                    , view.width/2,view.height/2
+                    , view.width / 2, view.height / 2
                     , 0, 0)
             PictureBrowserActivity.open(context, wallpaperList, position, compat)
         }
@@ -53,7 +58,7 @@ class RecommendAdapter(context: Context, data: MutableList<Wallpaper>) : BaseQui
         GlideArms.with(helper.itemView.context)
                 .load(item.url)
                 .listener(GlidePalette.with(item.url)
-                        .use(VIBRANT_LIGHT)
+                        .use(MUTED_LIGHT)
                         .intoCallBack { palette ->
                             (cardView)
                                     .setCardBackgroundColor(Objects.requireNonNull<Palette>(palette)

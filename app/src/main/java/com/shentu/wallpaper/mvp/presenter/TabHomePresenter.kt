@@ -9,6 +9,7 @@ import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.model.response.BannerPageResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.TabHomeContract
+import io.reactivex.Observable
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import javax.inject.Inject
@@ -26,16 +27,23 @@ constructor(model: TabHomeContract.Model, rootView: TabHomeContract.View) : Base
     @Inject
     lateinit var mAppManager: AppManager
 
-    //    public void getSubjects(int subjectType, boolean clear) {
-    //        mModel.getSubjects(subjectType, clear)
-    //                .compose(RxUtils.applySchedulers(mRootView, clear))
-    //                .subscribe(new ErrorHandleSubscriber<BaseResponse<BasePageResponse<Subject>>>(mErrorHandler) {
-    //                    @Override
-    //                    public void onNext(BaseResponse<BasePageResponse<Subject>> response) {
-    //                        mRootView.showHotSubject(response.getData().getContent(), clear);
-    //                    }
-    //                });
-    //    }
+    fun getData(clear: Boolean) {
+        val observable = if (clear)
+            Observable.concat(
+                    mModel.getBanners().compose(RxUtils.applyClearSchedulers(mRootView)),
+                    mModel.getRecommends(clear).compose(RxUtils.applySchedulers(mRootView, clear)))
+        else
+            mModel.getRecommends(clear).compose(RxUtils.applySchedulers(mRootView, clear))
+        observable.compose(RxUtils.applyClearSchedulers(mRootView))
+                .subscribe(object : ErrorHandleSubscriber<Any>(mErrorHandler) {
+                    override fun onNext(t: Any) {
+                        when (t) {
+                            is BannerPageResponse -> mRootView.showBanners(t.data!!.content)
+                            is WallpaperPageResponse -> mRootView.showRecommends(t.data!!.content, clear)
+                        }
+                    }
+                })
+    }
 
     fun getRecommends(clear: Boolean) {
         mModel.getRecommends(clear)
@@ -50,7 +58,7 @@ constructor(model: TabHomeContract.Model, rootView: TabHomeContract.View) : Base
                 })
     }
 
-    fun getBannes() {
+    fun getBanners() {
         mModel.getBanners()
                 .compose(RxUtils.applyClearSchedulers(mRootView))
                 .subscribe(object : ErrorHandleSubscriber<BannerPageResponse>(mErrorHandler) {

@@ -38,6 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipChildren="false"
+                    android:paddingBottom="12dp"
                     app:layout_scrollFlags="scroll">
 
                     <com.shentu.wallpaper.mvp.ui.widget.loopviewpager.LoopViewPager
@@ -70,7 +71,6 @@
                 android:id="@+id/rvHot"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="12dp"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -92,13 +92,13 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:background="@drawable/bg_home_search"
         android:drawableStart="@drawable/ic_search_white_24dp"
+        android:drawablePadding="10dp"
         android:gravity="center_vertical|start"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:drawablePadding="10dp"
-        android:textSize="@dimen/sp_15"
         android:text="@string/action_search"
         android:textColor="@color/colorIcon"
+        android:textSize="@dimen/sp_15"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

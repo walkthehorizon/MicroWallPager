@@ -78,7 +78,8 @@ public interface MicroService {
               @Query("limit") int limit,
               @Query("offset") int offset);
 
-    @GET("banner/")
+    @GET("banners/")
     Observable<BannerPageResponse>
-    getBanners();
+    getBanners(@Query("limit") int limit,
+               @Query("offset") int offset);
 }
