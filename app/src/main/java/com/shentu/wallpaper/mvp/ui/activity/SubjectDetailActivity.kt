@@ -11,20 +11,6 @@ import com.shentu.wallpaper.di.module.SubjectDetailModule
 import com.shentu.wallpaper.mvp.contract.SubjectDetailContract
 import com.shentu.wallpaper.mvp.presenter.SubjectDetailPresenter
 
-
-/**
- * 如果没presenter
- * 你可以这样写
- *
- * @ActivityScope(請注意命名空間) class NullObjectPresenterByActivity
- * @Inject constructor() : IPresenter {
- * override fun onStart() {
- * }
- *
- * override fun onDestroy() {
- * }
- * }
- */
 class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDetailContract.View {
 
     override fun setupActivityComponent(appComponent: AppComponent) {
