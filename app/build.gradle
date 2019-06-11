@@ -24,7 +24,7 @@ android {
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled = true
 
-        ndk{
+        ndk {
             abiFilters 'armeabi-v7a'
         }
     }
@@ -36,7 +36,7 @@ android {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "String", "Sever", '"http://192.168.12.60/wallpaper/"'
+            buildConfigField "String", "Sever", '"http://192.168.12.136/wallpaper/"'
             buildConfigField "boolean", "Debug", "true"
             buildConfigField "String", "API_KEY", '"tang01tang"'
             minifyEnabled false
@@ -139,6 +139,7 @@ dependencies {
     implementation rootProject.ext.dependencies["glidepalette"]
     implementation rootProject.ext.dependencies["loadsir"]
     implementation rootProject.ext.dependencies["filedownloader"]
+    implementation project(':netbus')
 
     kapt(rootProject.ext.dependencies["butterknife-compiler"]) {
         exclude module: 'support-annotations'

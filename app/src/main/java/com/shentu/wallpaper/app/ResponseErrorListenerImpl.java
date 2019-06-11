@@ -18,9 +18,9 @@ package com.shentu.wallpaper.app;
 import android.content.Context;
 import android.net.ParseException;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonParseException;
-import com.jess.arms.utils.ArmsUtils;
 
 import org.json.JSONException;
 
@@ -60,7 +60,8 @@ public class ResponseErrorListenerImpl implements ResponseErrorListener {
         } else if (t instanceof JsonParseException || t instanceof ParseException || t instanceof JSONException || t instanceof JsonIOException) {
             msg = "数据解析错误";
         }
-        ArmsUtils.snackbarText(msg);
+        ToastUtils.showShort(msg);
+//        ArmsUtils.snackbarText(msg);
     }
 
     private String convertStatusCode(HttpException httpException) {

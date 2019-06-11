@@ -10,6 +10,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.palette.graphics.Palette
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.bumptech.glide.MemoryCategory
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -26,7 +27,7 @@ import com.shentu.wallpaper.model.entity.WallpaperList
 import com.shentu.wallpaper.mvp.ui.activity.PictureBrowserActivity
 import java.util.*
 
-class RecommendAdapter(context: Context, data: MutableList<Wallpaper>) : BaseQuickAdapter<Wallpaper
+class RecommendAdapter(val context: Context, data: MutableList<Wallpaper>) : BaseQuickAdapter<Wallpaper
         , BaseViewHolder>(R.layout.item_rv_recommend, data) {
 
     private val wallpaperList: WallpaperList = WallpaperList()
@@ -42,6 +43,7 @@ class RecommendAdapter(context: Context, data: MutableList<Wallpaper>) : BaseQui
                     , 0, 0)
             PictureBrowserActivity.open(context, wallpaperList, position, compat)
         }
+        GlideArms.get(context).setMemoryCategory(MemoryCategory.HIGH)
     }
 
     override fun convert(helper: BaseViewHolder, item: Wallpaper) {

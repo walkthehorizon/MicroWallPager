@@ -132,7 +132,7 @@ public final class GlobalConfiguration implements ConfigModule {
                 })
                 .rxCacheConfiguration((context1, rxCacheBuilder) -> {//这里可以自己自定义配置 RxCache 的参数
                     rxCacheBuilder.useExpiredDataIfLoaderNotAvailable(true);
-                    Timber.e("cache path：%s", cachePath);
+//                    Timber.e("cache path：%s", cachePath);
 //                    File file = new File(cachePath, "cache");
 //                    FileUtils.createOrExistsDir(file);
 //                    rxCacheBuilder.persistence(file, new GsonSpeaker());

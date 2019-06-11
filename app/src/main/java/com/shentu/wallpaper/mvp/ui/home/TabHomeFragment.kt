@@ -20,15 +20,11 @@ import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.BaseLazyLoadFragment
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
-import com.kingja.loadsir.core.LoadService
-import com.kingja.loadsir.core.LoadSir
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
-import com.shentu.wallpaper.app.page.EmptyCallback
-import com.shentu.wallpaper.app.page.ErrorCallback
 import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.di.component.DaggerHotPagerComponent
 import com.shentu.wallpaper.di.module.TabHomeModule
@@ -55,7 +51,6 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     private var subType = -1//主题分类
     private var typeSparse: SparseIntArray? = null
     private lateinit var recommendAdapter: RecommendAdapter
-    private var loadService: LoadService<*>? = null
     private var bannerAdapter: HomeBannerAdapter? = null
     private var isLoading: Boolean = false
     private lateinit var appComponent: AppComponent
@@ -79,7 +74,6 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-        loadService = LoadSir.getDefault().register(rvHot)
         //初始化筛选项
         typeSparse = SparseIntArray()
         typeSparse!!.append(R.id.mTvDefault, -1)
@@ -129,6 +123,14 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
 //            SearchActivity.open(compact)
         }
         rvHot.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                    GlideArms.with(mContext).resumeRequests()
+//                } else {
+//                    GlideArms.with(mContext).pauseRequests()
+//                }
+//            }
+
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val manager: StaggeredGridLayoutManager = (recyclerView.layoutManager) as StaggeredGridLayoutManager
@@ -136,7 +138,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
                 val total = manager.itemCount
                 if (total - into[0] < 12 && !isLoading) {
                     isLoading = true
-                    mPresenter?.getData(false)
+                    mPresenter?.getRecommends(false)
 //                    Timber.e("auto load more...")
                 }
             }
@@ -149,28 +151,18 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     }
 
     override fun lazyLoadData() {
-        refreshLayout.autoRefresh()
+        refreshLayout.autoRefreshAnimationOnly()
+        mPresenter?.getBanners()
+        mPresenter?.getRecommends(true)
     }
 
     override fun hideRefresh(clear: Boolean) {
-        if (clear)
-            refreshLayout.finishRefresh()
+        if (clear) {
+            refreshLayout.finishRefresh(500)
+        }
         else
             refreshLayout.finishLoadMore()
     }
-
-    override fun showEmpty() {
-        loadService!!.showCallback(EmptyCallback::class.java)
-    }
-
-    override fun showContent() {
-        loadService!!.showSuccess()
-    }
-
-    override fun showError() {
-        loadService!!.showCallback(ErrorCallback::class.java)
-    }
-
 
     override fun showMessage(message: String) {
         checkNotNull(message)
@@ -187,11 +179,11 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
-        mPresenter?.getData(false)
+        mPresenter?.getRecommends(false)
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
-        mPresenter?.getData(true)
+        mPresenter?.getRecommends(true, isUser = true)
     }
 
     override fun showBanners(banners: MutableList<Banner>) {
@@ -276,7 +268,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
             val evaluate = ArgbEvaluator().evaluate(positionOffset, Color.parseColor(banners[position].color),
                     Color.parseColor(banners[if (position == bannerPager.adapter!!.count - 1) 0 else position + 1].color)) as Int
             arc1.setColorFilter(evaluate)
-        } catch (e: NumberFormatException) {
+        } catch (e: Throwable) {
             e.message?.let { showMessage(it) }
         }
     }
@@ -290,7 +282,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
                 .compose(RxUtils.applyClearSchedulers(this))
                 .subscribe(object : ErrorHandleSubscriber<Long>(appComponent.rxErrorHandler()) {
                     override fun onNext(t: Long) {
-                        if (!countdown || bannerAdapter != null) {
+                        if (!countdown || bannerAdapter == null) {
                             return
                         }
                         bannerPager.currentItem =

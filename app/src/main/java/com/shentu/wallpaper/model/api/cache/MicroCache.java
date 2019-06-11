@@ -52,4 +52,11 @@ public interface MicroCache {
     @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
     Observable<Reply<CategoryPageResponse>>
     getCategories(Observable<CategoryPageResponse> ob);
+
+    @ProviderKey("recommends-five-minutes")
+    @LifeCache(duration = 1, timeUnit = TimeUnit.MINUTES)
+    Observable<WallpaperPageResponse> getRecommends(
+            Observable<WallpaperPageResponse> ob,
+            DynamicKey page,
+            EvictProvider evict);
 }

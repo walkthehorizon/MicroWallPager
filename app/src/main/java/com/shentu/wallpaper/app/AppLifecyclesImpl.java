@@ -18,12 +18,14 @@ package com.shentu.wallpaper.app;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.multidex.MultiDex;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.Utils;
 import com.github.piasy.biv.BigImageViewer;
+import com.horizon.netbus.NetBus;
 import com.jess.arms.base.delegate.AppLifecycles;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -79,7 +81,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
         Beta.initDelay = 3000;
         Beta.canShowUpgradeActs.add(MainActivity.class);
         Bugly.init(application, "cc0a25808b", BuildConfig.Debug);
-
+        NetBus.getInstance().init(application);
         Completable.fromAction(() -> init(application)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> init(application));

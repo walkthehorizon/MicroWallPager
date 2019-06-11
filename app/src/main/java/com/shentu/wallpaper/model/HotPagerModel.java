@@ -2,6 +2,8 @@ package com.shentu.wallpaper.model;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.Gson;
 import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.integration.IRepositoryManager;
@@ -23,6 +25,8 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
+import io.rx_cache2.DynamicKey;
+import io.rx_cache2.EvictProvider;
 import io.rx_cache2.Reply;
 
 
@@ -46,6 +50,7 @@ public class HotPagerModel extends BasePageModel implements TabHomeContract.Mode
         this.mApplication = null;
     }
 
+    @NonNull
     @Override
     public Observable<BaseResponse<BasePageResponse<Subject>>> getSubjects(int subjectType, boolean clear) {
         offset = clear ? 0 : (limit + offset);
@@ -54,11 +59,15 @@ public class HotPagerModel extends BasePageModel implements TabHomeContract.Mode
                 .getSubjects(subjectType, limit, offset);
     }
 
+    @NonNull
     @Override
-    public Observable<WallpaperPageResponse> getRecommends(boolean clear) {
+    public Observable<WallpaperPageResponse> getRecommends(boolean clear, boolean isUser) {
         offset = clear ? 0 : (limit + offset);
-        return mRepositoryManager.obtainRetrofitService(MicroService.class)
-                .getRecommendWallpapers(limit, offset);
+        return Observable.just(mRepositoryManager.obtainRetrofitService(MicroService.class)
+                .getRecommendWallpapers(limit, offset))
+                .flatMap((Function<Observable<WallpaperPageResponse>, ObservableSource<WallpaperPageResponse>>)
+                        ob -> mRepositoryManager.obtainCacheService(MicroCache.class)
+                                .getRecommends(ob, new DynamicKey(offset), new EvictProvider(isUser)));
     }
 
     @NotNull

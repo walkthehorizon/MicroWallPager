@@ -1,9 +1,9 @@
 package com.shentu.wallpaper.mvp.ui.adapter;
 
-import androidx.annotation.Nullable;
 import android.widget.ImageView;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import androidx.annotation.Nullable;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shentu.wallpaper.R;
@@ -22,7 +22,6 @@ public class CategoryListAdapter extends BaseQuickAdapter<Wallpaper, BaseViewHol
     protected void convert(BaseViewHolder helper, Wallpaper item) {
         GlideArms.with(helper.itemView.getContext())
                 .load(PicUtils.getInstance().getMM131GlideUrl(item.getUrl()))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.default_cover_vertical)
                 .error(R.drawable.default_cover_vertical)
                 .into((ImageView) helper.getView(R.id.iv_small));

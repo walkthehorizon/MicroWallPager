@@ -6,12 +6,18 @@ import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.BarUtils
+import com.blankj.utilcode.util.SnackbarUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.horizon.netbus.NetBus
+import com.horizon.netbus.NetType
+import com.horizon.netbus.NetWork
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
 import com.pgyersdk.feedback.PgyerFeedbackManager
+import com.shentu.wallpaper.R
 import com.shentu.wallpaper.di.component.DaggerMainComponent
 import com.shentu.wallpaper.di.module.MainModule
 import com.shentu.wallpaper.mvp.contract.MainContract
@@ -44,7 +50,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {
-        return com.shentu.wallpaper.R.layout.activity_main
+        return R.layout.activity_main
     }
 
     override fun initData(savedInstanceState: Bundle?) {
@@ -57,11 +63,12 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
         navigationView!!.setOnNavigationItemReselectedListener(this)
 
         PgyerFeedbackManager.PgyerFeedbackBuilder().builder().register()
+        NetBus.getInstance().register(this)
     }
 
     override fun showMessage(message: String) {
         checkNotNull(message)
-        ArmsUtils.snackbarText(message)
+        ToastUtils.showShort(message)
     }
 
     override fun launchActivity(intent: Intent) {
@@ -86,9 +93,9 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
         }
         lastPos = position
         when (position) {
-            0 -> navigationView!!.selectedItemId = com.shentu.wallpaper.R.id.navigation_hot
-            1 -> navigationView!!.selectedItemId = com.shentu.wallpaper.R.id.navigation_category
-            2 -> navigationView!!.selectedItemId = com.shentu.wallpaper.R.id.navigation_my
+            0 -> navigationView!!.selectedItemId = R.id.navigation_hot
+            1 -> navigationView!!.selectedItemId = R.id.navigation_category
+            2 -> navigationView!!.selectedItemId = R.id.navigation_my
         }
     }
 
@@ -98,16 +105,16 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            com.shentu.wallpaper.R.id.navigation_hot -> {
+            R.id.navigation_hot -> {
                 viewPager.setCurrentItem(0, false);lastPos = 0
                 BarUtils.setStatusBarLightMode(this
                         , (fragments[0] as TabHomeFragment).getIsLightMode())
             }
-            com.shentu.wallpaper.R.id.navigation_category -> {
+            R.id.navigation_category -> {
                 viewPager.setCurrentItem(1, false);lastPos = 1
                 BarUtils.setStatusBarLightMode(this, true)
             }
-            com.shentu.wallpaper.R.id.navigation_my -> {
+            R.id.navigation_my -> {
                 viewPager.setCurrentItem(2, false);lastPos = 2
             }
         }
@@ -120,6 +127,19 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
 
     override fun onDestroy() {
         super.onDestroy()
+        NetBus.getInstance().unRegister(this)
         mainPagerAdapter = null
     }
+
+    @NetWork
+    fun onNetChange(type: NetType) {
+        Timber.e("netType...")
+        when (type) {
+            NetType.NONE -> SnackbarUtils.with(window.decorView.findViewById(android.R.id.content))
+                    .setMessage("网络异常！")
+                    .showError()
+            else -> return
+        }
+    }
+
 }

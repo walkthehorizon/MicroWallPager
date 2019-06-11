@@ -18,13 +18,13 @@ interface TabHomeContract {
 
         fun showRecommends(wallpapers: MutableList<Wallpaper>, clear: Boolean)
 
-        fun showBanners(banners:MutableList<Banner>)
+        fun showBanners(banners: MutableList<Banner>)
     }
 
     interface Model : IModel {
         fun getSubjects(subjectType: Int, clear: Boolean): Observable<BaseResponse<BasePageResponse<Subject>>>
 
-        fun getRecommends(clear: Boolean): Observable<WallpaperPageResponse>
+        fun getRecommends(clear: Boolean, isUser: Boolean): Observable<WallpaperPageResponse>
 
         fun getBanners(): Observable<BannerPageResponse>
     }
