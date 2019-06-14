@@ -23,9 +23,8 @@ import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
 import com.shentu.wallpaper.model.api.cache.CommonCache;
 import com.shentu.wallpaper.model.api.service.UserService;
-import com.shentu.wallpaper.model.entity.User;
+import com.shentu.wallpaper.model.entity.MicroUser;
 import com.shentu.wallpaper.mvp.contract.UserContract;
-
 
 import java.util.List;
 
@@ -60,21 +59,21 @@ public class UserModel extends BaseModel implements UserContract.Model {
     }
 
     @Override
-    public Observable<List<User>> getUsers(int lastIdQueried, boolean update) {
+    public Observable<List<MicroUser>> getUsers(int lastIdQueried, boolean update) {
         //使用rxcache缓存,上拉刷新则不读取缓存,加载更多读取缓存
         return Observable.just(mRepositoryManager
                 .obtainRetrofitService(UserService.class)
                 .getUsers(lastIdQueried, USERS_PER_PAGE))
-                .flatMap(new Function<Observable<List<User>>, ObservableSource<List<User>>>() {
+                .flatMap(new Function<Observable<List<MicroUser>>, ObservableSource<List<MicroUser>>>() {
                     @Override
-                    public ObservableSource<List<User>> apply(@NonNull Observable<List<User>> listObservable) throws Exception {
+                    public ObservableSource<List<MicroUser>> apply(@NonNull Observable<List<MicroUser>> listObservable) throws Exception {
                         return mRepositoryManager.obtainCacheService(CommonCache.class)
                                 .getUsers(listObservable
                                         , new DynamicKey(lastIdQueried)
                                         , new EvictDynamicKey(update))
-                                .map(new Function<Reply<List<User>>, List<User>>() {
+                                .map(new Function<Reply<List<MicroUser>>, List<MicroUser>>() {
                                     @Override
-                                    public List<User> apply(Reply<List<User>> listReply) throws Exception {
+                                    public List<MicroUser> apply(Reply<List<MicroUser>> listReply) throws Exception {
                                         return listReply.getData();
                                     }
                                 });

@@ -10,6 +10,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
+import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.app.event.LoginSuccessEvent
@@ -50,9 +51,7 @@ class MyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-        if (HkUserManager.getInstance().isLogined) {
-            refreshUser()
-        }
+        refreshUser()
         if (Beta.getUpgradeInfo() != null) {
             itUpdate.setEndValue("有新的升级可用")
         }
@@ -70,10 +69,17 @@ class MyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     }
 
     private fun refreshUser() {
-        tvMyName.text = HkUserManager.getInstance().user.nickname
-        GlideArms.with(this)
-                .load(HkUserManager.getInstance().user.avatar)
-                .into(circle_avatar)
+        if (HkUserManager.getInstance().isLogin) {
+            tvMyName.text = HkUserManager.getInstance().user.nickname
+            GlideArms.with(this)
+                    .load(HkUserManager.getInstance().user.avatar)
+                    .into(circle_avatar)
+        } else {
+            tvMyName.text = "微梦用户"
+            GlideArms.with(this)
+                    .load(R.drawable.default_head)
+                    .into(circle_avatar)
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -97,7 +103,6 @@ class MyFragment : BaseFragment<MyPresenter>(), MyContract.View {
 
     fun clickBrowser() {
         ToastUtils.showShort("待完善")
-
     }
 
     /**

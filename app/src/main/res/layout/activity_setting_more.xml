@@ -43,10 +43,11 @@
         android:layout_marginBottom="60dp"
         android:gravity="center"
         android:text="注销登录"
+        android:visibility="gone"
         android:textAllCaps="false"
         android:textAppearance="?android:attr/textAppearanceMediumInverse"
         android:textColor="@color/white"
         app:backgroundTint="@color/colorPrimary"
-        app:cornerRadius="30dp"
+        app:cornerRadius="24dp"
         app:rippleColor="@color/colorPrimaryDark" />
 </RelativeLayout>

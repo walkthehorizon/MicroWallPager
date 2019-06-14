@@ -3,7 +3,7 @@ package com.shentu.wallpaper.mvp.contract
 import com.jess.arms.mvp.IModel
 import com.jess.arms.mvp.IView
 import com.shentu.wallpaper.model.entity.BaseResponse
-import com.shentu.wallpaper.model.entity.User
+import com.shentu.wallpaper.model.entity.MicroUser
 import io.reactivex.Observable
 
 
@@ -17,9 +17,7 @@ interface LoginContract {
     interface Model : IModel {
         fun registerAccount(phone: String,password: String): Observable<BaseResponse<Boolean>>
 
-        fun loginAccount(phone: String, password: String): Observable<BaseResponse<User>>
-
-        fun logoutAccount():Observable<BaseResponse<Boolean>>
+        fun loginAccount(phone: String): Observable<BaseResponse<MicroUser>>
     }
 
 }

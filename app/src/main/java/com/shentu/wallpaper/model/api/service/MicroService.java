@@ -3,8 +3,8 @@ package com.shentu.wallpaper.model.api.service;
 
 import com.shentu.wallpaper.model.entity.BasePageResponse;
 import com.shentu.wallpaper.model.entity.BaseResponse;
+import com.shentu.wallpaper.model.entity.MicroUser;
 import com.shentu.wallpaper.model.entity.Subject;
-import com.shentu.wallpaper.model.entity.User;
 import com.shentu.wallpaper.model.response.BannerPageResponse;
 import com.shentu.wallpaper.model.response.CategoryPageResponse;
 import com.shentu.wallpaper.model.response.SplashAdResponse;
@@ -64,13 +64,12 @@ public interface MicroService {
 
     @FormUrlEncoded
     @POST("account/login/")
-    Observable<BaseResponse<User>>
-    getLoginAccount(@Field("phone") String phone,
-                    @Field("password") String password);
+    Observable<BaseResponse<MicroUser>>
+    loginAccount(@Field("phone") String phone);
 
     @POST("account/logout/")
-    Observable<BaseResponse<Boolean>>
-    getLogoutAccount();
+    Observable<BaseResponse<String>>
+    logout();
 
     @GET("subjects/")
     Observable<SubjectPageResponse>

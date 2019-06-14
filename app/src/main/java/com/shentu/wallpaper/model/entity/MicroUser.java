@@ -15,6 +15,8 @@
  */
 package com.shentu.wallpaper.model.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * ================================================
  * User 实体类
@@ -24,8 +26,9 @@ package com.shentu.wallpaper.model.entity;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class User {
-    public String id;
+public class MicroUser {
+    @SerializedName("id")
+    public String uid;
     public String nickname;
     public String avatar;
     public String phone;
@@ -36,6 +39,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "id:" + id + "nickname:" + nickname + "avatar:" + avatar + "phone:" + phone + "email:" + email;
+        return "uid:" + uid + "nickname:" + nickname + "avatar:" + avatar + "phone:" + phone + "email:" + email;
     }
 }

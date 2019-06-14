@@ -1,15 +1,13 @@
 package com.shentu.wallpaper.di.component
 
-import dagger.Component
 import com.jess.arms.di.component.AppComponent
-
+import com.jess.arms.di.scope.ActivityScope
 import com.shentu.wallpaper.di.module.LoginModule
+import com.shentu.wallpaper.mvp.ui.login.LoginActivity
+import dagger.Component
 
-import com.jess.arms.di.scope.FragmentScope
-import com.shentu.wallpaper.mvp.ui.fragment.LoginFragment
-
-@FragmentScope
-@Component(modules = arrayOf(LoginModule::class), dependencies = arrayOf(AppComponent::class))
+@ActivityScope
+@Component(modules = [LoginModule::class], dependencies = [AppComponent::class])
 interface LoginComponent {
-    fun inject(fragment: LoginFragment)
+    fun inject(activity: LoginActivity)
 }

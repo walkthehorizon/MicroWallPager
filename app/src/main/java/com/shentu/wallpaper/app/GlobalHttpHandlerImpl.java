@@ -16,23 +16,15 @@
 package com.shentu.wallpaper.app;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.jess.arms.http.GlobalHttpHandler;
-import com.jess.arms.utils.ArmsUtils;
+import com.shentu.wallpaper.BuildConfig;
 import com.shentu.wallpaper.app.utils.HkUtils;
 
-import java.net.URI;
-
-import com.shentu.wallpaper.BuildConfig;
 import okhttp3.Interceptor;
-import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
-import okio.BufferedSource;
-import timber.log.Timber;
 
 /**
  * ================================================
@@ -88,14 +80,13 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
     public Request onHttpRequestBefore(Interceptor.Chain chain, Request request) {
         Request.Builder builder = request.newBuilder();
         return builder
-                .addHeader("uid", HkUserManager.getInstance().user.id)
+                .addHeader("uid", HkUserManager.getInstance().isLogin() ?
+                        HkUserManager.getInstance().user.uid : "")
                 .addHeader("deviceId", HkUtils.getInstance().deviceId)
                 .addHeader("systemType", "Android")
                 .addHeader("systemVersion", android.os.Build.VERSION.RELEASE)
-                .addHeader("clientVersion",String.valueOf(BuildConfig.VERSION_NAME))
-                .addHeader("appVersion", String.valueOf(BuildConfig.VERSION_CODE))
-                .addHeader("apiVersion", "1")
-                .addHeader("X-CSRFToken",SPUtils.getInstance().getString("X-CSRFToken",""))
+                .addHeader("appVersion", BuildConfig.VERSION_NAME)
+                .addHeader("X-CSRFToken", SPUtils.getInstance().getString("X-CSRFToken", ""))
                 .build();
     }
 

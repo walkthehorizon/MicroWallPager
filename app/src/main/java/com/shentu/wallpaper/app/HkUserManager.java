@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.blankj.utilcode.util.SPUtils;
-import com.shentu.wallpaper.model.entity.User;
-import com.shentu.wallpaper.mvp.ui.activity.LoginActivity;
+import com.shentu.wallpaper.model.entity.MicroUser;
+import com.shentu.wallpaper.mvp.ui.login.LoginActivity;
 
 
 public class HkUserManager {
@@ -18,22 +18,25 @@ public class HkUserManager {
     private String USER_SIGNATURE = "user_signature";
     private String USER_DATE_JOINED = "user_date_joined";
     private String USER_LAST_LOGIN = "user_last_login";
-    public User user;
+    public MicroUser user;
 
-    private static final class SingletonHolder{
+    private static final class SingletonHolder {
         private static final HkUserManager INSTANCE = new HkUserManager();
     }
 
-    HkUserManager() {
-        user = new User();
-        user.id = SPUtils.getInstance().getString(USER_UID,"");
-        user.nickname = SPUtils.getInstance().getString(USER_NICKNAME,"");
-        user.avatar = SPUtils.getInstance().getString(USER_AVATAR,"");
-        user.email = SPUtils.getInstance().getString(USER_EMAIL,"");
-        user.phone = SPUtils.getInstance().getString(USER_PHONE,"");
-        user.signature = SPUtils.getInstance().getString(USER_SIGNATURE,"");
-        user.date_joined = SPUtils.getInstance().getString(USER_DATE_JOINED,"");
-        user.last_login = SPUtils.getInstance().getString(USER_LAST_LOGIN,"");
+    private HkUserManager() {
+        if (TextUtils.isEmpty(SPUtils.getInstance().getString(USER_UID, ""))) {
+            return;
+        }
+        user = new MicroUser();
+        user.uid = SPUtils.getInstance().getString(USER_UID, "");
+        user.nickname = SPUtils.getInstance().getString(USER_NICKNAME, "");
+        user.avatar = SPUtils.getInstance().getString(USER_AVATAR, "");
+        user.email = SPUtils.getInstance().getString(USER_EMAIL, "");
+        user.phone = SPUtils.getInstance().getString(USER_PHONE, "");
+        user.signature = SPUtils.getInstance().getString(USER_SIGNATURE, "");
+        user.date_joined = SPUtils.getInstance().getString(USER_DATE_JOINED, "");
+        user.last_login = SPUtils.getInstance().getString(USER_LAST_LOGIN, "");
     }
 
     public static HkUserManager getInstance() {
@@ -42,9 +45,9 @@ public class HkUserManager {
 
     /**
      * 参考python,存储变化前请先更新user
-     * */
-    public void save(){
-        SPUtils.getInstance().put(USER_UID, user.id);
+     */
+    public void save() {
+        SPUtils.getInstance().put(USER_UID, user.uid);
         SPUtils.getInstance().put(USER_NICKNAME, user.nickname);
         SPUtils.getInstance().put(USER_AVATAR, user.avatar);
         SPUtils.getInstance().put(USER_EMAIL, user.email);
@@ -56,18 +59,28 @@ public class HkUserManager {
 
     /**
      * 移除所有Sp数据，需要持久化保存不被删除的请使用Cache
-     * */
-    public void clear(){
-        SPUtils.getInstance().clear();
+     */
+    public void clear() {
+        user = null;
+        SPUtils.getInstance().remove(USER_UID);
+        SPUtils.getInstance().remove(USER_NICKNAME);
+        SPUtils.getInstance().remove(USER_AVATAR);
+        SPUtils.getInstance().remove(USER_EMAIL);
+        SPUtils.getInstance().remove(USER_PHONE);
+        SPUtils.getInstance().remove(USER_SIGNATURE);
+        SPUtils.getInstance().remove(USER_DATE_JOINED);
+        SPUtils.getInstance().remove(USER_LAST_LOGIN);
     }
 
-    public boolean isLogined(){
-        return !TextUtils.isEmpty(user.id);
+    public boolean isLogin() {
+        return user != null;
     }
 
-    public void checkLogin(Context context){
-        if(!isLogined()){
+    public void checkLogin(Context context) {
+        if (!isLogin()) {
             context.startActivity(new Intent(context, LoginActivity.class));
         }
     }
+
+
 }

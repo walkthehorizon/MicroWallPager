@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
+import com.blankj.utilcode.util.NetworkUtils
 import com.google.android.material.appbar.AppBarLayout
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.BaseLazyLoadFragment
@@ -120,7 +121,6 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
                     this.activity!!, tvSearch, getString(R.string.search_transitionName)
             )
             startActivity(Intent(mContext, SearchActivity::class.java), compact.toBundle())
-//            SearchActivity.open(compact)
         }
         rvHot.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 //            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -159,8 +159,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     override fun hideRefresh(clear: Boolean) {
         if (clear) {
             refreshLayout.finishRefresh(500)
-        }
-        else
+        } else
             refreshLayout.finishLoadMore()
     }
 
@@ -183,7 +182,11 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
-        mPresenter?.getRecommends(true, isUser = true)
+        if (NetworkUtils.isConnected()) {
+            mPresenter?.getRecommends(true, isUser = true)
+        } else {
+            mPresenter?.getRecommends(true)
+        }
     }
 
     override fun showBanners(banners: MutableList<Banner>) {

@@ -38,7 +38,6 @@ android {
             buildConfigField "boolean", "USE_CANARY", "false"
             buildConfigField "String", "Sever", '"http://192.168.12.136/wallpaper/"'
             buildConfigField "boolean", "Debug", "true"
-            buildConfigField "String", "API_KEY", '"tang01tang"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -47,8 +46,7 @@ android {
             buildConfigField "boolean", "LOG_DEBUG", "false"
             buildConfigField "boolean", "USE_CANARY", "false"
             buildConfigField "String", "Sever", '"http://wmmt119.top/wallpaper/"'
-            buildConfigField "boolean", "Debug", "true"
-            buildConfigField "String", "API_KEY", '"tang01tang"'
+            buildConfigField "boolean", "Debug", "false"
             minifyEnabled true
             shrinkResources true
             zipAlignEnabled true
@@ -73,7 +71,9 @@ MobSDK {
     appKey "2726f3a69c300"
     appSecret "5ef67a98fcae47f91163577728158ac3"
 
-    SMSSDK {}
+    SMSSDK {
+
+    }
     ShareSDK {
         //平台配置信息
         devInfo {

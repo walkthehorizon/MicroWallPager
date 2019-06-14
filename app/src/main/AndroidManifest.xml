@@ -32,7 +32,7 @@
 
         <activity android:name=".mvp.ui.activity.SearchActivity" />
         <activity
-            android:name=".mvp.ui.activity.SplashActivity"
+            android:name=".mvp.ui.login.SplashActivity"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,7 +65,7 @@
             android:value="ConfigModule" />
 
         <activity
-            android:name=".mvp.ui.activity.LoginActivity"
+            android:name=".mvp.ui.login.LoginActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
