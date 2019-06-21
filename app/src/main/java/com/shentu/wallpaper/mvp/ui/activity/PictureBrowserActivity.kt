@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.transition.Fade
 import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import androidx.viewpager.widget.ViewPager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
@@ -20,6 +22,7 @@ import com.liulishuo.filedownloader.BaseDownloadTask
 import com.liulishuo.filedownloader.FileDownloadSampleListener
 import com.liulishuo.filedownloader.FileDownloader
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.app.event.LoadOriginPictureEvent
 import com.shentu.wallpaper.app.event.LoadOriginResultEvent
 import com.shentu.wallpaper.app.event.SwitchNavigationEvent
@@ -27,7 +30,6 @@ import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.di.component.DaggerPictureBrowserComponent
 import com.shentu.wallpaper.di.module.PictureBrowserModule
 import com.shentu.wallpaper.model.entity.Wallpaper
-import com.shentu.wallpaper.model.entity.WallpaperList
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import com.shentu.wallpaper.mvp.presenter.PictureBrowserPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.PictureBrowserVpAdapter
@@ -48,13 +50,15 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     var type: Int = -1
     @Autowired
     @JvmField
-    var wallpaperList: WallpaperList = WallpaperList(ArrayList())
+    var wallpapers: ArrayList<Wallpaper> = ArrayList()
     @Autowired
     @JvmField
     var current: Int = 0
+    @Autowired
+    @JvmField
+    var categoryId: Int = -1
 
-    lateinit var wallpapers: MutableList<Wallpaper>
-    lateinit var vpAdapter: PictureBrowserVpAdapter
+    private lateinit var vpAdapter: PictureBrowserVpAdapter
 
     override fun setupActivityComponent(appComponent: AppComponent) {
         DaggerPictureBrowserComponent //如找不到该类,请编译一下项目
@@ -64,6 +68,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                 .build()
                 .inject(this)
         ScreenUtils.setFullScreen(this)
+        window.enterTransition = Fade()
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {
@@ -76,15 +81,38 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             throw IllegalStateException("picture browser type can not null")
         }
         if (type == 1) {
-            wallpapers = wallpaperList.wallpapers!!
             initViewPager()
         }
         if (type == 2) {
             mPresenter?.getPictures(subjectId)
         }
+        initSetCover()
+    }
+
+    private fun initSetCover() {
+        if (!HkUserManager.getInstance().isAdmin || categoryId == -1) {
+            return
+        }
+        tvSetCover.visibility = View.VISIBLE
+        tvSetCover.setOnClickListener {
+            MaterialDialog.Builder(this)
+                    .title("分类")
+                    .content("确定设为当前分类封面？")
+                    .positiveText("确定")
+                    .negativeText("取消")
+                    .onPositive { _, _ ->
+                        mPresenter?.updateCategoryCover(categoryId
+                                , wallpapers[viewPager.currentItem].url)
+                    }
+                    .onNegative { dialog, _ -> dialog.dismiss() }
+                    .show()
+        }
     }
 
     private fun initViewPager() {
+        if (wallpapers.size == 0) {
+            throw IllegalStateException("wallpapers size can not < 1")
+        }
         viewPager.addOnPageChangeListener(this)
         viewPager.offscreenPageLimit = 4
         vpAdapter = PictureBrowserVpAdapter(supportFragmentManager, wallpapers)
@@ -93,7 +121,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         onPageSelected(current)
 
         ivDownload.setOnClickListener {
-            FileDownloader.getImpl().create(wallpapers[viewPager.currentItem].origin_url)
+            FileDownloader.getImpl().create(wallpapers[viewPager.currentItem].originUrl)
                     .setPath(PathUtils.getExternalPicturesPath()).listener = object : FileDownloadSampleListener() {
                 override fun completed(task: BaseDownloadTask?) {
                     showMessage("文件已存储：" + task!!.targetFilePath)
@@ -112,7 +140,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         }
         ivDownload.setOnClickListener {
             ivDownload.visibility = View.GONE
-            mPresenter?.downloadPicture(wallpapers[viewPager.currentItem].origin_url!!)
+            mPresenter?.downloadPicture(wallpapers[viewPager.currentItem].originUrl!!)
         }
     }
 
@@ -125,11 +153,17 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     }
 
     override fun killMyself() {
-        finish()
+        ScreenUtils.setNonFullScreen(this)
+        finishAfterTransition()
+    }
+
+    override fun onBackPressed() {
+        ScreenUtils.setNonFullScreen(this)
+        super.onBackPressed()
     }
 
     override fun showPictures(pictures: MutableList<Wallpaper>) {
-        wallpapers = pictures
+        wallpapers = pictures as ArrayList<Wallpaper>
         initViewPager()
     }
 
@@ -146,7 +180,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         tvOrder.text = "${position + 1}/${vpAdapter.count}"
         mbLoadOrigin.visibility = if (wallpapers[position].isOriginExist) View.GONE else View.VISIBLE
         ivDownload.visibility = if (FileUtils.isFileExists(PicUtils.getInstance().getDownloadPicturePath(
-                        wallpapers[position].origin_url))) View.GONE else View.VISIBLE
+                        wallpapers[position].originUrl))) View.GONE else View.VISIBLE
     }
 
     override fun showNavigation() {
@@ -191,12 +225,23 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                     .navigation(context)
         }
 
-        fun open(context: Context, wallpapers: WallpaperList, current: Int, compat: ActivityOptionsCompat) {
+        fun open(context: Context, wallpapers: List<Wallpaper>, current: Int, compat: ActivityOptionsCompat? = null) {
             ARouter.getInstance()
                     .build("/picture/browser/activity")
                     .withInt("type", 1)
-                    .withSerializable("wallpaperList", wallpapers)
-                    .withInt("current",current)
+                    .withSerializable("wallpapers", wallpapers as ArrayList)
+                    .withInt("current", current)
+                    .withOptionsCompat(compat)
+                    .navigation(context)
+        }
+
+        fun open(context: Context, categoryId: Int, wallpapers: List<Wallpaper>, current: Int, compat: ActivityOptionsCompat? = null) {
+            ARouter.getInstance()
+                    .build("/picture/browser/activity")
+                    .withInt("type", 1)
+                    .withSerializable("wallpapers", wallpapers as ArrayList)
+                    .withInt("categoryId", categoryId)
+                    .withInt("current", current)
                     .withOptionsCompat(compat)
                     .navigation(context)
         }

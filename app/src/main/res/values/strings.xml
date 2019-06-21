@@ -30,5 +30,6 @@
     <string name="action_search">搜索壁纸</string>
 
     <string name="search_transitionName">search</string>
+    <string name="picture_transitionName">picture_share</string>
 
 </resources>

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
@@ -20,6 +21,7 @@ import com.shentu.wallpaper.di.module.MyModule
 import com.shentu.wallpaper.mvp.contract.MyContract
 import com.shentu.wallpaper.mvp.presenter.MyPresenter
 import com.shentu.wallpaper.mvp.ui.activity.SettingMoreActivity
+import com.shentu.wallpaper.mvp.ui.login.LoginActivity
 import com.tencent.bugly.beta.Beta
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -30,10 +32,10 @@ import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 
 
-class MyFragment : BaseFragment<MyPresenter>(), MyContract.View {
+class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     companion object {
-        fun newInstance(): MyFragment {
-            return MyFragment()
+        fun newInstance(): TabMyFragment {
+            return TabMyFragment()
         }
     }
 
@@ -47,7 +49,7 @@ class MyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     }
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(com.shentu.wallpaper.R.layout.fragment_my, container, false)
+        return inflater.inflate(R.layout.fragment_my, container, false)
     }
 
     override fun initData(savedInstanceState: Bundle?) {
@@ -96,9 +98,12 @@ class MyFragment : BaseFragment<MyPresenter>(), MyContract.View {
         HkUserManager.getInstance().checkLogin(context)
     }
 
-    fun clickCollect() {
-        HkUserManager.getInstance().checkLogin(context)
-        //激活直接显示的方式
+    private fun clickCollect() {
+        if (!HkUserManager.getInstance().isLogin) {
+            launchActivity(Intent(mContext, LoginActivity::class.java))
+        }
+        ARouter.getInstance().build("/activity/my/collect/")
+                .navigation(mContext)
     }
 
     fun clickBrowser() {
@@ -128,6 +133,9 @@ class MyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                     ToastUtils.showShort("清理完成")
                 }
                 .subscribe()
+        ArmsUtils.obtainAppComponentFromContext(mContext)
+                .repositoryManager()
+                .clearAllCache()
     }
 
     override fun setData(data: Any?) {

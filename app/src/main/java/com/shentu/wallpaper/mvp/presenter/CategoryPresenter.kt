@@ -28,7 +28,7 @@ constructor(model: CategoryContract.Model, rootView: CategoryContract.View) :
     lateinit var mAppManager: AppManager
 
     fun getCategories(clear: Boolean) {
-        mModel.getCategories()
+        mModel.getCategories(clear)
                 .compose(RxUtils.applySchedulers(mRootView, clear))
                 .subscribe(object : ErrorHandleSubscriber<CategoryPageResponse>(mErrorHandler) {
                     override fun onNext(t: CategoryPageResponse) {

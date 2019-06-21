@@ -51,7 +51,7 @@ public interface MicroCache {
     @ProviderKey("categories-one-day")
     @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
     Observable<Reply<CategoryPageResponse>>
-    getCategories(Observable<CategoryPageResponse> ob);
+    getCategories(Observable<CategoryPageResponse> ob, EvictDynamicKey evict, DynamicKey offset);
 
     @ProviderKey("recommends-one-week")
     @LifeCache(duration = 7, timeUnit = TimeUnit.DAYS)

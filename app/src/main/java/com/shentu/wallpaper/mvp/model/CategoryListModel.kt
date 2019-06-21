@@ -26,7 +26,7 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
     lateinit var mApplication: Application
 
     override fun getCategoryWallpapers(id: Int, clear: Boolean): Observable<WallpaperPageResponse> {
-        offset = if (clear) 0 else limit
+        offset = getOffset(clear)
         return Observable.just(mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
                 .getCategoryWallpapers(id, limit, offset))

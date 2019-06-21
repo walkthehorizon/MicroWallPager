@@ -2,10 +2,10 @@ package com.shentu.wallpaper.model.entity
 
 import java.io.Serializable
 
-class Wallpaper(var url: String?) : Serializable {
+class Wallpaper(var url: String = "") : Serializable {
 
     var id: Int = 0
-    var origin_url: String? = null
+    var originUrl: String = ""
     var sw: Int = 0
     var sh: Int = 0
 

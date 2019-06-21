@@ -7,6 +7,7 @@ import com.jess.arms.integration.IRepositoryManager
 import com.jess.arms.mvp.BaseModel
 import com.shentu.wallpaper.model.api.cache.MicroCache
 import com.shentu.wallpaper.model.api.service.MicroService
+import com.shentu.wallpaper.model.entity.BaseResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import io.reactivex.Observable
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class PictureBrowserModel
 @Inject
 constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager), PictureBrowserContract.Model {
+
 
     @Inject
     lateinit var mGson: Gson;
@@ -35,6 +37,11 @@ constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager
                             .map { it.data }
                 }
 
+    }
+
+    override fun updateCategoryCover(cid: Int?, logo: String): Observable<BaseResponse<Boolean>> {
+        return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
+                .updateCategoryCover(cid, logo);
     }
 
     override fun onDestroy() {

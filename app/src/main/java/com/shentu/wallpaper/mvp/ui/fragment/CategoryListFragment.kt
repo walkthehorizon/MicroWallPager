@@ -6,43 +6,47 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
+import com.kingja.loadsir.core.LoadService
+import com.kingja.loadsir.core.LoadSir
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.page.EmptyCallback
+import com.shentu.wallpaper.app.page.ErrorCallback
 import com.shentu.wallpaper.di.component.DaggerCategoryListComponent
 import com.shentu.wallpaper.di.module.CategoryListModule
 import com.shentu.wallpaper.model.entity.Wallpaper
-import com.shentu.wallpaper.model.entity.WallpaperList
 import com.shentu.wallpaper.mvp.contract.CategoryDetailContract
-import com.shentu.wallpaper.mvp.presenter.CategoryDetailPresenter
+import com.shentu.wallpaper.mvp.presenter.CategoryListPresenter
 import com.shentu.wallpaper.mvp.ui.activity.PictureBrowserActivity
 import com.shentu.wallpaper.mvp.ui.adapter.CategoryListAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.RvCategoryListDecoration
 import kotlinx.android.synthetic.main.fragment_category_list.*
 
 
-class CategoryDetailFragment : BaseFragment<CategoryDetailPresenter>(), CategoryDetailContract.View
+class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDetailContract.View
         , OnRefreshListener, OnLoadMoreListener {
 
     private var categoryId: Int = 0
+    private lateinit var loadService: LoadService<Any>
 
     companion object {
         const val CATEGORY_ID: String = "category_id"
 
-        fun newInstance(id: Int): CategoryDetailFragment {
-            val fragment = CategoryDetailFragment()
+        fun newInstance(id: Int): CategoryListFragment {
+            val fragment = CategoryListFragment()
             val bundle = Bundle()
             bundle.putInt(CATEGORY_ID, id)
             fragment.arguments = bundle
             return fragment
         }
     }
-
 
     override fun setupFragmentComponent(appComponent: AppComponent) {
         DaggerCategoryListComponent //如找不到该类,请编译一下项目
@@ -55,12 +59,18 @@ class CategoryDetailFragment : BaseFragment<CategoryDetailPresenter>(), Category
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState:
     Bundle?): View {
-        return inflater.inflate(R.layout.fragment_category_list, container, false)
+        val root = inflater.inflate(R.layout.fragment_category_list, container, false)
+        loadService = LoadSir.getDefault()
+                .register(root) {
+                    showContent()
+                    smartRefresh.autoRefresh()
+                }
+        return loadService.loadLayout
     }
 
     override fun initData(savedInstanceState: Bundle?) {
         categoryId = arguments?.getInt(CATEGORY_ID)!!
-        rvCategoryList.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context
+        rvCategoryList.layoutManager = GridLayoutManager(context
                 , 3)
         rvCategoryList.addItemDecoration(RvCategoryListDecoration(2))
 //        rvCategoryList.addOnScrollListener(OnGlideScrollListener())
@@ -82,7 +92,7 @@ class CategoryDetailFragment : BaseFragment<CategoryDetailPresenter>(), Category
                         val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                                 , view.width / 2, view.height / 2
                                 , 0, 0)
-                        PictureBrowserActivity.open(mContext, WallpaperList(wallpapers), position, compat)
+                        PictureBrowserActivity.open(mContext, categoryId, wallpapers, position, compat)
                     }
         } else {
             (rvCategoryList.adapter as CategoryListAdapter).addData(wallpapers)
@@ -97,17 +107,24 @@ class CategoryDetailFragment : BaseFragment<CategoryDetailPresenter>(), Category
         mPresenter?.getCategoryList(categoryId, false)
     }
 
-    override fun setData(data: Any?) {
-
+    override fun showContent() {
+        loadService.showSuccess()
     }
 
-    override fun showLoading() {
-
+    override fun showEmpty() {
+        loadService.showCallback(EmptyCallback::class.java)
     }
 
-    override fun hideLoading() {
-        smartRefresh.finishRefresh()
-        smartRefresh.finishLoadMore()
+    override fun showError() {
+        loadService.showCallback(ErrorCallback::class.java)
+    }
+
+    override fun hideRefresh(clear: Boolean) {
+        if (clear) {
+            smartRefresh.finishRefresh()
+        } else {
+            smartRefresh.finishLoadMore()
+        }
     }
 
     override fun showMessage(message: String) {

@@ -13,7 +13,6 @@ import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.integration.EventBusManager
 import com.jess.arms.mvp.IPresenter
-import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.event.LoadOriginPictureEvent
 import com.shentu.wallpaper.app.event.LoadOriginResultEvent
 import com.shentu.wallpaper.app.event.SwitchNavigationEvent
@@ -23,6 +22,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.io.File
+
 
 class PictureFragment : BaseFragment<IPresenter>() {
 
@@ -43,7 +43,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
     }
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_picture, container, false)
+        return inflater.inflate(com.shentu.wallpaper.R.layout.fragment_picture, container, false)
     }
 
     override fun initData(savedInstanceState: Bundle?) {
@@ -56,11 +56,16 @@ class PictureFragment : BaseFragment<IPresenter>() {
         //若原图存在直接加载原图
         context?.let {
             photoView.showImage(if (wallpaper.isOriginExist)
-                Uri.parse(wallpaper.origin_url)
+                Uri.parse(wallpaper.originUrl)
             else
                 Uri.parse(wallpaper.url))
         }
-
+//        val transitionSet = TransitionSet()
+//        transitionSet.addTransition(ChangeBounds())
+//        transitionSet.addTransition(ChangeTransform())
+//        transitionSet.addTarget(photoView)
+//        activity?.window?.sharedElementEnterTransition = transitionSet
+//        activity?.window?.sharedElementExitTransition = transitionSet
     }
 
     override fun setData(data: Any?) {
@@ -76,7 +81,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
         context?.let {
             photoView.setProgressIndicator(ProgressPieIndicator())
             photoView.setImageLoaderCallback(getImageLoadCallback())
-            photoView.showImage(Uri.parse(wallpaper.origin_url))
+            photoView.showImage(Uri.parse(wallpaper.originUrl))
         }
     }
 

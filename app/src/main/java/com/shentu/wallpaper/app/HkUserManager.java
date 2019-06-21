@@ -2,7 +2,6 @@ package com.shentu.wallpaper.app;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.shentu.wallpaper.model.entity.MicroUser;
@@ -25,11 +24,11 @@ public class HkUserManager {
     }
 
     private HkUserManager() {
-        if (TextUtils.isEmpty(SPUtils.getInstance().getString(USER_UID, ""))) {
+        if (SPUtils.getInstance().getInt(USER_UID, -1) == -1) {
             return;
         }
         user = new MicroUser();
-        user.uid = SPUtils.getInstance().getString(USER_UID, "");
+        user.uid = SPUtils.getInstance().getInt(USER_UID, -1);
         user.nickname = SPUtils.getInstance().getString(USER_NICKNAME, "");
         user.avatar = SPUtils.getInstance().getString(USER_AVATAR, "");
         user.email = SPUtils.getInstance().getString(USER_EMAIL, "");
@@ -82,5 +81,7 @@ public class HkUserManager {
         }
     }
 
-
+    public boolean isAdmin() {
+        return user != null && user.uid == 1;
+    }
 }

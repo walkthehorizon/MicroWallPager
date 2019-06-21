@@ -3,6 +3,7 @@ package com.shentu.wallpaper.mvp.presenter
 import android.app.Application
 import android.content.Context
 import com.blankj.utilcode.util.FileUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.di.scope.ActivityScope
 import com.jess.arms.http.imageloader.ImageLoader
 import com.jess.arms.integration.AppManager
@@ -13,6 +14,7 @@ import com.liulishuo.filedownloader.FileDownloader
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.app.utils.RxUtils
+import com.shentu.wallpaper.model.entity.BaseResponse
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
@@ -61,7 +63,7 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
         Observable.create(ObservableOnSubscribe<MutableList<Wallpaper>> {
             for (wallpaper in wallpapers) {
                 val file: File? = try {
-                    GlideArms.with(mRootView as Context).downloadOnly().load(wallpaper.origin_url).onlyRetrieveFromCache(true).submit().get()
+                    GlideArms.with(mRootView as Context).downloadOnly().load(wallpaper.originUrl).onlyRetrieveFromCache(true).submit().get()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     null
@@ -95,11 +97,17 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                 .start()
     }
 
-    override fun onStart() {
-        super.onStart()
+    fun updateCategoryCover(cid: Int, logo: String) {
+        mModel.updateCategoryCover(cid, logo)
+                .compose(RxUtils.applySchedulers(mRootView))
+                .subscribe(object : ErrorHandleSubscriber<BaseResponse<Boolean>>(mErrorHandler) {
+                    override fun onNext(t: BaseResponse<Boolean>) {
+                        if (!t.isSuccess) {
+                            return
+                        }
+                        ToastUtils.showShort("修改成功!")
+                    }
+                })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }

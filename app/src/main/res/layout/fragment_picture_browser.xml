@@ -7,7 +7,6 @@
     android:background="@color/grey_11"
     android:orientation="vertical">
 
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
@@ -28,14 +27,37 @@
             android:textColor="@color/colorDivider"
             android:textSize="18sp"
             tools:text="1/8" />
+
+        <TextView
+            android:id="@+id/tvSetWallpaper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:text="设为壁纸"
+            android:textColor="@color/colorDivider"
+            android:textSize="18sp" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvSetCover"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:text="设为封面"
+        android:textColor="@color/colorDivider"
+        android:textSize="18sp" />
 
     <RelativeLayout
         android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/ivCollect"

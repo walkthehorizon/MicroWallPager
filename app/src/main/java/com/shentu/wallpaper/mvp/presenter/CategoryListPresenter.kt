@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 
 @FragmentScope
-class CategoryDetailPresenter
+class CategoryListPresenter
 @Inject
 constructor(model: CategoryDetailContract.Model, rootView: CategoryDetailContract.View) :
         BasePresenter<CategoryDetailContract.Model, CategoryDetailContract.View>(model, rootView) {
@@ -30,9 +30,7 @@ constructor(model: CategoryDetailContract.Model, rootView: CategoryDetailContrac
 
     fun getCategoryList(id: Int, clear: Boolean) {
         mModel.getCategoryWallpapers(id, clear)
-                .compose(RxUtils.applySchedulers(mRootView))
-                .doOnSubscribe { mRootView.showLoading() }
-                .doFinally { mRootView.hideLoading() }
+                .compose(RxUtils.applySchedulers(mRootView, clear))
                 .subscribe(object : ErrorHandleSubscriber<WallpaperPageResponse>(mErrorHandler) {
                     override fun onNext(t: WallpaperPageResponse) {
                         if (!t.isSuccess) {

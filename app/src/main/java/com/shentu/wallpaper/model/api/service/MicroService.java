@@ -16,11 +16,13 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface MicroService {
 
     int PAGE_LIMIT = 20;
+    int PAGE_START = 0;
 
     @GET("splash")
     Observable<SplashAdResponse>
@@ -54,7 +56,7 @@ public interface MicroService {
 
     @GET("categories")
     Observable<CategoryPageResponse>
-    getCategories();
+    getCategories(@Query("offset") int offset);
 
     @FormUrlEncoded
     @POST("account/register/")
@@ -81,4 +83,18 @@ public interface MicroService {
     Observable<BannerPageResponse>
     getBanners(@Query("limit") int limit,
                @Query("offset") int offset);
+
+    @POST("collect/add/{pid}")
+    Observable<BaseResponse<Boolean>>
+    addCollect(@Path("pid") Integer pid);
+
+    @GET("collect/my")
+    Observable<WallpaperPageResponse>
+    getMyCollects(@Query("offset") int offset);
+
+    @FormUrlEncoded
+    @POST("category/update/")
+    Observable<BaseResponse<Boolean>>
+    updateCategoryCover(@Field("cid") Integer cid, @Field("logo") String logo);
+
 }

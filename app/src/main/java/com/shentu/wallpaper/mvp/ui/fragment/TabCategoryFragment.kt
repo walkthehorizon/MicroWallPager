@@ -15,8 +15,7 @@ import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.scwang.smartrefresh.layout.api.RefreshLayout
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.page.EmptyCallback
 import com.shentu.wallpaper.app.page.ErrorCallback
@@ -31,13 +30,13 @@ import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
 
 
-class CategoryFragment : BaseLazyLoadFragment<CategoryPresenter>(), CategoryContract.View, OnRefreshListener, OnLoadMoreListener {
+class TabCategoryFragment : BaseLazyLoadFragment<CategoryPresenter>(), CategoryContract.View {
 
     private lateinit var loadService: LoadService<Any>
 
     companion object {
-        fun newInstance(): CategoryFragment {
-            return CategoryFragment()
+        fun newInstance(): TabCategoryFragment {
+            return TabCategoryFragment()
         }
     }
 
@@ -74,15 +73,17 @@ class CategoryFragment : BaseLazyLoadFragment<CategoryPresenter>(), CategoryCont
         rvCategory.setHasFixedSize(true)
         rvCategory.adapter = CategoryAdapter(arrayListOf())
 
-        mPresenter?.getCategories(true)
-    }
+        smartRefresh.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
+            override fun onLoadMore(refreshLayout: RefreshLayout) {
+                mPresenter?.getCategories(false)
+            }
 
-    override fun onRefresh(refreshLayout: RefreshLayout) {
-        mPresenter?.getCategories(true)
-    }
+            override fun onRefresh(refreshLayout: RefreshLayout) {
+                mPresenter?.getCategories(true)
+            }
 
-    override fun onLoadMore(refreshLayout: RefreshLayout) {
-        mPresenter?.getCategories(false)
+        })
+        mPresenter?.getCategories(true)
     }
 
     override fun showEmpty() {
@@ -99,6 +100,14 @@ class CategoryFragment : BaseLazyLoadFragment<CategoryPresenter>(), CategoryCont
 
     override fun showMessage(message: String) {
         ArmsUtils.snackbarText(message)
+    }
+
+    override fun hideRefresh(clear: Boolean) {
+        if (clear) {
+            smartRefresh.finishRefresh()
+        } else {
+            smartRefresh.finishLoadMore()
+        }
     }
 
     override fun launchActivity(intent: Intent) {

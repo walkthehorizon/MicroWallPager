@@ -23,7 +23,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon,android:allowBackup,android:theme">
-        <activity android:name=".mvp.ui.activity.SubjectDetailActivity"></activity>
+        <activity android:name=".mvp.ui.activity.MyCollectActivity"></activity>
+        <activity android:name=".mvp.ui.activity.SubjectDetailActivity" />
         <activity android:name="com.pgyersdk.feedback.FeedbackActivity" />
 
         <meta-data
@@ -51,7 +52,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.ui.activity.CategoryDetailActivity"
+            android:name=".mvp.ui.fragment.CategoryListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

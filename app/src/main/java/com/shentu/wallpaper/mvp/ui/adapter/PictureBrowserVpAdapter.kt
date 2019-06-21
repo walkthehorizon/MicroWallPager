@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.ui.fragment.PictureFragment
 
-class PictureBrowserVpAdapter(fm: FragmentManager, private val wallpapers: MutableList<Wallpaper>) : FragmentStatePagerAdapter(fm) {
+class PictureBrowserVpAdapter(fm: FragmentManager, private val wallpapers: List<Wallpaper>) : FragmentStatePagerAdapter(fm) {
 
     override fun getItem(p0: Int): androidx.fragment.app.Fragment {
         return PictureFragment.newInstance(wallpapers[p0])
@@ -31,7 +31,7 @@ class PictureBrowserVpAdapter(fm: FragmentManager, private val wallpapers: Mutab
 //        //判断原图是否存在,若存在直接加载原图
 //        var picturePath: String? = pictures[position].url
 ////        var picturePath: String? = "https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/step.png"
-////        val file = File(PathUtils.getExternalPicturesPath(), URLUtil.guessFileName(pictures[position].origin_url
+////        val file = File(PathUtils.getExternalPicturesPath(), URLUtil.guessFileName(pictures[position].originUrl
 ////                , null, null))
 ////        if (FileUtils.isFileExists(file)) {
 ////            picturePath = file.absolutePath

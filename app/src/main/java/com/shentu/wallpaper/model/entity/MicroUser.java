@@ -28,7 +28,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class MicroUser {
     @SerializedName("id")
-    public String uid;
+    public Integer uid;
     public String nickname;
     public String avatar;
     public String phone;

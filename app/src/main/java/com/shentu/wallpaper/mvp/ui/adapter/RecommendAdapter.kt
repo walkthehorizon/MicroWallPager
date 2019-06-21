@@ -23,14 +23,14 @@ import com.github.florent37.glidepalette.GlidePalette
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.model.entity.Wallpaper
-import com.shentu.wallpaper.model.entity.WallpaperList
 import com.shentu.wallpaper.mvp.ui.activity.PictureBrowserActivity
 import java.util.*
+import kotlin.collections.ArrayList
 
 class RecommendAdapter(val context: Context, data: MutableList<Wallpaper>) : BaseQuickAdapter<Wallpaper
         , BaseViewHolder>(R.layout.item_rv_recommend, data) {
 
-    private val wallpaperList: WallpaperList = WallpaperList()
+    private var wallpapers: List<Wallpaper> = ArrayList()
 
     init {
         onItemClickListener = OnItemClickListener { _, view, position ->
@@ -41,7 +41,7 @@ class RecommendAdapter(val context: Context, data: MutableList<Wallpaper>) : Bas
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                     , view.width / 2, view.height / 2
                     , 0, 0)
-            PictureBrowserActivity.open(context, wallpaperList, position, compat)
+            PictureBrowserActivity.open(context, wallpapers, position, compat)
         }
         GlideArms.get(context).setMemoryCategory(MemoryCategory.HIGH)
     }
@@ -72,7 +72,7 @@ class RecommendAdapter(val context: Context, data: MutableList<Wallpaper>) : Bas
     }
 
     override fun setNewData(data: MutableList<Wallpaper>?) {
-        wallpaperList.wallpapers = data!!
+        this.wallpapers = data!!
         super.setNewData(data)
     }
 

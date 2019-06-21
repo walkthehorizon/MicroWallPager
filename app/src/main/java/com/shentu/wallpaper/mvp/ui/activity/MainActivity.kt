@@ -23,8 +23,8 @@ import com.shentu.wallpaper.di.module.MainModule
 import com.shentu.wallpaper.mvp.contract.MainContract
 import com.shentu.wallpaper.mvp.presenter.MainPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.MainPagerAdapter
-import com.shentu.wallpaper.mvp.ui.fragment.CategoryFragment
-import com.shentu.wallpaper.mvp.ui.fragment.MyFragment
+import com.shentu.wallpaper.mvp.ui.fragment.TabCategoryFragment
+import com.shentu.wallpaper.mvp.ui.fragment.TabMyFragment
 import com.shentu.wallpaper.mvp.ui.home.TabHomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
@@ -37,7 +37,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
     private var mainPagerAdapter: MainPagerAdapter? = null
     private var lastPos: Int = 0//上一个位置
     private val fragments: List<Fragment> = listOf(TabHomeFragment.newInstance()
-            , CategoryFragment.newInstance(), MyFragment.newInstance())
+            , TabCategoryFragment.newInstance(), TabMyFragment.newInstance())
 
     override fun setupActivityComponent(appComponent: AppComponent) {
         DaggerMainComponent //如找不到该类,请编译一下项目
