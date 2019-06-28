@@ -36,6 +36,7 @@ public class MicroUser {
     public String signature;
     public String date_joined;
     public String last_login;
+    public Integer sex;//默认保密
 
     @Override
     public String toString() {

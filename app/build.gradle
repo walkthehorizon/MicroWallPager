@@ -36,7 +36,7 @@ android {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "String", "Sever", '"http://192.168.12.69/wallpaper/"'
+            buildConfigField "String", "Sever", '"http://192.168.12.10/wallpaper/"'
             buildConfigField "boolean", "Debug", "true"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -140,6 +140,7 @@ dependencies {
     implementation rootProject.ext.dependencies["loadsir"]
     implementation rootProject.ext.dependencies["filedownloader"]
     implementation project(':netbus')
+    implementation rootProject.ext.dependencies["matisse"]
 
     kapt(rootProject.ext.dependencies["butterknife-compiler"]) {
         exclude module: 'support-annotations'
@@ -151,7 +152,6 @@ dependencies {
     implementation rootProject.ext.dependencies["eventbus"]
     kapt rootProject.ext.dependencies["eventbus-processor"]
     implementation rootProject.ext.dependencies['AndPermission']
-    implementation rootProject.ext.dependencies['pgyersdk']
     //view
     implementation rootProject.ext.dependencies["BRVAdapterHelper"]
     implementation rootProject.ext.dependencies["circleimageview"]
@@ -163,6 +163,10 @@ dependencies {
     //bugly
     implementation rootProject.ext.dependencies["bugly-upgrade"]
     implementation rootProject.ext.dependencies["bugly-tinker"]
+
+    implementation (rootProject.ext.dependencies["cosxml-lite"]){
+        exclude group:'com.tencent.qcloud', module: 'mtaUtils' //关闭 mta上报功能
+    }
 
     implementation rootProject.ext.dependencies["bigImageViewer"]
     implementation rootProject.ext.dependencies["circleindicator"]

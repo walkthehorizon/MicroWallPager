@@ -15,7 +15,10 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
-import com.blankj.utilcode.util.*
+import com.blankj.utilcode.util.ConvertUtils
+import com.blankj.utilcode.util.KeyboardUtils
+import com.blankj.utilcode.util.SPUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.gson.reflect.TypeToken
@@ -54,8 +57,8 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, Tex
                 .searchModule(searchModule(this))
                 .build()
                 .inject(this)
-        BarUtils.setStatusBarLightMode(this, true)
-        window.statusBarColor = Color.WHITE
+//        BarUtils.setStatusBarLightMode(this, true)
+//        window.statusBarColor = Color.WHITE
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {

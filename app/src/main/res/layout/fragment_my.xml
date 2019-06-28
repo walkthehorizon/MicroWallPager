@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorActivityBackground"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rlHead"
         android:layout_width="match_parent"
         android:layout_height="160dp"
@@ -21,32 +22,46 @@
             android:scaleType="centerCrop"
             android:src="@drawable/default_head"
             app:civ_border_color="@color/colorDivider"
-            app:civ_border_width="2dp" />
+            app:civ_border_width="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvMyName"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="26dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="70dp"
-            android:layout_toEndOf="@+id/circle_avatar"
-            android:drawableEnd="@drawable/ic_im_sex_man"
             android:maxLength="8"
             android:maxLines="1"
             android:text="微梦用户"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@id/circle_avatar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivSex"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_toEndOf="@+id/tvMyName"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="@id/tvMyName"
+            app:layout_constraintStart_toEndOf="@+id/tvMyName"
+            app:layout_constraintTop_toTopOf="@id/tvMyName"
+            tools:src="@drawable/ic_im_sex_man" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="100dp"
-            android:layout_toEndOf="@+id/circle_avatar"
             android:text="点击查看或编辑个人资料"
-            android:textColor="@color/grey_91" />
+            android:textColor="@color/grey_91"
+            app:layout_constraintStart_toEndOf="@id/circle_avatar"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
         android:id="@+id/itCollect"
@@ -54,20 +69,20 @@
         android:layout_height="60dp"
         android:layout_below="@+id/rlHead"
         android:layout_marginTop="12dp"
-        app:item_arrow_visible="true"
-        app:item_divider_visible="true"
-        app:item_icon="@drawable/ic_collections_black_24dp"
-        app:item_title="我的收藏" />
+        app:riv_arrow_visible="true"
+        app:riv_divider_visible="true"
+        app:riv_icon="@drawable/ic_collections_black_24dp"
+        app:riv_title="我的收藏" />
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
         android:id="@+id/itBrowser"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_below="@+id/itCollect"
-        app:item_arrow_visible="true"
-        app:item_icon="@drawable/ic_pets_pink_24dp"
-        app:item_title="浏览记录" />
+        android:visibility="gone"
+        app:riv_arrow_visible="true"
+        app:riv_icon="@drawable/ic_pets_pink_24dp"
+        app:riv_title="浏览记录" />
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
         android:id="@+id/itUpdate"
@@ -75,17 +90,17 @@
         android:layout_height="60dp"
         android:layout_below="@+id/itBrowser"
         android:layout_marginTop="12dp"
-        app:item_icon="@drawable/ic_update_black_24dp"
-        app:item_title="检查更新" />
+        app:riv_icon="@drawable/ic_update_black_24dp"
+        app:riv_title="检查更新" />
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
         android:id="@+id/itCache"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_below="@+id/itUpdate"
-        app:item_arrow_visible="false"
-        app:item_icon="@drawable/ic_delete_forever_black_24dp"
-        app:item_title="清除缓存" />
+        app:riv_arrow_visible="false"
+        app:riv_icon="@drawable/ic_delete_forever_black_24dp"
+        app:riv_title="清除缓存" />
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
         android:id="@+id/itFeedback"
@@ -93,18 +108,18 @@
         android:layout_height="60dp"
         android:layout_below="@+id/itCache"
         android:layout_marginTop="12dp"
-        app:item_arrow_visible="true"
-        app:item_icon="@drawable/ic_feedback_black_24dp"
-        app:item_title="意见反馈" />
+        app:riv_arrow_visible="true"
+        app:riv_icon="@drawable/ic_feedback_black_24dp"
+        app:riv_title="意见反馈" />
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
         android:id="@+id/itMore"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_below="@+id/itFeedback"
-        app:item_arrow_visible="true"
-        app:item_icon="@drawable/ic_more_horiz_pink_24dp"
-        app:item_title="更多设置" />
+        app:riv_arrow_visible="true"
+        app:riv_icon="@drawable/ic_more_horiz_pink_24dp"
+        app:riv_title="更多设置" />
 
 
 </RelativeLayout>

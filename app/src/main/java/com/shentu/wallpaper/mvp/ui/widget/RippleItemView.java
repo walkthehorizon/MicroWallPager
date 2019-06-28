@@ -37,14 +37,18 @@ public class RippleItemView extends RelativeLayout {
     public RippleItemView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray ta = context.obtainStyledAttributes(attrs,R.styleable.RippleItemView);
-        int leftIconId = ta.getResourceId(R.styleable.RippleItemView_item_icon, -1);
-        String title = ta.getString(R.styleable.RippleItemView_item_title);
-        Boolean isVisibleArrow = ta.getBoolean(R.styleable.RippleItemView_item_arrow_visible, true);
-        Boolean isVisibleDivider = ta.getBoolean(R.styleable.RippleItemView_item_divider_visible,true);
+        int leftIconId = ta.getResourceId(R.styleable.RippleItemView_riv_icon, -1);
+        String title = ta.getString(R.styleable.RippleItemView_riv_title);
+        boolean isVisibleArrow = ta.getBoolean(R.styleable.RippleItemView_riv_arrow_visible, true);
+        boolean isVisibleDivider = ta.getBoolean(R.styleable.RippleItemView_riv_divider_visible, true);
         ta.recycle();
         LayoutInflater.from(context).inflate(R.layout.layout_ripple_item, this, true);
         ButterKnife.bind(this);
-        mLeftIcon.setImageResource(leftIconId);
+        if (leftIconId != -1) {
+            mLeftIcon.setImageResource(leftIconId);
+        } else {
+            mLeftIcon.setVisibility(GONE);
+        }
         mTvTitle.setText(title);
         mEndArrow.setVisibility(isVisibleArrow ?VISIBLE:INVISIBLE);
         divider.setVisibility(isVisibleDivider?VISIBLE:INVISIBLE);
@@ -52,6 +56,5 @@ public class RippleItemView extends RelativeLayout {
 
     public void setEndValue(String value){
         mTvEndValue.setText(value);
-        mEndArrow.setVisibility(GONE);
     }
 }

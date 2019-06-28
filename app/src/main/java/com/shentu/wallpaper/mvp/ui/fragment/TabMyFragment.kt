@@ -6,29 +6,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
+import com.shentu.wallpaper.BuildConfig
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.HkUserManager
-import com.shentu.wallpaper.app.event.LoginSuccessEvent
-import com.shentu.wallpaper.app.event.LogoutEvent
 import com.shentu.wallpaper.di.component.DaggerMyComponent
 import com.shentu.wallpaper.di.module.MyModule
 import com.shentu.wallpaper.mvp.contract.MyContract
 import com.shentu.wallpaper.mvp.presenter.MyPresenter
 import com.shentu.wallpaper.mvp.ui.activity.SettingMoreActivity
 import com.shentu.wallpaper.mvp.ui.login.LoginActivity
+import com.shentu.wallpaper.mvp.ui.my.MyEditActivity
 import com.tencent.bugly.beta.Beta
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_my.*
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 
 
@@ -55,24 +54,43 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     override fun initData(savedInstanceState: Bundle?) {
         refreshUser()
         if (Beta.getUpgradeInfo() != null) {
-            itUpdate.setEndValue("有新的升级可用")
+            itUpdate.setEndValue("有新的升级")
+        } else {
+            itUpdate.setEndValue(BuildConfig.VERSION_NAME)
         }
         rlHead.setOnClickListener { clickHead() }
         itCollect.setOnClickListener { clickCollect() }
-        itBrowser.setOnClickListener { clickBrowser() }
         itUpdate.setOnClickListener {
             Beta.checkUpgrade()
         }
         itCache.setOnClickListener { clickCache() }
         itFeedback.setOnClickListener { clickFeedback() }
         itMore.setOnClickListener {
-            startActivity(Intent(context, SettingMoreActivity::class.java))
+            startActivity(Intent(mContext, SettingMoreActivity::class.java))
+        }
+        rlHead.setOnClickListener {
+            if (!HkUserManager.getInstance().isLogin) {
+                LoginActivity.open()
+                return@setOnClickListener
+            }
+            startActivity(Intent(mContext, MyEditActivity::class.java))
         }
     }
 
     private fun refreshUser() {
+        val user = HkUserManager.getInstance().user
         if (HkUserManager.getInstance().isLogin) {
-            tvMyName.text = HkUserManager.getInstance().user.nickname
+            tvMyName.text = user.nickname
+            ivSex.setImageResource(when (user.sex) {
+                1 -> R.drawable.ic_im_sex_man
+                2 -> R.drawable.ic_im_sex_woman
+                else -> R.drawable.ic_im_sex_unsure
+            })
+            if (user.sex == 2) {
+                ivSex.setColorFilter(ContextCompat.getColor(mContext, R.color.red_trans))
+            } else {
+                ivSex.clearColorFilter()
+            }
             GlideArms.with(this)
                     .load(HkUserManager.getInstance().user.avatar)
                     .into(circle_avatar)
@@ -84,30 +102,35 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun updateUser(event: LoginSuccessEvent) {
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    fun updateUser(event: LoginSuccessEvent) {
+//        refreshUser()
+//    }
+//
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    fun updateUser(event: LogoutEvent) {
+//        refreshUser()
+//    }
+
+    override fun onResume() {
+        super.onResume()
         refreshUser()
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun updateUser(event: LogoutEvent) {
-        refreshUser()
-    }
-
-    fun clickHead() {
-        HkUserManager.getInstance().checkLogin(context)
+    private fun clickHead() {
+        if (!HkUserManager.getInstance().isLogin) {
+            launchActivity(Intent(mContext, LoginActivity::class.java))
+            return
+        }
     }
 
     private fun clickCollect() {
         if (!HkUserManager.getInstance().isLogin) {
             launchActivity(Intent(mContext, LoginActivity::class.java))
+            return
         }
         ARouter.getInstance().build("/activity/my/collect/")
                 .navigation(mContext)
-    }
-
-    fun clickBrowser() {
-        ToastUtils.showShort("待完善")
     }
 
     /**

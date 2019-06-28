@@ -46,6 +46,9 @@ public class ActivityLifecycleCallbacksImpl implements Application.ActivityLifec
     public void onActivityStarted(Activity activity) {
         Timber.w(activity + " - onActivityStarted");
         if (activity.findViewById(R.id.toolbar) != null) {
+            if (!(activity.findViewById(R.id.toolbar) instanceof DefaultToolbar)) {
+                return;
+            }
             DefaultToolbar toolbar = activity.findViewById(R.id.toolbar);
             toolbar.addOnClickListener(new DefaultToolbar.OnClickListener() {
                 @Override

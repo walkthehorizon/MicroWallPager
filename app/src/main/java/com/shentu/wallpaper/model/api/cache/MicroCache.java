@@ -59,4 +59,10 @@ public interface MicroCache {
             Observable<WallpaperPageResponse> ob,
             DynamicKey page,
             EvictProvider evict);
+
+    @ProviderKey("subject-detail-one-week")
+    @LifeCache(duration = 7, timeUnit = TimeUnit.DAYS)
+    Observable<WallpaperPageResponse>
+    getSubjectWallpapers(Observable<WallpaperPageResponse> observable,
+                         DynamicKey subjectId);
 }

@@ -13,19 +13,12 @@ import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.FileUtils
-import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
-import com.liulishuo.filedownloader.BaseDownloadTask
-import com.liulishuo.filedownloader.FileDownloadSampleListener
-import com.liulishuo.filedownloader.FileDownloader
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.HkUserManager
-import com.shentu.wallpaper.app.event.LoadOriginPictureEvent
-import com.shentu.wallpaper.app.event.LoadOriginResultEvent
-import com.shentu.wallpaper.app.event.SwitchNavigationEvent
 import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.di.component.DaggerPictureBrowserComponent
 import com.shentu.wallpaper.di.module.PictureBrowserModule
@@ -33,13 +26,12 @@ import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import com.shentu.wallpaper.mvp.presenter.PictureBrowserPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.PictureBrowserVpAdapter
+import com.shentu.wallpaper.mvp.ui.fragment.PictureFragment
 import kotlinx.android.synthetic.main.fragment_picture_browser.*
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 @Route(path = "/picture/browser/activity")
-class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureBrowserContract.View, ViewPager.OnPageChangeListener {
+class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureBrowserContract.View
+        , ViewPager.OnPageChangeListener, PictureFragment.Callback {
 
     @Autowired
     @JvmField
@@ -115,32 +107,17 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         }
         viewPager.addOnPageChangeListener(this)
         viewPager.offscreenPageLimit = 4
-        vpAdapter = PictureBrowserVpAdapter(supportFragmentManager, wallpapers)
+        vpAdapter = PictureBrowserVpAdapter(supportFragmentManager, wallpapers, this)
         viewPager.adapter = vpAdapter
         viewPager.currentItem = current
         onPageSelected(current)
-
-        ivDownload.setOnClickListener {
-            FileDownloader.getImpl().create(wallpapers[viewPager.currentItem].originUrl)
-                    .setPath(PathUtils.getExternalPicturesPath()).listener = object : FileDownloadSampleListener() {
-                override fun completed(task: BaseDownloadTask?) {
-                    showMessage("文件已存储：" + task!!.targetFilePath)
-                }
-
-                override fun error(task: BaseDownloadTask?, e: Throwable?) {
-                    if (e != null) {
-                        showMessage("下载失败：" + e.message)
-                    }
-                }
-            }
-        }
         mbLoadOrigin.setOnClickListener {
             mbLoadOrigin.isEnabled = false//在结果回调前禁用二次点击
-            EventBus.getDefault().post(LoadOriginPictureEvent(wallpapers[viewPager.currentItem].id))
+            vpAdapter.getFragment(viewPager.currentItem).loadOriginPicture()
         }
         ivDownload.setOnClickListener {
             ivDownload.visibility = View.GONE
-            mPresenter?.downloadPicture(wallpapers[viewPager.currentItem].originUrl!!)
+            mPresenter?.downloadPicture(wallpapers[viewPager.currentItem].url)
         }
     }
 
@@ -193,8 +170,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         rl_bottom.visibility = View.GONE
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun switchNavigation(event: SwitchNavigationEvent) {
+    override fun switchNavigation() {
         if (rl_head.visibility == View.VISIBLE) {
             hideNavigation()
         } else {
@@ -202,17 +178,10 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoadOriginResult(event: LoadOriginResultEvent) {
-        for (wallpaper in wallpapers) {
-            if (wallpaper.id == event.id) {
-                if (event.result) {
-                    mbLoadOrigin.visibility = View.GONE
-                    wallpaper.isOriginExist = true
-                } else {
-                    mbLoadOrigin.isEnabled = true
-                }
-            }
+    override fun onLoadOrigin(pos: Int, result: Boolean) {
+        wallpapers[pos].isOriginExist = result
+        if (pos == viewPager.currentItem) {
+            mbLoadOrigin.visibility = View.GONE
         }
     }
 

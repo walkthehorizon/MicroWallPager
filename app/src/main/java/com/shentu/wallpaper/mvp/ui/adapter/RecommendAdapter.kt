@@ -1,6 +1,7 @@
 package com.shentu.wallpaper.mvp.ui.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.view.ViewGroup
@@ -9,7 +10,6 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.palette.graphics.Palette
 import com.blankj.utilcode.util.ConvertUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.MemoryCategory
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -20,9 +20,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter.OnItemClickListener
 import com.chad.library.adapter.base.BaseViewHolder
 import com.github.florent37.glidepalette.BitmapPalette.Profile.MUTED_LIGHT
 import com.github.florent37.glidepalette.GlidePalette
+import com.jess.arms.integration.AppManager
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.model.entity.Wallpaper
+import com.shentu.wallpaper.mvp.ui.activity.BannerListActivity
 import com.shentu.wallpaper.mvp.ui.activity.PictureBrowserActivity
 import java.util.*
 import kotlin.collections.ArrayList
@@ -35,7 +37,7 @@ class RecommendAdapter(val context: Context, data: MutableList<Wallpaper>) : Bas
     init {
         onItemClickListener = OnItemClickListener { _, view, position ->
             if (position == 0) {//主题列表
-                ToastUtils.showShort("主题")
+                AppManager.getAppManager().startActivity(Intent(context, BannerListActivity::class.java))
                 return@OnItemClickListener
             }
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view

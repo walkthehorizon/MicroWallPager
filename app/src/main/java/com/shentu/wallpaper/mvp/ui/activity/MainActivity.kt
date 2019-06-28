@@ -16,7 +16,6 @@ import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
-import com.pgyersdk.feedback.PgyerFeedbackManager
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.di.component.DaggerMainComponent
 import com.shentu.wallpaper.di.module.MainModule
@@ -61,9 +60,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
         //        HkUtils.disableShiftMode(navigationView);
         navigationView!!.setOnNavigationItemSelectedListener(this)
         navigationView!!.setOnNavigationItemReselectedListener(this)
-
-        PgyerFeedbackManager.PgyerFeedbackBuilder().builder().register()
-        NetBus.getInstance().register(this)
     }
 
     override fun showMessage(message: String) {

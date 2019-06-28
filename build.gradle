@@ -32,7 +32,9 @@ allprojects {
         maven {
             url  "http://dl.bintray.com/piasy/maven"
         }
-        maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
+        maven {
+            url "https://dl.bintray.com/tencentqcloudterminal/maven"
+        }
     }
 }
 

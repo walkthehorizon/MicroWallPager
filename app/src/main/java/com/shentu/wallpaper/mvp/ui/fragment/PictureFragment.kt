@@ -11,25 +11,19 @@ import com.github.piasy.biv.loader.ImageLoader
 import com.github.piasy.biv.view.GlideImageViewFactory
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
-import com.jess.arms.integration.EventBusManager
 import com.jess.arms.mvp.IPresenter
-import com.shentu.wallpaper.app.event.LoadOriginPictureEvent
-import com.shentu.wallpaper.app.event.LoadOriginResultEvent
-import com.shentu.wallpaper.app.event.SwitchNavigationEvent
 import com.shentu.wallpaper.model.entity.Wallpaper
 import kotlinx.android.synthetic.main.fragment_picture.*
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import java.io.File
 
 
 class PictureFragment : BaseFragment<IPresenter>() {
 
     companion object {
-        fun newInstance(wallpaper: Wallpaper): PictureFragment {
+        fun newInstance(wallpaper: Wallpaper, pos: Int): PictureFragment {
             val args = Bundle()
             args.putSerializable("wallpaper", wallpaper)
+            args.putInt("pos", pos)
             val fragment = PictureFragment()
             fragment.arguments = args
             return fragment
@@ -37,6 +31,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
     }
 
     lateinit var wallpaper: Wallpaper
+    var pos: Int = 0
 
     override fun setupFragmentComponent(appComponent: AppComponent) {
 
@@ -47,10 +42,11 @@ class PictureFragment : BaseFragment<IPresenter>() {
     }
 
     override fun initData(savedInstanceState: Bundle?) {
+        pos = arguments?.get("pos") as Int
         wallpaper = arguments!!["wallpaper"] as Wallpaper
         photoView.setImageViewFactory(GlideImageViewFactory())
         photoView.setOnClickListener {
-            EventBusManager.getInstance().post(SwitchNavigationEvent())
+            callback?.switchNavigation()
         }
 
         //若原图存在直接加载原图
@@ -60,29 +56,23 @@ class PictureFragment : BaseFragment<IPresenter>() {
             else
                 Uri.parse(wallpaper.url))
         }
-//        val transitionSet = TransitionSet()
-//        transitionSet.addTransition(ChangeBounds())
-//        transitionSet.addTransition(ChangeTransform())
-//        transitionSet.addTarget(photoView)
-//        activity?.window?.sharedElementEnterTransition = transitionSet
-//        activity?.window?.sharedElementExitTransition = transitionSet
     }
 
     override fun setData(data: Any?) {
 
     }
 
-    @SuppressLint("MissingPermission")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoadOriginPicture(event: LoadOriginPictureEvent) {
-        if (event.id != wallpaper.id) {
-            return
-        }
+    fun loadOriginPicture() {
         context?.let {
             photoView.setProgressIndicator(ProgressPieIndicator())
             photoView.setImageLoaderCallback(getImageLoadCallback())
             photoView.showImage(Uri.parse(wallpaper.originUrl))
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun saveImage() {
+        photoView.saveImageIntoGallery()
     }
 
     private fun getImageLoadCallback(): ImageLoader.Callback {
@@ -92,12 +82,11 @@ class PictureFragment : BaseFragment<IPresenter>() {
             }
 
             override fun onSuccess(image: File?) {
-                wallpaper.isOriginExist = true
-                EventBus.getDefault().post(LoadOriginResultEvent(wallpaper.id, true))
+                callback?.onLoadOrigin(pos, true)
             }
 
             override fun onFail(error: Exception?) {
-                EventBus.getDefault().post(LoadOriginResultEvent(wallpaper.id, false))
+                callback?.onLoadOrigin(pos, false)
             }
 
             override fun onCacheHit(imageType: Int, image: File?) {
@@ -114,5 +103,17 @@ class PictureFragment : BaseFragment<IPresenter>() {
 
             }
         }
+    }
+
+    interface Callback {
+        fun switchNavigation()
+
+        fun onLoadOrigin(pos: Int, result: Boolean)
+    }
+
+    private var callback: Callback? = null
+
+    fun setCallback(callback: Callback?) {
+        this.callback = callback
     }
 }

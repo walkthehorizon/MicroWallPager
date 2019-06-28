@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 import com.blankj.utilcode.util.ConvertUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.model.entity.Banner
+import com.shentu.wallpaper.mvp.ui.activity.SubjectDetailActivity
 
 class HomeBannerAdapter(private val banners: List<Banner>) : PagerAdapter() {
 
@@ -25,7 +25,9 @@ class HomeBannerAdapter(private val banners: List<Banner>) : PagerAdapter() {
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val ivBanner = ImageView(container.context)
         container.addView(ivBanner, -1, -1)
-        ivBanner.setOnClickListener { ToastUtils.showShort(position) }
+        ivBanner.setOnClickListener {
+            SubjectDetailActivity.open(banners[position])
+        }
         GlideArms.with(container.context)
                 .load(banners[position].imageUrl)
                 .transform(CenterCrop(), RoundedCorners(ConvertUtils.dp2px(8.0f)))

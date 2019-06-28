@@ -153,7 +153,6 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     override fun lazyLoadData() {
         refreshLayout.autoRefreshAnimationOnly()
         mPresenter?.getBanners()
-        mPresenter?.getRecommends(true)
     }
 
     override fun hideRefresh(clear: Boolean) {
@@ -193,6 +192,9 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
         if (banners.size > Constant.BANNER_COUNT) {
             historyBanner = banners.removeAt(banners.size - 1)
         }
+        //首次加载确保拿到banner数据后请求推荐内容
+        mPresenter?.getRecommends(true)
+
         this.banners = banners
         if (bannerAdapter == null) {
             bannerAdapter = HomeBannerAdapter(banners)

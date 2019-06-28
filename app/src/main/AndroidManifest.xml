@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".app.HkApplication"
@@ -22,15 +23,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:icon,android:allowBackup,android:theme">
-        <activity android:name=".mvp.ui.activity.MyCollectActivity"></activity>
+        tools:replace="android:allowBackup">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.shentu.wallpaper.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths_public" />
+        </provider>
+
+        <activity android:name=".mvp.ui.my.MyEditActivity" />
+        <activity android:name=".mvp.ui.activity.MyCollectActivity" />
+        <activity android:name=".mvp.ui.activity.BannerListActivity" />
         <activity android:name=".mvp.ui.activity.SubjectDetailActivity" />
-        <activity android:name="com.pgyersdk.feedback.FeedbackActivity" />
-
-        <meta-data
-            android:name="PGYER_APPID"
-            android:value="ceee8517a59b9333ae6520a9e98b98fc" />
-
         <activity android:name=".mvp.ui.activity.SearchActivity" />
         <activity
             android:name=".mvp.ui.login.SplashActivity"

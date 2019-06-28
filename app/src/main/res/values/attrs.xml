@@ -15,10 +15,10 @@
     <!-- RoundWidget end -->
 
     <declare-styleable name="RippleItemView">
-        <attr name="item_icon" format="reference" />
-        <attr name="item_title" format="string" />
-        <attr name="item_arrow_visible" format="boolean" />
-        <attr name="item_divider_visible" format="boolean" />
+        <attr name="riv_icon" format="reference" />
+        <attr name="riv_title" format="string" />
+        <attr name="riv_arrow_visible" format="boolean" />
+        <attr name="riv_divider_visible" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="DefaultToolbar">

@@ -4,7 +4,7 @@ import android.app.Application
 import com.google.gson.Gson
 import com.jess.arms.di.scope.ActivityScope
 import com.jess.arms.integration.IRepositoryManager
-import com.jess.arms.mvp.BasePageModel
+import com.shentu.wallpaper.app.BasePageModel
 import com.shentu.wallpaper.model.api.cache.MicroCache
 import com.shentu.wallpaper.model.api.service.MicroService
 import com.shentu.wallpaper.model.response.SubjectPageResponse
@@ -26,7 +26,7 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
     lateinit var mApplication: Application
 
     override fun searchKey(key: String, clear: Boolean): Observable<SubjectPageResponse> {
-        offset = updateOffset(clear)
+        offset = getOffset(clear)
         return Observable.just(mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
                 .searchKey(key, limit, offset))

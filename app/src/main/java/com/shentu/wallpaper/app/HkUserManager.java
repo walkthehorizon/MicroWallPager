@@ -17,6 +17,7 @@ public class HkUserManager {
     private String USER_SIGNATURE = "user_signature";
     private String USER_DATE_JOINED = "user_date_joined";
     private String USER_LAST_LOGIN = "user_last_login";
+    private String USER_SEX = "user_sex";
     public MicroUser user;
 
     private static final class SingletonHolder {
@@ -36,6 +37,7 @@ public class HkUserManager {
         user.signature = SPUtils.getInstance().getString(USER_SIGNATURE, "");
         user.date_joined = SPUtils.getInstance().getString(USER_DATE_JOINED, "");
         user.last_login = SPUtils.getInstance().getString(USER_LAST_LOGIN, "");
+        user.sex = SPUtils.getInstance().getInt(USER_SEX, 0);
     }
 
     public static HkUserManager getInstance() {
@@ -54,6 +56,7 @@ public class HkUserManager {
         SPUtils.getInstance().put(USER_SIGNATURE, user.signature);
         SPUtils.getInstance().put(USER_DATE_JOINED, user.date_joined);
         SPUtils.getInstance().put(USER_LAST_LOGIN, user.last_login);
+        SPUtils.getInstance().put(USER_SEX, user.sex);
     }
 
     /**
@@ -69,6 +72,7 @@ public class HkUserManager {
         SPUtils.getInstance().remove(USER_SIGNATURE);
         SPUtils.getInstance().remove(USER_DATE_JOINED);
         SPUtils.getInstance().remove(USER_LAST_LOGIN);
+        SPUtils.getInstance().remove(USER_SEX);
     }
 
     public boolean isLogin() {

@@ -6,6 +6,8 @@ import android.os.Bundle
 import cn.smssdk.EventHandler
 import cn.smssdk.SMSSDK
 import com.afollestad.materialdialogs.MaterialDialog
+import com.alibaba.android.arouter.facade.annotation.Route
+import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.RegexUtils
 import com.blankj.utilcode.util.SPUtils
@@ -27,8 +29,16 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.login_verify.*
 import java.util.concurrent.TimeUnit
 
-
+@Route(path = "/activity/login/account")
 class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
+    companion object {
+        fun open() {
+            ARouter.getInstance()
+                    .build("/activity/login/account")
+                    .navigation()
+        }
+    }
+
     private var loadingDialog: MaterialDialog? = null
 
     private var eh: EventHandler = object : EventHandler() {
