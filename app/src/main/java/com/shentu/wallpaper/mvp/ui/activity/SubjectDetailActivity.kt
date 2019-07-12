@@ -2,6 +2,7 @@ package com.shentu.wallpaper.mvp.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View.VISIBLE
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Autowired
@@ -18,7 +19,7 @@ import com.shentu.wallpaper.app.page.ErrorCallback
 import com.shentu.wallpaper.app.page.LoadingCallback
 import com.shentu.wallpaper.di.component.DaggerSubjectDetailComponent
 import com.shentu.wallpaper.di.module.SubjectDetailModule
-import com.shentu.wallpaper.model.entity.Banner
+import com.shentu.wallpaper.model.entity.Subject
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.contract.SubjectDetailContract
 import com.shentu.wallpaper.mvp.presenter.SubjectDetailPresenter
@@ -27,10 +28,12 @@ import kotlinx.android.synthetic.main.activity_subject_detail.*
 
 @Route(path = "/activity/subject/detail")
 class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDetailContract.View {
-
     @Autowired
     @JvmField
-    var banner: Banner = Banner()
+    var cover: String? = null
+    @Autowired
+    @JvmField
+    var subjectId = -1
 
     private lateinit var adapter: SubjectDetailAdapter
     private lateinit var loadService: LoadService<Any>
@@ -46,22 +49,30 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
 
 
     override fun initView(savedInstanceState: Bundle?): Int {
-        return R.layout.activity_subject_detail //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
+        return R.layout.activity_subject_detail
     }
 
 
     override fun initData(savedInstanceState: Bundle?) {
+        ARouter.getInstance().inject(this)
         loadService = LoadSir.getDefault().register(this) {
             showLoading()
-            mPresenter?.getWallpapers(banner.subjectId)
+            mPresenter?.getWallpapers(subjectId)
         }
-        ARouter.getInstance().inject(this)
-        GlideArms.with(this)
-                .load(banner.imageUrl)
-                .into(ivCover)
-        toolbar.setTitle(banner.title)
-        tvDesc.text = banner.desc
-        mPresenter?.getWallpapers(banner.subjectId)
+        if (cover != null) {
+            ivCover.visibility = VISIBLE
+            GlideArms.with(this)
+                    .load(cover)
+                    .error(R.drawable.default_cover_horizon)
+                    .into(ivCover)
+        }
+        mPresenter?.getSubjectDetail(subjectId)
+        mPresenter?.getWallpapers(subjectId)
+    }
+
+    override fun showDetail(subject: Subject) {
+        toolbar.setTitle(subject.name)
+        tvDesc.loadData(subject.description, "text/html", "utf-8")
     }
 
     override fun showWallpapers(wallpapers: List<Wallpaper>) {
@@ -102,10 +113,13 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
     }
 
     companion object {
-        fun open(banner: Banner) {
+
+        fun open(subjectId: Int, cover: String? = null) {
             ARouter.getInstance()
                     .build("/activity/subject/detail")
-                    .withSerializable("banner", banner)
+                    .withInt("subjectId", subjectId)
+                    .withString("cover", cover)
+                    .withInt("type", 2)
                     .navigation()
         }
     }

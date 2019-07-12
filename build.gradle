@@ -8,7 +8,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.4.2'
         //Gradle Android Maven plugin
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         //Gradle Bintray Plugin
@@ -17,6 +17,7 @@ buildscript {
         classpath "com.mob.sdk:MobSDK:2018.0319.1724"
 //        classpath "com.tencent.bugly:tinker-support:1.1.5"
         classpath 'com.novoda:bintray-release:0.9.1'
+        classpath 'com.google.gms:google-services:4.2.0'
     }
 }
 

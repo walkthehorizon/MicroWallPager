@@ -56,7 +56,7 @@ class BannerListActivity : BaseActivity<IPresenter>(), IView {
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, _, position ->
             val banner = adapter?.data?.get(position) as Banner
-            SubjectDetailActivity.open(banner)
+            SubjectDetailActivity.open(banner.subjectId, banner.imageUrl)
         }
         rvBanner.layoutManager = LinearLayoutManager(this)
         rvBanner.setHasFixedSize(true)

@@ -6,6 +6,7 @@ import com.jess.arms.http.imageloader.ImageLoader
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.wallpaper.app.utils.RxUtils
+import com.shentu.wallpaper.model.response.SubjectDetailResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.SubjectDetailContract
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
@@ -36,6 +37,19 @@ constructor(model: SubjectDetailContract.Model, rootView: SubjectDetailContract.
                             return
                         }
                         t.data?.content?.let { mRootView.showWallpapers(it) }
+                    }
+                })
+    }
+
+    fun getSubjectDetail(id: Int) {
+        mModel.getSubjectDetail(id)
+                .compose(RxUtils.applyClearSchedulers(mRootView))
+                .subscribe(object : ErrorHandleSubscriber<SubjectDetailResponse>(mErrorHandler) {
+                    override fun onNext(t: SubjectDetailResponse) {
+                        if (!t.isSuccess) {
+                            return
+                        }
+                        t.data?.let { mRootView.showDetail(it) }
                     }
                 })
     }

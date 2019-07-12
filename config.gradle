@@ -17,7 +17,8 @@ ext {
             butterknifeSdkVersion   : "10.1.0",
             rxlifecycle2SdkVersion  : "2.2.2",
             espressoSdkVersion      : "3.0.1",
-            canarySdkVersion        : "1.6.3"
+            canarySdkVersion        : "1.6.3",
+            lifecycleVersion        : "2.0.0",
     ]
 
     dependencies = [
@@ -29,6 +30,7 @@ ext {
             "recyclerview-v7"          : "androidx.recyclerview:recyclerview:1.0.0",
             "vector-drawable"          : "androidx.vectordrawable:vectordrawable:1.0.0",
             "viewpager2"               : "androidx.viewpager2:viewpager2:1.0.0-alpha02",
+            "lifecycle-extensions"     : "androidx.lifecycle:lifecycle-extensions:${version["lifecycleVersion"]}",
 
             //network
             "retrofit"                 : "com.squareup.retrofit2:retrofit:${version["retrofitSdkVersion"]}",
@@ -112,6 +114,8 @@ ext {
             "AndPermission"            : "com.yanzhenjie:permission:2.0.0-rc12",
             "matisse"                  : "com.zhihu.android:matisse:0.5.2-beta3",
             "cosxml-lite"              : "com.tencent.qcloud:cosxml-lite:5.4.25",
+            "adMob"                    : "com.google.firebase:firebase-ads:17.2.0",
+            "firebase"                 : "com.google.firebase:firebase-core:17.0.0",
 
             //test
             "junit"                    : "junit:junit:4.12",

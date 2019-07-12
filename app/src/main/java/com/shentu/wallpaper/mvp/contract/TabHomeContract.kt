@@ -2,10 +2,10 @@ package com.shentu.wallpaper.mvp.contract
 
 import com.jess.arms.mvp.IModel
 import com.jess.arms.mvp.IView
-import com.shentu.wallpaper.model.entity.*
+import com.shentu.wallpaper.model.entity.Banner
+import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.model.response.BannerPageResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
-
 import io.reactivex.Observable
 
 
@@ -22,7 +22,6 @@ interface TabHomeContract {
     }
 
     interface Model : IModel {
-        fun getSubjects(subjectType: Int, clear: Boolean): Observable<BaseResponse<BasePageResponse<Subject>>>
 
         fun getRecommends(clear: Boolean, isUser: Boolean): Observable<WallpaperPageResponse>
 

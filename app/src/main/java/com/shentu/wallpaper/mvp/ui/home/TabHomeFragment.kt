@@ -43,6 +43,8 @@ import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import java.util.concurrent.TimeUnit
+import kotlin.math.abs
+import kotlin.math.max
 
 
 class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContract.View
@@ -92,7 +94,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
 
         appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, i ->
             //            Timber.e("current:$i total:${appBarLayout.totalScrollRange} p:${i * 1.0f / appBarLayout.totalScrollRange}")
-            val percent: Float = Math.abs(i) * 1.0f / appBarLayout.totalScrollRange//向上滚动，增大
+            val percent: Float = abs(i) * 1.0f / appBarLayout.totalScrollRange//向上滚动，增大
             bgSearch.setBackgroundColor(ArgbEvaluator().evaluate(percent, Color.TRANSPARENT, Color.WHITE) as Int)
             if (percent - 0.5f > 0) {
                 activity?.let {
@@ -113,7 +115,7 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
                 tvSearch.supportBackgroundTintList = ColorStateList.valueOf(Color.parseColor("#4FF5F5F5"))
                 tvSearch.supportCompoundDrawablesTintList = ColorStateList.valueOf(color)
             }
-            arc1.alpha = Math.max(1.0f - percent * 3, 0f)//双倍速度隐藏与显示，效果更好
+            arc1.alpha = max(1.0f - percent * 3, 0f)//双倍速度隐藏与显示，效果更好
         })
         ViewCompat.setTransitionName(tvSearch, getString(R.string.search_transitionName))
         tvSearch.setOnClickListener {
@@ -130,7 +132,6 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
 //                    GlideArms.with(mContext).pauseRequests()
 //                }
 //            }
-
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val manager: StaggeredGridLayoutManager = (recyclerView.layoutManager) as StaggeredGridLayoutManager
@@ -139,7 +140,6 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
                 if (total - into[0] < 12 && !isLoading) {
                     isLoading = true
                     mPresenter?.getRecommends(false)
-//                    Timber.e("auto load more...")
                 }
             }
         })
@@ -153,6 +153,21 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     override fun lazyLoadData() {
         refreshLayout.autoRefreshAnimationOnly()
         mPresenter?.getBanners()
+    }
+
+    fun scrollToTop() {
+        if ((rvHot?.layoutManager as StaggeredGridLayoutManager)
+                        .findFirstVisibleItemPositions(null)[0] > 12) {
+            rvHot.scrollToPosition(11)
+        }
+        rvHot.smoothScrollToPosition(0)
+    }
+
+    /**
+     * 是否已滚动
+     * */
+    fun isScrolled(): Boolean {
+        return rvHot.canScrollVertically(-1)
     }
 
     override fun hideRefresh(clear: Boolean) {

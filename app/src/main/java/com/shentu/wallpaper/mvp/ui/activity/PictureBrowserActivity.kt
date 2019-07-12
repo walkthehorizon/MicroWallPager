@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.transition.Fade
+import android.view.Gravity
 import android.view.View
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityOptionsCompat
 import androidx.viewpager.widget.ViewPager
 import com.afollestad.materialdialogs.MaterialDialog
@@ -14,11 +16,13 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ScreenUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.HkUserManager
+import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.di.component.DaggerPictureBrowserComponent
 import com.shentu.wallpaper.di.module.PictureBrowserModule
@@ -49,6 +53,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     @Autowired
     @JvmField
     var categoryId: Int = -1
+    private var popupMenu: PopupMenu? = null
 
     private lateinit var vpAdapter: PictureBrowserVpAdapter
 
@@ -78,7 +83,40 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         if (type == 2) {
             mPresenter?.getPictures(subjectId)
         }
+        ivMore.setOnClickListener {
+            showMenu()
+        }
+        ivCollect.setOnClickListener {
+            mPresenter?.addCollect(wallpapers[viewPager.currentItem].id)
+        }
         initSetCover()
+    }
+
+    private fun showMenu() {
+        if (popupMenu == null) {
+            popupMenu = PopupMenu(this, ivMore, Gravity.BOTTOM)
+            popupMenu!!.menuInflater.inflate(R.menu.menu_picture_detail, popupMenu!!.menu)
+            popupMenu!!.setOnMenuItemClickListener { item ->
+                when (item?.itemId) {
+                    R.id.itSetPaper -> mPresenter?.downloadPicture(wallpapers[viewPager
+                            .currentItem].originUrl, 1)
+                    R.id.itSubject -> SubjectDetailActivity.open(wallpapers[viewPager.currentItem].subjectId)
+                }
+                true
+            }
+        }
+        popupMenu!!.show()
+    }
+
+    override fun showCollect() {
+        ivCollect.isSelected = !ivCollect.isSelected
+        val wallpaper = wallpapers[viewPager.currentItem]
+        wallpaper.collectNum = if (ivCollect.isSelected) wallpaper.collectNum + 1 else wallpaper.collectNum - 1
+        tvCollectNum.text = wallpaper.collectNum.toString()
+    }
+
+    override fun setWallpaper(path: String) {
+        HkUtils.setWallpaper(this, path)
     }
 
     private fun initSetCover() {
@@ -122,7 +160,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     }
 
     override fun showMessage(message: String) {
-        ArmsUtils.snackbarText(message)
+        ToastUtils.showShort(message)
     }
 
     override fun launchActivity(intent: Intent) {
@@ -158,6 +196,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         mbLoadOrigin.visibility = if (wallpapers[position].isOriginExist) View.GONE else View.VISIBLE
         ivDownload.visibility = if (FileUtils.isFileExists(PicUtils.getInstance().getDownloadPicturePath(
                         wallpapers[position].originUrl))) View.GONE else View.VISIBLE
+        tvCollectNum.text = wallpapers[position].collectNum.toString()
     }
 
     override fun showNavigation() {

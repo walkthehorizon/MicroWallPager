@@ -18,7 +18,6 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.KeyboardUtils
 import com.blankj.utilcode.util.SPUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.gson.reflect.TypeToken
@@ -87,8 +86,6 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, Tex
         etSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    curKey = etSearch.text.toString()
-                    loadData(true)
                     KeyboardUtils.hideSoftInput(etSearch)
                     return true
                 }
@@ -101,11 +98,7 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, Tex
         rvData.adapter = hotAdapter
     }
 
-    fun loadData(clear: Boolean) {
-        if (TextUtils.isEmpty(curKey)) {
-            ToastUtils.showShort("无效的关键字")
-            return
-        }
+    private fun loadData(clear: Boolean) {
         if (clear) {
             keyQueue.offer(curKey, true)
             SPUtils.getInstance().put("search_history",
@@ -185,9 +178,12 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, Tex
     }
 
     override fun afterTextChanged(s: Editable?) {
-        if (TextUtils.isEmpty(s)) {
+        curKey = s.toString()
+        if (TextUtils.isEmpty(curKey)) {
             showHistory()
+            return
         }
+        loadData(true)
     }
 
     override fun showMessage(message: String) {

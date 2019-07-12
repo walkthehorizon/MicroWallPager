@@ -1,13 +1,12 @@
 package com.shentu.wallpaper.model.api.service;
 
 
-import com.shentu.wallpaper.model.entity.BasePageResponse;
 import com.shentu.wallpaper.model.entity.BaseResponse;
 import com.shentu.wallpaper.model.entity.MicroUser;
-import com.shentu.wallpaper.model.entity.Subject;
 import com.shentu.wallpaper.model.response.BannerPageResponse;
 import com.shentu.wallpaper.model.response.CategoryPageResponse;
 import com.shentu.wallpaper.model.response.SplashAdResponse;
+import com.shentu.wallpaper.model.response.SubjectDetailResponse;
 import com.shentu.wallpaper.model.response.SubjectPageResponse;
 import com.shentu.wallpaper.model.response.WallpaperPageResponse;
 
@@ -30,11 +29,9 @@ public interface MicroService {
     Observable<SplashAdResponse>
     getSplash();
 
-    @GET("subjects")
-    Observable<BaseResponse<BasePageResponse<Subject>>>
-    getSubjects(@Query("subject_type") int subjectType,
-                @Query("limit") int limit,
-                @Query("offset") int offset);
+    @GET("subjects/{pk}")
+    Observable<SubjectDetailResponse>
+    getSubjectDetail(@Path("pk") Integer pk);
 
     @GET("wallpapers")
     Observable<WallpaperPageResponse>
@@ -58,7 +55,8 @@ public interface MicroService {
 
     @GET("categories")
     Observable<CategoryPageResponse>
-    getCategories(@Query("offset") int offset);
+    getCategories(@Query("offset") int offset,
+                  @Query("limit") int limit);
 
     @FormUrlEncoded
     @POST("account/register/")

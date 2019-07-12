@@ -3,4 +3,7 @@
     <external-path
         name="micro_avatars"
         path="Pictures" />
+    <external-path
+        name="download"
+        path="DCIM/看个够" />
 </paths>

@@ -27,6 +27,11 @@ constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager
     @Inject
     lateinit var mApplication: Application
 
+    override fun addCollect(pid: Int): Observable<BaseResponse<Boolean>> {
+        return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
+                .addCollect(pid)
+    }
+
     override fun getWallPapersBySubjectId(id: Int): Observable<WallpaperPageResponse> {
         return Observable.just(mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)

@@ -1,5 +1,6 @@
 package com.shentu.wallpaper.app;
 
+import com.bumptech.glide.Glide;
 import com.jess.arms.base.BaseApplication;
 
 /**
@@ -16,5 +17,20 @@ public class HkApplication extends BaseApplication {
 
     public static HkApplication getInstance() {
         return sInstance;
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        if (level == TRIM_MEMORY_UI_HIDDEN) {
+            Glide.get(this).clearMemory();
+        }
+        Glide.get(this).trimMemory(level);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        Glide.get(this).clearMemory();
     }
 }

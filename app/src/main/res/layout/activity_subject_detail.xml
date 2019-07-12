@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="match_parent">
 
     <com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:elevation="1dp"
-        android:layout_height="@dimen/default_toolbar_height" />
+        android:layout_height="@dimen/default_toolbar_height"
+        android:elevation="1dp" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -21,23 +22,23 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_scrollFlags="scroll">
 
             <ImageView
                 android:id="@+id/ivCover"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 app:layout_constraintDimensionRatio="H,900:383"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:background="@color/red" />
 
-            <TextView
+            <WebView
                 android:id="@+id/tvDesc"
+                android:background="@color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:gravity="center_vertical"
                 android:paddingTop="18dp"
                 android:paddingBottom="18dp"
@@ -52,8 +53,6 @@
         android:id="@+id/rvSubject"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

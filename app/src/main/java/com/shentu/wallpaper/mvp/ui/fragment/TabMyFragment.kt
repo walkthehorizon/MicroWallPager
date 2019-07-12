@@ -6,9 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.afollestad.materialdialogs.MaterialDialog
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ToastUtils
+import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
@@ -16,6 +20,7 @@ import com.shentu.wallpaper.BuildConfig
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.HkUserManager
+import com.shentu.wallpaper.app.utils.AdUtils
 import com.shentu.wallpaper.di.component.DaggerMyComponent
 import com.shentu.wallpaper.di.module.MyModule
 import com.shentu.wallpaper.mvp.contract.MyContract
@@ -75,6 +80,29 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
             }
             startActivity(Intent(mContext, MyEditActivity::class.java))
         }
+        itMoney.setOnClickListener {
+            MaterialDialog.Builder(mContext)
+                    .title("获取看豆")
+                    .content("观看广告可获取少量看豆，大量需求请通过官方渠道获取")
+                    .positiveText("观看广告")
+                    .negativeText("官方渠道")
+                    .onPositive { _, _ -> showAd() }
+                    .onNegative { _, _ -> clickFeedback() }
+                    .show()
+        }
+    }
+
+    private fun showAd() {
+        AdUtils.instance.showUrgeAd(activity as AppCompatActivity, object : RewardedAdCallback() {
+            override fun onRewardedAdClosed() {
+                AdUtils.instance.createAndLoadRewardedAd()
+            }
+
+            override fun onUserEarnedReward(p0: RewardItem) {
+                super.onUserEarnedReward(p0)
+                ToastUtils.showShort("成功！！！")
+            }
+        })
     }
 
     private fun refreshUser() {
@@ -101,16 +129,6 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                     .into(circle_avatar)
         }
     }
-
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    fun updateUser(event: LoginSuccessEvent) {
-//        refreshUser()
-//    }
-//
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    fun updateUser(event: LogoutEvent) {
-//        refreshUser()
-//    }
 
     override fun onResume() {
         super.onResume()

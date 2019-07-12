@@ -26,7 +26,7 @@ class HomeBannerAdapter(private val banners: List<Banner>) : PagerAdapter() {
         val ivBanner = ImageView(container.context)
         container.addView(ivBanner, -1, -1)
         ivBanner.setOnClickListener {
-            SubjectDetailActivity.open(banners[position])
+            SubjectDetailActivity.open(banners[position].subjectId, banners[position].imageUrl)
         }
         GlideArms.with(container.context)
                 .load(banners[position].imageUrl)

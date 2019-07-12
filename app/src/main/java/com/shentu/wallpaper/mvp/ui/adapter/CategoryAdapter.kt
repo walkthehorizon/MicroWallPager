@@ -14,9 +14,10 @@ import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.model.entity.Category
 import com.shentu.wallpaper.mvp.ui.fragment.CategoryListActivity
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
-import kotlin.random.Random
 
 class CategoryAdapter(data: MutableList<Category>) : BaseQuickAdapter<Category, BaseViewHolder>(R.layout.app_item_wallpaper_category, data) {
+
+    private val defaultDrawable = ColorDrawable(Color.LTGRAY)
 
     init {
         setOnItemClickListener { adapter, _, position ->
@@ -26,16 +27,14 @@ class CategoryAdapter(data: MutableList<Category>) : BaseQuickAdapter<Category, 
     }
 
     override fun convert(helper: BaseViewHolder, item: Category) {
-        GlideArms.with(helper.itemView.context)
-                .load(
-                        if (TextUtils.isEmpty(item.logo))
-                            ColorDrawable(Color.argb(112, Random.nextInt(255)
-                                    , Random.nextInt(255), Random.nextInt(255)))
-                        else
-                            item.logo)
+        GlideArms.with(mContext)
+                .load(if (TextUtils.isEmpty(item.logo))
+                    defaultDrawable
+                else
+                    item.logo)
+                .override(480, 270)
                 .transform(MultiTransformation<Bitmap>(
-//                        ColorFilterTransformation(Color.parseColor("#66FF0000")),
-                        CenterCrop(), RoundedCornersTransformation(ConvertUtils.dp2px(5.0f),
+                        CenterCrop(), RoundedCornersTransformation(ConvertUtils.dp2px(5f),
                         0, RoundedCornersTransformation.CornerType.ALL)))
                 .into(helper.getView(R.id.ivCover))
         helper.setText(R.id.tv_name, item.name)

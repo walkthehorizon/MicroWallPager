@@ -1,18 +1,4 @@
-/*
- * Copyright 2017 JessYan
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package com.shentu.wallpaper.app;
 
 import android.annotation.SuppressLint;
@@ -25,6 +11,7 @@ import androidx.multidex.MultiDex;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.Utils;
 import com.github.piasy.biv.BigImageViewer;
+import com.google.android.gms.ads.MobileAds;
 import com.horizon.netbus.NetBus;
 import com.jess.arms.base.delegate.AppLifecycles;
 import com.jess.arms.di.component.AppComponent;
@@ -114,7 +101,13 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 .commit();
         FileDownloader.setup(application);
         AppComponent appComponent = ArmsUtils.obtainAppComponentFromContext(application);
-        BigImageViewer.initialize(PictureGlideImageLoader.with(application,appComponent.okHttpClient()));
+        BigImageViewer.initialize(PictureGlideImageLoader.with(application, appComponent.okHttpClient()));
+        MobileAds.initialize(application, "ca-app-pub-9991643602960691~8603727291");
+//        if (BuildConfig.DEBUG) {
+//            new AdRequest.Builder()
+//                    .addTestDevice("AC4336C49C9EE0CE77262074E8960078")  // An example device ID
+//                    .build().isTestDevice(application);
+//        }
     }
 
     @Override

@@ -74,7 +74,7 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
     }
 
     /**
-     * refresh
+     * scrollToTop
      * */
     override fun refreshView() {
         GlideArms.with(this)

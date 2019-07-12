@@ -43,6 +43,18 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
 //    @Inject
 //    lateinit var context: Context
 
+    fun addCollect(pid: Int) {
+        mModel.addCollect(pid)
+                .compose(RxUtils.applyClearSchedulers(mRootView))
+                .subscribe(object : ErrorHandleSubscriber<BaseResponse<Boolean>>(mErrorHandler) {
+                    override fun onNext(t: BaseResponse<Boolean>) {
+                        if (!t.isSuccess) {
+                            return
+                        }
+                        mRootView.showCollect()
+                    }
+                })
+    }
 
     fun getPictures(id: Int) {
         mModel.getWallPapersBySubjectId(id)
@@ -80,13 +92,20 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                 })
     }
 
-    fun downloadPicture(pictureUrl: String) {
+    /**
+     * @param type 1、设置壁纸
+     * */
+    fun downloadPicture(pictureUrl: String, type: Int = 0) {
         FileDownloader.getImpl().create(pictureUrl)
                 .setPath(PicUtils.getInstance().getDownloadPicturePath(pictureUrl))
                 .setListener(object : FileDownloadSampleListener() {
                     override fun completed(task: BaseDownloadTask?) {
                         super.completed(task)
-                        mRootView.showMessage("图片已保存在 手机相册》看个够")
+                        if (type == 1) {
+                            task?.path?.let { mRootView.setWallpaper(it) }
+                        } else {
+                            mRootView.showMessage("图片已保存在 手机相册》看个够")
+                        }
                     }
 
                     override fun error(task: BaseDownloadTask?, e: Throwable?) {

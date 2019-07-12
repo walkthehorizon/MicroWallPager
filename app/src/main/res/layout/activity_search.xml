@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/default_toolbar_height"
         android:background="@color/white"
-        app:tl_left_tint="@color/colorNormalText"
         app:tl_left_icon="@drawable/ic_arrow_back_white_24dp">
 
         <EditText
@@ -24,7 +23,7 @@
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:focusable="true"
             android:background="@drawable/bg_home_search"
-            android:drawableStart="@drawable/ic_search_black_24dp"
+            android:drawableStart="@drawable/ic_search_white_24dp"
             android:drawablePadding="10dp"
             android:gravity="center_vertical|start"
             android:hint="@string/action_search"
@@ -33,8 +32,7 @@
             android:maxLines="1"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:textColor="@color/colorNormalText"
-            android:textColorHint="@color/colorNormalText"
+            android:textColor="@color/colorIcon"
             android:textSize="@dimen/sp_15"
             android:transitionName="@string/search_transitionName" />
 

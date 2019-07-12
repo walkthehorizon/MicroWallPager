@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.mob.sdk'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -36,7 +37,7 @@ android {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "String", "Sever", '"http://192.168.12.10/wallpaper/"'
+            buildConfigField "String", "Sever", '"http://192.168.12.179/wallpaper/"'
             buildConfigField "boolean", "Debug", "true"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -125,6 +126,7 @@ dependencies {
     implementation rootProject.ext.dependencies["vector-drawable"]
     implementation rootProject.ext.dependencies["multidex"]
     implementation rootProject.ext.dependencies["design"]
+    implementation rootProject.ext.dependencies["lifecycle-extensions"]
     //tools
     implementation rootProject.ext.dependencies["progressmanager"]
     implementation rootProject.ext.dependencies["retrofit-url-manager"]
@@ -170,6 +172,9 @@ dependencies {
 
     implementation rootProject.ext.dependencies["bigImageViewer"]
     implementation rootProject.ext.dependencies["circleindicator"]
+
+    implementation rootProject.ext.dependencies["firebase"]
+    implementation rootProject.ext.dependencies["adMob"]
 
     //test
     testImplementation rootProject.ext.dependencies["junit"]

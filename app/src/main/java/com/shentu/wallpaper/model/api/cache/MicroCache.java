@@ -4,6 +4,7 @@ package com.shentu.wallpaper.model.api.cache;
 import com.shentu.wallpaper.model.response.BannerPageResponse;
 import com.shentu.wallpaper.model.response.CategoryPageResponse;
 import com.shentu.wallpaper.model.response.SplashAdResponse;
+import com.shentu.wallpaper.model.response.SubjectDetailResponse;
 import com.shentu.wallpaper.model.response.SubjectPageResponse;
 import com.shentu.wallpaper.model.response.WallpaperPageResponse;
 
@@ -60,9 +61,15 @@ public interface MicroCache {
             DynamicKey page,
             EvictProvider evict);
 
-    @ProviderKey("subject-detail-one-week")
+    @ProviderKey("subject-wallpaper-one-week")
     @LifeCache(duration = 7, timeUnit = TimeUnit.DAYS)
     Observable<WallpaperPageResponse>
     getSubjectWallpapers(Observable<WallpaperPageResponse> observable,
                          DynamicKey subjectId);
+
+    @ProviderKey("subject-detail-one-week")
+    @LifeCache(duration = 7, timeUnit = TimeUnit.DAYS)
+    Observable<SubjectDetailResponse>
+    getSubjectDetail(Observable<SubjectDetailResponse> observable,
+                     DynamicKey subjectId);
 }

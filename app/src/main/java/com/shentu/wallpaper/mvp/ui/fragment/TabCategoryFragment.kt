@@ -8,9 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.BarUtils
+import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
-import com.jess.arms.mvp.BaseLazyLoadFragment
 import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
@@ -30,9 +31,10 @@ import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
 
 
-class TabCategoryFragment : BaseLazyLoadFragment<CategoryPresenter>(), CategoryContract.View {
+class TabCategoryFragment : BaseFragment<CategoryPresenter>(), CategoryContract.View {
 
     private lateinit var loadService: LoadService<Any>
+    private var isLoading = false
 
     companion object {
         fun newInstance(): TabCategoryFragment {
@@ -60,10 +62,6 @@ class TabCategoryFragment : BaseLazyLoadFragment<CategoryPresenter>(), CategoryC
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-
-    }
-
-    override fun lazyLoadData() {
         val lp = smartRefresh.layoutParams as FrameLayout.LayoutParams
         lp.topMargin = BarUtils.getStatusBarHeight()
         smartRefresh.layoutParams = lp
@@ -72,6 +70,18 @@ class TabCategoryFragment : BaseLazyLoadFragment<CategoryPresenter>(), CategoryC
         rvCategory.addItemDecoration(RvCategoryDecoration(12))
         rvCategory.setHasFixedSize(true)
         rvCategory.adapter = CategoryAdapter(arrayListOf())
+        rvCategory.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val manager: GridLayoutManager = (recyclerView.layoutManager) as GridLayoutManager
+                val into = manager.findLastCompletelyVisibleItemPosition()
+                val total = manager.itemCount
+                if (total - into < 30 && !isLoading) {
+                    isLoading = true
+                    mPresenter?.getCategories(false)
+                }
+            }
+        })
 
         smartRefresh.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
             override fun onLoadMore(refreshLayout: RefreshLayout) {
@@ -81,7 +91,6 @@ class TabCategoryFragment : BaseLazyLoadFragment<CategoryPresenter>(), CategoryC
             override fun onRefresh(refreshLayout: RefreshLayout) {
                 mPresenter?.getCategories(true)
             }
-
         })
         mPresenter?.getCategories(true)
     }
@@ -122,6 +131,7 @@ class TabCategoryFragment : BaseLazyLoadFragment<CategoryPresenter>(), CategoryC
         if (clear) {
             (rvCategory.adapter as CategoryAdapter).setNewData(results)
         } else {
+            isLoading = false
             results?.let { (rvCategory.adapter as CategoryAdapter).addData(it) }
         }
     }

@@ -75,10 +75,22 @@
         app:riv_title="我的收藏" />
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
-        android:id="@+id/itBrowser"
+        android:id="@+id/itMoney"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_below="@+id/itCollect"
+        app:riv_arrow_visible="true"
+        app:riv_divider_visible="true"
+        app:riv_icon="@drawable/ic_collections_black_24dp"
+        app:riv_title="我的看豆">
+
+    </com.shentu.wallpaper.mvp.ui.widget.RippleItemView>
+
+    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+        android:id="@+id/itBrowser"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/itMoney"
         android:visibility="gone"
         app:riv_arrow_visible="true"
         app:riv_icon="@drawable/ic_pets_pink_24dp"
@@ -88,7 +100,7 @@
         android:id="@+id/itUpdate"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@+id/itBrowser"
+        android:layout_below="@+id/itMoney"
         android:layout_marginTop="12dp"
         app:riv_icon="@drawable/ic_update_black_24dp"
         app:riv_title="检查更新" />

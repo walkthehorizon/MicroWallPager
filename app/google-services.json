@@ -1,0 +1,41 @@
+{
+  "project_info": {
+    "project_number": "283322162277",
+    "firebase_url": "https://microdream-8212a.firebaseio.com",
+    "project_id": "microdream-8212a",
+    "storage_bucket": "microdream-8212a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:283322162277:android:9eebebcffe93811d",
+        "android_client_info": {
+          "package_name": "com.shentu.wallpaper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "283322162277-l2ofr5t7jo6idt8fs16fuukdm1jtefro.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaZdAxX533drH4KKehLObu8zB2RbxjO4U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "283322162277-l2ofr5t7jo6idt8fs16fuukdm1jtefro.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-9991643602960691~8603727291"
+    }
+  ],
+  "configuration_version": "1"
+}

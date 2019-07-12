@@ -1,11 +1,16 @@
 package com.jess.arms.mvp;
 
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.jess.arms.base.BaseFragment;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * 懒加载Fragment
@@ -26,6 +31,12 @@ public abstract class BaseLazyLoadFragment<P extends IPresenter> extends BaseFra
         super.setUserVisibleHint(isVisibleToUser);
         this.isVisibleToUser = isVisibleToUser;
         tryLoadData();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Timber.e(this.toString() + "-onActivityCreated1111");
     }
 
     @Override

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/itSetPaper"
+        android:title="设为壁纸"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/itSubject"
+        android:title="打开主题" />
+</menu>

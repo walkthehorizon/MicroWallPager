@@ -10,7 +10,6 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.palette.graphics.Palette
 import com.blankj.utilcode.util.ConvertUtils
-import com.bumptech.glide.MemoryCategory
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -45,7 +44,6 @@ class RecommendAdapter(val context: Context, data: MutableList<Wallpaper>) : Bas
                     , 0, 0)
             PictureBrowserActivity.open(context, wallpapers, position, compat)
         }
-        GlideArms.get(context).setMemoryCategory(MemoryCategory.HIGH)
     }
 
     override fun convert(helper: BaseViewHolder, item: Wallpaper) {
@@ -59,13 +57,12 @@ class RecommendAdapter(val context: Context, data: MutableList<Wallpaper>) : Bas
             lp.height = ConvertUtils.dp2px(300.0f)
             ivPicture.layoutParams = lp
         }
-        GlideArms.with(helper.itemView.context)
+        GlideArms.with(mContext)
                 .load(item.url)
                 .listener(GlidePalette.with(item.url)
                         .use(MUTED_LIGHT)
                         .intoCallBack { palette ->
-                            (cardView)
-                                    .setCardBackgroundColor(Objects.requireNonNull<Palette>(palette)
+                            (cardView).setCardBackgroundColor(Objects.requireNonNull<Palette>(palette)
                                             .getLightVibrantColor(Color.WHITE))
                         })
                 .transform(MultiTransformation<Bitmap>(CenterCrop(), RoundedCorners(ConvertUtils.dp2px(5f))))

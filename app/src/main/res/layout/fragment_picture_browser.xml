@@ -28,36 +28,33 @@
             android:textSize="18sp"
             tools:text="1/8" />
 
-        <TextView
-            android:id="@+id/tvSetWallpaper"
+        <ImageView
+            android:id="@+id/ivMore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:text="设为壁纸"
-            android:textColor="@color/colorDivider"
-            android:textSize="18sp" />
+            android:src="@drawable/ic_more_horiz_white_24dp" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/tvSetCover"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:text="设为封面"
         android:textColor="@color/colorDivider"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="gone" />
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone">
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true">
 
         <ImageView
             android:id="@+id/ivCollect"
@@ -65,17 +62,36 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:src="@drawable/bg_wallpaper_collect" />
+            android:src="@drawable/bg_wallpaper_collect"
+            app:layout_constraintBottom_toTopOf="@+id/tvCollectNum"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvCollectNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/ivCollect"
+            app:layout_constraintStart_toStartOf="@id/ivCollect"
+            app:layout_constraintTop_toBottomOf="@+id/ivCollect"
+            tools:text="1700" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mbLoadOrigin"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="36dp"
             android:layout_centerInParent="true"
             android:text="加载原图"
             android:textColor="@color/colorDivider"
             app:backgroundTint="@color/transparent"
             app:cornerRadius="3dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:strokeColor="@color/colorDivider"
             app:strokeWidth="1dp" />
 
@@ -83,11 +99,24 @@
             android:id="@+id/ivDownload"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:padding="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/tvDownloadNum"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_file_download_black_24dp" />
-    </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvDownloadNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="133"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/ivDownload"
+            app:layout_constraintStart_toStartOf="@id/ivDownload"
+            app:layout_constraintTop_toBottomOf="@id/ivDownload" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

@@ -121,6 +121,25 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
         Timber.e("reselected: %s", item.title)
     }
 
+    private var lastTime: Long = 0
+
+    override fun onBackPressed() {
+        if (System.currentTimeMillis() - lastTime < 2000) {
+            if (viewPager.currentItem == 0 && (fragments[0] as TabHomeFragment).isScrolled()) {
+                (fragments[0] as TabHomeFragment).scrollToTop()
+            } else {
+                super.onBackPressed()
+            }
+        } else {
+            if (viewPager.currentItem == 0 && (fragments[0] as TabHomeFragment).isScrolled()) {
+                (fragments[0] as TabHomeFragment).scrollToTop()
+            } else {
+                ToastUtils.showShort("再点一次返回")
+                lastTime = System.currentTimeMillis()
+            }
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         NetBus.getInstance().unRegister(this)
