@@ -2,7 +2,7 @@ package com.shentu.wallpaper.mvp.presenter
 
 import android.app.Application
 import com.jess.arms.di.scope.ActivityScope
-import com.jess.arms.http.imageloader.ImageLoader
+
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.wallpaper.app.utils.RxUtils
@@ -24,8 +24,7 @@ constructor(model: SearchContract.Model, rootView: SearchContract.View) :
     lateinit var mErrorHandler: RxErrorHandler
     @Inject
     lateinit var mApplication: Application
-    @Inject
-    lateinit var mImageLoader: ImageLoader
+
     @Inject
     lateinit var mAppManager: AppManager
 

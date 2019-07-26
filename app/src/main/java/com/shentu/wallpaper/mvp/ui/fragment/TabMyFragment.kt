@@ -1,14 +1,12 @@
 package com.shentu.wallpaper.mvp.ui.fragment
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.afollestad.materialdialogs.MaterialDialog
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ToastUtils
 import com.google.android.gms.ads.rewarded.RewardItem
@@ -21,6 +19,7 @@ import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.app.utils.AdUtils
+import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.di.component.DaggerMyComponent
 import com.shentu.wallpaper.di.module.MyModule
 import com.shentu.wallpaper.mvp.contract.MyContract
@@ -33,7 +32,6 @@ import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_my.*
-import timber.log.Timber
 
 
 class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
@@ -81,14 +79,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
             startActivity(Intent(mContext, MyEditActivity::class.java))
         }
         itMoney.setOnClickListener {
-            MaterialDialog.Builder(mContext)
-                    .title("获取看豆")
-                    .content("观看广告可获取少量看豆，大量需求请通过官方渠道获取")
-                    .positiveText("观看广告")
-                    .negativeText("官方渠道")
-                    .onPositive { _, _ -> showAd() }
-                    .onNegative { _, _ -> clickFeedback() }
-                    .show()
+            HkUtils.instance.showChargeDialog(mContext)
         }
     }
 
@@ -122,11 +113,13 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
             GlideArms.with(this)
                     .load(HkUserManager.getInstance().user.avatar)
                     .into(circle_avatar)
+            itMoney.setEndValue(user.pea.toString())
         } else {
             tvMyName.text = "微梦用户"
             GlideArms.with(this)
                     .load(R.drawable.default_head)
                     .into(circle_avatar)
+            itMoney.setEndValue("")
         }
     }
 
@@ -155,12 +148,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
      * 直接通过qq反馈
      * */
     private fun clickFeedback() {
-        try {
-            startActivity(Intent(Intent.ACTION_VIEW,
-                    Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin=160585515")))
-        } catch (e: ClassNotFoundException) {
-            Timber.e(e)
-        }
+        HkUtils.contactKefu()
     }
 
     private fun clickCache() {

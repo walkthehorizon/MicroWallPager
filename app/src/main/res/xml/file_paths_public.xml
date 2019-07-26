@@ -6,4 +6,10 @@
     <external-path
         name="download"
         path="DCIM/看个够" />
+    <cache-path
+        name="apk1"
+        path="." />
+    <external-path
+        name="apk2"
+        path="." />
 </paths>

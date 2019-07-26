@@ -1,6 +1,5 @@
 package com.shentu.wallpaper.mvp.ui.fragment
 
-import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -68,11 +67,6 @@ class PictureFragment : BaseFragment<IPresenter>() {
             photoView.setImageLoaderCallback(getImageLoadCallback())
             photoView.showImage(Uri.parse(wallpaper.originUrl))
         }
-    }
-
-    @SuppressLint("MissingPermission")
-    fun saveImage() {
-        photoView.saveImageIntoGallery()
     }
 
     private fun getImageLoadCallback(): ImageLoader.Callback {

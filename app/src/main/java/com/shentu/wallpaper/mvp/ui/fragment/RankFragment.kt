@@ -17,20 +17,6 @@ import com.shentu.wallpaper.mvp.contract.RankContract
 import com.shentu.wallpaper.mvp.presenter.RankPresenter
 import kotlinx.android.synthetic.main.fragment_rank.*
 
-
-/**
- * 如果没presenter
- * 你可以这样写
- *
- * @FragmentScope(請注意命名空間) class NullObjectPresenterByFragment
- * @Inject constructor() : IPresenter {
- * override fun onStart() {
- * }
- *
- * override fun onDestroy() {
- * }
- * }
- */
 class RankFragment : BaseFragment<RankPresenter>(), RankContract.View {
     companion object {
         fun newInstance(): RankFragment {

@@ -2,7 +2,7 @@ package com.shentu.wallpaper.mvp.presenter
 
 import android.app.Application
 import com.jess.arms.di.scope.ActivityScope
-import com.jess.arms.http.imageloader.ImageLoader
+
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.wallpaper.app.HkUserManager
@@ -31,8 +31,7 @@ constructor(model: MyEditContract.Model, rootView: MyEditContract.View) :
     lateinit var mErrorHandler: RxErrorHandler
     @Inject
     lateinit var mApplication: Application
-    @Inject
-    lateinit var mImageLoader: ImageLoader
+
     @Inject
     lateinit var mAppManager: AppManager
 

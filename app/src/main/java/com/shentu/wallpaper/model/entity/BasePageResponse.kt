@@ -2,7 +2,7 @@ package com.shentu.wallpaper.model.entity
 
 import java.io.Serializable
 
-open class BasePageResponse<T> : Serializable {
+class BasePageResponse<T : Any> : Serializable {
     var count: Int = 0
     var next: String? = null
     var previous: String? = null

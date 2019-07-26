@@ -53,36 +53,47 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true">
 
-        <ImageView
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/ivCollect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:src="@drawable/bg_wallpaper_collect"
-            app:layout_constraintBottom_toTopOf="@+id/tvCollectNum"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_rawRes="@raw/anim_collect" />
+
+        <!--<ImageView-->
+        <!--android:id="@+id/ivCollect"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_marginStart="@dimen/activity_horizontal_margin"-->
+        <!--android:padding="6dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:srcCompat="@drawable/ic_collect" />-->
 
         <TextView
             android:id="@+id/tvCollectNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
             android:textColor="@color/white"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/ivCollect"
-            app:layout_constraintStart_toStartOf="@id/ivCollect"
-            app:layout_constraintTop_toBottomOf="@+id/ivCollect"
+            android:layout_marginStart="52dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="1700" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mbLoadOrigin"
             android:layout_width="wrap_content"
-            android:layout_height="36dp"
+            android:layout_height="40dp"
             android:layout_centerInParent="true"
             android:text="加载原图"
             android:textColor="@color/colorDivider"
@@ -97,26 +108,16 @@
 
         <ImageView
             android:id="@+id/ivDownload"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:padding="2dp"
-            app:layout_constraintBottom_toTopOf="@+id/tvDownloadNum"
+            android:padding="6dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_file_download_black_24dp" />
 
-        <TextView
-            android:id="@+id/tvDownloadNum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="133"
-            android:textSize="12sp"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/ivDownload"
-            app:layout_constraintStart_toStartOf="@id/ivDownload"
-            app:layout_constraintTop_toBottomOf="@id/ivDownload" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

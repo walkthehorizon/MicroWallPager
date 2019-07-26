@@ -23,7 +23,7 @@ interface TabHomeContract {
 
     interface Model : IModel {
 
-        fun getRecommends(clear: Boolean, isUser: Boolean): Observable<WallpaperPageResponse>
+        fun getRecommends(clear: Boolean): Observable<WallpaperPageResponse>
 
         fun getBanners(): Observable<BannerPageResponse>
     }

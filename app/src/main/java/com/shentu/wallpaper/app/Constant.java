@@ -12,4 +12,6 @@ public class Constant {
     public static int BANNER_COUNT = 5;
 
     public static String URGE_AD_DIALOG = "urge_ad_dialog";
+
+    public static String DEFAULT_DOWNLOAD_RESUME = "default_download_resume";
 }

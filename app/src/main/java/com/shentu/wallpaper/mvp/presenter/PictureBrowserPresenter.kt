@@ -5,7 +5,6 @@ import android.content.Context
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.di.scope.ActivityScope
-import com.jess.arms.http.imageloader.ImageLoader
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
 import com.liulishuo.filedownloader.BaseDownloadTask
@@ -36,12 +35,9 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
     lateinit var mErrorHandler: RxErrorHandler
     @Inject
     lateinit var mApplication: Application
-    @Inject
-    lateinit var mImageLoader: ImageLoader
+
     @Inject
     lateinit var mAppManager: AppManager
-//    @Inject
-//    lateinit var context: Context
 
     fun addCollect(pid: Int) {
         mModel.addCollect(pid)
@@ -51,7 +47,7 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                         if (!t.isSuccess) {
                             return
                         }
-                        mRootView.showCollect()
+                        mRootView.showCollectAnim()
                     }
                 })
     }
@@ -92,6 +88,19 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                 })
     }
 
+    fun buyPaper(wallpaper: Wallpaper, pea: Int) {
+        mModel.buyPaper(wallpaper.id, pea)
+                .compose(RxUtils.applyClearSchedulers(mRootView))
+                .subscribe(object : ErrorHandleSubscriber<BaseResponse<String>>(mErrorHandler) {
+                    override fun onNext(t: BaseResponse<String>) {
+                        if (!t.isSuccess) {
+                            return
+                        }
+                        downloadPicture(if (pea == 3) wallpaper.originUrl else wallpaper.url)
+                    }
+                })
+    }
+
     /**
      * @param type 1、设置壁纸
      * */
@@ -109,8 +118,17 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                     }
 
                     override fun error(task: BaseDownloadTask?, e: Throwable?) {
-                        super.error(task, e)
                         mRootView.showMessage("下载异常：" + e?.message)
+                    }
+
+                    override fun pending(task: BaseDownloadTask?, soFarBytes: Int, totalBytes: Int) {
+                        super.pending(task, soFarBytes, totalBytes)
+                    }
+
+                    override fun progress(task: BaseDownloadTask?, soFarBytes: Int, totalBytes: Int) {
+                        if (type == 1) {
+                            return
+                        }
                     }
                 })
                 .start()

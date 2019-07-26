@@ -8,6 +8,8 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
@@ -27,7 +29,6 @@ import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.internal.entity.CaptureStrategy
 import kotlinx.android.synthetic.main.activity_my_edit.*
 import java.io.File
-import java.util.*
 
 
 class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
@@ -68,9 +69,6 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
         rivSex.setOnClickListener {
             showSexDialog()
         }
-        loadingDialog = MaterialDialog.Builder(this)
-                .progress(true, 100)
-                .build()
     }
 
     /**
@@ -93,28 +91,25 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
     }
 
     private fun showNickNameDialog() {
-        MaterialDialog.Builder(this)
-                .title("昵称")
-                .input("新的昵称", HkUserManager.getInstance().user.nickname, false)
-                { _, input ->
-                    HkUserManager.getInstance().user.nickname = input.toString()
-                    mPresenter?.updateUser()
-                }
-                .inputRange(1, 6)
-                .show()
+        MaterialDialog(this).show {
+            title(text = "昵称")
+            input("新的昵称", prefill = HkUserManager.getInstance().user.nickname
+                    , maxLength = 6) { _, sequence ->
+                HkUserManager.getInstance().user.nickname = sequence.toString()
+                mPresenter?.updateUser()
+            }
+        }
     }
 
     private fun showSexDialog() {
-        MaterialDialog.Builder(this)
-                .title("性别")
-                .positiveText("确认")
-                .items(Arrays.asList("保密", "男", "女"))
-                .itemsCallbackSingleChoice(HkUserManager.getInstance().user.sex) { _, _, which, _ ->
-                    HkUserManager.getInstance().user.sex = which
-                    mPresenter?.updateUser()
-                    true
-                }
-                .show()
+        MaterialDialog(this).show {
+            title(text = "性别")
+            positiveButton(text = "确认")
+            listItemsSingleChoice(items = listOf("保密", "男", "女")) { _, index, _ ->
+                HkUserManager.getInstance().user.sex = index
+                mPresenter?.updateUser()
+            }
+        }
     }
 
     private fun openMatisse() {
@@ -168,13 +163,11 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
     }
 
     override fun showLoading() {
-        if (!loadingDialog.isShowing) {
-            loadingDialog.show()
-        }
+
     }
 
     override fun hideLoading() {
-        loadingDialog.dismiss()
+
     }
 
     override fun showMessage(message: String) {

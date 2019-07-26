@@ -1,11 +1,7 @@
 package com.shentu.wallpaper.app;
 
-import android.content.Context;
-import android.content.Intent;
-
 import com.blankj.utilcode.util.SPUtils;
 import com.shentu.wallpaper.model.entity.MicroUser;
-import com.shentu.wallpaper.mvp.ui.login.LoginActivity;
 
 
 public class HkUserManager {
@@ -18,6 +14,7 @@ public class HkUserManager {
     private String USER_DATE_JOINED = "user_date_joined";
     private String USER_LAST_LOGIN = "user_last_login";
     private String USER_SEX = "user_sex";
+    private String USER_PEA = "user_pea";
     public MicroUser user;
 
     private static final class SingletonHolder {
@@ -38,6 +35,7 @@ public class HkUserManager {
         user.date_joined = SPUtils.getInstance().getString(USER_DATE_JOINED, "");
         user.last_login = SPUtils.getInstance().getString(USER_LAST_LOGIN, "");
         user.sex = SPUtils.getInstance().getInt(USER_SEX, 0);
+        user.pea = SPUtils.getInstance().getInt(USER_PEA, 0);
     }
 
     public static HkUserManager getInstance() {
@@ -57,6 +55,7 @@ public class HkUserManager {
         SPUtils.getInstance().put(USER_DATE_JOINED, user.date_joined);
         SPUtils.getInstance().put(USER_LAST_LOGIN, user.last_login);
         SPUtils.getInstance().put(USER_SEX, user.sex);
+        SPUtils.getInstance().put(USER_PEA, user.pea);
     }
 
     /**
@@ -73,16 +72,11 @@ public class HkUserManager {
         SPUtils.getInstance().remove(USER_DATE_JOINED);
         SPUtils.getInstance().remove(USER_LAST_LOGIN);
         SPUtils.getInstance().remove(USER_SEX);
+        SPUtils.getInstance().remove(USER_PEA);
     }
 
     public boolean isLogin() {
         return user != null;
-    }
-
-    public void checkLogin(Context context) {
-        if (!isLogin()) {
-            context.startActivity(new Intent(context, LoginActivity.class));
-        }
     }
 
     public boolean isAdmin() {

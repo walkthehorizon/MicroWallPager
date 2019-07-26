@@ -6,6 +6,7 @@ import android.os.Bundle
 import cn.smssdk.EventHandler
 import cn.smssdk.SMSSDK
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.BarUtils
@@ -16,6 +17,7 @@ import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.RxLifecycleUtils
+import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.di.component.DaggerLoginComponent
 import com.shentu.wallpaper.di.module.LoginModule
@@ -123,12 +125,10 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
     }
 
     override fun showVerifyDialog() {
-        val dialog = MaterialDialog.Builder(this)
+        val dialog = MaterialDialog(this)
                 .cancelable(false)
-                .canceledOnTouchOutside(false)
-                .title("验证手机号")
-                .customView(com.shentu.wallpaper.R.layout.login_verify, false)
-                .build()
+                .title(text = "验证手机号")
+                .customView(R.layout.login_verify, scrollable = false)
         dialog.vc_input.setOnCompleteListener { content ->
             ToastUtils.showShort(content)
             dialog.dismiss()
@@ -137,11 +137,10 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
     }
 
     override fun showLoading() {
-        loadingDialog = MaterialDialog.Builder(this)
+        loadingDialog = MaterialDialog(this)
                 .title(com.shentu.wallpaper.R.string.title_activity_login)
-                .content(com.shentu.wallpaper.R.string.tip_please_wait)
-                .progress(true, 0)
-                .show()
+                .message(com.shentu.wallpaper.R.string.tip_please_wait)
+        loadingDialog?.show()
     }
 
     override fun hideLoading() {

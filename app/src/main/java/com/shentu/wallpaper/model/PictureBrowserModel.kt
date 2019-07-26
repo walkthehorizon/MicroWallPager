@@ -21,7 +21,6 @@ class PictureBrowserModel
 @Inject
 constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager), PictureBrowserContract.Model {
 
-
     @Inject
     lateinit var mGson: Gson;
     @Inject
@@ -41,12 +40,16 @@ constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager
                             .getWallPapersBySubjectId(t, DynamicKey(id), EvictDynamicKey(false))
                             .map { it.data }
                 }
-
     }
 
     override fun updateCategoryCover(cid: Int?, logo: String): Observable<BaseResponse<Boolean>> {
         return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
-                .updateCategoryCover(cid, logo);
+                .updateCategoryCover(cid, logo)
+    }
+
+    override fun buyPaper(pk: Int, pea: Int): Observable<BaseResponse<String>> {
+        return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
+                .buyPaper(pk, pea)
     }
 
     override fun onDestroy() {

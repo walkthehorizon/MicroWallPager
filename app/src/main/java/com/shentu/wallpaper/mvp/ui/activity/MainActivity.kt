@@ -57,7 +57,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
         viewPager!!.offscreenPageLimit = mainPagerAdapter!!.count
         viewPager!!.addOnPageChangeListener(this)
         viewPager!!.adapter = mainPagerAdapter
-        //        HkUtils.disableShiftMode(navigationView);
         navigationView!!.setOnNavigationItemSelectedListener(this)
         navigationView!!.setOnNavigationItemReselectedListener(this)
     }

@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
 import com.jess.arms.di.scope.FragmentScope
-import com.jess.arms.http.imageloader.ImageLoader
+
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.wallpaper.mvp.contract.CategoryPageContract
@@ -22,8 +22,7 @@ constructor(model: CategoryPageContract.Model, rootView: CategoryPageContract.Vi
     lateinit var mErrorHandler: RxErrorHandler
     @Inject
     lateinit var mApplication: Application
-    @Inject
-    lateinit var mImageLoader: ImageLoader
+
     @Inject
     lateinit var mAppManager: AppManager
 

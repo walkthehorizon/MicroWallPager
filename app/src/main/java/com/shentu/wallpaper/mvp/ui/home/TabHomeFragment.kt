@@ -15,10 +15,9 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
-import com.blankj.utilcode.util.NetworkUtils
 import com.google.android.material.appbar.AppBarLayout
+import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
-import com.jess.arms.mvp.BaseLazyLoadFragment
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
 import com.scwang.smartrefresh.layout.api.RefreshLayout
@@ -26,6 +25,7 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
+import com.shentu.wallpaper.app.event.PaperCollectEvent
 import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.di.component.DaggerHotPagerComponent
 import com.shentu.wallpaper.di.module.TabHomeModule
@@ -42,12 +42,14 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.max
 
 
-class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContract.View
+class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
         , OnRefreshListener, OnLoadMoreListener, ViewPager.OnPageChangeListener {
 
     private var popWindow: CustomPopWindow? = null
@@ -125,13 +127,6 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
             startActivity(Intent(mContext, SearchActivity::class.java), compact.toBundle())
         }
         rvHot.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                    GlideArms.with(mContext).resumeRequests()
-//                } else {
-//                    GlideArms.with(mContext).pauseRequests()
-//                }
-//            }
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val manager: StaggeredGridLayoutManager = (recyclerView.layoutManager) as StaggeredGridLayoutManager
@@ -143,16 +138,13 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
                 }
             }
         })
+        refreshLayout.autoRefresh()
+        mPresenter?.getBanners()
     }
 
     override fun onResume() {
         super.onResume()
         startCountDown()
-    }
-
-    override fun lazyLoadData() {
-        refreshLayout.autoRefreshAnimationOnly()
-        mPresenter?.getBanners()
     }
 
     fun scrollToTop() {
@@ -196,20 +188,14 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
-        if (NetworkUtils.isConnected()) {
-            mPresenter?.getRecommends(true, isUser = true)
-        } else {
-            mPresenter?.getRecommends(true)
-        }
+        mPresenter?.getRecommends(true)
     }
 
     override fun showBanners(banners: MutableList<Banner>) {
         if (banners.size > Constant.BANNER_COUNT) {
             historyBanner = banners.removeAt(banners.size - 1)
+            recommendAdapter
         }
-        //首次加载确保拿到banner数据后请求推荐内容
-        mPresenter?.getRecommends(true)
-
         this.banners = banners
         if (bannerAdapter == null) {
             bannerAdapter = HomeBannerAdapter(banners)
@@ -234,7 +220,6 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
 
     override fun showRecommends(wallpapers: MutableList<Wallpaper>, clear: Boolean) {
         if (clear) {
-            wallpapers.add(0, Wallpaper(historyBanner.imageUrl))
             recommendAdapter.setNewData(wallpapers)
         } else {
             isLoading = false
@@ -314,6 +299,13 @@ class TabHomeFragment : BaseLazyLoadFragment<TabHomePresenter>(), TabHomeContrac
 
     fun getIsLightMode(): Boolean {
         return isLightMode
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onWallpaperCollected(event: PaperCollectEvent) {
+        val paper = (recommendAdapter.data as MutableList<Wallpaper>)[event.index + 1]
+        paper.collectNum += 1
+        paper.collected = true
     }
 
     companion object {

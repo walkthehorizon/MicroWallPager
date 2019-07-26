@@ -24,8 +24,6 @@ import com.jess.arms.base.delegate.AppDelegate;
 import com.jess.arms.di.module.AppModule;
 import com.jess.arms.di.module.ClientModule;
 import com.jess.arms.di.module.GlobalConfigModule;
-import com.jess.arms.http.imageloader.BaseImageLoaderStrategy;
-import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.ConfigModule;
 import com.jess.arms.integration.IRepositoryManager;
@@ -83,15 +81,6 @@ public interface AppComponent {
      */
     RxErrorHandler rxErrorHandler();
 
-    /**
-     * 图片加载管理器, 用于加载图片的管理类, 使用策略者模式, 可在运行时动态替换任何图片加载框架
-     * arms-imageloader-glide 提供 Glide 的策略实现类, 也可以自行实现
-     * 需要在 {@link ConfigModule#applyOptions(Context, GlobalConfigModule.Builder)} 中
-     * 手动注册 {@link BaseImageLoaderStrategy}, {@link ImageLoader} 才能正常使用
-     *
-     * @return
-     */
-    ImageLoader imageLoader();
 
     /**
      * 网络请求框架

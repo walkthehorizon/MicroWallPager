@@ -4,7 +4,7 @@ import android.app.Application
 import com.blankj.utilcode.util.SPUtils
 import com.google.gson.Gson
 import com.jess.arms.di.scope.ActivityScope
-import com.jess.arms.http.imageloader.ImageLoader
+
 import com.jess.arms.integration.AppManager
 import com.jess.arms.integration.EventBusManager
 import com.jess.arms.mvp.BasePresenter
@@ -31,8 +31,7 @@ constructor(model: LoginContract.Model, rootView: LoginContract.View) :
     lateinit var mErrorHandler: RxErrorHandler
     @Inject
     lateinit var mApplication: Application
-    @Inject
-    lateinit var mImageLoader: ImageLoader
+
     @Inject
     lateinit var mAppManager: AppManager
 

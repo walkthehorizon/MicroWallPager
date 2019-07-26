@@ -19,7 +19,7 @@ interface PictureBrowserContract {
 
         fun setWallpaper(path: String)
 
-        fun showCollect()
+        fun showCollectAnim()
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
@@ -29,6 +29,8 @@ interface PictureBrowserContract {
         fun getWallPapersBySubjectId(id: Int): Observable<WallpaperPageResponse>
 
         fun updateCategoryCover(cid: Int?, logo: String): Observable<BaseResponse<Boolean>>
+
+        fun buyPaper(pk: Int, pea: Int): Observable<BaseResponse<String>>
     }
 
 }

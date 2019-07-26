@@ -11,7 +11,6 @@ import androidx.multidex.MultiDex;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.Utils;
 import com.github.piasy.biv.BigImageViewer;
-import com.google.android.gms.ads.MobileAds;
 import com.horizon.netbus.NetBus;
 import com.jess.arms.base.delegate.AppLifecycles;
 import com.jess.arms.di.component.AppComponent;
@@ -102,12 +101,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
         FileDownloader.setup(application);
         AppComponent appComponent = ArmsUtils.obtainAppComponentFromContext(application);
         BigImageViewer.initialize(PictureGlideImageLoader.with(application, appComponent.okHttpClient()));
-        MobileAds.initialize(application, "ca-app-pub-9991643602960691~8603727291");
-//        if (BuildConfig.DEBUG) {
-//            new AdRequest.Builder()
-//                    .addTestDevice("AC4336C49C9EE0CE77262074E8960078")  // An example device ID
-//                    .build().isTestDevice(application);
-//        }
     }
 
     @Override

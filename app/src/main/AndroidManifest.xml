@@ -29,7 +29,7 @@
             android:value="ca-app-pub-9991643602960691~8603727291" />
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.shentu.wallpaper.fileprovider"
+            android:authorities="com.shentu.wallpaper.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -44,6 +44,7 @@
         <activity android:name=".mvp.ui.activity.SearchActivity" />
         <activity
             android:name=".mvp.ui.login.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

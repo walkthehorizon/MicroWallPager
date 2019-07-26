@@ -1,5 +1,7 @@
 package com.shentu.wallpaper.mvp.ui.activity
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -11,17 +13,22 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityOptionsCompat
 import androidx.viewpager.widget.ViewPager
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.checkbox.checkBoxPrompt
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.FileUtils
+import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.HkUserManager
+import com.shentu.wallpaper.app.event.PaperCollectEvent
 import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.di.component.DaggerPictureBrowserComponent
@@ -31,7 +38,9 @@ import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import com.shentu.wallpaper.mvp.presenter.PictureBrowserPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.PictureBrowserVpAdapter
 import com.shentu.wallpaper.mvp.ui.fragment.PictureFragment
+import com.shentu.wallpaper.mvp.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.fragment_picture_browser.*
+import org.greenrobot.eventbus.EventBus
 
 @Route(path = "/picture/browser/activity")
 class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureBrowserContract.View
@@ -86,7 +95,22 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         ivMore.setOnClickListener {
             showMenu()
         }
+        ivCollect.addAnimatorListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator?) {
+                val wallpaper = wallpapers[viewPager.currentItem]
+                ivCollect.isSelected = !ivCollect.isSelected
+                wallpaper.collected = ivCollect.isSelected
+                wallpaper.collectNum = if (ivCollect.isSelected) wallpaper.collectNum + 1 else wallpaper.collectNum - 1
+                tvCollectNum.text = wallpaper.collectNum.toString()
+                EventBus.getDefault().post(PaperCollectEvent(viewPager.currentItem))
+            }
+        })
+
         ivCollect.setOnClickListener {
+            //不允许在此处取消
+            if (ivCollect.isSelected) {
+                return@setOnClickListener
+            }
             mPresenter?.addCollect(wallpapers[viewPager.currentItem].id)
         }
         initSetCover()
@@ -108,15 +132,33 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         popupMenu!!.show()
     }
 
-    override fun showCollect() {
-        ivCollect.isSelected = !ivCollect.isSelected
-        val wallpaper = wallpapers[viewPager.currentItem]
-        wallpaper.collectNum = if (ivCollect.isSelected) wallpaper.collectNum + 1 else wallpaper.collectNum - 1
-        tvCollectNum.text = wallpaper.collectNum.toString()
-    }
-
     override fun setWallpaper(path: String) {
         HkUtils.setWallpaper(this, path)
+    }
+
+    private fun showDownloadDialog() {
+        var pea = SPUtils.getInstance().getInt(Constant.DEFAULT_DOWNLOAD_RESUME, -1)
+        if (pea != -1) {
+            ivDownload.visibility = View.GONE
+            mPresenter?.buyPaper(wallpapers[viewPager.currentItem], pea)
+        } else {
+            pea = 1
+            MaterialDialog(this)
+                    .title(text = "下载")
+                    .listItemsSingleChoice(items = listOf("默认（1看豆）", "原图（3看豆）")
+                            , initialSelection = 0) { _, index, _ ->
+                        pea = if (index == 0) 1 else 3
+                        ivDownload.visibility = View.GONE
+                        mPresenter?.buyPaper(wallpapers[viewPager.currentItem], pea)
+                    }
+                    .positiveButton(text = "确认")
+                    .negativeButton(text = "取消")
+                    .checkBoxPrompt(text = "不再显示") {
+                        if (it) {
+                            SPUtils.getInstance().put(Constant.DEFAULT_DOWNLOAD_RESUME, pea)
+                        }
+                    }.show()
+        }
     }
 
     private fun initSetCover() {
@@ -125,17 +167,14 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         }
         tvSetCover.visibility = View.VISIBLE
         tvSetCover.setOnClickListener {
-            MaterialDialog.Builder(this)
-                    .title("分类")
-                    .content("确定设为当前分类封面？")
-                    .positiveText("确定")
-                    .negativeText("取消")
-                    .onPositive { _, _ ->
-                        mPresenter?.updateCategoryCover(categoryId
-                                , wallpapers[viewPager.currentItem].url)
-                    }
-                    .onNegative { dialog, _ -> dialog.dismiss() }
-                    .show()
+            MaterialDialog(this).show {
+                title(text = "分类")
+                message(text = "确定设为当前分类封面？")
+                positiveButton(text = "确定") {
+                    mPresenter?.updateCategoryCover(categoryId, wallpapers[viewPager.currentItem].url)
+                }
+                negativeButton(text = "取消")
+            }
         }
     }
 
@@ -143,6 +182,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         if (wallpapers.size == 0) {
             throw IllegalStateException("wallpapers size can not < 1")
         }
+        wallpapers.removeAt(0)//移除第一个banner
         viewPager.addOnPageChangeListener(this)
         viewPager.offscreenPageLimit = 4
         vpAdapter = PictureBrowserVpAdapter(supportFragmentManager, wallpapers, this)
@@ -154,9 +194,20 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             vpAdapter.getFragment(viewPager.currentItem).loadOriginPicture()
         }
         ivDownload.setOnClickListener {
-            ivDownload.visibility = View.GONE
-            mPresenter?.downloadPicture(wallpapers[viewPager.currentItem].url)
+            if (!HkUserManager.getInstance().isLogin) {
+                launchActivity(Intent(this@PictureBrowserActivity, LoginActivity::class.java))
+                return@setOnClickListener
+            }
+            if (HkUserManager.getInstance().user.pea < 1) {
+                HkUtils.instance.showChargeDialog(this@PictureBrowserActivity)
+                return@setOnClickListener
+            }
+            showDownloadDialog()
         }
+    }
+
+    override fun showCollectAnim() {
+        ivCollect.playAnimation()
     }
 
     override fun showMessage(message: String) {
@@ -197,6 +248,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         ivDownload.visibility = if (FileUtils.isFileExists(PicUtils.getInstance().getDownloadPicturePath(
                         wallpapers[position].originUrl))) View.GONE else View.VISIBLE
         tvCollectNum.text = wallpapers[position].collectNum.toString()
+        ivCollect.progress = if (wallpapers[position].collected) 1f else 0f
     }
 
     override fun showNavigation() {

@@ -15,4 +15,5 @@ class Wallpaper(var url: String = "") : Serializable {
      * 判断原图是否存在
      */
     var isOriginExist: Boolean = false
+    var collected = false
 }

@@ -44,18 +44,18 @@ public interface MicroCache {
     searchKey(Observable<SubjectPageResponse> ob,
               DynamicKeyGroup filter);
 
-    @ProviderKey("banner-two-hour")
-    @LifeCache(duration = 2, timeUnit = TimeUnit.HOURS)
+    @ProviderKey("banner-one-month")
+    @LifeCache(duration = 30, timeUnit = TimeUnit.DAYS)
     Observable<Reply<BannerPageResponse>>
-    getBanners(Observable<BannerPageResponse> ob);
+    getBanners(Observable<BannerPageResponse> ob, EvictProvider evict);
 
     @ProviderKey("categories-one-day")
     @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
     Observable<Reply<CategoryPageResponse>>
     getCategories(Observable<CategoryPageResponse> ob, EvictDynamicKey evict, DynamicKey offset);
 
-    @ProviderKey("recommends-one-week")
-    @LifeCache(duration = 7, timeUnit = TimeUnit.DAYS)
+    @ProviderKey("recommends-one-month")
+    @LifeCache(duration = 30, timeUnit = TimeUnit.DAYS)
     Observable<WallpaperPageResponse> getRecommends(
             Observable<WallpaperPageResponse> ob,
             DynamicKey page,

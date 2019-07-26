@@ -100,4 +100,8 @@ public interface MicroService {
     @PATCH("user/update/{pk}")
     Observable<MicroUser>
     updateUser(@Body MicroUser user, @Path("pk") int pk);
+
+    @POST("buy/paper/{pk}")
+    Observable<BaseResponse<String>>
+    buyPaper(@Path("pk") int pk, @Query("pea") int pea);
 }
