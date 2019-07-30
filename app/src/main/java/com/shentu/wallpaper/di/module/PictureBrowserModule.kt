@@ -1,8 +1,8 @@
 package com.shentu.wallpaper.di.module
 
 import com.jess.arms.di.scope.ActivityScope
-import com.shentu.wallpaper.model.PictureBrowserModel
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
+import com.shentu.wallpaper.mvp.model.PictureBrowserModel
 import dagger.Module
 import dagger.Provides
 

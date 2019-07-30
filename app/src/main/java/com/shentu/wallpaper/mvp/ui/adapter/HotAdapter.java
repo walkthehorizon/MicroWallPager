@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.cardview.widget.CardView;
+
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.load.MultiTransformation;
@@ -14,15 +16,12 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.github.florent37.glidepalette.GlidePalette;
 import com.shentu.wallpaper.R;
 import com.shentu.wallpaper.app.GlideArms;
-import com.shentu.wallpaper.app.utils.PicUtils;
 import com.shentu.wallpaper.app.utils.ShareUtils;
 import com.shentu.wallpaper.model.entity.Subject;
-import com.shentu.wallpaper.mvp.ui.activity.PictureBrowserActivity;
 
 import java.util.List;
 import java.util.Objects;
 
-import androidx.cardview.widget.CardView;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
@@ -34,11 +33,6 @@ public class HotAdapter extends BaseMultiItemQuickAdapter<Subject, BaseViewHolde
         addItemType(Subject.ITEM_VIEW_1, R.layout.app_item_hot_page_1);
         addItemType(Subject.ITEM_VIEW_2, R.layout.app_item_hot_page_2);
         addItemType(Subject.ITEM_VIEW_3, R.layout.app_item_hot_page_3);
-
-        this.setOnItemClickListener((adapter, view, position) -> {
-            Subject subject = (Subject) adapter.getData().get(position);
-            PictureBrowserActivity.Companion.open(mContext,subject.id);
-        });
 
         this.setOnItemChildClickListener((adapter, view, position) -> {
             if (view.getId() == R.id.tv_share) {
@@ -104,7 +98,7 @@ public class HotAdapter extends BaseMultiItemQuickAdapter<Subject, BaseViewHolde
             MultiTransformation multi = new MultiTransformation<>(new RoundedCornersTransformation(ConvertUtils.dp2px(5),
                     0, RoundedCornersTransformation.CornerType.ALL), new CenterCrop());
             GlideArms.with(helper.itemView.getContext())
-                    .load(PicUtils.getInstance().getMM131GlideUrl(item.cover))
+                    .load(item.cover)
                     .transforms(multi)
                     .into((ImageView) helper.getView(R.id.iv_cover));
         }

@@ -2,7 +2,7 @@ package com.shentu.wallpaper.mvp.contract
 
 import com.jess.arms.mvp.IModel
 import com.jess.arms.mvp.IView
-import com.shentu.wallpaper.model.entity.BaseResponse
+import com.shentu.wallpaper.model.response.BaseResponse
 import io.reactivex.Observable
 
 

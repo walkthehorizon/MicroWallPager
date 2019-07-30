@@ -2,18 +2,16 @@ package com.shentu.wallpaper.mvp.ui.fragment
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.core.view.ViewCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.GlideArms
-import com.shentu.wallpaper.app.utils.PicUtils
 import kotlinx.android.synthetic.main.item_rv_category_page.*
 import timber.log.Timber
 
@@ -56,7 +54,7 @@ class CategoryPageItemFragment : androidx.fragment.app.Fragment() {
             ViewCompat.setTransitionName(ivPic, "shareView")
             context?.let {
                 GlideArms.with(it)
-                        .load(PicUtils.getInstance().getMM131GlideUrl(picUrl))
+                        .load(picUrl)
                         .placeholder(R.drawable.default_cover_vertical)
                         .listener(object : RequestListener<Drawable> {
                             override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
@@ -77,7 +75,7 @@ class CategoryPageItemFragment : androidx.fragment.app.Fragment() {
         } else {
             context?.let {
                 GlideArms.with(it)
-                        .load(PicUtils.getInstance().getMM131GlideUrl(picUrl))
+                        .load(picUrl)
                         .placeholder(R.drawable.default_cover_vertical)
                         .fitCenter()
                         .into(ivPic)

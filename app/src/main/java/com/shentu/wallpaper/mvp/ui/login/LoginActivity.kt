@@ -44,10 +44,13 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
     private var loadingDialog: MaterialDialog? = null
 
     private var eh: EventHandler = object : EventHandler() {
-
         override fun afterEvent(event: Int, result: Int, data: Any) {
-
             if (result == SMSSDK.RESULT_COMPLETE) {
+                if (data == true) {
+                    mPresenter?.loginAccount(etPhone.text.toString())
+                    ToastUtils.showShort("已通过智能验证，直接登录")
+                    return
+                }
                 //回调完成
                 when (event) {
                     SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE -> {
@@ -74,7 +77,7 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {
-        return com.shentu.wallpaper.R.layout.fragment_login
+        return R.layout.fragment_login
     }
 
     override fun initData(savedInstanceState: Bundle?) {
@@ -87,12 +90,12 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
                 showMessage("手机号错误！")
                 return@setOnClickListener
             }
-            mPresenter?.loginAccount(etPhone.text.toString())
-//            if (etCode.text.length != 4) {
-//                showMessage("无效的验证码！")
-//                return@setOnClickListener
-//            }
-//            SMSSDK.submitVerificationCode("86",etPhone.text.toString(),etCode.text.toString())
+//            mPresenter?.loginAccount(etPhone.text.toString())
+            if (etCode.text.length != 4) {
+                showMessage("无效的验证码！")
+                return@setOnClickListener
+            }
+            SMSSDK.submitVerificationCode("86", etPhone.text.toString(), etCode.text.toString())
         }
         tvSee.setOnClickListener {
             killMyself()
@@ -137,10 +140,11 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
     }
 
     override fun showLoading() {
-        loadingDialog = MaterialDialog(this)
-                .title(com.shentu.wallpaper.R.string.title_activity_login)
-                .message(com.shentu.wallpaper.R.string.tip_please_wait)
-        loadingDialog?.show()
+        loadingDialog = MaterialDialog(this).show {
+            title(R.string.title_activity_login)
+            message(R.string.tip_please_wait)
+            customView(R.layout.dialog_loading)
+        }
     }
 
     override fun hideLoading() {
@@ -153,6 +157,11 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
 
     override fun launchActivity(intent: Intent) {
         ArmsUtils.startActivity(intent)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        SMSSDK.unregisterEventHandler(eh)
     }
 
     override fun killMyself() {

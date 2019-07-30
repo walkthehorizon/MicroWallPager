@@ -18,6 +18,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.KeyboardUtils
 import com.blankj.utilcode.util.SPUtils
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.gson.reflect.TypeToken
@@ -44,7 +45,6 @@ import kotlinx.android.synthetic.main.activity_search.*
 @Route(path = "/activity/search")
 class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, TextWatcher {
 
-
     private var curKey = ""
     private val hotAdapter: HotAdapter = HotAdapter(ArrayList())
     private lateinit var loadService: LoadService<Any>
@@ -56,8 +56,6 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, Tex
                 .searchModule(searchModule(this))
                 .build()
                 .inject(this)
-//        BarUtils.setStatusBarLightMode(this, true)
-//        window.statusBarColor = Color.WHITE
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {
@@ -95,6 +93,10 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, Tex
         etSearch.addTextChangedListener(this)
         rvData.layoutManager = LinearLayoutManager(this)
         rvData.addItemDecoration(HotPageRvDecoration(12))
+        hotAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, _, position ->
+            val subject = adapter.data[position] as Subject
+            PictureBrowserActivity.open(subjectId = subject.id)
+        }
         rvData.adapter = hotAdapter
     }
 

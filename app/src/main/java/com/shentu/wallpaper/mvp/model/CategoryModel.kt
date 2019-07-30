@@ -1,4 +1,4 @@
-package com.shentu.wallpaper.model
+package com.shentu.wallpaper.mvp.model
 
 import android.app.Application
 import com.google.gson.Gson

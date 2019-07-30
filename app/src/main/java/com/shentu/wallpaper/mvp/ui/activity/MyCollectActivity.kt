@@ -3,10 +3,14 @@ package com.shentu.wallpaper.mvp.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.transition.Slide
+import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -22,6 +26,7 @@ import com.shentu.wallpaper.app.page.EmptyCallback
 import com.shentu.wallpaper.app.page.ErrorCallback
 import com.shentu.wallpaper.di.component.DaggerMyCollectComponent
 import com.shentu.wallpaper.di.module.MyCollectModule
+import com.shentu.wallpaper.model.body.DelCollectBody
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.contract.MyCollectContract
 import com.shentu.wallpaper.mvp.presenter.MyCollectPresenter
@@ -30,7 +35,25 @@ import com.shentu.wallpaper.mvp.ui.adapter.decoration.CollectListDecoration
 import kotlinx.android.synthetic.main.activity_my_collect.*
 
 @Route(path = "/activity/my/collect/")
-class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.View {
+class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.View,
+        PictureBrowserActivity.Callback {
+
+    private lateinit var loadingDialog: MaterialDialog
+
+    override fun showDelDialog() {
+        MaterialDialog(this).show {
+            title(text = "删除")
+            message(text = "确定删除所选收藏么")
+            positiveButton(text = "确定") {
+                val delList = mutableListOf<Int>()
+                for (paper in adapter.data) {
+                    if (paper.checked) delList.add(paper.id)
+                }
+                mPresenter?.delCollects(DelCollectBody(delList))
+            }
+            negativeButton(text = "取消")
+        }
+    }
 
     private var wallpapers: List<Wallpaper> = ArrayList()
     private lateinit var adapter: CollectListAdapter
@@ -45,11 +68,9 @@ class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.
                 .inject(this)
     }
 
-
     override fun initView(savedInstanceState: Bundle?): Int {
         return R.layout.activity_my_collect
     }
-
 
     override fun initData(savedInstanceState: Bundle?) {
         window.exitTransition = Slide(GravityCompat.START)
@@ -70,11 +91,44 @@ class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.
         rvCollect.layoutManager = GridLayoutManager(this, 3)
         rvCollect.addItemDecoration(CollectListDecoration(ConvertUtils.dp2px(4.0f)))
         adapter = CollectListAdapter(wallpapers, ConvertUtils.dp2px(16f))
+        (rvCollect.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
         rvCollect.adapter = adapter
-        adapter.setOnItemClickListener { _, view, position ->
+        adapter.setOnItemClickListener { a, view, position ->
+            val paper = a.data[position] as Wallpaper
+            if ((a as CollectListAdapter).getMode()) {
+                paper.checked = !paper.checked
+                a.notifyItemChanged(position)
+                //检查删除按钮状态
+                var enabled = false
+                a.data.forEach {
+                    if (it.checked) {
+                        enabled = true
+                        return@forEach
+                    }
+                }
+                tvDelete.isEnabled = enabled
+                return@setOnItemClickListener
+            }
             ViewCompat.setTransitionName(view, resources.getString(R.string.picture_transitionName))
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
-            PictureBrowserActivity.open(this, this.wallpapers, position, compat)
+            PictureBrowserActivity.open(position, this, compat)
+        }
+        tvDelete.setOnClickListener {
+            showDelDialog()
+        }
+        tvSelect.setOnClickListener {
+            if (tvSelect.text == "全选") {
+                tvSelect.text = "取消全选"
+            } else {
+                tvSelect.text = "全选"
+            }
+            for (paper in adapter.data) {
+                paper.checked = tvSelect.text != "全选"
+            }
+            adapter.notifyModeChanged(true)
+        }
+        ivMore.setOnClickListener {
+            openDelMode()
         }
         mPresenter?.getMyCollects(true)
     }
@@ -88,13 +142,15 @@ class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.
         }
     }
 
-
-    override fun showLoading() {
-
+    override fun showProgress() {
+        loadingDialog = MaterialDialog(this).show {
+            customView(R.layout.dialog_loading)
+            maxWidth(literal = ConvertUtils.dp2px(120f))
+        }
     }
 
-    override fun hideLoading() {
-
+    override fun hideProgress() {
+        loadingDialog.dismiss()
     }
 
     override fun hideRefresh(clear: Boolean) {
@@ -127,5 +183,41 @@ class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.
 
     override fun killMyself() {
         finish()
+    }
+
+    override fun onBackPressed() {
+        if (adapter.getMode()) {
+            closeDelMode()
+            return
+        }
+        super.onBackPressed()
+    }
+
+    override fun getWallpaperList(): MutableList<Wallpaper> {
+        return adapter.data
+    }
+
+    override fun openDelMode() {
+        tvDelete.visibility = View.VISIBLE
+        tvSelect.visibility = View.VISIBLE
+        ivMore.visibility = View.GONE
+        adapter.notifyModeChanged(true)
+    }
+
+    override fun closeDelMode(removeData: Boolean) {
+        if (removeData) {
+            val it: MutableIterator<Wallpaper> = (adapter.data as MutableList).iterator()
+            while (it.hasNext()) {
+                if (it.next().checked) {
+                    it.remove()
+                }
+            }
+        }
+        tvSelect.visibility = View.GONE
+        tvSelect.text = "全选"
+        tvDelete.visibility = View.GONE
+        tvDelete.isEnabled = false
+        ivMore.visibility = View.VISIBLE
+        adapter.notifyModeChanged(false)
     }
 }

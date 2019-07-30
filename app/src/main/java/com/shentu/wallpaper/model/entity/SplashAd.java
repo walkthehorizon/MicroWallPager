@@ -1,5 +1,7 @@
 package com.shentu.wallpaper.model.entity;
 
+import com.shentu.wallpaper.model.response.BaseResponse;
+
 public class SplashAd extends BaseResponse {
     /**
      * aid : 1

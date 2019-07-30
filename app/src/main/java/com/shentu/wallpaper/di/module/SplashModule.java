@@ -1,9 +1,8 @@
 package com.shentu.wallpaper.di.module;
 
 import com.jess.arms.di.scope.FragmentScope;
-import com.shentu.wallpaper.model.SplashModel;
 import com.shentu.wallpaper.mvp.contract.SplashContract;
-
+import com.shentu.wallpaper.mvp.model.SplashModel;
 
 import dagger.Module;
 import dagger.Provides;

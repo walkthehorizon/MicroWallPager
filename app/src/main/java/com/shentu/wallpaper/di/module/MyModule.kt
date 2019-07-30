@@ -1,12 +1,10 @@
 package com.shentu.wallpaper.di.module
 
 import com.jess.arms.di.scope.FragmentScope
-
+import com.shentu.wallpaper.mvp.contract.MyContract
+import com.shentu.wallpaper.mvp.model.MyModel
 import dagger.Module
 import dagger.Provides
-
-import com.shentu.wallpaper.mvp.contract.MyContract
-import com.shentu.wallpaper.model.MyModel
 
 
 @Module

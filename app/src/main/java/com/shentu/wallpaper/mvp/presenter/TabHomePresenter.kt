@@ -5,8 +5,8 @@ import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.wallpaper.app.utils.RxUtils
-import com.shentu.wallpaper.model.entity.BaseResponse
 import com.shentu.wallpaper.model.response.BannerPageResponse
+import com.shentu.wallpaper.model.response.BaseResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.TabHomeContract
 import io.reactivex.Observable
@@ -30,6 +30,7 @@ constructor(model: TabHomeContract.Model, rootView: TabHomeContract.View) : Base
             Observable.concat(mModel.getBanners(), mModel.getRecommends(clear))
         else
             mModel.getRecommends(clear)
+
         observable.compose(RxUtils.applySchedulers(mRootView))
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<*>>(mErrorHandler) {
                     override fun onNext(t: BaseResponse<*>) {

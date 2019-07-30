@@ -1,8 +1,8 @@
 package com.shentu.wallpaper.di.module
 
 import com.jess.arms.di.scope.ActivityScope
-import com.shentu.wallpaper.model.LoginModel
 import com.shentu.wallpaper.mvp.contract.LoginContract
+import com.shentu.wallpaper.mvp.model.LoginModel
 import dagger.Module
 import dagger.Provides
 

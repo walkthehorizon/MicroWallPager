@@ -81,7 +81,7 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                     , view.width / 2, view.height / 2
                     , 0, 0)
-            PictureBrowserActivity.open(this@SubjectDetailActivity, wallpapers, position, compat)
+            PictureBrowserActivity.open(position, compat = compat)
         }
         rvSubject.layoutManager = GridLayoutManager(this, 2)
         rvSubject.setHasFixedSize(true)

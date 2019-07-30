@@ -1,12 +1,10 @@
 package com.shentu.wallpaper.di.module
 
 import com.jess.arms.di.scope.FragmentScope
-
+import com.shentu.wallpaper.mvp.contract.LoginVerifyContract
+import com.shentu.wallpaper.mvp.model.LoginVerifyModel
 import dagger.Module
 import dagger.Provides
-
-import com.shentu.wallpaper.mvp.contract.LoginVerifyContract
-import com.shentu.wallpaper.model.LoginVerifyModel
 
 
 @Module

@@ -16,4 +16,7 @@ class Wallpaper(var url: String = "") : Serializable {
      */
     var isOriginExist: Boolean = false
     var collected = false
+
+    //delete
+    var checked = false
 }

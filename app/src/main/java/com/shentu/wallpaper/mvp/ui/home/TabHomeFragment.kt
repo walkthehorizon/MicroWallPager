@@ -15,9 +15,11 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.material.appbar.AppBarLayout
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
+import com.jess.arms.integration.AppManager
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
 import com.scwang.smartrefresh.layout.api.RefreshLayout
@@ -25,7 +27,6 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
-import com.shentu.wallpaper.app.event.PaperCollectEvent
 import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.di.component.DaggerHotPagerComponent
 import com.shentu.wallpaper.di.module.TabHomeModule
@@ -33,6 +34,8 @@ import com.shentu.wallpaper.model.entity.Banner
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.contract.TabHomeContract
 import com.shentu.wallpaper.mvp.presenter.TabHomePresenter
+import com.shentu.wallpaper.mvp.ui.activity.BannerListActivity
+import com.shentu.wallpaper.mvp.ui.activity.PictureBrowserActivity
 import com.shentu.wallpaper.mvp.ui.activity.SearchActivity
 import com.shentu.wallpaper.mvp.ui.adapter.HomeBannerAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.RecommendAdapter
@@ -42,15 +45,14 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.max
 
 
 class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
-        , OnRefreshListener, OnLoadMoreListener, ViewPager.OnPageChangeListener {
+        , OnRefreshListener, OnLoadMoreListener, ViewPager.OnPageChangeListener, PictureBrowserActivity.Callback {
+
 
     private var popWindow: CustomPopWindow? = null
     private var subType = -1//主题分类
@@ -86,7 +88,17 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
         typeSparse!!.append(R.id.mTvCos, 2)
         typeSparse!!.append(R.id.mTvGirl, 3)
 
-        recommendAdapter = RecommendAdapter(mContext, ArrayList())
+        recommendAdapter = RecommendAdapter(mContext, ArrayList(), 12f)
+        recommendAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, view, position ->
+            if (position == 0) {//主题列表
+                AppManager.getAppManager().startActivity(Intent(context, BannerListActivity::class.java))
+                return@OnItemClickListener
+            }
+            val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
+                    , view.width / 2, view.height / 2
+                    , 0, 0)
+            PictureBrowserActivity.open(position, this, compat)
+        }
         rvHot.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         rvHot.addItemDecoration(RandomRecommendDecoration(ConvertUtils.dp2px(12.0f)))
         rvHot.adapter = recommendAdapter
@@ -169,6 +181,10 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
             refreshLayout.finishLoadMore()
     }
 
+    override fun getWallpaperList(): MutableList<Wallpaper> {
+        return recommendAdapter.data
+    }
+
     override fun showMessage(message: String) {
         checkNotNull(message)
         ArmsUtils.snackbarText(message)
@@ -194,7 +210,6 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
     override fun showBanners(banners: MutableList<Banner>) {
         if (banners.size > Constant.BANNER_COUNT) {
             historyBanner = banners.removeAt(banners.size - 1)
-            recommendAdapter
         }
         this.banners = banners
         if (bannerAdapter == null) {
@@ -220,6 +235,7 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
 
     override fun showRecommends(wallpapers: MutableList<Wallpaper>, clear: Boolean) {
         if (clear) {
+            wallpapers.add(0, Wallpaper(historyBanner.imageUrl))
             recommendAdapter.setNewData(wallpapers)
         } else {
             isLoading = false
@@ -299,13 +315,6 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
 
     fun getIsLightMode(): Boolean {
         return isLightMode
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onWallpaperCollected(event: PaperCollectEvent) {
-        val paper = (recommendAdapter.data as MutableList<Wallpaper>)[event.index + 1]
-        paper.collectNum += 1
-        paper.collected = true
     }
 
     companion object {

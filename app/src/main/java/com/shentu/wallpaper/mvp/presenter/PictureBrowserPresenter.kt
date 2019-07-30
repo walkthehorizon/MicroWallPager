@@ -13,8 +13,8 @@ import com.liulishuo.filedownloader.FileDownloader
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.app.utils.RxUtils
-import com.shentu.wallpaper.model.entity.BaseResponse
 import com.shentu.wallpaper.model.entity.Wallpaper
+import com.shentu.wallpaper.model.response.BaseResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import io.reactivex.Observable
@@ -39,7 +39,7 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
     @Inject
     lateinit var mAppManager: AppManager
 
-    fun addCollect(pid: Int) {
+    fun addCollect(pid: Int, position: Int) {
         mModel.addCollect(pid)
                 .compose(RxUtils.applyClearSchedulers(mRootView))
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<Boolean>>(mErrorHandler) {
@@ -47,7 +47,7 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                         if (!t.isSuccess) {
                             return
                         }
-                        mRootView.showCollectAnim()
+                        mRootView.showCollectAnim(position)
                     }
                 })
     }

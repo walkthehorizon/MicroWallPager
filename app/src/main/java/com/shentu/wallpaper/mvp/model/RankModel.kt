@@ -1,20 +1,18 @@
-package com.shentu.wallpaper.model
+package com.shentu.wallpaper.mvp.model
 
 import android.app.Application
 import com.google.gson.Gson
+import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.integration.IRepositoryManager
 import com.jess.arms.mvp.BaseModel
-
-import com.jess.arms.di.scope.FragmentScope
+import com.shentu.wallpaper.mvp.contract.RankContract
 import javax.inject.Inject
-
-import com.shentu.wallpaper.mvp.contract.MyContract
 
 
 @FragmentScope
-class MyModel
+class RankModel
 @Inject
-constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager), MyContract.Model {
+constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager), RankContract.Model {
     @Inject
     lateinit var mGson: Gson;
     @Inject

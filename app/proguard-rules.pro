@@ -42,7 +42,7 @@
  #实体类不参与混淆
 -keep class com.jess.arms.widget.** { *; } #自定义控件不参与混淆
 -keep class com.shentu.wallpaper.mvp.ui.widget.** { *; }
--keep class com.shentu.wallpaper.model.entity.** { *; }#自定义实体，理论上全都实现Serializable
+-keep class com.shentu.wallpaper.model.** { *; }#自定义实体，理论上全都实现Serializable
 -keep class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator *;
 }
@@ -278,3 +278,13 @@
 
 ################matisse########################
 -dontwarn com.squareup.picasso.**
+
+###################Arouter########################
+-keep public class com.alibaba.android.arouter.routes.**{*;}
+-keep public class com.alibaba.android.arouter.facade.**{*;}
+-keep class * implements com.alibaba.android.arouter.facade.template.ISyringe{*;}
+# 如果使用了 byType 的方式获取 Service，需添加下面规则，保护接口
+-keep interface * implements com.alibaba.android.arouter.facade.template.IProvider
+
+# 如果使用了 单类注入，即不定义接口实现 IProvider，需添加下面规则，保护实现
+# -keep class * implements com.alibaba.android.arouter.facade.template.IProvider

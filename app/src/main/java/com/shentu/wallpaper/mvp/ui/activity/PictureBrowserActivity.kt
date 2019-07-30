@@ -1,9 +1,7 @@
 package com.shentu.wallpaper.mvp.ui.activity
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.transition.Fade
@@ -11,6 +9,7 @@ import android.view.Gravity
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityOptionsCompat
+import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.checkbox.checkBoxPrompt
@@ -28,7 +27,6 @@ import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.HkUserManager
-import com.shentu.wallpaper.app.event.PaperCollectEvent
 import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.di.component.DaggerPictureBrowserComponent
@@ -38,9 +36,10 @@ import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import com.shentu.wallpaper.mvp.presenter.PictureBrowserPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.PictureBrowserVpAdapter
 import com.shentu.wallpaper.mvp.ui.fragment.PictureFragment
+import com.shentu.wallpaper.mvp.ui.home.TabHomeFragment
 import com.shentu.wallpaper.mvp.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.fragment_picture_browser.*
-import org.greenrobot.eventbus.EventBus
+import timber.log.Timber
 
 @Route(path = "/picture/browser/activity")
 class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureBrowserContract.View
@@ -53,9 +52,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     @Autowired
     @JvmField
     var type: Int = -1
-    @Autowired
-    @JvmField
-    var wallpapers: ArrayList<Wallpaper> = ArrayList()
+
     @Autowired
     @JvmField
     var current: Int = 0
@@ -64,6 +61,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     var categoryId: Int = -1
     private var popupMenu: PopupMenu? = null
 
+    private var wallpapers: MutableList<Wallpaper> = arrayListOf()
     private lateinit var vpAdapter: PictureBrowserVpAdapter
 
     override fun setupActivityComponent(appComponent: AppComponent) {
@@ -83,35 +81,30 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
     override fun initData(savedInstanceState: Bundle?) {
         ARouter.getInstance().inject(this)
-        if (type == -1) {
-            throw IllegalStateException("picture browser type can not null")
-        }
-        if (type == 1) {
-            initViewPager()
-        }
-        if (type == 2) {
-            mPresenter?.getPictures(subjectId)
+        when {
+            callback != null -> {
+                if (callback is TabHomeFragment) {
+                    current -= 1
+                    wallpapers.addAll(callback!!.getWallpaperList().subList(1,
+                            callback!!.getWallpaperList().size - 1))
+                } else {
+                    wallpapers.addAll(callback!!.getWallpaperList())
+                }
+                initViewPager()
+            }
+            subjectId != -1 -> mPresenter?.getPictures(subjectId)
+            else -> throw IllegalStateException("数据获取异常！")
         }
         ivMore.setOnClickListener {
             showMenu()
         }
-        ivCollect.addAnimatorListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator?) {
-                val wallpaper = wallpapers[viewPager.currentItem]
-                ivCollect.isSelected = !ivCollect.isSelected
-                wallpaper.collected = ivCollect.isSelected
-                wallpaper.collectNum = if (ivCollect.isSelected) wallpaper.collectNum + 1 else wallpaper.collectNum - 1
-                tvCollectNum.text = wallpaper.collectNum.toString()
-                EventBus.getDefault().post(PaperCollectEvent(viewPager.currentItem))
-            }
-        })
 
         ivCollect.setOnClickListener {
-            //不允许在此处取消
-            if (ivCollect.isSelected) {
+            if (!HkUserManager.getInstance().isLogin) {
+                launchActivity(Intent(this, LoginActivity::class.java))
                 return@setOnClickListener
             }
-            mPresenter?.addCollect(wallpapers[viewPager.currentItem].id)
+            mPresenter?.addCollect(wallpapers[viewPager.currentItem].id, viewPager.currentItem)
         }
         initSetCover()
     }
@@ -179,14 +172,14 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     }
 
     private fun initViewPager() {
-        if (wallpapers.size == 0) {
+        if (wallpapers.isEmpty()) {
             throw IllegalStateException("wallpapers size can not < 1")
         }
-        wallpapers.removeAt(0)//移除第一个banner
         viewPager.addOnPageChangeListener(this)
         viewPager.offscreenPageLimit = 4
         vpAdapter = PictureBrowserVpAdapter(supportFragmentManager, wallpapers, this)
         viewPager.adapter = vpAdapter
+        Timber.e("currentItem:$current")
         viewPager.currentItem = current
         onPageSelected(current)
         mbLoadOrigin.setOnClickListener {
@@ -206,8 +199,15 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         }
     }
 
-    override fun showCollectAnim() {
-        ivCollect.playAnimation()
+    override fun showCollectAnim(position: Int) {
+        val wallpaper = wallpapers[position]
+        wallpaper.collected = true
+        wallpaper.collectNum = wallpaper.collectNum + 1
+        if (position == viewPager.currentItem) {
+            tvCollectNum.text = wallpaper.collectNum.toString()
+            ivCollect.isClickable = false
+            ivCollect.playAnimation()
+        }
     }
 
     override fun showMessage(message: String) {
@@ -243,11 +243,15 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
     @SuppressLint("SetTextI18n", "CheckResult")
     override fun onPageSelected(position: Int) {
+        if (ivCollect.isAnimating) {
+            ivCollect.cancelAnimation()
+        }
         tvOrder.text = "${position + 1}/${vpAdapter.count}"
         mbLoadOrigin.visibility = if (wallpapers[position].isOriginExist) View.GONE else View.VISIBLE
         ivDownload.visibility = if (FileUtils.isFileExists(PicUtils.getInstance().getDownloadPicturePath(
                         wallpapers[position].originUrl))) View.GONE else View.VISIBLE
         tvCollectNum.text = wallpapers[position].collectNum.toString()
+        ivCollect.isClickable = !wallpapers[position].collected
         ivCollect.progress = if (wallpapers[position].collected) 1f else 0f
     }
 
@@ -276,34 +280,28 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        callback = null
+    }
+
     companion object {
-        fun open(context: Context, subjectId: Int) {
+        private var callback: Callback? = null
+        fun open(current: Int = 0, callback: Callback? = null, compat: ActivityOptionsCompat? = null,
+                 categoryId: Int = -1, subjectId: Int = -1) {
+            this.callback = callback
             ARouter.getInstance()
                     .build("/picture/browser/activity")
-                    .withInt("type", 2)
-                    .withInt("subjectId", subjectId)
-                    .navigation(context)
-        }
-
-        fun open(context: Context, wallpapers: List<Wallpaper>, current: Int, compat: ActivityOptionsCompat? = null) {
-            ARouter.getInstance()
-                    .build("/picture/browser/activity")
-                    .withInt("type", 1)
-                    .withSerializable("wallpapers", wallpapers as ArrayList)
-                    .withInt("current", current)
-                    .withOptionsCompat(compat)
-                    .navigation(context)
-        }
-
-        fun open(context: Context, categoryId: Int, wallpapers: List<Wallpaper>, current: Int, compat: ActivityOptionsCompat? = null) {
-            ARouter.getInstance()
-                    .build("/picture/browser/activity")
-                    .withInt("type", 1)
-                    .withSerializable("wallpapers", wallpapers as ArrayList)
                     .withInt("categoryId", categoryId)
                     .withInt("current", current)
+                    .withInt("subjectId", subjectId)
                     .withOptionsCompat(compat)
-                    .navigation(context)
+                    .navigation(if (callback is Activity) callback else (callback as Fragment).context)
         }
+    }
+
+
+    interface Callback {
+        fun getWallpaperList(): List<Wallpaper>
     }
 }

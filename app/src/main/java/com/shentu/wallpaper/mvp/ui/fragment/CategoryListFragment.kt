@@ -92,7 +92,7 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDeta
                         val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                                 , view.width / 2, view.height / 2
                                 , 0, 0)
-                        PictureBrowserActivity.open(mContext, categoryId, wallpapers, position, compat)
+                        PictureBrowserActivity.open(position, categoryId = categoryId, compat = compat)
                     }
         } else {
             (rvCategoryList.adapter as CategoryListAdapter).addData(wallpapers)

@@ -5,7 +5,9 @@ import com.google.gson.Gson
 import com.jess.arms.di.scope.ActivityScope
 import com.jess.arms.integration.IRepositoryManager
 import com.shentu.wallpaper.app.BasePageModel
-import com.shentu.wallpaper.model.api.service.MicroService
+import com.shentu.wallpaper.model.api.service.CollectService
+import com.shentu.wallpaper.model.body.DelCollectBody
+import com.shentu.wallpaper.model.response.BaseResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.MyCollectContract
 import io.reactivex.Observable
@@ -23,7 +25,12 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
     lateinit var mApplication: Application
 
     override fun getMyCollects(clear: Boolean): Observable<WallpaperPageResponse> {
-        return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
+        return mRepositoryManager.obtainRetrofitService(CollectService::class.java)
                 .getMyCollects(getOffset(clear))
+    }
+
+    override fun delCollects(body: DelCollectBody): Observable<BaseResponse<Boolean>> {
+        return mRepositoryManager.obtainRetrofitService(CollectService::class.java)
+                .delCollects(body)
     }
 }

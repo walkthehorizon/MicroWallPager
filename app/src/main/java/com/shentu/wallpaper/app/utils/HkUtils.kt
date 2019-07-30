@@ -39,7 +39,7 @@ class HkUtils private constructor() {
 
     fun showChargeDialog(context: Context) {
         MaterialDialog(context).show {
-            title(text = "您的看豆余额已不足")
+            title(text = "看豆获取")
             message(text = "看豆，看豆，在多也不够！")
             positiveButton(text = "打赏获取") {
                 contactKefu()
@@ -66,7 +66,7 @@ class HkUtils private constructor() {
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 //7.0以上的读取文件uri要用这种方式了
                 FileProvider.getUriForFile(context.applicationContext,
-                        BuildConfig.APPLICATION_ID + ".fileprovider", File(filepath))
+                        BuildConfig.APPLICATION_ID + ".fileProvider", File(filepath))
             } else {
                 Uri.fromFile(File(filepath))
             }
@@ -78,8 +78,8 @@ class HkUtils private constructor() {
             }
             val uriPath = getUriWithPath(context, path)
             val intent: Intent
-            if (RomUtil.isEmui()) {
-                try {
+            when {
+                RomUtil.isEmui() -> try {
                     val componentName = ComponentName("com.android.gallery3d", "com.android.gallery3d.app.Wallpaper")
                     intent = Intent(Intent.ACTION_VIEW)
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -97,9 +97,7 @@ class HkUtils private constructor() {
                     }
 
                 }
-
-            } else if (RomUtil.isMiui()) {
-                try {
+                RomUtil.isMiui() -> try {
                     val componentName = ComponentName("com.android.thememanager",
                             "com.android.thememanager.activity.WallpaperDetailActivity")
                     intent = Intent("miui.intent.action.START_WALLPAPER_DETAIL")
@@ -118,9 +116,7 @@ class HkUtils private constructor() {
                     }
 
                 }
-
-            } else {
-                try {
+                else -> try {
                     intent = WallpaperManager.getInstance(context.applicationContext).getCropAndSetWallpaperIntent(uriPath)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     context.applicationContext.startActivity(intent)
@@ -136,7 +132,6 @@ class HkUtils private constructor() {
                     }
 
                 }
-
             }
         }
     }

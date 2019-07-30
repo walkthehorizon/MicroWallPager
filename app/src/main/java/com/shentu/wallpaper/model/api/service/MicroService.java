@@ -1,9 +1,9 @@
 package com.shentu.wallpaper.model.api.service;
 
 
-import com.shentu.wallpaper.model.entity.BaseResponse;
 import com.shentu.wallpaper.model.entity.MicroUser;
 import com.shentu.wallpaper.model.response.BannerPageResponse;
+import com.shentu.wallpaper.model.response.BaseResponse;
 import com.shentu.wallpaper.model.response.CategoryPageResponse;
 import com.shentu.wallpaper.model.response.SplashAdResponse;
 import com.shentu.wallpaper.model.response.SubjectDetailResponse;
@@ -84,14 +84,6 @@ public interface MicroService {
     getBanners(@Query("limit") int limit,
                @Query("offset") int offset);
 
-    @POST("collect/add/{pid}")
-    Observable<BaseResponse<Boolean>>
-    addCollect(@Path("pid") Integer pid);
-
-    @GET("collect/my")
-    Observable<WallpaperPageResponse>
-    getMyCollects(@Query("offset") int offset);
-
     @FormUrlEncoded
     @POST("category/update/")
     Observable<BaseResponse<Boolean>>
@@ -104,4 +96,11 @@ public interface MicroService {
     @POST("buy/paper/{pk}")
     Observable<BaseResponse<String>>
     buyPaper(@Path("pk") int pk, @Query("pea") int pea);
+
+//    /**
+//     * collect
+//     * */
+//    @GET("collect/my")
+//    Observable<WallpaperPageResponse>
+//    getMyCollects(@Query("offset") int offset);
 }

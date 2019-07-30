@@ -1,12 +1,10 @@
 package com.shentu.wallpaper.di.module
 
 import com.jess.arms.di.scope.FragmentScope
-
+import com.shentu.wallpaper.mvp.contract.PasswordForgetContract
+import com.shentu.wallpaper.mvp.model.PasswordForgetModel
 import dagger.Module
 import dagger.Provides
-
-import com.shentu.wallpaper.mvp.contract.PasswordForgetContract
-import com.shentu.wallpaper.model.PasswordForgetModel
 
 
 @Module

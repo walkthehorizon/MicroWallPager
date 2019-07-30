@@ -1,11 +1,13 @@
 package com.shentu.wallpaper.mvp.presenter
 
 import android.app.Application
+import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.di.scope.ActivityScope
-
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.wallpaper.app.utils.RxUtils
+import com.shentu.wallpaper.model.body.DelCollectBody
+import com.shentu.wallpaper.model.response.BaseResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.MyCollectContract
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
@@ -35,6 +37,26 @@ constructor(model: MyCollectContract.Model, rootView: MyCollectContract.View) :
                             return
                         }
                         t.data?.content?.let { mRootView.showCollects(it, clear) }
+                    }
+                })
+    }
+
+    fun delCollects(body: DelCollectBody) {
+        mModel.delCollects(body)
+                .compose(RxUtils.applyClearSchedulers(mRootView))
+                .doOnSubscribe {
+                    mRootView.showProgress()
+                }
+                .doFinally {
+                    mRootView.hideProgress()
+                }
+                .subscribe(object : ErrorHandleSubscriber<BaseResponse<Boolean>>(mErrorHandler) {
+                    override fun onNext(t: BaseResponse<Boolean>) {
+                        if (!t.isSuccess) {
+                            return
+                        }
+                        mRootView.closeDelMode(true)
+                        ToastUtils.showShort("删除成功")
                     }
                 })
     }

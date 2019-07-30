@@ -1,8 +1,8 @@
 package com.shentu.wallpaper.di.module;
 
 import com.jess.arms.di.scope.ActivityScope;
-import com.shentu.wallpaper.model.MainModel;
 import com.shentu.wallpaper.mvp.contract.MainContract;
+import com.shentu.wallpaper.mvp.model.MainModel;
 
 import dagger.Module;
 import dagger.Provides;

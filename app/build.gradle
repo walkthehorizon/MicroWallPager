@@ -32,15 +32,22 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
+    signingConfigs {
+        release {
+            storeFile file("../extras/micro.jks")
+            keyAlias 'micro'
+            keyPassword '911019'
+            storePassword '911019'
+        }
+    }
     buildTypes {
-
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "String", "Sever", '"http://192.168.12.101/wallpaper/"'
+            buildConfigField "String", "Sever", '"http://192.168.12.81/wallpaper/"'
             buildConfigField "boolean", "Debug", "true"
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
 
         release {
@@ -51,6 +58,7 @@ android {
             minifyEnabled true
             shrinkResources true
             zipAlignEnabled true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -73,7 +81,7 @@ MobSDK {
     appSecret "5ef67a98fcae47f91163577728158ac3"
 
     SMSSDK {
-
+        gui false
     }
     ShareSDK {
         //平台配置信息

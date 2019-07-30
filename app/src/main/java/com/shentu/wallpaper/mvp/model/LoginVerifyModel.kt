@@ -1,20 +1,18 @@
-package com.shentu.wallpaper.model
+package com.shentu.wallpaper.mvp.model
 
 import android.app.Application
 import com.google.gson.Gson
+import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.integration.IRepositoryManager
 import com.jess.arms.mvp.BaseModel
-
-import com.jess.arms.di.scope.FragmentScope
+import com.shentu.wallpaper.mvp.contract.LoginVerifyContract
 import javax.inject.Inject
-
-import com.shentu.wallpaper.mvp.contract.PasswordForgetContract
 
 
 @FragmentScope
-class PasswordForgetModel
+class LoginVerifyModel
 @Inject
-constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager), PasswordForgetContract.Model {
+constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager), LoginVerifyContract.Model {
     @Inject
     lateinit var mGson: Gson;
     @Inject

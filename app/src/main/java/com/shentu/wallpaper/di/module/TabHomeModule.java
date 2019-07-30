@@ -1,9 +1,8 @@
 package com.shentu.wallpaper.di.module;
 
 import com.jess.arms.di.scope.FragmentScope;
-import com.shentu.wallpaper.model.HotPagerModel;
 import com.shentu.wallpaper.mvp.contract.TabHomeContract;
-
+import com.shentu.wallpaper.mvp.model.HotPagerModel;
 
 import dagger.Module;
 import dagger.Provides;

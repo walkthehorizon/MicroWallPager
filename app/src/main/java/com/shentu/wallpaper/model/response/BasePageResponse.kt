@@ -1,4 +1,4 @@
-package com.shentu.wallpaper.model.entity
+package com.shentu.wallpaper.model.response
 
 import java.io.Serializable
 

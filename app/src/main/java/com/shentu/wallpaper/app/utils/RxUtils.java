@@ -20,8 +20,8 @@ import android.text.TextUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.utils.RxLifecycleUtils;
-import com.shentu.wallpaper.model.entity.BasePageResponse;
-import com.shentu.wallpaper.model.entity.BaseResponse;
+import com.shentu.wallpaper.model.response.BasePageResponse;
+import com.shentu.wallpaper.model.response.BaseResponse;
 
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
