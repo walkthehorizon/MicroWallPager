@@ -183,6 +183,8 @@ dependencies {
     }
 
     implementation rootProject.ext.dependencies["bigImageViewer"]
+    implementation rootProject.ext.dependencies["bigGlideLoader"]
+    implementation rootProject.ext.dependencies["bigGifDrawable"]
     implementation rootProject.ext.dependencies["circleindicator"]
 
     implementation rootProject.ext.dependencies["firebase"]

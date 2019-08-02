@@ -11,9 +11,9 @@ import androidx.multidex.MultiDex;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.Utils;
 import com.github.piasy.biv.BigImageViewer;
+import com.github.piasy.biv.loader.glide.GlideImageLoader;
 import com.horizon.netbus.NetBus;
 import com.jess.arms.base.delegate.AppLifecycles;
-import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.kingja.loadsir.core.LoadSir;
 import com.liulishuo.filedownloader.FileDownloader;
@@ -99,8 +99,9 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 .setDefaultCallback(LoadingCallback.class)//设置默认状态页
                 .commit();
         FileDownloader.setup(application);
-        AppComponent appComponent = ArmsUtils.obtainAppComponentFromContext(application);
-        BigImageViewer.initialize(PictureGlideImageLoader.with(application, appComponent.okHttpClient()));
+        BigImageViewer.initialize(GlideImageLoader.with(application));
+//        AppComponent appComponent = ArmsUtils.obtainAppComponentFromContext(application);
+//        BigImageViewer.initialize(PictureGlideImageLoader.with(application, appComponent.okHttpClient()));
     }
 
     @Override

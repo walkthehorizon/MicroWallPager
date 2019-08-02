@@ -28,9 +28,17 @@ public interface MicroCache {
 //    @LifeCache(duration = 1,timeUnit = TimeUnit.DAYS)
 //    Observable<Reply<CategorysEntity>> getCategories(Observable<CategorysEntity> observable, EvictProvider evictProvider);
 //
-    @ProviderKey("subject-detail-one-hour")
-    @LifeCache(duration = 1, timeUnit = TimeUnit.HOURS)
-    Observable<Reply<WallpaperPageResponse>> getWallPapersBySubjectId(Observable<WallpaperPageResponse> ob, DynamicKey key, EvictDynamicKey dynamicKey);
+    @ProviderKey("subject-detail-one-week")
+    @LifeCache(duration = 7, timeUnit = TimeUnit.DAYS)
+    Observable<Reply<WallpaperPageResponse>>
+    getWallPapersBySubjectId(Observable<WallpaperPageResponse> ob
+            , DynamicKey key, EvictDynamicKey dynamicKey);
+
+    @ProviderKey("banner-wallpapers-one-day")
+    @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
+    Observable<Reply<WallpaperPageResponse>>
+    getWallPapersByBannerId(Observable<WallpaperPageResponse> ob
+            , DynamicKey key, EvictDynamicKey dynamicKey);
 
     @ProviderKey("category-list-one-hour")
     @LifeCache(duration = 1, timeUnit = TimeUnit.HOURS)

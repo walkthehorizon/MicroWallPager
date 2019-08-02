@@ -58,7 +58,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.ui.activity.PictureBrowserActivity"
+            android:name=".mvp.ui.browser.PictureBrowserActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

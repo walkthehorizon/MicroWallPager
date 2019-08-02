@@ -90,12 +90,12 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
                 showMessage("手机号错误！")
                 return@setOnClickListener
             }
-//            mPresenter?.loginAccount(etPhone.text.toString())
-            if (etCode.text.length != 4) {
-                showMessage("无效的验证码！")
-                return@setOnClickListener
-            }
-            SMSSDK.submitVerificationCode("86", etPhone.text.toString(), etCode.text.toString())
+            mPresenter?.loginAccount(etPhone.text.toString())
+//            if (etCode.text.length != 4) {
+//                showMessage("无效的验证码！")
+//                return@setOnClickListener
+//            }
+//            SMSSDK.submitVerificationCode("86", etPhone.text.toString(), etCode.text.toString())
         }
         tvSee.setOnClickListener {
             killMyself()
@@ -141,7 +141,6 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
 
     override fun showLoading() {
         loadingDialog = MaterialDialog(this).show {
-            title(R.string.title_activity_login)
             message(R.string.tip_please_wait)
             customView(R.layout.dialog_loading)
         }

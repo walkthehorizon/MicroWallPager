@@ -6,6 +6,9 @@
     <external-path
         name="download"
         path="DCIM/看个够" />
+    <external-cache-path
+        name="glide"
+        path="Glide/" />
     <cache-path
         name="apk1"
         path="." />

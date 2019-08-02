@@ -40,6 +40,7 @@ import com.shentu.wallpaper.mvp.contract.SearchContract
 import com.shentu.wallpaper.mvp.presenter.SearchPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.HotAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.HotPageRvDecoration
+import com.shentu.wallpaper.mvp.ui.browser.PictureBrowserActivity
 import kotlinx.android.synthetic.main.activity_search.*
 
 @Route(path = "/activity/search")
@@ -95,7 +96,7 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, Tex
         rvData.addItemDecoration(HotPageRvDecoration(12))
         hotAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, _, position ->
             val subject = adapter.data[position] as Subject
-            PictureBrowserActivity.open(subjectId = subject.id)
+            PictureBrowserActivity.open(subjectId = subject.id, context = this)
         }
         rvData.adapter = hotAdapter
     }

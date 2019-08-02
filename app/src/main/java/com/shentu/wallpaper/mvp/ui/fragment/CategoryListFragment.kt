@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
@@ -24,14 +25,17 @@ import com.shentu.wallpaper.di.module.CategoryListModule
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.contract.CategoryDetailContract
 import com.shentu.wallpaper.mvp.presenter.CategoryListPresenter
-import com.shentu.wallpaper.mvp.ui.activity.PictureBrowserActivity
 import com.shentu.wallpaper.mvp.ui.adapter.CategoryListAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.RvCategoryListDecoration
+import com.shentu.wallpaper.mvp.ui.browser.PictureBrowserActivity
 import kotlinx.android.synthetic.main.fragment_category_list.*
 
 
 class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDetailContract.View
-        , OnRefreshListener, OnLoadMoreListener {
+        , OnRefreshListener, OnLoadMoreListener, PictureBrowserActivity.Callback {
+    override fun getWallpaperList(): List<Wallpaper> {
+        return (rvCategoryList.adapter as CategoryListAdapter).data
+    }
 
     private var categoryId: Int = 0
     private lateinit var loadService: LoadService<Any>
@@ -70,6 +74,7 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDeta
 
     override fun initData(savedInstanceState: Bundle?) {
         categoryId = arguments?.getInt(CATEGORY_ID)!!
+        ToastUtils.showShort("id:$categoryId")
         rvCategoryList.layoutManager = GridLayoutManager(context
                 , 3)
         rvCategoryList.addItemDecoration(RvCategoryListDecoration(2))
@@ -84,15 +89,11 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDeta
             rvCategoryList.adapter = CategoryListAdapter(wallpapers, categoryId)
             (rvCategoryList.adapter as CategoryListAdapter).onItemClickListener = BaseQuickAdapter
                     .OnItemClickListener { _, view, position ->
-                        //                        ViewCompat.setTransitionName(view, "shareView")
-//                        val options = activity?.let {
-//                            ActivityOptionsCompat.makeSceneTransitionAnimation(it
-//                                    , view, "shareView")
-//                        }
                         val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                                 , view.width / 2, view.height / 2
                                 , 0, 0)
-                        PictureBrowserActivity.open(position, categoryId = categoryId, compat = compat)
+                        PictureBrowserActivity.open(position, compat = compat, callback = this
+                                , context = mContext)
                     }
         } else {
             (rvCategoryList.adapter as CategoryListAdapter).addData(wallpapers)

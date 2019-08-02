@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.jess.arms.di.scope.ActivityScope
 import com.jess.arms.integration.IRepositoryManager
 import com.shentu.wallpaper.app.BasePageModel
+import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.model.api.service.CollectService
 import com.shentu.wallpaper.model.body.DelCollectBody
 import com.shentu.wallpaper.model.response.BaseResponse
@@ -26,7 +27,7 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
 
     override fun getMyCollects(clear: Boolean): Observable<WallpaperPageResponse> {
         return mRepositoryManager.obtainRetrofitService(CollectService::class.java)
-                .getMyCollects(getOffset(clear))
+                .getMyCollects(HkUserManager.getInstance().uid, getOffset(clear))
     }
 
     override fun delCollects(body: DelCollectBody): Observable<BaseResponse<Boolean>> {

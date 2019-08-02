@@ -32,6 +32,7 @@ import com.shentu.wallpaper.mvp.contract.MyCollectContract
 import com.shentu.wallpaper.mvp.presenter.MyCollectPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.CollectListAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.CollectListDecoration
+import com.shentu.wallpaper.mvp.ui.browser.PictureBrowserActivity
 import kotlinx.android.synthetic.main.activity_my_collect.*
 
 @Route(path = "/activity/my/collect/")
@@ -111,7 +112,7 @@ class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.
             }
             ViewCompat.setTransitionName(view, resources.getString(R.string.picture_transitionName))
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
-            PictureBrowserActivity.open(position, this, compat)
+            PictureBrowserActivity.open(position, this, compat, context = this)
         }
         tvDelete.setOnClickListener {
             showDelDialog()

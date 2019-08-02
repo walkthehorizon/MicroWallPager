@@ -12,6 +12,7 @@ import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.SubjectDetailContract
 import io.reactivex.Observable
 import io.rx_cache2.DynamicKey
+import io.rx_cache2.EvictDynamicKey
 import javax.inject.Inject
 
 
@@ -35,6 +36,17 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
                 .flatMap {
                     mRepositoryManager.obtainCacheService(MicroCache::class.java)
                             .getSubjectDetail(it, DynamicKey(pk))
+                }
+    }
+
+    override fun getBannerWallpapers(id: Int): Observable<WallpaperPageResponse> {
+        return Observable.just(mRepositoryManager
+                .obtainRetrofitService(MicroService::class.java)
+                .getBannerWallpapers(id, 100, 0))
+                .flatMap { t ->
+                    mRepositoryManager.obtainCacheService(MicroCache::class.java)
+                            .getWallPapersByBannerId(t, DynamicKey(id), EvictDynamicKey(false))
+                            .map { it.data }
                 }
     }
 

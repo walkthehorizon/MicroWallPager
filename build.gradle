@@ -23,6 +23,9 @@ buildscript {
 
 allprojects {
     repositories {
+        maven {
+            url  "http://dl.bintray.com/piasy/maven"
+        }
         jcenter()
         google()
         maven { url "https://jitpack.io" }
@@ -30,9 +33,7 @@ allprojects {
             dirs 'libs'
         }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven {
-            url  "http://dl.bintray.com/piasy/maven"
-        }
+
         maven {
             url "https://dl.bintray.com/tencentqcloudterminal/maven"
         }

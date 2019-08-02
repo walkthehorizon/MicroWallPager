@@ -17,6 +17,7 @@ import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.model.response.BaseResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
+import com.shentu.wallpaper.mvp.ui.browser.SaveType
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
@@ -88,7 +89,7 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                 })
     }
 
-    fun buyPaper(wallpaper: Wallpaper, pea: Int) {
+    fun buyPaper(position: Int, wallpaper: Wallpaper, pea: Int) {
         mModel.buyPaper(wallpaper.id, pea)
                 .compose(RxUtils.applyClearSchedulers(mRootView))
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<String>>(mErrorHandler) {
@@ -96,7 +97,8 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                         if (!t.isSuccess) {
                             return
                         }
-                        downloadPicture(if (pea == 3) wallpaper.originUrl else wallpaper.url)
+                        mRootView.savePicture(position, if (pea == 3) SaveType.ORIGIN else SaveType.NORMAL)
+                        //downloadPicture(if (pea == 3) wallpaper.originUrl else wallpaper.url)
                     }
                 })
     }
@@ -106,7 +108,8 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
      * */
     fun downloadPicture(pictureUrl: String, type: Int = 0) {
         FileDownloader.getImpl().create(pictureUrl)
-                .setPath(PicUtils.getInstance().getDownloadPicturePath(pictureUrl))
+                .setPath(if (type == 1) PicUtils.getInstance().getSetPaperCachePath(pictureUrl) else
+                    PicUtils.getInstance().getDownloadPicturePath(pictureUrl))
                 .setListener(object : FileDownloadSampleListener() {
                     override fun completed(task: BaseDownloadTask?) {
                         super.completed(task)
@@ -119,10 +122,6 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
 
                     override fun error(task: BaseDownloadTask?, e: Throwable?) {
                         mRootView.showMessage("下载异常：" + e?.message)
-                    }
-
-                    override fun pending(task: BaseDownloadTask?, soFarBytes: Int, totalBytes: Int) {
-                        super.pending(task, soFarBytes, totalBytes)
                     }
 
                     override fun progress(task: BaseDownloadTask?, soFarBytes: Int, totalBytes: Int) {

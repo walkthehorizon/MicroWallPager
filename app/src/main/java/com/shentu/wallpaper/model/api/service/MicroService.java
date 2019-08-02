@@ -41,6 +41,12 @@ public interface MicroService {
 
     @GET("wallpapers")
     Observable<WallpaperPageResponse>
+    getBannerWallpapers(@Query("banner_id") int subjectId,
+                        @Query("limit") int limit,
+                        @Query("offset") int offset);
+
+    @GET("wallpapers")
+    Observable<WallpaperPageResponse>
     getCategoryWallpapers(@Query("category_id") int categoryId,
                           @Query("limit") int limit,
                           @Query("offset") int offset);

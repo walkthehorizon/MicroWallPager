@@ -7,8 +7,9 @@ import io.reactivex.Observable
 import retrofit2.http.*
 
 interface CollectService {
-    @GET("collect/my")
-    fun getMyCollects(@Query("offset") offset: Int): Observable<WallpaperPageResponse>
+    @GET("wallpapers/")
+    fun getMyCollects(@Query("uid") uid: Int,
+                      @Query("offset") offset: Int): Observable<WallpaperPageResponse>
 
     @POST("collect/add/{pid}")
     fun addCollect(@Path("pid") pid: Int?): Observable<BaseResponse<Boolean>>

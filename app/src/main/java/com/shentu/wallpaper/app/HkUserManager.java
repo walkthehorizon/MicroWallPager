@@ -82,4 +82,8 @@ public class HkUserManager {
     public boolean isAdmin() {
         return user != null && user.uid == 1;
     }
+
+    public int getUid() {
+        return isLogin() ? user.uid : -1;
+    }
 }

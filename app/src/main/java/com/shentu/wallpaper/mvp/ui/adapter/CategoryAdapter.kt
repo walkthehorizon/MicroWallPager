@@ -6,7 +6,9 @@ import android.graphics.drawable.ColorDrawable
 import android.text.TextUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.shentu.wallpaper.R
@@ -33,9 +35,11 @@ class CategoryAdapter(data: MutableList<Category>) : BaseQuickAdapter<Category, 
                 else
                     item.logo)
                 .override(480, 270)
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .transform(MultiTransformation<Bitmap>(
                         CenterCrop(), RoundedCornersTransformation(ConvertUtils.dp2px(5f),
                         0, RoundedCornersTransformation.CornerType.ALL)))
+                .transition(withCrossFade())
                 .into(helper.getView(R.id.ivCover))
         helper.setText(R.id.tv_name, item.name)
     }

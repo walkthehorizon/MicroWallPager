@@ -41,4 +41,9 @@ public class PicUtils {
         return PathUtils.getExternalDcimPath() + File.separator + "看个够" + File.separator
                 + URLUtil.guessFileName(pictureUrl, null, null);
     }
+
+    public String getSetPaperCachePath(String pictureUrl) {
+        return PathUtils.getInternalAppCachePath() + File.separator + "Wallpaper" + File.separator
+                + URLUtil.guessFileName(pictureUrl, null, null);
+    }
 }

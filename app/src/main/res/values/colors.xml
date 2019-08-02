@@ -63,4 +63,9 @@
     <color name="grey_81">#CFCFCF</color>
     <color name="grey_91">#E8E8E8</color>
 
+    <!--ProgressPieView-->
+    <color name="default_background_color">@android:color/transparent</color>
+    <color name="default_progress_color">#33b5e5</color>
+    <color name="default_stroke_color">#33b5e5</color>
+    <color name="default_text_color">#333333</color>
 </resources>

@@ -1,5 +1,6 @@
 package com.shentu.wallpaper.mvp.ui.adapter
 
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -11,7 +12,7 @@ import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.model.entity.Banner
 import com.shentu.wallpaper.mvp.ui.activity.SubjectDetailActivity
 
-class HomeBannerAdapter(private val banners: List<Banner>) : PagerAdapter() {
+class HomeBannerAdapter(private val banners: List<Banner>, private val context: Context) : PagerAdapter() {
 
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
@@ -26,7 +27,7 @@ class HomeBannerAdapter(private val banners: List<Banner>) : PagerAdapter() {
         val ivBanner = ImageView(container.context)
         container.addView(ivBanner, -1, -1)
         ivBanner.setOnClickListener {
-            SubjectDetailActivity.open(banners[position].subjectId, banners[position].imageUrl)
+            SubjectDetailActivity.open(banners[position], context)
         }
         GlideArms.with(container.context)
                 .load(banners[position].imageUrl)

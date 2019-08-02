@@ -1,22 +1,33 @@
 package com.shentu.wallpaper.mvp.ui.fragment
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.github.piasy.biv.indicator.progresspie.ProgressPieIndicator
+import com.blankj.utilcode.util.FileUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.github.piasy.biv.loader.ImageLoader
-import com.github.piasy.biv.view.GlideImageViewFactory
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.IPresenter
+import com.shentu.wallpaper.app.GlideImageViewFactory
+import com.shentu.wallpaper.app.utils.HkUtils
+import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.model.entity.Wallpaper
+import com.shentu.wallpaper.mvp.ui.browser.Behavior
+import com.shentu.wallpaper.mvp.ui.browser.SaveType
+import com.shentu.wallpaper.mvp.ui.widget.progress.DefaultLoadCallback
+import com.shentu.wallpaper.mvp.ui.widget.progress.ProgressPieIndicator
 import kotlinx.android.synthetic.main.fragment_picture.*
 import java.io.File
 
 
 class PictureFragment : BaseFragment<IPresenter>() {
+
+    private var normalLoad = false
+    private var originLoad = false
 
     companion object {
         fun newInstance(wallpaper: Wallpaper, pos: Int): PictureFragment {
@@ -44,6 +55,11 @@ class PictureFragment : BaseFragment<IPresenter>() {
         pos = arguments?.get("pos") as Int
         wallpaper = arguments!!["wallpaper"] as Wallpaper
         photoView.setImageViewFactory(GlideImageViewFactory())
+        photoView.setImageLoaderCallback(object : DefaultLoadCallback {
+            override fun onSuccess(image: File?) {
+                normalLoad = true
+            }
+        })
         photoView.setOnClickListener {
             callback?.switchNavigation()
         }
@@ -61,22 +77,31 @@ class PictureFragment : BaseFragment<IPresenter>() {
 
     }
 
-    fun loadOriginPicture() {
+    fun loadOriginPicture(behavior: Behavior) {
         context?.let {
             photoView.setProgressIndicator(ProgressPieIndicator())
-            photoView.setImageLoaderCallback(getImageLoadCallback())
+            photoView.setImageLoaderCallback(getImageLoadCallback(behavior))
             photoView.showImage(Uri.parse(wallpaper.originUrl))
         }
     }
 
-    private fun getImageLoadCallback(): ImageLoader.Callback {
+    private fun getImageLoadCallback(behavior: Behavior): ImageLoader.Callback {
         return object : ImageLoader.Callback {
             override fun onFinish() {
 
             }
 
+            @SuppressLint("MissingPermission")
             override fun onSuccess(image: File?) {
+//                Timber.e(image?.absolutePath)
+                originLoad = true
                 callback?.onLoadOrigin(pos, true)
+                if (behavior == Behavior.SET_WALLPAPER) {
+                    image?.absolutePath?.let { HkUtils.setWallpaper(mContext, it) }
+                }
+                if (behavior == Behavior.ONLY_DOWNLOAD) {
+                    copyPictureToLocal(SaveType.ORIGIN)
+                }
             }
 
             override fun onFail(error: Exception?) {
@@ -97,6 +122,35 @@ class PictureFragment : BaseFragment<IPresenter>() {
 
             }
         }
+    }
+
+    /**
+     * @param type
+     * @see SaveType
+     * */
+    fun savePicture(type: SaveType) {
+        if (normalLoad && type == SaveType.NORMAL) {
+            copyPictureToLocal(type)
+            return
+        }
+        if (type == SaveType.ORIGIN) {
+            if (originLoad) {
+                copyPictureToLocal(type)
+            } else {
+                loadOriginPicture(Behavior.ONLY_DOWNLOAD)
+            }
+            return
+        }
+        ToastUtils.showShort("下载失败")
+    }
+
+    private fun copyPictureToLocal(type: SaveType) {
+        val destPath = if (type == SaveType.NORMAL)
+            PicUtils.getInstance().getDownloadPicturePath(wallpaper.url)
+        else
+            PicUtils.getInstance().getDownloadPicturePath(wallpaper.originUrl)
+        FileUtils.copyFile(photoView.currentImageFile, File(destPath))
+        ToastUtils.showShort("图片已保存在 手机相册》看个够")
     }
 
     interface Callback {

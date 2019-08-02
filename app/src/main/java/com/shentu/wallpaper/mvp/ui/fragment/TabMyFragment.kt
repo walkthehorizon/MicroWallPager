@@ -162,9 +162,11 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                     ToastUtils.showShort("清理完成")
                 }
                 .subscribe()
-        ArmsUtils.obtainAppComponentFromContext(mContext)
-                .repositoryManager()
-                .clearAllCache()
+        if (BuildConfig.DEBUG) {
+            ArmsUtils.obtainAppComponentFromContext(mContext)
+                    .repositoryManager()
+                    .clearAllCache()
+        }
     }
 
     override fun setData(data: Any?) {

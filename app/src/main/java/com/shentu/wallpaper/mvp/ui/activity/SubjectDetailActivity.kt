@@ -1,5 +1,6 @@
 package com.shentu.wallpaper.mvp.ui.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View.VISIBLE
@@ -19,21 +20,26 @@ import com.shentu.wallpaper.app.page.ErrorCallback
 import com.shentu.wallpaper.app.page.LoadingCallback
 import com.shentu.wallpaper.di.component.DaggerSubjectDetailComponent
 import com.shentu.wallpaper.di.module.SubjectDetailModule
+import com.shentu.wallpaper.model.entity.Banner
 import com.shentu.wallpaper.model.entity.Subject
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.contract.SubjectDetailContract
 import com.shentu.wallpaper.mvp.presenter.SubjectDetailPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.SubjectDetailAdapter
+import com.shentu.wallpaper.mvp.ui.browser.PictureBrowserActivity
 import kotlinx.android.synthetic.main.activity_subject_detail.*
 
 @Route(path = "/activity/subject/detail")
 class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDetailContract.View {
     @Autowired
     @JvmField
-    var cover: String? = null
+    var banner: Banner? = null
     @Autowired
     @JvmField
     var subjectId = -1
+    @Autowired
+    @JvmField
+    var type = 1
 
     private lateinit var adapter: SubjectDetailAdapter
     private lateinit var loadService: LoadService<Any>
@@ -57,17 +63,24 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
         ARouter.getInstance().inject(this)
         loadService = LoadSir.getDefault().register(this) {
             showLoading()
-            mPresenter?.getWallpapers(subjectId)
+            loadData()
         }
-        if (cover != null) {
+
+        loadData()
+    }
+
+    private fun loadData() {
+        if (type == 1) {
+            mPresenter?.getSubjectDetail(subjectId)
+            mPresenter?.getSubjectWallpapers(subjectId)
+        } else {
+            mPresenter?.getBannerWallpapers(banner!!.id)
             ivCover.visibility = VISIBLE
             GlideArms.with(this)
-                    .load(cover)
+                    .load(banner?.imageUrl)
                     .error(R.drawable.default_cover_horizon)
                     .into(ivCover)
         }
-        mPresenter?.getSubjectDetail(subjectId)
-        mPresenter?.getWallpapers(subjectId)
     }
 
     override fun showDetail(subject: Subject) {
@@ -81,7 +94,7 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                     , view.width / 2, view.height / 2
                     , 0, 0)
-            PictureBrowserActivity.open(position, compat = compat)
+            PictureBrowserActivity.open(position, compat = compat, context = this)
         }
         rvSubject.layoutManager = GridLayoutManager(this, 2)
         rvSubject.setHasFixedSize(true)
@@ -114,13 +127,20 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
 
     companion object {
 
-        fun open(subjectId: Int, cover: String? = null) {
+        fun open(subjectId: Int = -1, context: Context) {
             ARouter.getInstance()
                     .build("/activity/subject/detail")
                     .withInt("subjectId", subjectId)
-                    .withString("cover", cover)
+                    .withInt("type", 1)
+                    .navigation(context)
+        }
+
+        fun open(banner: Banner, context: Context) {
+            ARouter.getInstance()
+                    .build("/activity/subject/detail")
+                    .withSerializable("banner", banner)
                     .withInt("type", 2)
-                    .navigation()
+                    .navigation(context)
         }
     }
 }

@@ -66,8 +66,7 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
     public Request onHttpRequestBefore(Interceptor.Chain chain, Request request) {
         Request.Builder builder = request.newBuilder();
         return builder
-                .addHeader("uid", HkUserManager.getInstance().isLogin() ?
-                        String.valueOf(HkUserManager.getInstance().user.uid) : "")
+                .addHeader("uid", HkUserManager.getInstance().getUid() + "")
                 .addHeader("deviceId", HkUtils.Companion.getInstance().getDeviceId())
                 .addHeader("systemType", "Android")
                 .addHeader("systemVersion", android.os.Build.VERSION.RELEASE)

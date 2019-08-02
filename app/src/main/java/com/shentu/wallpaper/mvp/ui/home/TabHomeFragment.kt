@@ -35,11 +35,11 @@ import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.contract.TabHomeContract
 import com.shentu.wallpaper.mvp.presenter.TabHomePresenter
 import com.shentu.wallpaper.mvp.ui.activity.BannerListActivity
-import com.shentu.wallpaper.mvp.ui.activity.PictureBrowserActivity
 import com.shentu.wallpaper.mvp.ui.activity.SearchActivity
 import com.shentu.wallpaper.mvp.ui.adapter.HomeBannerAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.RecommendAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.RandomRecommendDecoration
+import com.shentu.wallpaper.mvp.ui.browser.PictureBrowserActivity
 import com.shentu.wallpaper.mvp.ui.widget.CustomPopWindow
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_setting_more.*
@@ -97,7 +97,7 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                     , view.width / 2, view.height / 2
                     , 0, 0)
-            PictureBrowserActivity.open(position, this, compat)
+            PictureBrowserActivity.open(position, this, compat, context = mContext)
         }
         rvHot.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         rvHot.addItemDecoration(RandomRecommendDecoration(ConvertUtils.dp2px(12.0f)))
@@ -213,7 +213,7 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
         }
         this.banners = banners
         if (bannerAdapter == null) {
-            bannerAdapter = HomeBannerAdapter(banners)
+            bannerAdapter = HomeBannerAdapter(banners, mContext)
             bannerPager.offscreenPageLimit = banners.size
             bannerPager.pageMargin = ConvertUtils.dp2px(12.0f)
             bannerPager.adapter = bannerAdapter
