@@ -1,6 +1,7 @@
 package com.shentu.wallpaper.model.api.service;
 
 
+import com.shentu.wallpaper.model.entity.AppUpdate;
 import com.shentu.wallpaper.model.entity.MicroUser;
 import com.shentu.wallpaper.model.response.BannerPageResponse;
 import com.shentu.wallpaper.model.response.BaseResponse;
@@ -28,6 +29,10 @@ public interface MicroService {
     @GET("splash")
     Observable<SplashAdResponse>
     getSplash();
+
+    @GET("update")
+    Observable<BaseResponse<AppUpdate>>
+    getUpdateInfo();
 
     @GET("subjects/{pk}")
     Observable<SubjectDetailResponse>

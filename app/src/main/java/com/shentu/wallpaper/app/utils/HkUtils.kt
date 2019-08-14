@@ -1,6 +1,7 @@
 package com.shentu.wallpaper.app.utils
 
 import android.app.WallpaperManager
+import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -19,6 +20,7 @@ import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.util.*
+
 
 class HkUtils private constructor() {
 
@@ -57,7 +59,7 @@ class HkUtils private constructor() {
             try {
                 AppManager.getAppManager().startActivity((Intent(Intent.ACTION_VIEW,
                         Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin=160585515"))))
-            } catch (e: ClassNotFoundException) {
+            } catch (e: ActivityNotFoundException) {
                 Timber.e(e)
             }
         }

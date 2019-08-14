@@ -5,36 +5,42 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.alibaba.android.arouter.launcher.ARouter
+import com.blankj.utilcode.util.SPUtils
+import com.blankj.utilcode.util.TimeUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.google.android.gms.ads.rewarded.RewardItem
-import com.google.android.gms.ads.rewarded.RewardedAdCallback
+import com.jess.arms.base.BaseActivity
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.BuildConfig
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.HkUserManager
-import com.shentu.wallpaper.app.utils.AdUtils
 import com.shentu.wallpaper.app.utils.HkUtils
+import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.di.component.DaggerMyComponent
 import com.shentu.wallpaper.di.module.MyModule
+import com.shentu.wallpaper.model.api.service.MicroService
+import com.shentu.wallpaper.model.entity.AppUpdate
+import com.shentu.wallpaper.model.response.BaseResponse
 import com.shentu.wallpaper.mvp.contract.MyContract
 import com.shentu.wallpaper.mvp.presenter.MyPresenter
 import com.shentu.wallpaper.mvp.ui.activity.SettingMoreActivity
 import com.shentu.wallpaper.mvp.ui.login.LoginActivity
 import com.shentu.wallpaper.mvp.ui.my.MyEditActivity
-import com.tencent.bugly.beta.Beta
+import com.shentu.wallpaper.mvp.ui.update.AppUpdateDialog
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_my.*
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 
 
 class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
+
     companion object {
         fun newInstance(): TabMyFragment {
             return TabMyFragment()
@@ -56,15 +62,10 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
 
     override fun initData(savedInstanceState: Bundle?) {
         refreshUser()
-        if (Beta.getUpgradeInfo() != null) {
-            itUpdate.setEndValue("有新的升级")
-        } else {
-            itUpdate.setEndValue(BuildConfig.VERSION_NAME)
-        }
         rlHead.setOnClickListener { clickHead() }
         itCollect.setOnClickListener { clickCollect() }
         itUpdate.setOnClickListener {
-            Beta.checkUpgrade()
+            checkUpdate()
         }
         itCache.setOnClickListener { clickCache() }
         itFeedback.setOnClickListener { clickFeedback() }
@@ -81,20 +82,54 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
         itMoney.setOnClickListener {
             HkUtils.instance.showChargeDialog(mContext)
         }
+        if (!TimeUtils.isToday(SPUtils.getInstance().getLong(Constant.LAST_NOTIFY_TIME))) {
+            itUpdate.performClick()
+        }
     }
 
-    private fun showAd() {
-        AdUtils.instance.showUrgeAd(activity as AppCompatActivity, object : RewardedAdCallback() {
-            override fun onRewardedAdClosed() {
-                AdUtils.instance.createAndLoadRewardedAd()
-            }
-
-            override fun onUserEarnedReward(p0: RewardItem) {
-                super.onUserEarnedReward(p0)
-                ToastUtils.showShort("成功！！！")
-            }
-        })
+    private fun checkUpdate() {
+        ArmsUtils.obtainAppComponentFromContext(mContext)
+                .repositoryManager()
+                .obtainRetrofitService(MicroService::class.java)
+                .updateInfo
+                .compose(RxUtils.applyClearSchedulers(this))
+                .subscribe(object : ErrorHandleSubscriber<BaseResponse<AppUpdate>>(
+                        ArmsUtils.obtainAppComponentFromContext(mContext).rxErrorHandler()) {
+                    override fun onNext(response: BaseResponse<AppUpdate>) {
+                        if (!response.isSuccess) {
+                            return
+                        }
+                        if (response.data == null) {
+                            return
+                        }
+                        if (response.data.versionCode > BuildConfig.VERSION_CODE) {
+                            itUpdate.setEndValue("有新版本：${response.data.versionName}")
+                            showUpdateDialog(response.data)
+                        } else {
+                            itUpdate.setEndValue(BuildConfig.VERSION_NAME)
+                        }
+                    }
+                })
     }
+
+    private fun showUpdateDialog(update: AppUpdate) {
+        val appUpdateDialog = AppUpdateDialog.newInstance(update)
+        appUpdateDialog.show((activity as BaseActivity<*>).supportFragmentManager
+                , AppUpdateDialog::class.java.simpleName)
+    }
+
+//    private fun showAd() {
+//        AdUtils.instance.showUrgeAd(activity as AppCompatActivity, object : RewardedAdCallback() {
+//            override fun onRewardedAdClosed() {
+//                AdUtils.instance.createAndLoadRewardedAd()
+//            }
+//
+//            override fun onUserEarnedReward(p0: RewardItem) {
+//                super.onUserEarnedReward(p0)
+//                ToastUtils.showShort("成功！！！")
+//            }
+//        })
+//    }
 
     private fun refreshUser() {
         val user = HkUserManager.getInstance().user

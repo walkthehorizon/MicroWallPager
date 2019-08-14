@@ -1,5 +1,7 @@
 package com.shentu.wallpaper.app;
 
+import com.shentu.wallpaper.model.entity.AppUpdate;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,4 +16,8 @@ public class Constant {
     public static String URGE_AD_DIALOG = "urge_ad_dialog";
 
     public static String DEFAULT_DOWNLOAD_RESUME = "default_download_resume";
+
+    public static AppUpdate appUpdate = null;
+
+    public static String LAST_NOTIFY_TIME = "LAST_NOTIFY_TIME";
 }

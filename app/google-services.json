@@ -1,40 +1,47 @@
 {
   "project_info": {
-    "project_number": "283322162277",
-    "firebase_url": "https://microdream-8212a.firebaseio.com",
-    "project_id": "microdream-8212a",
-    "storage_bucket": "microdream-8212a.appspot.com"
+    "project_number": "747627543274",
+    "firebase_url": "https://microsee-e1802.firebaseio.com",
+    "project_id": "microsee-e1802",
+    "storage_bucket": "microsee-e1802.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:283322162277:android:9eebebcffe93811d",
+        "mobilesdk_app_id": "1:747627543274:android:9eebebcffe93811d",
         "android_client_info": {
           "package_name": "com.shentu.wallpaper"
         }
       },
       "oauth_client": [
         {
-          "client_id": "283322162277-l2ofr5t7jo6idt8fs16fuukdm1jtefro.apps.googleusercontent.com",
+          "client_id": "747627543274-j885vm8dniel1q0kvse8nf0mebjalg3d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shentu.wallpaper",
+            "certificate_hash": "367febf4a42502c3110ac50c4b381c4d74595e47"
+          }
+        },
+        {
+          "client_id": "747627543274-124kui1o6h6le7ftstu7e0cjjokb7nkr.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAaZdAxX533drH4KKehLObu8zB2RbxjO4U"
+          "current_key": "AIzaSyD2Gy5wosZb1rKxrwb79JwqfD1tQAejClg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "283322162277-l2ofr5t7jo6idt8fs16fuukdm1jtefro.apps.googleusercontent.com",
+              "client_id": "747627543274-124kui1o6h6le7ftstu7e0cjjokb7nkr.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
         }
-      },
-      "admob_app_id": "ca-app-pub-9991643602960691~8603727291"
+      }
     }
   ],
   "configuration_version": "1"

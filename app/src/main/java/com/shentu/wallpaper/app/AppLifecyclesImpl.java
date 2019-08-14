@@ -26,11 +26,8 @@ import com.shentu.wallpaper.R;
 import com.shentu.wallpaper.app.page.EmptyCallback;
 import com.shentu.wallpaper.app.page.ErrorCallback;
 import com.shentu.wallpaper.app.page.LoadingCallback;
-import com.shentu.wallpaper.mvp.ui.activity.MainActivity;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
-import com.tencent.bugly.Bugly;
-import com.tencent.bugly.beta.Beta;
 
 import butterknife.ButterKnife;
 import io.reactivex.Completable;
@@ -41,10 +38,6 @@ import timber.log.Timber;
 /**
  * ================================================
  * 展示 {@link AppLifecycles} 的用法
- * <p>
- * Created by JessYan on 04/09/2017 17:12
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
 public class AppLifecyclesImpl implements AppLifecycles {
@@ -63,10 +56,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
     @Override
     public void onCreate(@NonNull Application application) {
         long start = System.currentTimeMillis();
-
-        Beta.initDelay = 3000;
-        Beta.canShowUpgradeActs.add(MainActivity.class);
-        Bugly.init(application, "cc0a25808b", BuildConfig.Debug);
         NetBus.getInstance().init(application);
         Completable.fromAction(() -> init(application)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -100,8 +89,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 .commit();
         FileDownloader.setup(application);
         BigImageViewer.initialize(GlideImageLoader.with(application));
-//        AppComponent appComponent = ArmsUtils.obtainAppComponentFromContext(application);
-//        BigImageViewer.initialize(PictureGlideImageLoader.with(application, appComponent.okHttpClient()));
     }
 
     @Override

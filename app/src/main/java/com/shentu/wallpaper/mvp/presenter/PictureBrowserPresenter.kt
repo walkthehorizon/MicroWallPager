@@ -46,9 +46,15 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<Boolean>>(mErrorHandler) {
                     override fun onNext(t: BaseResponse<Boolean>) {
                         if (!t.isSuccess) {
+                            mRootView.resetCollect()
                             return
                         }
                         mRootView.showCollectAnim(position)
+                    }
+
+                    override fun onError(t: Throwable) {
+                        super.onError(t)
+                        mRootView.resetCollect()
                     }
                 })
     }

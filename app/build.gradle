@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.mob.sdk'
-apply plugin: 'com.google.gms.google-services'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -45,6 +45,7 @@ android {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "false"
             buildConfigField "String", "Sever", '"http://192.168.12.81/wallpaper/"'
+//            buildConfigField "String", "Sever", '"http://wmmt119.top/wallpaper/"'
             buildConfigField "boolean", "Debug", "true"
             minifyEnabled false
             signingConfig signingConfigs.release
@@ -174,9 +175,6 @@ dependencies {
     implementation rootProject.ext.dependencies["mdialogs:bottomsheets"]
     implementation rootProject.ext.dependencies["mdialogs-input"]
     implementation rootProject.ext.dependencies["flexbox"]
-    //bugly
-    implementation rootProject.ext.dependencies["bugly-upgrade"]
-    implementation rootProject.ext.dependencies["bugly-tinker"]
 
     implementation(rootProject.ext.dependencies["cosxml-lite"]) {
         exclude group: 'com.tencent.qcloud', module: 'mtaUtils' //关闭 mta上报功能
@@ -189,6 +187,7 @@ dependencies {
 
     implementation rootProject.ext.dependencies["firebase"]
     implementation rootProject.ext.dependencies["adMob"]
+    implementation rootProject.ext.dependencies["crashlytics"]
 
     //test
     testImplementation rootProject.ext.dependencies["junit"]
@@ -196,3 +195,4 @@ dependencies {
     releaseImplementation rootProject.ext.dependencies["canary-release"]
     testImplementation rootProject.ext.dependencies["canary-release"]
 }
+apply plugin: 'com.google.gms.google-services'

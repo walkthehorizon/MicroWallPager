@@ -28,13 +28,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * ================================================
  * 放置便于使用 RxJava 的一些工具方法
- * <p>
- * Created by JessYan on 11/10/2016 16:39
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
- * ================================================
  */
 public class RxUtils {
 
@@ -43,22 +37,21 @@ public class RxUtils {
 
     //用于无需状态控制的observable
     public static <T> ObservableTransformer<T, T> applyClearSchedulers(final IView view) {
-        return observable -> observable.subscribeOn(Schedulers.io())
+        return observable -> observable.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxLifecycleUtils.bindToLifecycle(view));
     }
 
     public static <T> ObservableTransformer<T, T> applySchedulers(final IView view) {
         return observable -> {
             //隐藏进度条
-            return observable.subscribeOn(Schedulers.io())
+            return observable.observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(disposable -> view.showLoading())
                     .doOnNext(t -> handleOnNext(t, view))
                     .doOnError(throwable -> view.showError())
                     .doFinally(view::hideLoading)
+                    .doOnSubscribe(disposable -> view.showLoading())
+                    .subscribeOn(AndroidSchedulers.mainThread())
                     .compose(RxLifecycleUtils.bindToLifecycle(view));
         };
     }
@@ -66,9 +59,8 @@ public class RxUtils {
     public static <T> ObservableTransformer<T, T> applySchedulers(final IView view, boolean clear) {
         return observable -> {
             //隐藏进度条
-            return observable
+            return observable.observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe(disposable -> view.showLoading())
                     .doOnNext(t -> handleOnNext(t, view))
                     .doOnError(throwable -> view.showError())

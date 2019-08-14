@@ -43,7 +43,6 @@ import kotlinx.android.synthetic.main.fragment_picture_browser.*
 class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureBrowserContract.View
         , ViewPager.OnPageChangeListener, PictureFragment.Callback {
 
-
     @Autowired
     @JvmField
     var subjectId: Int = -1
@@ -190,6 +189,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                 launchActivity(Intent(this, LoginActivity::class.java))
                 return@setOnClickListener
             }
+            ivCollect.isClickable = false
             mPresenter?.addCollect(wallpapers[viewPager.currentItem].id, viewPager.currentItem)
         }
 
@@ -199,6 +199,10 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         viewPager.adapter = vpAdapter
         viewPager.currentItem = current
         onPageSelected(current)
+    }
+
+    override fun resetCollect() {
+        ivCollect.isClickable = true;
     }
 
     override fun showCollectAnim(position: Int) {

@@ -21,12 +21,12 @@ import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.di.component.DaggerLoginComponent
 import com.shentu.wallpaper.di.module.LoginModule
+import com.shentu.wallpaper.model.entity.SmsError
 import com.shentu.wallpaper.mvp.contract.LoginContract
 import com.shentu.wallpaper.mvp.presenter.LoginPresenter
 import com.trello.rxlifecycle2.android.ActivityEvent
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.login_verify.*
 import java.util.concurrent.TimeUnit
@@ -61,7 +61,11 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
                     }
                 }
             } else {
-                (data as Throwable).message?.let { showMessage(it) }
+                val desc = ArmsUtils.obtainAppComponentFromContext(this@LoginActivity)
+                        .gson()
+                        .fromJson((data as Throwable).message, SmsError::class.java)
+                        .description
+                showMessage(desc)
             }
         }
     }
@@ -90,12 +94,12 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
                 showMessage("手机号错误！")
                 return@setOnClickListener
             }
-            mPresenter?.loginAccount(etPhone.text.toString())
-//            if (etCode.text.length != 4) {
-//                showMessage("无效的验证码！")
-//                return@setOnClickListener
-//            }
-//            SMSSDK.submitVerificationCode("86", etPhone.text.toString(), etCode.text.toString())
+//            mPresenter?.loginAccount(etPhone.text.toString())
+            if (etCode.text.length != 4) {
+                showMessage("无效的验证码！")
+                return@setOnClickListener
+            }
+            SMSSDK.submitVerificationCode("86", etPhone.text.toString(), etCode.text.toString())
         }
         tvSee.setOnClickListener {
             killMyself()
@@ -115,15 +119,16 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
         showMessage("验证码已发送")
         Observable.interval(1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
                 .compose(RxLifecycleUtils.bindUntilEvent<Long, ActivityEvent>(this, ActivityEvent.DESTROY))
                 .take(60)
                 .map { aLong -> 59 - aLong }
+                .subscribeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { tvSendCode.isEnabled = false }
                 .doOnComplete {
                     tvSendCode.isEnabled = true
                     tvSendCode.text = "发送验证码"
                 }
+                .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe { aLong -> tvSendCode.text = "${aLong}s" }
     }
 
