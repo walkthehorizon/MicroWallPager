@@ -93,6 +93,9 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             subjectId != -1 -> mPresenter?.getPictures(subjectId)
             else -> throw IllegalStateException("数据获取异常！")
         }
+        ivShare.setOnClickListener {
+            mPresenter?.getShareData(wallpapers[viewPager.currentItem])
+        }
         initSetCover()
     }
 

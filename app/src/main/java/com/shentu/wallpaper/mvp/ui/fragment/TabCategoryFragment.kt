@@ -28,7 +28,6 @@ import com.shentu.wallpaper.mvp.presenter.CategoryPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.CategoryAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.RvCategoryDecoration
 import kotlinx.android.synthetic.main.fragment_category.*
-import kotlinx.android.synthetic.main.fragment_tab_home.*
 
 
 class TabCategoryFragment : BaseFragment<CategoryPresenter>(), CategoryContract.View {
@@ -55,8 +54,8 @@ class TabCategoryFragment : BaseFragment<CategoryPresenter>(), CategoryContract.
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val rootView = inflater.inflate(R.layout.fragment_category, container, false)
         loadService = LoadSir.getDefault().register(rootView) {
-            showContent()
-            refreshLayout.autoRefresh()
+            showLoading()
+            mPresenter?.getCategories(true)
         }
         return loadService.loadLayout
     }

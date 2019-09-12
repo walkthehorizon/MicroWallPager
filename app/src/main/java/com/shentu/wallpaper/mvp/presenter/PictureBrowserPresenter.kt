@@ -10,11 +10,14 @@ import com.jess.arms.mvp.BasePresenter
 import com.liulishuo.filedownloader.BaseDownloadTask
 import com.liulishuo.filedownloader.FileDownloadSampleListener
 import com.liulishuo.filedownloader.FileDownloader
+import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.app.utils.RxUtils
+import com.shentu.wallpaper.app.utils.ShareUtils
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.model.response.BaseResponse
+import com.shentu.wallpaper.model.response.SubjectDetailResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import com.shentu.wallpaper.mvp.ui.browser.SaveType
@@ -150,6 +153,23 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                         ToastUtils.showShort("修改成功!")
                     }
                 })
+    }
+
+    fun getShareData(paper: Wallpaper) {
+        mModel.getShareSubject(paper.subjectId)
+                .compose(RxUtils.applyClearSchedulers(mRootView))
+                .subscribe(object : ErrorHandleSubscriber<SubjectDetailResponse>(mErrorHandler) {
+                    override fun onNext(t: SubjectDetailResponse) {
+                        val subject = t.data
+                        ShareUtils.getInstance().showShare(subject?.description, subject?.name
+                                , Constant.BASE_WALLPAPER_SHARE_URL + paper.id, paper.url)
+                    }
+
+                    override fun onError(t: Throwable) {
+                        mRootView.showMessage("生成分享数据异常")
+                    }
+                })
+
     }
 
 }

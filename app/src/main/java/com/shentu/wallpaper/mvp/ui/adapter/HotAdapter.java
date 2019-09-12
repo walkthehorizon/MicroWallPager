@@ -16,7 +16,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.github.florent37.glidepalette.GlidePalette;
 import com.shentu.wallpaper.R;
 import com.shentu.wallpaper.app.GlideArms;
-import com.shentu.wallpaper.app.utils.ShareUtils;
 import com.shentu.wallpaper.model.entity.Subject;
 
 import java.util.List;
@@ -35,9 +34,6 @@ public class HotAdapter extends BaseMultiItemQuickAdapter<Subject, BaseViewHolde
         addItemType(Subject.ITEM_VIEW_3, R.layout.app_item_hot_page_3);
 
         this.setOnItemChildClickListener((adapter, view, position) -> {
-            if (view.getId() == R.id.tv_share) {
-                ShareUtils.getInstance().showShare(this.mContext);
-            }
             if (view.getId() == R.id.tv_comment) {
                 ToastUtils.showShort("评论");
             }

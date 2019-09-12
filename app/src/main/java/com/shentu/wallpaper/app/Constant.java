@@ -20,4 +20,6 @@ public class Constant {
     public static AppUpdate appUpdate = null;
 
     public static String LAST_NOTIFY_TIME = "LAST_NOTIFY_TIME";
+
+    public static final String BASE_WALLPAPER_SHARE_URL = "https://wmmt119.top/#/wallpaper/";
 }

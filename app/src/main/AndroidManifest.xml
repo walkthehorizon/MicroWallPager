@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:allowBackup">
+        tools:replace="android:allowBackup,android:name">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-9991643602960691~8603727291" />

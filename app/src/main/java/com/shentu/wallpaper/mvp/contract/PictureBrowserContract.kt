@@ -4,6 +4,7 @@ import com.jess.arms.mvp.IModel
 import com.jess.arms.mvp.IView
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.model.response.BaseResponse
+import com.shentu.wallpaper.model.response.SubjectDetailResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.ui.browser.SaveType
 import io.reactivex.Observable
@@ -36,6 +37,8 @@ interface PictureBrowserContract {
         fun updateCategoryCover(cid: Int?, logo: String): Observable<BaseResponse<Boolean>>
 
         fun buyPaper(pk: Int, pea: Int): Observable<BaseResponse<String>>
+
+        fun getShareSubject(pk: Int?): Observable<SubjectDetailResponse>
     }
 
 }
