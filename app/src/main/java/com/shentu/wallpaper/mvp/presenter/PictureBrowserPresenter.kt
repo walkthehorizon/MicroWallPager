@@ -10,14 +10,11 @@ import com.jess.arms.mvp.BasePresenter
 import com.liulishuo.filedownloader.BaseDownloadTask
 import com.liulishuo.filedownloader.FileDownloadSampleListener
 import com.liulishuo.filedownloader.FileDownloader
-import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.app.utils.RxUtils
-import com.shentu.wallpaper.app.utils.ShareUtils
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.model.response.BaseResponse
-import com.shentu.wallpaper.model.response.SubjectDetailResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import com.shentu.wallpaper.mvp.ui.browser.SaveType
@@ -156,13 +153,11 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
     }
 
     fun getShareData(paper: Wallpaper) {
-        mModel.getShareSubject(paper.subjectId)
+        mModel.getPaperDetail(paper.id)
                 .compose(RxUtils.applyClearSchedulers(mRootView))
-                .subscribe(object : ErrorHandleSubscriber<SubjectDetailResponse>(mErrorHandler) {
-                    override fun onNext(t: SubjectDetailResponse) {
-                        val subject = t.data
-                        ShareUtils.getInstance().showShare(subject?.description, subject?.name
-                                , Constant.BASE_WALLPAPER_SHARE_URL + paper.id, paper.url)
+                .subscribe(object : ErrorHandleSubscriber<BaseResponse<Wallpaper>>(mErrorHandler) {
+                    override fun onNext(t: BaseResponse<Wallpaper>) {
+                        t.data?.let { mRootView.showShare(it) }
                     }
 
                     override fun onError(t: Throwable) {

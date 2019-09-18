@@ -1,8 +1,8 @@
 package com.shentu.wallpaper.app.utils;
 
-import com.jess.arms.integration.AppManager;
+import android.content.Context;
 
-import java.util.Objects;
+import com.shentu.wallpaper.app.HkApplication;
 
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
@@ -28,6 +28,7 @@ public class ShareUtils {
      * @param title 分享标题
      */
     public void showShare(String text, String title, String url, String imageUrl) {
+        Context context = HkApplication.getInstance();
         OnekeyShare oks = new OnekeyShare();
         oks.disableSSOWhenAuthorize();
         oks.setText(text);
@@ -37,7 +38,7 @@ public class ShareUtils {
         oks.setUrl(url);
 //        oks.setSite("http://wmmt119.top");//仅用于QQ空间
 //        oks.setSiteUrl("http://wmmt119.top");//仅用于QQ空间
-        oks.show(Objects.requireNonNull(AppManager.getAppManager().getTopActivity()));
+        oks.show(context);
     }
 
 }

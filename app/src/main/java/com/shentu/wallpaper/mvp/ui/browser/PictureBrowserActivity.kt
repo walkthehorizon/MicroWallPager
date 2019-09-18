@@ -3,6 +3,7 @@ package com.shentu.wallpaper.mvp.ui.browser
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.transition.Fade
 import android.view.Gravity
@@ -10,6 +11,7 @@ import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityOptionsCompat
 import androidx.viewpager.widget.ViewPager
+import cn.sharesdk.onekeyshare.OnekeyShare
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.checkbox.checkBoxPrompt
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
@@ -95,8 +97,38 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         }
         ivShare.setOnClickListener {
             mPresenter?.getShareData(wallpapers[viewPager.currentItem])
+
         }
         initSetCover()
+    }
+
+    /**
+     * 展示分享九宫格
+     * @param paper 带有详细数据的Wallpaper
+     * */
+    override fun showShare(paper: Wallpaper) {
+        val oks = OnekeyShare()
+        oks.disableSSOWhenAuthorize()
+        oks.text = paper.description
+        oks.setTitle(paper.title)
+        oks.setImageUrl(paper.url)
+        oks.setTitleUrl(Constant.BASE_WALLPAPER_SHARE_URL + paper.id)
+        oks.setUrl(Constant.BASE_WALLPAPER_SHARE_URL + paper.id)
+        oks.setDialogMode(false)
+        oks.setSite(resources.getString(R.string.app_name))
+        oks.setSiteUrl(Constant.MICRO_BASE_URL)
+        //自定义打开图片分享
+        val customLogo = BitmapFactory.decodeResource(resources, R.drawable.ic_share_picture)
+        val label = "分享图片"
+        val listener = View.OnClickListener {
+            ARouter.getInstance().build("/activity/picture/share")
+                    .withSerializable("paper", paper)
+                    .withString("originPath", vpAdapter.getFragment(viewPager.currentItem)
+                            .getCurrentImageFile().absolutePath)
+                    .navigation(this)
+        }
+        oks.setCustomerLogo(customLogo, label, listener)
+        oks.show(this)
     }
 
     private fun showMenu() {
@@ -165,9 +197,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     }
 
     private fun initViewPager() {
-        if (wallpapers.isEmpty()) {
-            throw IllegalStateException("wallpapers size can not < 1")
-        }
+        check(wallpapers.isNotEmpty()) { "wallpapers size can not < 1" }
 
         mbLoadOrigin.setOnClickListener {
             mbLoadOrigin.isEnabled = false//在结果回调前禁用二次点击
@@ -205,7 +235,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     }
 
     override fun resetCollect() {
-        ivCollect.isClickable = true;
+        ivCollect.isClickable = true
     }
 
     override fun showCollectAnim(position: Int) {

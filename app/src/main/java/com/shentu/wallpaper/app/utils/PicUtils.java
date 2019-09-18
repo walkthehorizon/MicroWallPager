@@ -42,6 +42,11 @@ public class PicUtils {
                 + URLUtil.guessFileName(pictureUrl, null, null);
     }
 
+    public String getDownloadSharePath(String pictureUrl) {
+        return PathUtils.getExternalDcimPath() + File.separator + "看个够" + File.separator
+                + "share_" + URLUtil.guessFileName(pictureUrl, null, null);
+    }
+
     public String getSetPaperCachePath(String pictureUrl) {
         return PathUtils.getInternalAppCachePath() + File.separator + "Wallpaper" + File.separator
                 + URLUtil.guessFileName(pictureUrl, null, null);

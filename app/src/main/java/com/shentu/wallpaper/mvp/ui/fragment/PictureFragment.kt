@@ -153,6 +153,13 @@ class PictureFragment : BaseFragment<IPresenter>() {
         ToastUtils.showShort("图片已保存在 手机相册》看个够")
     }
 
+    /**
+     * 获取当前加载图片的File
+     * */
+    public fun getCurrentImageFile(): File {
+        return photoView.currentImageFile
+    }
+
     interface Callback {
         fun switchNavigation()
 

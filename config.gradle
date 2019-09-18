@@ -46,7 +46,7 @@ ext {
             "glide-transformations"    : "jp.wasabeef:glide-transformations:4.0.0",
 
             //view
-            "autolayout"               : "com.zhy:autolayout:1.4.5",
+            "autosize"               : "me.jessyan:autosize:1.1.2",
             "butterknife"              : "com.jakewharton:butterknife:${version["butterknifeSdkVersion"]}",
             "butterknife-compiler"     : "com.jakewharton:butterknife-compiler:${version["butterknifeSdkVersion"]}",
             "pickerview"               : "com.contrarywind:Android-PickerView:3.2.5",

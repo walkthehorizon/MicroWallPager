@@ -64,8 +64,9 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
         refreshUser()
         rlHead.setOnClickListener { clickHead() }
         itCollect.setOnClickListener { clickCollect() }
+        itUpdate.setEndValue(BuildConfig.VERSION_NAME)
         itUpdate.setOnClickListener {
-            checkUpdate()
+            checkUpdate(true)
         }
         itCache.setOnClickListener { clickCache() }
         itFeedback.setOnClickListener { clickFeedback() }
@@ -80,14 +81,19 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
             startActivity(Intent(mContext, MyEditActivity::class.java))
         }
         itMoney.setOnClickListener {
+            if (!HkUserManager.getInstance().isLogin) {
+                launchActivity(Intent(mContext, LoginActivity::class.java))
+                return@setOnClickListener
+            }
             HkUtils.instance.showChargeDialog(mContext)
         }
         if (!TimeUtils.isToday(SPUtils.getInstance().getLong(Constant.LAST_NOTIFY_TIME))) {
-            itUpdate.performClick()
+            checkUpdate(false)
         }
     }
 
-    private fun checkUpdate() {
+    private fun checkUpdate(isUser: Boolean) {
+//        ToastUtils.showShort("请求版本信息啦")
         ArmsUtils.obtainAppComponentFromContext(mContext)
                 .repositoryManager()
                 .obtainRetrofitService(MicroService::class.java)
@@ -99,14 +105,12 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                         if (!response.isSuccess) {
                             return
                         }
-                        if (response.data == null) {
-                            return
-                        }
-                        if (response.data.versionCode > BuildConfig.VERSION_CODE) {
+                        if (response.data!!.versionCode > BuildConfig.VERSION_CODE) {
                             itUpdate.setEndValue("有新版本：${response.data.versionName}")
                             showUpdateDialog(response.data)
-                        } else {
-                            itUpdate.setEndValue(BuildConfig.VERSION_NAME)
+                        }
+                        if (isUser) {
+                            ToastUtils.showShort("已是最新版本")
                         }
                     }
                 })
@@ -117,19 +121,6 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
         appUpdateDialog.show((activity as BaseActivity<*>).supportFragmentManager
                 , AppUpdateDialog::class.java.simpleName)
     }
-
-//    private fun showAd() {
-//        AdUtils.instance.showUrgeAd(activity as AppCompatActivity, object : RewardedAdCallback() {
-//            override fun onRewardedAdClosed() {
-//                AdUtils.instance.createAndLoadRewardedAd()
-//            }
-//
-//            override fun onUserEarnedReward(p0: RewardItem) {
-//                super.onUserEarnedReward(p0)
-//                ToastUtils.showShort("成功！！！")
-//            }
-//        })
-//    }
 
     private fun refreshUser() {
         val user = HkUserManager.getInstance().user

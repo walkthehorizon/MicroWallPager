@@ -44,7 +44,7 @@ android {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "false"
-            //buildConfigField "String", "Sever", '"http://192.168.12.81/micro/"'
+//            buildConfigField "String", "Sever", '"http://192.168.12.167/micro/"'
             buildConfigField "String", "Sever", '"http://api.wmmt119.top/micro/"'
             buildConfigField "boolean", "Debug", "true"
             minifyEnabled false
@@ -87,13 +87,17 @@ MobSDK {
     ShareSDK {
         //平台配置信息
         devInfo {
+            WechatMoments {
+                appId "wx0297c301e792e1d3"
+                appSecret "82ca4da77bbe554a14fefd70b3f24c7e"
+            }
             Wechat {
                 appId "wx0297c301e792e1d3"
                 appSecret "82ca4da77bbe554a14fefd70b3f24c7e"
             }
             QQ {
-                appId "1109660294"
-                appKey "PfE6ZLbMcvF8aVni"
+                appId "1107764210"
+                appKey "radHCb2FhkGLtIv4"
                 shareByAppClient true
             }
         }
@@ -147,7 +151,6 @@ dependencies {
     implementation project(':netbus')
     implementation rootProject.ext.dependencies["matisse"]
     implementation rootProject.ext.dependencies["lottie"]
-
     kapt(rootProject.ext.dependencies["butterknife-compiler"]) {
         exclude module: 'support-annotations'
     }
@@ -164,25 +167,21 @@ dependencies {
     implementation rootProject.ext.dependencies["SmartRefreshLayout"]
     implementation rootProject.ext.dependencies["SmartRefreshHeader"]
     implementation rootProject.ext.dependencies["photoview"]
-//    implementation rootProject.ext.dependencies["material-dialogs"]
+    implementation rootProject.ext.dependencies["autosize"]
+    //    implementation rootProject.ext.dependencies["material-dialogs"]
     implementation rootProject.ext.dependencies["mdialogs-core"]
     implementation rootProject.ext.dependencies["mdialogs:bottomsheets"]
     implementation rootProject.ext.dependencies["mdialogs-input"]
     implementation rootProject.ext.dependencies["flexbox"]
-
     implementation(rootProject.ext.dependencies["cosxml-lite"]) {
         exclude group: 'com.tencent.qcloud', module: 'mtaUtils' //关闭 mta上报功能
     }
-
     implementation rootProject.ext.dependencies["bigImageViewer"]
     implementation rootProject.ext.dependencies["bigGlideLoader"]
     implementation rootProject.ext.dependencies["bigGifDrawable"]
     implementation rootProject.ext.dependencies["circleindicator"]
-
     implementation rootProject.ext.dependencies["firebase"]
-    implementation rootProject.ext.dependencies["adMob"]
     implementation rootProject.ext.dependencies["crashlytics"]
-
     //test
     testImplementation rootProject.ext.dependencies["junit"]
     debugImplementation rootProject.ext.dependencies["canary-debug"]

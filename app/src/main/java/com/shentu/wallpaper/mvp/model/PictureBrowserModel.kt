@@ -8,8 +8,8 @@ import com.jess.arms.mvp.BaseModel
 import com.shentu.wallpaper.model.api.cache.MicroCache
 import com.shentu.wallpaper.model.api.service.CollectService
 import com.shentu.wallpaper.model.api.service.MicroService
+import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.model.response.BaseResponse
-import com.shentu.wallpaper.model.response.SubjectDetailResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import io.reactivex.Observable
@@ -54,9 +54,9 @@ constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager
                 .buyPaper(pk, pea)
     }
 
-    override fun getShareSubject(pk: Int?): Observable<SubjectDetailResponse> {
+    override fun getPaperDetail(pk: Int?): Observable<BaseResponse<Wallpaper>> {
         return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
-                .getSubjectDetail(pk)
+                .getPaperDetail(pk)
     }
 
     override fun onDestroy() {

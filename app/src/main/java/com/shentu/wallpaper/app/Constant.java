@@ -21,5 +21,7 @@ public class Constant {
 
     public static String LAST_NOTIFY_TIME = "LAST_NOTIFY_TIME";
 
+    public static String MICRO_BASE_URL = "https://wmmt119.top";
+
     public static final String BASE_WALLPAPER_SHARE_URL = "https://wmmt119.top/#/wallpaper/";
 }

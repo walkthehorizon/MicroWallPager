@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tvWxMoment"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:drawableTop="@drawable/ssdk_oks_classic_wechatmoments"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="朋友圈" />
+
+    <TextView
+        android:id="@+id/tvWx"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:drawableTop="@drawable/ssdk_oks_classic_wechat"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="微信好友" />
+
+    <TextView
+        android:id="@+id/tvQQ"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:drawableTop="@drawable/ssdk_oks_classic_qq"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="QQ" />
+
+    <TextView
+        android:id="@+id/tvDownload"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:drawableTop="@drawable/ic_share_download"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="下载图片" />
+
+</LinearLayout>

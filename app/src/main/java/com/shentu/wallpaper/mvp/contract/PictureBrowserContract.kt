@@ -4,7 +4,6 @@ import com.jess.arms.mvp.IModel
 import com.jess.arms.mvp.IView
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.model.response.BaseResponse
-import com.shentu.wallpaper.model.response.SubjectDetailResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.ui.browser.SaveType
 import io.reactivex.Observable
@@ -26,6 +25,8 @@ interface PictureBrowserContract {
         fun savePicture(currentItem: Int, type: SaveType)
 
         fun resetCollect()
+
+        fun showShare(paper: Wallpaper)
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
@@ -38,7 +39,7 @@ interface PictureBrowserContract {
 
         fun buyPaper(pk: Int, pea: Int): Observable<BaseResponse<String>>
 
-        fun getShareSubject(pk: Int?): Observable<SubjectDetailResponse>
+        fun getPaperDetail(pk: Int?): Observable<BaseResponse<Wallpaper>>
     }
 
 }

@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
-import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
@@ -74,7 +73,6 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDeta
 
     override fun initData(savedInstanceState: Bundle?) {
         categoryId = arguments?.getInt(CATEGORY_ID)!!
-        ToastUtils.showShort("id:$categoryId")
         rvCategoryList.layoutManager = GridLayoutManager(context
                 , 3)
         rvCategoryList.addItemDecoration(RvCategoryListDecoration(2))

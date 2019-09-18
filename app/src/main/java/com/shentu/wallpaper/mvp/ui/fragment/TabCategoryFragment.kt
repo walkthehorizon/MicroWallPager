@@ -1,6 +1,5 @@
 package com.shentu.wallpaper.mvp.ui.fragment
 
-
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,7 +27,6 @@ import com.shentu.wallpaper.mvp.presenter.CategoryPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.CategoryAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.RvCategoryDecoration
 import kotlinx.android.synthetic.main.fragment_category.*
-
 
 class TabCategoryFragment : BaseFragment<CategoryPresenter>(), CategoryContract.View {
 

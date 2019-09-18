@@ -3,6 +3,7 @@ package com.shentu.wallpaper.model.api.service;
 
 import com.shentu.wallpaper.model.entity.AppUpdate;
 import com.shentu.wallpaper.model.entity.MicroUser;
+import com.shentu.wallpaper.model.entity.Wallpaper;
 import com.shentu.wallpaper.model.response.BannerPageResponse;
 import com.shentu.wallpaper.model.response.BaseResponse;
 import com.shentu.wallpaper.model.response.CategoryPageResponse;
@@ -108,6 +109,9 @@ public interface MicroService {
     Observable<BaseResponse<String>>
     buyPaper(@Path("pk") int pk, @Query("pea") int pea);
 
+    @GET("wallpaper/detail/{pk}")
+    Observable<BaseResponse<Wallpaper>>
+    getPaperDetail(@Path("pk") Integer pk);
 //    /**
 //     * collect
 //     * */

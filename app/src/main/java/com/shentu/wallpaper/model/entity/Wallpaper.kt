@@ -19,4 +19,11 @@ class Wallpaper(var url: String = "") : Serializable {
 
     //delete
     var checked = false
+
+    /**
+     * from subject
+     * */
+    var description: String = ""
+
+    var title: String = ""
 }
