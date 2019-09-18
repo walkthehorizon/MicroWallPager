@@ -6,6 +6,8 @@ import android.webkit.URLUtil;
 import com.blankj.utilcode.util.PathUtils;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
+import com.shentu.wallpaper.R;
+import com.shentu.wallpaper.app.HkApplication;
 
 import java.io.File;
 
@@ -38,12 +40,16 @@ public class PicUtils {
     }
 
     public String getDownloadPicturePath(String pictureUrl) {
-        return PathUtils.getExternalDcimPath() + File.separator + "看个够" + File.separator
+        return PathUtils.getExternalDcimPath() + File.separator
+                + HkApplication.getInstance().getResources().getString(R.string.app_name)
+                + File.separator
                 + URLUtil.guessFileName(pictureUrl, null, null);
     }
 
     public String getDownloadSharePath(String pictureUrl) {
-        return PathUtils.getExternalDcimPath() + File.separator + "看个够" + File.separator
+        return PathUtils.getExternalDcimPath() + File.separator
+                + HkApplication.getInstance().getResources().getString(R.string.app_name)
+                + File.separator
                 + "share_" + URLUtil.guessFileName(pictureUrl, null, null);
     }
 

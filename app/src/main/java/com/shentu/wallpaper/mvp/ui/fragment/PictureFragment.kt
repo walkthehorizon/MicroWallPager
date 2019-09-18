@@ -150,14 +150,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
         else
             PicUtils.getInstance().getDownloadPicturePath(wallpaper.originUrl)
         FileUtils.copyFile(photoView.currentImageFile, File(destPath))
-        ToastUtils.showShort("图片已保存在 手机相册》看个够")
-    }
-
-    /**
-     * 获取当前加载图片的File
-     * */
-    public fun getCurrentImageFile(): File {
-        return photoView.currentImageFile
+        ToastUtils.showShort("图片已保存在 手机相册》萌幻Cos")
     }
 
     interface Callback {

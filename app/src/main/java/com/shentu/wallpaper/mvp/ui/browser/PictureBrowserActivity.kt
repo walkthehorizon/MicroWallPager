@@ -123,8 +123,6 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         val listener = View.OnClickListener {
             ARouter.getInstance().build("/activity/picture/share")
                     .withSerializable("paper", paper)
-                    .withString("originPath", vpAdapter.getFragment(viewPager.currentItem)
-                            .getCurrentImageFile().absolutePath)
                     .navigation(this)
         }
         oks.setCustomerLogo(customLogo, label, listener)

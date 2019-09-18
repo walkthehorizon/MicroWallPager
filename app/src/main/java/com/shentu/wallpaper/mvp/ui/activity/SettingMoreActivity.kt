@@ -41,7 +41,7 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
                 .load(R.drawable.ic_launcher)
                 .transform(RoundedCornersTransformation(ConvertUtils.dp2px(12.0f), 0, RoundedCornersTransformation.CornerType.ALL))
                 .into(mIvCover)
-        mTvVersion.text = "看个够："+BuildConfig.VERSION_NAME
+        mTvVersion.text = BuildConfig.VERSION_NAME
         if (HkUserManager.getInstance().isLogin) {
             mbLogout.visibility = View.VISIBLE
             mbLogout.setOnClickListener {

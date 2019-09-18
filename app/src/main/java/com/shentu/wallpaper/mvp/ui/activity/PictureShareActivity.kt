@@ -13,7 +13,10 @@ import cn.sharesdk.wechat.moments.WechatMoments
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
-import com.blankj.utilcode.util.*
+import com.blankj.utilcode.util.ConvertUtils
+import com.blankj.utilcode.util.FileIOUtils
+import com.blankj.utilcode.util.ImageUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.IPresenter
@@ -34,10 +37,6 @@ class PictureShareActivity : BaseActivity<IPresenter>() {
     @Autowired
     var paper: Wallpaper = Wallpaper()
 
-    @JvmField
-    @Autowired
-    var originPath: String? = null
-
     private lateinit var cardBitmap: Bitmap
 
     override fun setupActivityComponent(appComponent: AppComponent) {
@@ -51,10 +50,6 @@ class PictureShareActivity : BaseActivity<IPresenter>() {
     @SuppressLint("SetTextI18n")
     override fun initData(savedInstanceState: Bundle?) {
         ARouter.getInstance().inject(this)
-        if (!FileUtils.isFileExists(originPath)) {
-            ToastUtils.showShort("原图加载异常")
-            return
-        }
         GlideArms.with(this)
                 .load(paper.url)
                 .transform(RoundedCornersTransformation(ConvertUtils.dp2px(10f)
@@ -79,7 +74,7 @@ class PictureShareActivity : BaseActivity<IPresenter>() {
         tvDownload.setOnClickListener {
             FileIOUtils.writeFileFromBytesByStream(PicUtils.getInstance().getDownloadSharePath(
                     paper.url), ImageUtils.bitmap2Bytes(getCardBitmap(), Bitmap.CompressFormat.JPEG))
-            ToastUtils.showShort("图片已保存在 手机相册》看个够")
+            ToastUtils.showShort("图片已保存在 手机相册》萌幻Cos")
         }
     }
 

@@ -7,11 +7,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.di.scope.ActivityScope
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
-import com.liulishuo.filedownloader.BaseDownloadTask
-import com.liulishuo.filedownloader.FileDownloadSampleListener
-import com.liulishuo.filedownloader.FileDownloader
 import com.shentu.wallpaper.app.GlideArms
-import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.model.response.BaseResponse
@@ -107,36 +103,6 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                         //downloadPicture(if (pea == 3) wallpaper.originUrl else wallpaper.url)
                     }
                 })
-    }
-
-    /**
-     * @param type 1、设置壁纸
-     * */
-    fun downloadPicture(pictureUrl: String, type: Int = 0) {
-        FileDownloader.getImpl().create(pictureUrl)
-                .setPath(if (type == 1) PicUtils.getInstance().getSetPaperCachePath(pictureUrl) else
-                    PicUtils.getInstance().getDownloadPicturePath(pictureUrl))
-                .setListener(object : FileDownloadSampleListener() {
-                    override fun completed(task: BaseDownloadTask?) {
-                        super.completed(task)
-                        if (type == 1) {
-                            task?.path?.let { mRootView.setWallpaper(it) }
-                        } else {
-                            mRootView.showMessage("图片已保存在 手机相册》看个够")
-                        }
-                    }
-
-                    override fun error(task: BaseDownloadTask?, e: Throwable?) {
-                        mRootView.showMessage("下载异常：" + e?.message)
-                    }
-
-                    override fun progress(task: BaseDownloadTask?, soFarBytes: Int, totalBytes: Int) {
-                        if (type == 1) {
-                            return
-                        }
-                    }
-                })
-                .start()
     }
 
     fun updateCategoryCover(cid: Int, logo: String) {

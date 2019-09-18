@@ -31,7 +31,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/mIvCover"
         android:gravity="center"
-        tools:text = "看个够：1.0.0"
+        tools:text="萌幻Cos：1.0.0"
         android:layout_height="wrap_content" />
 
     <com.google.android.material.button.MaterialButton
