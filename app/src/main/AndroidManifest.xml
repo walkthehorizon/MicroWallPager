@@ -31,9 +31,6 @@
         <meta-data
             android:name="design_height_in_dp"
             android:value="640" />
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-9991643602960691~8603727291" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.shentu.wallpaper.fileProvider"

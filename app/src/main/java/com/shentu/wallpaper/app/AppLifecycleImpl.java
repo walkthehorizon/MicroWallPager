@@ -40,9 +40,9 @@ import timber.log.Timber;
  * 展示 {@link AppLifecycles} 的用法
  * ================================================
  */
-public class AppLifecyclesImpl implements AppLifecycles {
+public class AppLifecycleImpl implements AppLifecycles {
 
-    public AppLifecyclesImpl() {
+    public AppLifecycleImpl() {
 
     }
 
@@ -63,24 +63,23 @@ public class AppLifecyclesImpl implements AppLifecycles {
         if (BuildConfig.LOG_DEBUG) {//Timber初始化
             Timber.plant(new Timber.DebugTree());
         }
-
         Timber.d("init use time: %s ms", String.valueOf(System.currentTimeMillis() - start));
     }
 
     private void init(Application application) {
         Utils.init(application);
-        if (BuildConfig.Debug) {           // 这两行必须写在init之前，否则这些配置在init过程中将无效
-            ARouter.openLog();     // 打印日志
-            ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
-        }
+//        if (BuildConfig.Debug) {           // 这两行必须写在init之前，否则这些配置在init过程中将无效
+//            ARouter.openLog();     // 打印日志
+//            ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
+//        }
         ARouter.init(application); // 尽可能早，推荐在Application中初始化
         MobSDK.init(application);
         ButterKnife.setDebug(BuildConfig.Debug);
 
         //使用 IntelligentCache.KEY_KEEP 作为 key 的前缀, 可以使储存的数据永久存储在内存中
         //否则存储在 LRU 算法的存储空间中, 前提是 extras 使用的是 IntelligentCache (框架默认使用)
-        ArmsUtils.obtainAppComponentFromContext(application).extras().put(IntelligentCache.KEY_KEEP + RefWatcher.class.getName(), BuildConfig.USE_CANARY ? LeakCanary.install(application) : RefWatcher.DISABLED);
-
+        ArmsUtils.obtainAppComponentFromContext(application).extras().put(IntelligentCache.KEY_KEEP
+                + RefWatcher.class.getName(), BuildConfig.USE_CANARY ? LeakCanary.install(application) : RefWatcher.DISABLED);
         LoadSir.beginBuilder()
                 .addCallback(new ErrorCallback())//添加各种状态页
                 .addCallback(new EmptyCallback())

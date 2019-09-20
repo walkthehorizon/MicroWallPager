@@ -91,7 +91,7 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDeta
                                 , view.width / 2, view.height / 2
                                 , 0, 0)
                         PictureBrowserActivity.open(position, compat = compat, callback = this
-                                , context = mContext)
+                                , context = mContext, categoryId = categoryId)
                     }
         } else {
             (rvCategoryList.adapter as CategoryListAdapter).addData(wallpapers)

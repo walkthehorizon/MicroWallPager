@@ -15,6 +15,7 @@ public class HkUserManager {
     private String USER_LAST_LOGIN = "user_last_login";
     private String USER_SEX = "user_sex";
     private String USER_PEA = "user_pea";
+    private String USER_TOKEN = "user_token";
     public MicroUser user;
 
     private static final class SingletonHolder {
@@ -36,6 +37,7 @@ public class HkUserManager {
         user.last_login = SPUtils.getInstance().getString(USER_LAST_LOGIN, "");
         user.sex = SPUtils.getInstance().getInt(USER_SEX, 0);
         user.pea = SPUtils.getInstance().getInt(USER_PEA, 0);
+        user.token = SPUtils.getInstance().getString(USER_TOKEN, "");
     }
 
     public static HkUserManager getInstance() {
@@ -56,6 +58,7 @@ public class HkUserManager {
         SPUtils.getInstance().put(USER_LAST_LOGIN, user.last_login);
         SPUtils.getInstance().put(USER_SEX, user.sex);
         SPUtils.getInstance().put(USER_PEA, user.pea);
+        SPUtils.getInstance().put(USER_TOKEN, user.token);
     }
 
     /**
@@ -73,6 +76,7 @@ public class HkUserManager {
         SPUtils.getInstance().remove(USER_LAST_LOGIN);
         SPUtils.getInstance().remove(USER_SEX);
         SPUtils.getInstance().remove(USER_PEA);
+        SPUtils.getInstance().remove(USER_TOKEN);
     }
 
     public boolean isLogin() {
@@ -85,5 +89,9 @@ public class HkUserManager {
 
     public int getUid() {
         return isLogin() ? user.uid : -1;
+    }
+
+    public String getToken() {
+        return isLogin() ? user.token : "";
     }
 }

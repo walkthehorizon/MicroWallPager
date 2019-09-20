@@ -16,6 +16,7 @@ import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.GlideArms
+import com.shentu.wallpaper.app.page.EmptyCallback
 import com.shentu.wallpaper.app.page.ErrorCallback
 import com.shentu.wallpaper.app.page.LoadingCallback
 import com.shentu.wallpaper.di.component.DaggerSubjectDetailComponent
@@ -113,6 +114,10 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
 
     override fun showContent() {
         loadService.showSuccess()
+    }
+
+    override fun showEmpty() {
+        loadService.showCallback(EmptyCallback::class.java)
     }
 
     override fun showError() {

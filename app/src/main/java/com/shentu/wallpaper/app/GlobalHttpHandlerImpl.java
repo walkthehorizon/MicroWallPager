@@ -1,8 +1,8 @@
 package com.shentu.wallpaper.app;
 
 import android.content.Context;
+import android.text.TextUtils;
 
-import com.blankj.utilcode.util.SPUtils;
 import com.jess.arms.http.GlobalHttpHandler;
 import com.shentu.wallpaper.BuildConfig;
 import com.shentu.wallpaper.app.utils.HkUtils;
@@ -15,9 +15,6 @@ import okhttp3.Response;
  * ================================================
  * 展示 {@link GlobalHttpHandler} 的用法
  * <p>
- * Created by JessYan on 04/09/2017 17:06
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
 public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
@@ -65,6 +62,10 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
     @Override
     public Request onHttpRequestBefore(Interceptor.Chain chain, Request request) {
         Request.Builder builder = request.newBuilder();
+        String token = HkUserManager.getInstance().getToken();
+        if (!TextUtils.isEmpty(token)) {
+            builder.addHeader("Authorization", "Token " + token);
+        }
         return builder
                 .addHeader("uid", HkUserManager.getInstance().getUid() + "")
                 .addHeader("Content-Type", "application/json")
@@ -72,7 +73,7 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
                 .addHeader("systemType", "Android")
                 .addHeader("systemVersion", android.os.Build.VERSION.RELEASE)
                 .addHeader("appVersion", BuildConfig.VERSION_NAME)
-                .addHeader("X-CSRFToken", SPUtils.getInstance().getString("X-CSRFToken", ""))
+//                .addHeader("X-CSRFToken", SPUtils.getInstance().getString("X-CSRFToken", ""))
                 .build();
     }
 

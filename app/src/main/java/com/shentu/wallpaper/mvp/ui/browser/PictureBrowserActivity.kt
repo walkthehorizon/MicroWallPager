@@ -40,6 +40,7 @@ import com.shentu.wallpaper.mvp.ui.fragment.PictureFragment
 import com.shentu.wallpaper.mvp.ui.home.TabHomeFragment
 import com.shentu.wallpaper.mvp.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.fragment_picture_browser.*
+import timber.log.Timber
 
 @Route(path = "/picture/browser/activity")
 class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureBrowserContract.View
@@ -59,6 +60,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     @Autowired
     @JvmField
     var categoryId: Int = -1
+
     private var popupMenu: PopupMenu? = null
 
     private var wallpapers: MutableList<Wallpaper> = arrayListOf()
@@ -178,6 +180,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     }
 
     private fun initSetCover() {
+        Timber.e("admin:$categoryId")
         if (!HkUserManager.getInstance().isAdmin || categoryId == -1) {
             return
         }
@@ -295,11 +298,13 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     override fun showNavigation() {
         rl_head.visibility = View.VISIBLE
         rl_bottom.visibility = View.VISIBLE
+        ivShare.visibility = View.VISIBLE
     }
 
     override fun hideNavigation() {
         rl_head.visibility = View.GONE
         rl_bottom.visibility = View.GONE
+        ivShare.visibility = View.GONE
     }
 
     override fun switchNavigation() {

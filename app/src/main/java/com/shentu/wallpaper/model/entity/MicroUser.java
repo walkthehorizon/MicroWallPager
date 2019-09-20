@@ -14,6 +14,7 @@ public class MicroUser {
     public String last_login;
     public Integer sex;//默认保密
     public Integer pea = 0;
+    public String token = "";
 
     @Override
     public String toString() {
