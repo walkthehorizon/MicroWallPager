@@ -3,7 +3,6 @@ package com.shentu.wallpaper.mvp.ui.adapter
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.text.TextUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -30,11 +29,9 @@ class CategoryAdapter(data: MutableList<Category>) : BaseQuickAdapter<Category, 
 
     override fun convert(helper: BaseViewHolder, item: Category) {
         GlideArms.with(mContext)
-                .load(if (TextUtils.isEmpty(item.logo))
-                    defaultDrawable
-                else
-                    item.logo)
+                .load(item.logo)
                 .override(480, 270)
+                .placeholder(R.drawable.default_category_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .transform(MultiTransformation<Bitmap>(
                         CenterCrop(), RoundedCornersTransformation(ConvertUtils.dp2px(5f),

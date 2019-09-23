@@ -94,9 +94,14 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, Tex
         etSearch.addTextChangedListener(this)
         rvData.layoutManager = LinearLayoutManager(this)
         rvData.addItemDecoration(HotPageRvDecoration(12))
-        hotAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, _, position ->
+        hotAdapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
             val subject = adapter.data[position] as Subject
-            PictureBrowserActivity.open(subjectId = subject.id, context = this)
+            val current = when (view.id) {
+                R.id.iv_2 -> 1
+                R.id.iv_3 -> 2
+                else -> 0
+            }
+            PictureBrowserActivity.open(current = current, subjectId = subject.id, context = this)
         }
         rvData.adapter = hotAdapter
     }

@@ -151,6 +151,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     }
 
     override fun savePicture(currentItem: Int, type: SaveType) {
+        HkUserManager.getInstance().updateKandou(type)
         vpAdapter.getFragment(currentItem).savePicture(type)
     }
 
@@ -190,7 +191,8 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                 title(text = "分类")
                 message(text = "确定设为当前分类封面？")
                 positiveButton(text = "确定") {
-                    mPresenter?.updateCategoryCover(categoryId, wallpapers[viewPager.currentItem].url)
+                    val index = this@PictureBrowserActivity.viewPager.currentItem
+                    mPresenter?.updateCategoryCover(categoryId, wallpapers[index].url)
                 }
                 negativeButton(text = "取消")
             }
@@ -201,7 +203,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         check(wallpapers.isNotEmpty()) { "wallpapers size can not < 1" }
 
         mbLoadOrigin.setOnClickListener {
-            mbLoadOrigin.isEnabled = false//在结果回调前禁用二次点击
+            //            mbLoadOrigin.isEnabled = false//在结果回调前禁用二次点击
             vpAdapter.getFragment(viewPager.currentItem).loadOriginPicture(Behavior.ONLY_LOAD)
         }
         ivDownload.setOnClickListener {
@@ -287,7 +289,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             ivCollect.cancelAnimation()
         }
         tvOrder.text = "${position + 1}/${vpAdapter.count}"
-        mbLoadOrigin.visibility = if (wallpapers[position].isOriginExist) View.GONE else View.VISIBLE
+//        mbLoadOrigin.visibility = if (wallpapers[position].isOriginExist) View.GONE else View.VISIBLE
 //        ivDownload.visibility = if (FileUtils.isFileExists(PicUtils.getInstance().getDownloadPicturePath(
 //                        wallpapers[position].originUrl))) View.GONE else View.VISIBLE
         tvCollectNum.text = wallpapers[position].collectNum.toString()
@@ -317,9 +319,9 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
     override fun onLoadOrigin(pos: Int, result: Boolean) {
         wallpapers[pos].isOriginExist = result
-        if (pos == viewPager.currentItem) {
-            mbLoadOrigin.visibility = View.GONE
-        }
+//        if (pos == viewPager.currentItem) {
+//            mbLoadOrigin.visibility = View.GONE
+//        }
     }
 
     override fun onDestroy() {

@@ -2,6 +2,7 @@ package com.shentu.wallpaper.app;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.shentu.wallpaper.model.entity.MicroUser;
+import com.shentu.wallpaper.mvp.ui.browser.SaveType;
 
 
 public class HkUserManager {
@@ -77,6 +78,11 @@ public class HkUserManager {
         SPUtils.getInstance().remove(USER_SEX);
         SPUtils.getInstance().remove(USER_PEA);
         SPUtils.getInstance().remove(USER_TOKEN);
+    }
+
+    public void updateKandou(SaveType type) {
+        user.pea -= type == SaveType.NORMAL ? 1 : 3;
+        SPUtils.getInstance().put(USER_PEA, user.pea);
     }
 
     public boolean isLogin() {

@@ -101,7 +101,6 @@ class HkUtils private constructor() {
                     } catch (e1: IOException) {
                         e1.printStackTrace()
                     }
-
                 }
                 RomUtil.isMiui() -> try {
                     val componentName = ComponentName("com.android.thememanager",

@@ -28,6 +28,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
 
     private var normalLoad = false
     private var originLoad = false
+    private var isOriginLoading = false
 
     companion object {
         fun newInstance(wallpaper: Wallpaper, pos: Int): PictureFragment {
@@ -78,6 +79,9 @@ class PictureFragment : BaseFragment<IPresenter>() {
     }
 
     fun loadOriginPicture(behavior: Behavior) {
+        if (isOriginLoading) {
+            return
+        }
         context?.let {
             photoView.setProgressIndicator(ProgressPieIndicator())
             photoView.setImageLoaderCallback(getImageLoadCallback(behavior))
@@ -88,7 +92,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
     private fun getImageLoadCallback(behavior: Behavior): ImageLoader.Callback {
         return object : ImageLoader.Callback {
             override fun onFinish() {
-
+                isOriginLoading = false
             }
 
             @SuppressLint("MissingPermission")
@@ -119,7 +123,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
             }
 
             override fun onStart() {
-
+                isOriginLoading = true
             }
         }
     }
