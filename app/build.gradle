@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.mob.sdk'
 apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -182,6 +183,7 @@ dependencies {
     implementation rootProject.ext.dependencies["circleindicator"]
     implementation rootProject.ext.dependencies["firebase"]
     implementation rootProject.ext.dependencies["crashlytics"]
+    implementation rootProject.ext.dependencies["firebase-perf"]
     //test
     testImplementation rootProject.ext.dependencies["junit"]
     debugImplementation rootProject.ext.dependencies["canary-debug"]

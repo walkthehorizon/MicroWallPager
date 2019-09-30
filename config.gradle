@@ -111,8 +111,8 @@ ext {
             "AndPermission"            : "com.yanzhenjie:permission:2.0.0-rc12",
             "matisse"                  : "com.zhihu.android:matisse:0.5.2-beta3",
             "cosxml-lite"              : "com.tencent.qcloud:cosxml-lite:5.4.25",
-            "adMob"                    : "com.google.firebase:firebase-ads:17.2.0",
             "firebase"                 : "com.google.firebase:firebase-core:17.0.0",
+            "firebase-perf"            : "com.google.firebase:firebase-perf:18.0.1",
             "crashlytics"              : "com.crashlytics.sdk.android:crashlytics:2.10.1",
 
             //test

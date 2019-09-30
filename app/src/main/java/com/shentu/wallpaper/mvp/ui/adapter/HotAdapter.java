@@ -98,7 +98,10 @@ public class HotAdapter extends BaseMultiItemQuickAdapter<Subject, BaseViewHolde
                     .transforms(multi)
                     .into((ImageView) helper.getView(R.id.iv_cover));
         }
-        helper.addOnClickListener(R.id.tv_share)
-                .addOnClickListener(R.id.tv_support);
+        helper.addOnClickListener(R.id.tv_share);
+        helper.addOnClickListener(R.id.tv_support);
+        helper.addOnClickListener(R.id.iv_1);
+        helper.addOnClickListener(R.id.iv_2);
+        helper.addOnClickListener(R.id.iv_3);
     }
 }
