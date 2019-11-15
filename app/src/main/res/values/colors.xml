@@ -3,7 +3,7 @@
     <!--<color name="colorPrimary">#455A64</color>-->
     <color name="colorPrimary">@color/pink</color>
     <color name="colorPrimaryDark">@color/pink_dark</color>
-    <color name="colorAccent">@color/pink_trans</color>
+    <color name="colorAccent">@color/pink</color>
     <color name="colorDivider">#f2f2f2</color>
     <color name="colorIcon">#A8A8A8</color>
     <color name="colorPrimaryText">#212121</color>

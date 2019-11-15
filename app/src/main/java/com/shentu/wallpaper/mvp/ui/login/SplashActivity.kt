@@ -46,7 +46,7 @@ class SplashActivity : BaseActivity<IPresenter>() {
     fun requestPermissions() {
         AndPermission.with(this)
                 .runtime()
-                .permission(*Permission.Group.STORAGE)
+                .permission(Permission.Group.STORAGE)
                 .rationale { _, _, executor -> showPermissionRequestDialog(executor) }
                 .onGranted { showSplash() }
                 .onDenied { ToastUtils.showShort("权限被拒绝，启动失败") }.start()

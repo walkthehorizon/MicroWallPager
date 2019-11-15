@@ -107,7 +107,8 @@ public interface MicroService {
 
     @POST("buy/paper/{pk}")
     Observable<BaseResponse<String>>
-    buyPaper(@Path("pk") int pk, @Query("pea") int pea);
+    buyPaper(@Path("pk") int pk,
+             @Query("type") int type);
 
     @GET("wallpaper/detail/{pk}")
     Observable<BaseResponse<Wallpaper>>

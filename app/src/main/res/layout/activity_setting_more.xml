@@ -10,29 +10,38 @@
     <com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        app:tl_title="更多设置"
-        app:tl_left_icon="@drawable/ic_arrow_back_white_24dp"
+        android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:layout_height="wrap_content" />
+        app:tl_left_icon="@drawable/ic_arrow_back_white_24dp"
+        app:tl_title="更多设置" />
+
+    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+        android:id="@+id/rivDownload"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/toolbar"
+        app:riv_arrow_visible="false"
+        app:riv_divider_visible="false"
+        app:riv_title="下载询问"/>
 
     <ImageView
         android:id="@+id/mIvCover"
         android:layout_width="320dp"
         android:layout_height="320dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="120dp"/>
+        android:layout_marginTop="120dp" />
 
     <TextView
         android:id="@+id/mTvVersion"
-        android:layout_marginTop="12dp"
         android:layout_width="320dp"
-        android:textSize="18sp"
-        android:textColor="@color/colorPrimary"
-        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/mIvCover"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
         android:gravity="center"
-        tools:text="萌幻Cos：1.0.0"
-        android:layout_height="wrap_content" />
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        tools:text="V1.0.0" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mbLogout"
@@ -43,10 +52,10 @@
         android:layout_marginBottom="60dp"
         android:gravity="center"
         android:text="注销登录"
-        android:visibility="gone"
         android:textAllCaps="false"
         android:textAppearance="?android:attr/textAppearanceMediumInverse"
         android:textColor="@color/white"
+        android:visibility="gone"
         app:backgroundTint="@color/colorPrimary"
         app:cornerRadius="24dp"
         app:rippleColor="@color/colorPrimaryDark" />

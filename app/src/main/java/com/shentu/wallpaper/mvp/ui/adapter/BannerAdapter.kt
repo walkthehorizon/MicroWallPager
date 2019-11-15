@@ -10,7 +10,7 @@ import com.shentu.wallpaper.model.entity.Banner
 class BannerAdapter(data: List<Banner>?) : BaseQuickAdapter<Banner, BaseViewHolder>(R.layout.item_home_banner, data) {
 
     init {
-        setOnItemClickListener { adapter, view, position ->
+        setOnItemClickListener { _, _, position ->
             ToastUtils.showShort(position)
         }
     }

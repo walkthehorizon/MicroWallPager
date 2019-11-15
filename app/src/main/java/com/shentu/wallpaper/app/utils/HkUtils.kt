@@ -126,7 +126,7 @@ class HkUtils private constructor() {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     context.applicationContext.startActivity(intent)
                 } catch (e: IllegalArgumentException) {
-                    var bitmap: Bitmap? = null
+                    val bitmap: Bitmap?
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(context.applicationContext.contentResolver, uriPath)
                         if (bitmap != null) {

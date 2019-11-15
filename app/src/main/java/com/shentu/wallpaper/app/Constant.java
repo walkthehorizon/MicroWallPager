@@ -15,7 +15,10 @@ public class Constant {
 
     public static String URGE_AD_DIALOG = "urge_ad_dialog";
 
-    public static String DEFAULT_DOWNLOAD_RESUME = "default_download_resume";
+    /**
+     * 下载询问
+     * */
+    public static String DOWNLOAD_TYPE = "download_type";
 
     public static AppUpdate appUpdate = null;
 

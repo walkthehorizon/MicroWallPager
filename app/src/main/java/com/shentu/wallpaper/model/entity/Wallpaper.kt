@@ -26,4 +26,8 @@ class Wallpaper(var url: String = "") : Serializable {
     var description: String = ""
 
     var title: String = ""
+
+    var normalPrice = 1
+
+    var originPrice = 3
 }

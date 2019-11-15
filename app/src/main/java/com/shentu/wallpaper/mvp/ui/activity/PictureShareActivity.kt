@@ -56,7 +56,7 @@ class PictureShareActivity : BaseActivity<IPresenter>() {
                         , 0, RoundedCornersTransformation.CornerType.TOP))
                 .into(ivShare)
         ivCode.post {
-            val qrBitmap = HkUtils.instance.createQRImage(Constant.BASE_WALLPAPER_SHARE_URL + paper!!.id
+            val qrBitmap = HkUtils.instance.createQRImage(Constant.BASE_WALLPAPER_SHARE_URL + paper.id
                     , ivCode.width, ivCode.height)
             ivCode.setImageBitmap(qrBitmap)
         }

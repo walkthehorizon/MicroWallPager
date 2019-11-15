@@ -91,16 +91,15 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                 })
     }
 
-    fun buyPaper(position: Int, wallpaper: Wallpaper, pea: Int) {
-        mModel.buyPaper(wallpaper.id, pea)
+    fun buyPaper(position: Int, wallpaper: Wallpaper, type: SaveType) {
+        mModel.buyPaper(wallpaper.id, type.value)
                 .compose(RxUtils.applyClearSchedulers(mRootView))
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<String>>(mErrorHandler) {
                     override fun onNext(t: BaseResponse<String>) {
                         if (!t.isSuccess) {
                             return
                         }
-                        mRootView.savePicture(position, if (pea == 3) SaveType.ORIGIN else SaveType.NORMAL)
-                        //downloadPicture(if (pea == 3) wallpaper.originUrl else wallpaper.url)
+                        mRootView.savePicture(position, type)
                     }
                 })
     }

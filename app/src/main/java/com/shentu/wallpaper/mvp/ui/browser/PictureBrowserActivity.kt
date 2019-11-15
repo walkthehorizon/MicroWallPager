@@ -155,26 +155,29 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         vpAdapter.getFragment(currentItem).savePicture(type)
     }
 
-    private fun showDownloadDialog() {
-        var pea = SPUtils.getInstance().getInt(Constant.DEFAULT_DOWNLOAD_RESUME, -1)
-        if (pea != -1) {
+    private fun showDownloadDialog(paper: Wallpaper) {
+        var type = SPUtils.getInstance().getInt(Constant.DOWNLOAD_TYPE, -1)
+        if (type != -1) {
 //            ivDownload.visibility = View.GONE
-            mPresenter?.buyPaper(viewPager.currentItem, wallpapers[viewPager.currentItem], pea)
+            mPresenter?.buyPaper(viewPager.currentItem, paper
+                    , if (type == 1) SaveType.NORMAL else SaveType.ORIGIN)
         } else {
-            pea = 1
+            var result: Int = -1
             MaterialDialog(this)
                     .title(text = "下载")
-                    .listItemsSingleChoice(items = listOf("默认（1看豆）", "原图（3看豆）")
+                    .listItemsSingleChoice(items = listOf("默认（${paper.normalPrice}看豆）"
+                            , "原图（${paper.originPrice}看豆）")
                             , initialSelection = 0) { _, index, _ ->
-                        pea = if (index == 0) 1 else 3
-//                        ivDownload.visibility = View.GONE
-                        mPresenter?.buyPaper(viewPager.currentItem, wallpapers[viewPager.currentItem], pea)
+                        val saveType = if (index == 0) SaveType.NORMAL else SaveType.ORIGIN
+                        result = saveType.value
+                        mPresenter?.buyPaper(viewPager.currentItem, wallpapers[viewPager.currentItem]
+                                , if (index == 0) SaveType.NORMAL else SaveType.ORIGIN)
                     }
                     .positiveButton(text = "确认")
                     .negativeButton(text = "取消")
                     .checkBoxPrompt(text = "不再显示") {
                         if (it) {
-                            SPUtils.getInstance().put(Constant.DEFAULT_DOWNLOAD_RESUME, pea)
+                            SPUtils.getInstance().put(Constant.DOWNLOAD_TYPE, result)
                         }
                     }.show()
         }
@@ -215,7 +218,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                 HkUtils.instance.showChargeDialog(this@PictureBrowserActivity)
                 return@setOnClickListener
             }
-            showDownloadDialog()
+            showDownloadDialog(wallpapers[viewPager.currentItem])
         }
         ivMore.setOnClickListener {
             showMenu()
