@@ -42,7 +42,7 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
 
 
     override fun initView(savedInstanceState: Bundle?): Int {
-        return R.layout.activity_setting_more //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
+        return R.layout.activity_setting_more
     }
 
 
@@ -62,16 +62,16 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
         }
         val type = SPUtils.getInstance().getInt(Constant.DOWNLOAD_TYPE, 0)
         rivDownload.setEndValue("")
-        rivDownload.setOnClickListener(View.OnClickListener {
+        rivDownload.setOnClickListener {
             showDownloadDialog(type)
-        })
+        }
     }
 
     private fun showDownloadDialog(type: Int) {
         MaterialDialog(this)
                 .title(text = "下载")
-                .listItemsSingleChoice(items = listOf("不询问", "默认", "原图")
-                        , initialSelection = type) { dialog, index, _ ->
+                .listItemsSingleChoice(items = listOf("询问", "默认", "原图")
+                        , initialSelection = type) { _, index, _ ->
                     SPUtils.getInstance().put(Constant.DOWNLOAD_TYPE, index)
                 }
                 .show()

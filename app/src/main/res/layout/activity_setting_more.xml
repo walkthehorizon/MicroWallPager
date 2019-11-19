@@ -19,10 +19,11 @@
         android:id="@+id/rivDownload"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        app:riv_icon="@drawable/ic_file_download_black_24dp"
         android:layout_below="@+id/toolbar"
         app:riv_arrow_visible="false"
         app:riv_divider_visible="false"
-        app:riv_title="下载询问"/>
+        app:riv_title="下载提示"/>
 
     <ImageView
         android:id="@+id/mIvCover"

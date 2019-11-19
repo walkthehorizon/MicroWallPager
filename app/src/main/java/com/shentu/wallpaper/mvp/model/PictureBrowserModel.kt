@@ -49,7 +49,7 @@ constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager
                 .updateCategoryCover(cid, logo)
     }
 
-    override fun buyPaper(pk: Int, pea: Int): Observable<BaseResponse<String>> {
+    override fun buyPaper(pk: Int, pea: Int): Observable<BaseResponse<Int>> {
         return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
                 .buyPaper(pk, pea)
     }

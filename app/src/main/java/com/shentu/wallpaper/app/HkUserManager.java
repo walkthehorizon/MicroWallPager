@@ -19,9 +19,7 @@ public class HkUserManager {
     private String USER_TOKEN = "user_token";
     public MicroUser user;
 
-    private static final class SingletonHolder {
-        private static final HkUserManager INSTANCE = new HkUserManager();
-    }
+    private static final HkUserManager INSTANCE = new HkUserManager();
 
     private HkUserManager() {
         if (SPUtils.getInstance().getInt(USER_UID, -1) == -1) {
@@ -42,7 +40,7 @@ public class HkUserManager {
     }
 
     public static HkUserManager getInstance() {
-        return SingletonHolder.INSTANCE;
+        return INSTANCE;
     }
 
     /**
@@ -80,8 +78,8 @@ public class HkUserManager {
         SPUtils.getInstance().remove(USER_TOKEN);
     }
 
-    public void updateKandou(SaveType type) {
-        user.pea -= type == SaveType.NORMAL ? 1 : 3;
+    public void updateKandou(int change) {
+        user.pea +=change;
         SPUtils.getInstance().put(USER_PEA, user.pea);
     }
 

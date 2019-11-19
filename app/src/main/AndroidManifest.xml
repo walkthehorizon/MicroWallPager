@@ -31,6 +31,7 @@
         <meta-data
             android:name="design_height_in_dp"
             android:value="640" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.shentu.wallpaper.fileProvider"
@@ -92,6 +93,9 @@
         <activity
             android:name=".mvp.ui.activity.PictureShareActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".mvp.ui.activity.BrowserActivity" />
     </application>
 
 </manifest>

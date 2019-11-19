@@ -1,6 +1,7 @@
 package com.shentu.wallpaper.mvp.ui.widget;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.shentu.wallpaper.R;
 
@@ -27,34 +30,37 @@ public class RippleItemView extends RelativeLayout {
     TextView mTvEndValue;
 
     public RippleItemView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public RippleItemView(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public RippleItemView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray ta = context.obtainStyledAttributes(attrs,R.styleable.RippleItemView);
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.RippleItemView);
         int leftIconId = ta.getResourceId(R.styleable.RippleItemView_riv_icon, -1);
         String title = ta.getString(R.styleable.RippleItemView_riv_title);
         boolean isVisibleArrow = ta.getBoolean(R.styleable.RippleItemView_riv_arrow_visible, true);
         boolean isVisibleDivider = ta.getBoolean(R.styleable.RippleItemView_riv_divider_visible, true);
+        int iconTint = ta.getColor(R.styleable.RippleItemView_riv_icon_tint,
+                ContextCompat.getColor(context, R.color.colorAccent));
         ta.recycle();
         LayoutInflater.from(context).inflate(R.layout.layout_ripple_item, this, true);
         ButterKnife.bind(this);
         if (leftIconId != -1) {
+            mLeftIcon.setImageTintList(ColorStateList.valueOf(iconTint));
             mLeftIcon.setImageResource(leftIconId);
         } else {
             mLeftIcon.setVisibility(GONE);
         }
         mTvTitle.setText(title);
-        mEndArrow.setVisibility(isVisibleArrow ?VISIBLE:INVISIBLE);
-        divider.setVisibility(isVisibleDivider?VISIBLE:INVISIBLE);
+        mEndArrow.setVisibility(isVisibleArrow ? VISIBLE : INVISIBLE);
+        divider.setVisibility(isVisibleDivider ? VISIBLE : INVISIBLE);
     }
 
-    public void setEndValue(String value){
+    public void setEndValue(String value) {
         mTvEndValue.setText(value);
     }
 }

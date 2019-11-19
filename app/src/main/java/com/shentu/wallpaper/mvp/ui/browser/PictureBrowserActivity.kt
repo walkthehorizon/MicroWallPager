@@ -7,13 +7,17 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.transition.Fade
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityOptionsCompat
 import androidx.viewpager.widget.ViewPager
 import cn.sharesdk.onekeyshare.OnekeyShare
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.checkbox.checkBoxPrompt
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -22,6 +26,7 @@ import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.github.piasy.biv.BigImageViewer
+import com.google.android.material.button.MaterialButton
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
@@ -34,11 +39,13 @@ import com.shentu.wallpaper.di.module.PictureBrowserModule
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import com.shentu.wallpaper.mvp.presenter.PictureBrowserPresenter
+import com.shentu.wallpaper.mvp.ui.activity.BrowserActivity
 import com.shentu.wallpaper.mvp.ui.activity.SubjectDetailActivity
 import com.shentu.wallpaper.mvp.ui.adapter.PictureBrowserVpAdapter
 import com.shentu.wallpaper.mvp.ui.fragment.PictureFragment
 import com.shentu.wallpaper.mvp.ui.home.TabHomeFragment
 import com.shentu.wallpaper.mvp.ui.login.LoginActivity
+import com.shentu.wallpaper.mvp.ui.my.DonateDialog
 import kotlinx.android.synthetic.main.fragment_picture_browser.*
 import timber.log.Timber
 
@@ -151,18 +158,18 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     }
 
     override fun savePicture(currentItem: Int, type: SaveType) {
-        HkUserManager.getInstance().updateKandou(type)
         vpAdapter.getFragment(currentItem).savePicture(type)
     }
 
     private fun showDownloadDialog(paper: Wallpaper) {
-        var type = SPUtils.getInstance().getInt(Constant.DOWNLOAD_TYPE, -1)
-        if (type != -1) {
+        val type = SPUtils.getInstance().getInt(Constant.DOWNLOAD_TYPE, 0)
+        if (type != 0) {
 //            ivDownload.visibility = View.GONE
             mPresenter?.buyPaper(viewPager.currentItem, paper
                     , if (type == 1) SaveType.NORMAL else SaveType.ORIGIN)
         } else {
-            var result: Int = -1
+            var checked = false
+            var result = SaveType.NORMAL.value
             MaterialDialog(this)
                     .title(text = "下载")
                     .listItemsSingleChoice(items = listOf("默认（${paper.normalPrice}看豆）"
@@ -173,12 +180,14 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                         mPresenter?.buyPaper(viewPager.currentItem, wallpapers[viewPager.currentItem]
                                 , if (index == 0) SaveType.NORMAL else SaveType.ORIGIN)
                     }
-                    .positiveButton(text = "确认")
-                    .negativeButton(text = "取消")
-                    .checkBoxPrompt(text = "不再显示") {
-                        if (it) {
+                    .positiveButton(text = "确认") {
+                        if (checked) {
                             SPUtils.getInstance().put(Constant.DOWNLOAD_TYPE, result)
                         }
+                    }
+                    .negativeButton(text = "取消")
+                    .checkBoxPrompt(text = "不再显示") {
+                        checked = it
                     }.show()
         }
     }
@@ -212,10 +221,6 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         ivDownload.setOnClickListener {
             if (!HkUserManager.getInstance().isLogin) {
                 launchActivity(Intent(this@PictureBrowserActivity, LoginActivity::class.java))
-                return@setOnClickListener
-            }
-            if (HkUserManager.getInstance().user.pea < 1) {
-                HkUtils.instance.showChargeDialog(this@PictureBrowserActivity)
                 return@setOnClickListener
             }
             showDownloadDialog(wallpapers[viewPager.currentItem])
@@ -298,6 +303,19 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         tvCollectNum.text = wallpapers[position].collectNum.toString()
         ivCollect.isClickable = !wallpapers[position].collected
         ivCollect.progress = if (wallpapers[position].collected) 1f else 0f
+    }
+
+    override fun showDonateDialog() {
+        val dialog = MaterialDialog(this).show {
+            customView(R.layout.activity_donate)
+            cornerRadius(12f)
+        }
+        dialog.getCustomView().findViewById<TextView>(R.id.tvQuestion).setOnClickListener {
+            BrowserActivity.open(this, "https://www.baidu.com/")
+        }
+        dialog.getCustomView().findViewById<MaterialButton>(R.id.mbDonate).setOnClickListener {
+            HkUtils.contactKefu()
+        }
     }
 
     override fun showNavigation() {

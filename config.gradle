@@ -114,6 +114,7 @@ ext {
             "firebase"                 : "com.google.firebase:firebase-core:17.0.0",
             "firebase-perf"            : "com.google.firebase:firebase-perf:18.0.1",
             "crashlytics"              : "com.crashlytics.sdk.android:crashlytics:2.10.1",
+            "agentweb"                 : "com.just.agentweb:agentweb:4.1.2",
 
             //test
             "junit"                    : "junit:junit:4.12",

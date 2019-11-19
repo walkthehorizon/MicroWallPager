@@ -27,6 +27,8 @@ interface PictureBrowserContract {
         fun resetCollect()
 
         fun showShare(paper: Wallpaper)
+
+        fun showDonateDialog()
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
@@ -37,7 +39,7 @@ interface PictureBrowserContract {
 
         fun updateCategoryCover(cid: Int?, logo: String): Observable<BaseResponse<Boolean>>
 
-        fun buyPaper(pk: Int, pea: Int): Observable<BaseResponse<String>>
+        fun buyPaper(pk: Int, pea: Int): Observable<BaseResponse<Int>>
 
         fun getPaperDetail(pk: Int?): Observable<BaseResponse<Wallpaper>>
     }

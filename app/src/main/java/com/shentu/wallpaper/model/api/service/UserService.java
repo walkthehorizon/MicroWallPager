@@ -17,6 +17,7 @@ package com.shentu.wallpaper.model.api.service;
 
 
 import com.shentu.wallpaper.model.entity.MicroUser;
+import com.shentu.wallpaper.model.response.BaseResponse;
 
 import java.util.List;
 
@@ -31,4 +32,8 @@ public interface UserService {
     @Headers({HEADER_API_VERSION})
     @GET("/users")
     Observable<List<MicroUser>> getUsers(@Query("since") int lastIdQueried, @Query("per_page") int perPage);
+
+    @GET("sign")
+    Observable<BaseResponse<Integer>>
+    sign();
 }

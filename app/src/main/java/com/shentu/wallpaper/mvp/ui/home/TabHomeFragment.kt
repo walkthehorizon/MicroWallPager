@@ -171,7 +171,7 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
      * 是否已滚动
      * */
     fun isScrolled(): Boolean {
-        return rvHot.canScrollVertically(-1)
+        return rvHot!=null && rvHot.canScrollVertically(-1)
     }
 
     override fun hideRefresh(clear: Boolean) {

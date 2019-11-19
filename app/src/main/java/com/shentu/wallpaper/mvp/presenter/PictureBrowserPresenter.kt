@@ -8,12 +8,14 @@ import com.jess.arms.di.scope.ActivityScope
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.wallpaper.app.GlideArms
+import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.model.response.BaseResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import com.shentu.wallpaper.mvp.ui.browser.SaveType
+import com.shentu.wallpaper.mvp.ui.my.DonateDialog
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
@@ -94,11 +96,16 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
     fun buyPaper(position: Int, wallpaper: Wallpaper, type: SaveType) {
         mModel.buyPaper(wallpaper.id, type.value)
                 .compose(RxUtils.applyClearSchedulers(mRootView))
-                .subscribe(object : ErrorHandleSubscriber<BaseResponse<String>>(mErrorHandler) {
-                    override fun onNext(t: BaseResponse<String>) {
+                .subscribe(object : ErrorHandleSubscriber<BaseResponse<Int>>(mErrorHandler) {
+                    override fun onNext(t: BaseResponse<Int>) {
+                        if(t.code==1402){
+                            mRootView.showDonateDialog()
+                            return
+                        }
                         if (!t.isSuccess) {
                             return
                         }
+                        HkUserManager.getInstance().updateKandou(-t.data!!)
                         mRootView.savePicture(position, type)
                     }
                 })
@@ -129,7 +136,6 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                         mRootView.showMessage("生成分享数据异常")
                     }
                 })
-
     }
 
 }

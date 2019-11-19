@@ -106,7 +106,7 @@ public interface MicroService {
     updateUser(@Body MicroUser user, @Path("pk") int pk);
 
     @POST("buy/paper/{pk}")
-    Observable<BaseResponse<String>>
+    Observable<BaseResponse<Integer>>
     buyPaper(@Path("pk") int pk,
              @Query("type") int type);
 

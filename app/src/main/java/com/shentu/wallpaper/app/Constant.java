@@ -15,6 +15,8 @@ public class Constant {
 
     public static String URGE_AD_DIALOG = "urge_ad_dialog";
 
+    public static String LAST_SIGN_TIME = "last_sign_time";
+
     /**
      * 下载询问
      * */
