@@ -103,6 +103,7 @@ dependencies {
     compileOnly rootProject.ext.dependencies["eventbus"]
     api rootProject.ext.dependencies["gson"]
     implementation rootProject.ext.dependencies["loadsir"]
+    api project(':netbus')
 
     //test
     api rootProject.ext.dependencies["timber"]

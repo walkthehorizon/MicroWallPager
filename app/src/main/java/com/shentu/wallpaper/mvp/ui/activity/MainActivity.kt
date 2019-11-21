@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.horizon.netbus.NetBus
 import com.horizon.netbus.NetType
 import com.horizon.netbus.NetWork
@@ -160,18 +161,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
         NetBus.getInstance().unRegister(this)
         mainPagerAdapter = null
     }
-
-    @NetWork
-    fun onNetChange(type: NetType) {
-        Timber.e("netType...")
-        when (type) {
-            NetType.NONE -> SnackbarUtils.with(window.decorView.findViewById(android.R.id.content))
-                    .setMessage("网络异常！")
-                    .showError()
-            else -> return
-        }
-    }
-
 
     /**
      * 签到

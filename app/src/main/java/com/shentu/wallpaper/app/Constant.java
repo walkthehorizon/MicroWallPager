@@ -28,5 +28,5 @@ public class Constant {
 
     public static String MICRO_BASE_URL = "https://wmmt119.top";
 
-    public static final String BASE_WALLPAPER_SHARE_URL = "https://wmmt119.top/#/wallpaper/";
+    public static final String BASE_WALLPAPER_SHARE_URL = "https://wmmt119.top/wallpaper/";
 }

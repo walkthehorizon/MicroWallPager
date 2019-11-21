@@ -18,6 +18,7 @@ import com.jess.arms.utils.ArmsUtils;
 import com.kingja.loadsir.core.LoadSir;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.mob.MobSDK;
+import com.mob.moblink.MobLink;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
@@ -74,6 +75,7 @@ public class AppLifecycleImpl implements AppLifecycles {
 //        }
         ARouter.init(application); // 尽可能早，推荐在Application中初始化
         MobSDK.init(application);
+        MobLink.setRestoreSceneListener(new SceneListener());
         ButterKnife.setDebug(BuildConfig.Debug);
 
         //使用 IntelligentCache.KEY_KEEP 作为 key 的前缀, 可以使储存的数据永久存储在内存中

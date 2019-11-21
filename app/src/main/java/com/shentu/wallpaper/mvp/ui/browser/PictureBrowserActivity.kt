@@ -30,6 +30,9 @@ import com.google.android.material.button.MaterialButton
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
+import com.mob.moblink.MobLink
+import com.mob.moblink.Scene
+import com.mob.moblink.SceneRestorable
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.HkUserManager
@@ -51,22 +54,19 @@ import timber.log.Timber
 
 @Route(path = "/picture/browser/activity")
 class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureBrowserContract.View
-        , ViewPager.OnPageChangeListener, PictureFragment.Callback {
+        , ViewPager.OnPageChangeListener, PictureFragment.Callback, SceneRestorable {
 
     @Autowired
     @JvmField
     var subjectId: Int = -1
-    //1、wallpaper2、subject
-    @Autowired
-    @JvmField
-    var type: Int = -1
-
     @Autowired
     @JvmField
     var current: Int = 0
     @Autowired
     @JvmField
     var categoryId: Int = -1
+    //from web
+    private var paperId:Int=-1
 
     private var popupMenu: PopupMenu? = null
 
@@ -102,13 +102,14 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                 initViewPager()
             }
             subjectId != -1 -> mPresenter?.getPictures(subjectId)
-            else -> throw IllegalStateException("数据获取异常！")
+            paperId !=-1 ->mPresenter?.getPaperDetail(paperId)
+            else -> throw IllegalArgumentException("参数异常")
         }
         ivShare.setOnClickListener {
             mPresenter?.getShareData(wallpapers[viewPager.currentItem])
-
         }
         initSetCover()
+        Timber.e("presenter:"+(mPresenter==null))
     }
 
     /**
@@ -345,6 +346,19 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 //        }
     }
 
+    /**
+     * 先于initData执行
+     * */
+    override fun onReturnSceneData(scene: Scene) {
+        paperId = scene.params["id"] as Int
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        MobLink.updateNewIntent(getIntent(), this)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         BigImageViewer.imageLoader().cancelAll()
@@ -353,6 +367,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
     companion object {
         private var callback: Callback? = null
+
         fun open(current: Int = 0, callback: Callback? = null, compat: ActivityOptionsCompat? = null,
                  categoryId: Int = -1, subjectId: Int = -1, context: Context) {
             Companion.callback = callback

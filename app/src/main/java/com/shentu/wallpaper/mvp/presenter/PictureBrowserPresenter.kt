@@ -62,7 +62,8 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                 .compose(RxUtils.applySchedulers(mRootView))
                 .subscribe(object : ErrorHandleSubscriber<WallpaperPageResponse>(mErrorHandler) {
                     override fun onNext(t: WallpaperPageResponse) {
-                        t.data?.content?.let { checkPictureOriginExists(it) }
+                        t.data?.content?.let { it -> mRootView.showPictures(it) }
+//                        t.data?.content?.let { checkPictureOriginExists(it) }
                     }
 
                     override fun onError(t: Throwable) {
@@ -98,7 +99,7 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                 .compose(RxUtils.applyClearSchedulers(mRootView))
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<Int>>(mErrorHandler) {
                     override fun onNext(t: BaseResponse<Int>) {
-                        if(t.code==1402){
+                        if (t.code == 1402) {
                             mRootView.showDonateDialog()
                             return
                         }
@@ -134,6 +135,16 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
 
                     override fun onError(t: Throwable) {
                         mRootView.showMessage("生成分享数据异常")
+                    }
+                })
+    }
+
+    fun getPaperDetail(paperId: Int) {
+        mModel.getPaperDetail(paperId)
+                .compose(RxUtils.applyClearSchedulers(mRootView))
+                .subscribe(object : ErrorHandleSubscriber<BaseResponse<Wallpaper>>(mErrorHandler) {
+                    override fun onNext(t: BaseResponse<Wallpaper>) {
+                        t.data?.let { mRootView.showPictures(mutableListOf(t.data)) }
                     }
                 })
     }

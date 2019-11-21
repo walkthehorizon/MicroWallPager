@@ -19,13 +19,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.AttributeSet;
 import android.view.InflateException;
 import android.view.View;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.horizon.netbus.NetBus;
+import com.horizon.netbus.NetType;
+import com.horizon.netbus.NetWork;
 import com.jess.arms.base.delegate.IActivity;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.integration.cache.CacheType;
@@ -37,6 +43,7 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 import javax.inject.Inject;
 
 import androidx.fragment.app.FragmentManager;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.subjects.BehaviorSubject;
@@ -93,6 +100,7 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
             if (e instanceof InflateException) throw e;
             e.printStackTrace();
         }
+        snackbar = Snackbar.make(findViewById(android.R.id.content), "网络已断开连接", Snackbar.LENGTH_INDEFINITE);
         initData(savedInstanceState);
     }
 
@@ -130,5 +138,32 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
     @Override
     public boolean useFragment() {
         return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        NetBus.getInstance().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        NetBus.getInstance().unRegister(this);
+    }
+
+    private Snackbar snackbar;
+
+    @NetWork
+    public void onNetChange(NetType type) {
+        switch (type) {
+            case WIFI:
+            case GPRS:
+                snackbar.dismiss();
+                break;
+            case NONE:
+                snackbar.show();
+                break;
+        }
     }
 }
