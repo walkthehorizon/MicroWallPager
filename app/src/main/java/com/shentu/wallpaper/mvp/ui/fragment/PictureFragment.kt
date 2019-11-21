@@ -9,10 +9,11 @@ import android.view.ViewGroup
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.github.piasy.biv.loader.ImageLoader
+
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.IPresenter
-import com.shentu.wallpaper.app.GlideImageViewFactory
+import com.shentu.wallpaper.app.bigimage.GlideImageViewFactory
 import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.model.entity.Wallpaper

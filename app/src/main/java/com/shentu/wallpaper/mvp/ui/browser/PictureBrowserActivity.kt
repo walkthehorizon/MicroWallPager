@@ -26,6 +26,7 @@ import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.github.piasy.biv.BigImageViewer
+import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.google.android.material.button.MaterialButton
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
@@ -90,6 +91,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
     override fun initData(savedInstanceState: Bundle?) {
         ARouter.getInstance().inject(this)
+        BigImageViewer.initialize(GlideImageLoader.with(application))
         when {
             callback != null -> {
                 if (callback is TabHomeFragment) {

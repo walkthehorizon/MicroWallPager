@@ -9,13 +9,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
+import com.bumptech.glide.Glide
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.shentu.wallpaper.R
-import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.page.EmptyCallback
 import com.shentu.wallpaper.app.page.ErrorCallback
 import com.shentu.wallpaper.app.page.LoadingCallback
@@ -79,7 +79,7 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
         } else {
             mPresenter?.getBannerWallpapers(banner!!.id)
             ivCover.visibility = VISIBLE
-            GlideArms.with(this)
+            Glide.with(this)
                     .load(banner?.imageUrl)
                     .error(R.drawable.default_cover_horizon)
                     .into(ivCover)

@@ -12,12 +12,13 @@ import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.R
-import com.shentu.wallpaper.app.GlideArms
+
 import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.di.component.DaggerMyEditComponent
 import com.shentu.wallpaper.di.module.MyEditModule
@@ -75,7 +76,7 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
      * scrollToTop
      * */
     override fun refreshView() {
-        GlideArms.with(this)
+        Glide.with(this)
                 .load(user.avatar)
                 .transform(CircleCrop())
                 .error(R.drawable.default_head)

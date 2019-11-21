@@ -86,6 +86,7 @@
 
 
 ################glide###############
+-keep class com.bumptech.glide.GeneratedAppGlideModuleImpl { *; }
 -keep public class * implements com.bumptech.glide.module.AppGlideModule
 -keep public class * implements com.bumptech.glide.module.LibraryGlideModule
 -keep class com.bumptech.glide.** { *; }

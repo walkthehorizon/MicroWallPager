@@ -4,10 +4,10 @@ import android.app.Application
 import android.content.Context
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.bumptech.glide.Glide
 import com.jess.arms.di.scope.ActivityScope
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
-import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.model.entity.Wallpaper
@@ -77,7 +77,7 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
         Observable.create(ObservableOnSubscribe<MutableList<Wallpaper>> {
             for (wallpaper in wallpapers) {
                 val file: File? = try {
-                    GlideArms.with(mRootView as Context).downloadOnly().load(wallpaper.originUrl).onlyRetrieveFromCache(true).submit().get()
+                    Glide.with(mRootView as Context).downloadOnly().load(wallpaper.originUrl).onlyRetrieveFromCache(true).submit().get()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     null

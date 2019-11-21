@@ -2,10 +2,10 @@ package com.shentu.wallpaper.mvp.ui.adapter
 
 import android.view.View
 import android.widget.CheckBox
+import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.shentu.wallpaper.R
-import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.model.entity.Wallpaper
 
 class CollectListAdapter(data: List<Wallpaper>?, val decoration: Int) : BaseQuickAdapter<Wallpaper
@@ -13,7 +13,7 @@ class CollectListAdapter(data: List<Wallpaper>?, val decoration: Int) : BaseQuic
     private var multiChecked = false
 
     override fun convert(helper: BaseViewHolder, item: Wallpaper?) {
-        GlideArms.with(mContext)
+        Glide.with(mContext)
                 .load(item?.url)
                 .placeholder(R.drawable.ic_pets_black_24dp)
                 .centerCrop()

@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 import com.blankj.utilcode.util.ConvertUtils
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.model.entity.Banner
 import com.shentu.wallpaper.mvp.ui.activity.SubjectDetailActivity
 
@@ -29,7 +29,7 @@ class HomeBannerAdapter(private val banners: List<Banner>, private val context: 
         ivBanner.setOnClickListener {
             SubjectDetailActivity.open(banners[position], context)
         }
-        GlideArms.with(container.context)
+        Glide.with(container.context)
                 .load(banners[position].imageUrl)
                 .transform(CenterCrop(), RoundedCorners(ConvertUtils.dp2px(8.0f)))
                 .into(ivBanner)

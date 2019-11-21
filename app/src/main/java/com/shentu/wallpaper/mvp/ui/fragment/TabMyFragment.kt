@@ -10,6 +10,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.TimeUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.bumptech.glide.Glide
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
@@ -17,7 +18,6 @@ import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.BuildConfig
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
-import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.app.utils.RxUtils
@@ -136,13 +136,13 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
             } else {
                 ivSex.clearColorFilter()
             }
-            GlideArms.with(this)
+            Glide.with(this)
                     .load(HkUserManager.getInstance().user.avatar)
                     .into(circle_avatar)
             itMoney.setEndValue(user.pea.toString())
         } else {
             tvMyName.text = "微梦用户"
-            GlideArms.with(this)
+            Glide.with(this)
                     .load(R.drawable.default_head)
                     .into(circle_avatar)
             itMoney.setEndValue("")
@@ -178,11 +178,11 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     }
 
     private fun clickCache() {
-        Completable.fromAction { GlideArms.get(mContext).clearMemory() }
+        Completable.fromAction { Glide.get(mContext).clearMemory() }
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe()
         Completable.fromAction {
-            GlideArms.get(mContext).clearDiskCache()
+            Glide.get(mContext).clearDiskCache()
         }.subscribeOn(Schedulers.io())
                 .doOnComplete {
                     ToastUtils.showShort("清理完成")

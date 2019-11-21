@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import butterknife.OnClick
 import com.blankj.utilcode.util.SpanUtils
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -21,7 +22,6 @@ import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
 import com.jess.arms.utils.RxLifecycleUtils
 import com.shentu.wallpaper.R
-import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.di.component.DaggerSplashComponent
 import com.shentu.wallpaper.di.module.SplashModule
 import com.shentu.wallpaper.model.entity.SplashAd
@@ -93,7 +93,7 @@ class SplashFragment : BaseFragment<SplashPresenter>(), SplashContract.View {
             return
         }
         context?.let {
-            GlideArms.with(it)
+            Glide.with(it)
                     .load(splashAd.cover_url)
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Drawable>, isFirstResource: Boolean): Boolean {

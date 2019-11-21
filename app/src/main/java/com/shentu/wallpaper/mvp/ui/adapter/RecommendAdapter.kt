@@ -9,6 +9,7 @@ import androidx.cardview.widget.CardView
 import androidx.palette.graphics.Palette
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.ScreenUtils
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -18,7 +19,6 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.github.florent37.glidepalette.BitmapPalette.Profile.MUTED_LIGHT
 import com.github.florent37.glidepalette.GlidePalette
 import com.shentu.wallpaper.R
-import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.model.entity.Wallpaper
 import java.util.*
 
@@ -38,7 +38,7 @@ class RecommendAdapter(val context: Context, private var wallpapers: MutableList
             lp.height = ConvertUtils.dp2px(300.0f)
             ivPicture.layoutParams = lp
         }
-        GlideArms.with(mContext)
+        Glide.with(mContext)
                 .load(item.url)
                 .listener(GlidePalette.with(item.url)
                         .use(MUTED_LIGHT)

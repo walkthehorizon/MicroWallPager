@@ -11,7 +11,6 @@ import androidx.multidex.MultiDex;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.Utils;
 import com.github.piasy.biv.BigImageViewer;
-import com.github.piasy.biv.loader.glide.GlideImageLoader;
 import com.horizon.netbus.NetBus;
 import com.jess.arms.base.delegate.AppLifecycles;
 import com.jess.arms.utils.ArmsUtils;
@@ -24,6 +23,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.shentu.wallpaper.BuildConfig;
 import com.shentu.wallpaper.R;
+import com.shentu.wallpaper.app.bigimage.GlideImageLoader;
 import com.shentu.wallpaper.app.page.EmptyCallback;
 import com.shentu.wallpaper.app.page.ErrorCallback;
 import com.shentu.wallpaper.app.page.LoadingCallback;
@@ -31,9 +31,6 @@ import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
 import butterknife.ButterKnife;
-import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -58,9 +55,7 @@ public class AppLifecycleImpl implements AppLifecycles {
     public void onCreate(@NonNull Application application) {
         long start = System.currentTimeMillis();
         NetBus.getInstance().init(application);
-        Completable.fromAction(() -> init(application)).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> init(application));
+        init(application);
         if (BuildConfig.LOG_DEBUG) {//Timber初始化
             Timber.plant(new Timber.DebugTree());
         }
@@ -69,6 +64,7 @@ public class AppLifecycleImpl implements AppLifecycles {
 
     private void init(Application application) {
         Utils.init(application);
+
 //        if (BuildConfig.Debug) {           // 这两行必须写在init之前，否则这些配置在init过程中将无效
 //            ARouter.openLog();     // 打印日志
 //            ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)

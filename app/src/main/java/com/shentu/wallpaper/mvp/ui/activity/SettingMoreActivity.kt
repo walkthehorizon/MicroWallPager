@@ -10,13 +10,13 @@ import com.afollestad.materialdialogs.checkbox.checkBoxPrompt
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.SPUtils
+import com.bumptech.glide.Glide
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.BuildConfig
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
-import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.di.component.DaggerSettingMoreComponent
 import com.shentu.wallpaper.di.module.SettingMoreModule
@@ -47,7 +47,7 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
 
 
     override fun initData(savedInstanceState: Bundle?) {
-        GlideArms.with(this)
+        Glide.with(this)
                 .load(R.drawable.ic_launcher)
                 .transform(RoundedCornersTransformation(ConvertUtils.dp2px(12.0f), 0, RoundedCornersTransformation.CornerType.ALL))
                 .into(mIvCover)

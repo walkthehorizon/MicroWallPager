@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.shentu.wallpaper.R
-import com.shentu.wallpaper.app.GlideArms
 import kotlinx.android.synthetic.main.item_rv_category_page.*
 import timber.log.Timber
 
@@ -53,7 +53,7 @@ class CategoryPageItemFragment : androidx.fragment.app.Fragment() {
             Timber.e("shareView++++")
             ViewCompat.setTransitionName(ivPic, "shareView")
             context?.let {
-                GlideArms.with(it)
+                Glide.with(it)
                         .load(picUrl)
                         .placeholder(R.drawable.default_cover_vertical)
                         .listener(object : RequestListener<Drawable> {
@@ -74,7 +74,7 @@ class CategoryPageItemFragment : androidx.fragment.app.Fragment() {
             }
         } else {
             context?.let {
-                GlideArms.with(it)
+                Glide.with(it)
                         .load(picUrl)
                         .placeholder(R.drawable.default_cover_vertical)
                         .fitCenter()

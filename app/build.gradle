@@ -181,18 +181,19 @@ dependencies {
     implementation(rootProject.ext.dependencies["cosxml-lite"]) {
         exclude group: 'com.tencent.qcloud', module: 'mtaUtils' //关闭 mta上报功能
     }
-    implementation rootProject.ext.dependencies["bigImageViewer"]
-    implementation rootProject.ext.dependencies["bigGlideLoader"]
-    implementation rootProject.ext.dependencies["bigGifDrawable"]
     implementation rootProject.ext.dependencies["circleindicator"]
     implementation rootProject.ext.dependencies["firebase"]
     implementation rootProject.ext.dependencies["crashlytics"]
     implementation rootProject.ext.dependencies["firebase-perf"]
+
+    //bigImage
+    implementation rootProject.ext.dependencies["bigImageViewer"]
+    implementation 'com.github.piasy:GlideImageLoader:1.6.1'
+    implementation rootProject.ext.dependencies["bigGifDrawable"]
     //test
     testImplementation rootProject.ext.dependencies["junit"]
     debugImplementation rootProject.ext.dependencies["canary-debug"]
     releaseImplementation rootProject.ext.dependencies["canary-release"]
     testImplementation rootProject.ext.dependencies["canary-release"]
-    compile "org.jetbrains.kotlin:kotlin-reflect:1.3.50"
 }
 apply plugin: 'com.google.gms.google-services'
