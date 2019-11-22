@@ -39,9 +39,6 @@ import timber.log.Timber;
  *
  * @see com.jess.arms.base.delegate.AppDelegate
  * @see com.jess.arms.integration.ManifestParser
- * Created by JessYan on 12/04/2017 17:25
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
 public final class GlobalConfiguration implements ConfigModule {

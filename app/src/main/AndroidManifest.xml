@@ -47,9 +47,13 @@
         <activity android:name=".mvp.ui.activity.BannerListActivity" />
         <activity android:name=".mvp.ui.activity.SubjectDetailActivity" />
         <activity android:name=".mvp.ui.activity.SearchActivity" />
+        <!--        <activity-->
+        <!--            android:name=".mvp.ui.login.SplashActivity"-->
+        <!--            android:screenOrientation="portrait"-->
+        <!--            android:theme="@style/AppTheme.Launcher"></activity>-->
         <activity
-            android:name=".mvp.ui.login.SplashActivity"
-            android:screenOrientation="portrait"
+            android:name=".mvp.ui.activity.MainActivity"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -57,11 +61,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".mvp.ui.activity.MainActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.browser.PictureBrowserActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
@@ -94,8 +93,7 @@
             android:name=".mvp.ui.activity.PictureShareActivity"
             android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".mvp.ui.activity.BrowserActivity" />
+        <activity android:name=".mvp.ui.activity.BrowserActivity" />
     </application>
 
 </manifest>

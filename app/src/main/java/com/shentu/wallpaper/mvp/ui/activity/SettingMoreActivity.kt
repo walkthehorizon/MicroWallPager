@@ -27,6 +27,7 @@ import com.shentu.wallpaper.mvp.ui.browser.SaveType
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_picture_browser.*
+import timber.log.Timber
 
 
 class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreContract.View {
@@ -47,6 +48,7 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
 
 
     override fun initData(savedInstanceState: Bundle?) {
+        Timber.e("init setting:"+System.currentTimeMillis())
         Glide.with(this)
                 .load(R.drawable.ic_launcher)
                 .transform(RoundedCornersTransformation(ConvertUtils.dp2px(12.0f), 0, RoundedCornersTransformation.CornerType.ALL))

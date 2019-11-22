@@ -99,7 +99,11 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                 .compose(RxUtils.applyClearSchedulers(mRootView))
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<Int>>(mErrorHandler) {
                     override fun onNext(t: BaseResponse<Int>) {
-                        if (t.code == 1402) {
+                        if(t.code==1401){//已购
+                            mRootView.savePicture(position, type)
+                            return
+                        }
+                        if (t.code == 1402) {//看豆不足
                             mRootView.showDonateDialog()
                             return
                         }

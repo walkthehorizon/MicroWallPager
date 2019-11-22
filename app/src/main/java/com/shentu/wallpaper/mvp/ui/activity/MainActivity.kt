@@ -2,7 +2,6 @@ package com.shentu.wallpaper.mvp.ui.activity
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -10,12 +9,12 @@ import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
-import com.blankj.utilcode.util.*
+import com.blankj.utilcode.util.BarUtils
+import com.blankj.utilcode.util.SPUtils
+import com.blankj.utilcode.util.TimeUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
 import com.horizon.netbus.NetBus
-import com.horizon.netbus.NetType
-import com.horizon.netbus.NetWork
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
@@ -55,6 +54,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
                 .mainModule(MainModule(this))
                 .build()
                 .inject(this)
+        setTheme(R.style.AppTheme)
         BarUtils.setStatusBarAlpha(this)
     }
 
@@ -63,6 +63,9 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
     }
 
     override fun initData(savedInstanceState: Bundle?) {
+        viewPager.post {
+            Timber.e("init main:"+System.currentTimeMillis())
+        }
         mainPagerAdapter = MainPagerAdapter(supportFragmentManager, fragments)
         viewPager!!.offscreenPageLimit = mainPagerAdapter!!.count
         viewPager!!.addOnPageChangeListener(this)
@@ -74,7 +77,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
                 llSign.visibility = View.GONE
             }
         })
-
         sign()
     }
 

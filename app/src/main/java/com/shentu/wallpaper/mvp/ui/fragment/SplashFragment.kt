@@ -111,14 +111,6 @@ class SplashFragment : BaseFragment<SplashPresenter>(), SplashContract.View {
         }
     }
 
-    private fun loadAd() {
-
-    }
-
-    private fun showAd() {
-
-    }
-
     override fun toMainPage() {
         launchActivity(Intent(mContext, MainActivity::class.java))
         killMyself()

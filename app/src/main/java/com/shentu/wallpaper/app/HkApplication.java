@@ -1,5 +1,9 @@
 package com.shentu.wallpaper.app;
 
+import android.content.Context;
+import android.os.Debug;
+import android.util.Log;
+
 import com.bumptech.glide.Glide;
 import com.jess.arms.base.BaseApplication;
 
@@ -10,6 +14,12 @@ import timber.log.Timber;
  */
 public class HkApplication extends BaseApplication {
     private static HkApplication sInstance;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        Log.e("Hk", "init attach base:" + System.currentTimeMillis());
+        super.attachBaseContext(base);
+    }
 
     @Override
     public void onCreate() {

@@ -3,8 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.mob.sdk'
-apply plugin: 'io.fabric'
-apply plugin: 'com.google.firebase.firebase-perf'
+//apply plugin: 'io.fabric'
+//apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -45,8 +45,8 @@ android {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "String", "Sever", '"http://192.168.10.122/micro/"'
-//            buildConfigField "String", "Sever", '"http://api.wmmt119.top/micro/"'
+//            buildConfigField "String", "Sever", '"http://192.168.10.122/micro/"'
+            buildConfigField "String", "Sever", '"http://api.wmmt119.top/micro/"'
             buildConfigField "boolean", "Debug", "true"
             minifyEnabled false
             signingConfig signingConfigs.release
@@ -65,6 +65,12 @@ android {
         }
     }
 
+    android.applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = "${rootProject.name}_${buildType.name}_${defaultConfig.versionName}_${new Date().format("yyMMdd", TimeZone.getTimeZone("UTC"))}" + ".apk"
+        }
+    }
+
     lintOptions {
         disable 'InvalidPackage'
         disable "ResourceType"
@@ -75,6 +81,12 @@ android {
         main {
             jniLibs.srcDirs = ['jniLibs']
         }
+    }
+
+    dexOptions {
+        preDexLibraries true
+        maxProcessCount 8
+        javaMaxHeapSize "4G"
     }
 }
 
@@ -182,9 +194,9 @@ dependencies {
         exclude group: 'com.tencent.qcloud', module: 'mtaUtils' //关闭 mta上报功能
     }
     implementation rootProject.ext.dependencies["circleindicator"]
-    implementation rootProject.ext.dependencies["firebase"]
-    implementation rootProject.ext.dependencies["crashlytics"]
-    implementation rootProject.ext.dependencies["firebase-perf"]
+//    implementation rootProject.ext.dependencies["firebase"]
+//    implementation rootProject.ext.dependencies["crashlytics"]
+//    implementation rootProject.ext.dependencies["firebase-perf"]
 
     //bigImage
     implementation rootProject.ext.dependencies["bigImageViewer"]
@@ -196,4 +208,4 @@ dependencies {
     releaseImplementation rootProject.ext.dependencies["canary-release"]
     testImplementation rootProject.ext.dependencies["canary-release"]
 }
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'
