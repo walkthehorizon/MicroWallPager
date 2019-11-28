@@ -19,6 +19,7 @@ import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
+import com.shentu.wallpaper.BuildConfig.Debug
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.HkUserManager
@@ -63,9 +64,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-        viewPager.post {
-            Timber.e("init main:"+System.currentTimeMillis())
-        }
         mainPagerAdapter = MainPagerAdapter(supportFragmentManager, fragments)
         viewPager!!.offscreenPageLimit = mainPagerAdapter!!.count
         viewPager!!.addOnPageChangeListener(this)

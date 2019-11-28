@@ -43,16 +43,9 @@ class BannerListActivity : BaseActivity<IPresenter>(), IView {
             showContent()
             smartRefresh.autoRefresh()
         }
-
-        smartRefresh.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
-            override fun onLoadMore(refreshLayout: RefreshLayout) {
-                getBanners(false)
-            }
-
-            override fun onRefresh(refreshLayout: RefreshLayout) {
-                getBanners(true)
-            }
-        })
+        smartRefresh.setOnLoadMoreListener {
+            getBanners(false)
+        }
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, _, position ->
             val banner = adapter?.data?.get(position) as Banner

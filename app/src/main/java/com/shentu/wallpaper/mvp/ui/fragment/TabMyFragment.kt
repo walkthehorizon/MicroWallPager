@@ -1,11 +1,19 @@
 package com.shentu.wallpaper.mvp.ui.fragment
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.TimeUtils
@@ -90,6 +98,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
         if (!TimeUtils.isToday(SPUtils.getInstance().getLong(Constant.LAST_NOTIFY_TIME))) {
             checkUpdate(false)
         }
+
     }
 
     private fun checkUpdate(isUser: Boolean) {

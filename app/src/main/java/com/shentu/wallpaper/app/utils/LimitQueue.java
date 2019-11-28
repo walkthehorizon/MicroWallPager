@@ -1,14 +1,16 @@
 package com.shentu.wallpaper.app.utils;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class LimitQueue<E> {
+public class LimitQueue<E> implements Serializable {
     private int limit; // 队列长度
 
-    private LinkedList<E> queue = new LinkedList<E>();
+    private LinkedList<E> queue;
 
     public LimitQueue(int limit) {
         this.limit = limit;
+        queue = new LinkedList<>();
     }
 
     /**

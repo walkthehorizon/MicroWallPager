@@ -1,14 +1,19 @@
 package com.shentu.wallpaper.mvp.ui.activity
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.*
 import android.os.Bundle
 import android.view.View
 import android.widget.CompoundButton
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import butterknife.BindView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.checkbox.checkBoxPrompt
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.blankj.utilcode.util.ConvertUtils
+import com.blankj.utilcode.util.ImageUtils
 import com.blankj.utilcode.util.SPUtils
 import com.bumptech.glide.Glide
 import com.jess.arms.base.BaseActivity
@@ -18,6 +23,7 @@ import com.shentu.wallpaper.BuildConfig
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.HkUserManager
+import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.di.component.DaggerSettingMoreComponent
 import com.shentu.wallpaper.di.module.SettingMoreModule
 import com.shentu.wallpaper.model.entity.Wallpaper
@@ -28,6 +34,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_picture_browser.*
 import timber.log.Timber
+import kotlin.math.min
 
 
 class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreContract.View {
@@ -48,12 +55,6 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
 
 
     override fun initData(savedInstanceState: Bundle?) {
-        Timber.e("init setting:"+System.currentTimeMillis())
-        Glide.with(this)
-                .load(R.drawable.ic_launcher)
-                .transform(RoundedCornersTransformation(ConvertUtils.dp2px(12.0f), 0, RoundedCornersTransformation.CornerType.ALL))
-                .into(mIvCover)
-        mTvVersion.text = BuildConfig.VERSION_NAME
         if (HkUserManager.getInstance().isLogin) {
             mbLogout.visibility = View.VISIBLE
             mbLogout.setOnClickListener {
@@ -67,6 +68,10 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
         rivDownload.setOnClickListener {
             showDownloadDialog(type)
         }
+        mIvCover.post {
+            mIvCover.setImageBitmap(HkUtils.instance.getSvgBitmap(mIvCover.width,mIvCover.height
+                    ,R.drawable.ic_launcher,R.drawable.ic_favorite_black_24dp))
+        }
     }
 
     private fun showDownloadDialog(type: Int) {
@@ -78,6 +83,8 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
                 }
                 .show()
     }
+
+
 
     override fun showLoading() {
 

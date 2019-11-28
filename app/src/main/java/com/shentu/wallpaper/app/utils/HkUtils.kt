@@ -5,25 +5,36 @@ import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.*
+import android.graphics.drawable.VectorDrawable
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.text.TextUtils
+import android.view.View
+import android.widget.ImageView
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import cn.sharesdk.framework.utils.QRCodeUtil.WriterException
 import com.afollestad.materialdialogs.MaterialDialog
+import com.blankj.utilcode.util.ImageUtils
 import com.blankj.utilcode.util.SPUtils
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
 import com.jess.arms.integration.AppManager
 import com.shentu.wallpaper.BuildConfig
+import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.HkApplication
+import com.shentu.wallpaper.mvp.contract.MainContract
+import kotlinx.android.synthetic.main.activity_setting_more.*
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.util.*
+import kotlin.math.min
 
 
 class HkUtils private constructor() {
@@ -181,5 +192,37 @@ class HkUtils private constructor() {
             Timber.e(e)
         }
         return null
+    }
+
+    private fun getVectorBitmap(reqWidth: Int, reqHeight: Int,@DrawableRes distId: Int):Bitmap?{
+        val distDrawable = ContextCompat.getDrawable(HkApplication.getInstance(),distId)
+        if(distDrawable !is VectorDrawable && distDrawable !is VectorDrawableCompat){
+            return null
+        }
+        val distBitmap =  Bitmap.createBitmap(reqWidth,reqHeight,Bitmap.Config.ARGB_8888)
+        val distCanvas = Canvas(distBitmap)
+        distDrawable.setBounds(0, 0, reqWidth, reqHeight)
+        distDrawable.draw(distCanvas)
+        return distBitmap
+    }
+
+    /**
+     * 获取不规则图片
+     * */
+    fun getSvgBitmap(reqWidth: Int, reqHeight: Int, @DrawableRes srcId: Int,@DrawableRes distId: Int): Bitmap {
+        val distBitmap = getVectorBitmap(reqWidth,reqHeight, distId)
+                ?: throw IllegalArgumentException("目标图不是VectorDrawable")
+
+        val srcBitmap = ImageUtils.getBitmap(srcId, reqWidth, reqHeight)
+        //创建画笔
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        paint.isDither = true
+        val bitmap = Bitmap.createBitmap(reqWidth, reqHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        canvas.drawBitmap(distBitmap, Matrix(), paint)
+        //采用SRC_ATOP模式重叠
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP)
+        canvas.drawBitmap(srcBitmap, Matrix(), paint)
+        return bitmap
     }
 }

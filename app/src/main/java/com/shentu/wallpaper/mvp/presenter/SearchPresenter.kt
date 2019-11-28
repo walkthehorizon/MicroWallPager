@@ -1,16 +1,27 @@
 package com.shentu.wallpaper.mvp.presenter
 
 import android.app.Application
+import android.text.Editable
+import android.text.TextWatcher
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.OnLifecycleEvent
+import com.blankj.utilcode.util.KeyboardUtils
+import com.blankj.utilcode.util.SPUtils
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.jess.arms.di.scope.ActivityScope
-
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
+import com.shentu.wallpaper.app.utils.LimitQueue
 import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.model.response.SubjectPageResponse
 import com.shentu.wallpaper.mvp.contract.SearchContract
 import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
+import kotlinx.android.synthetic.main.activity_search.*
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -24,15 +35,58 @@ constructor(model: SearchContract.Model, rootView: SearchContract.View) :
     lateinit var mErrorHandler: RxErrorHandler
     @Inject
     lateinit var mApplication: Application
-
     @Inject
     lateinit var mAppManager: AppManager
+    @Inject
+    lateinit var gson: Gson
 
+    private var clear: Boolean = true
+    private lateinit var observable: Observable<String>
+    private lateinit var mEmitter: ObservableEmitter<String>
+    private var curKey: String = ""
+    private lateinit var keyQueue: LimitQueue<String>
 
-    fun searchKey(key: String, clear: Boolean) {
-        Observable.just(key)
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .filter { it.isNotEmpty() }
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    fun onCreate() {
+        val history = SPUtils.getInstance().getString("search_history", "")
+        Timber.e(history)
+        keyQueue = if (history.isEmpty()) {
+            LimitQueue(12)
+        } else {
+            gson.fromJson(history, object : TypeToken<LimitQueue<String>>() {}.type)
+        }
+        Timber.e(keyQueue.queue.toString())
+        observable = Observable.create { emitter ->
+            mEmitter = emitter
+            mRootView.getEtSearch().addTextChangedListener(object : TextWatcher {
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    clear = true
+                    curKey = p0.toString()
+                    mEmitter.onNext(p0.toString())
+                }
+            })
+        }
+        observable.debounce(500, TimeUnit.MILLISECONDS)
+                .filter {
+                    if (it.isEmpty()) {
+                        mRootView.showHistory(keyQueue)
+                        return@filter false
+                    }
+                    keyQueue.offer(curKey, true)
+                    SPUtils.getInstance().put("search_history", gson.toJson(keyQueue))
+                    return@filter true
+                }
+                .doOnNext {
+                    mRootView.showLoading()
+                }
                 .switchMap { mModel.searchKey(it, clear) }
                 .compose(RxUtils.applySchedulers(mRootView, clear))
                 .subscribe(object : ErrorHandleSubscriber<SubjectPageResponse>(mErrorHandler) {
@@ -43,5 +97,16 @@ constructor(model: SearchContract.Model, rootView: SearchContract.View) :
                         t.data?.content?.let { mRootView.showResults(it, clear) }
                     }
                 })
+        mRootView.getEtSearch().post {
+            mEmitter.onNext("")
+        }
+    }
+
+    fun search(key: String, clear: Boolean) {
+        this.clear = clear
+        if (key.isNotEmpty()) {
+            curKey = key
+        }
+        mEmitter.onNext(curKey)
     }
 }

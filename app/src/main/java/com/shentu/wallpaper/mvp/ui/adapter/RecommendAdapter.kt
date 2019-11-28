@@ -22,9 +22,9 @@ import com.shentu.wallpaper.R
 import com.shentu.wallpaper.model.entity.Wallpaper
 import java.util.*
 
-class RecommendAdapter(val context: Context, private var wallpapers: MutableList<Wallpaper>,
-                       private var decoration: Float) : BaseQuickAdapter<Wallpaper,
-        BaseViewHolder>(R.layout.item_rv_recommend, wallpapers) {
+class RecommendAdapter(val context: Context, private var wallpapers: List<Wallpaper>,
+                       private var decoration: Float) : BaseQuickAdapter<Wallpaper, BaseViewHolder>(
+        R.layout.item_rv_recommend, wallpapers) {
 
     override fun convert(helper: BaseViewHolder, item: Wallpaper) {
         val cardView: CardView = helper.getView(R.id.cardView)

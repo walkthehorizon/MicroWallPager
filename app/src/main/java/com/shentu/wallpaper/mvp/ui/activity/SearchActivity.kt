@@ -4,11 +4,9 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextUtils
-import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
@@ -17,11 +15,9 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.KeyboardUtils
-import com.blankj.utilcode.util.SPUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.gson.reflect.TypeToken
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
@@ -42,14 +38,18 @@ import com.shentu.wallpaper.mvp.ui.adapter.HotAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.HotPageRvDecoration
 import com.shentu.wallpaper.mvp.ui.browser.PictureBrowserActivity
 import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Route(path = "/activity/search")
-class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, TextWatcher {
+class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
 
-    private var curKey = ""
+
     private val hotAdapter: HotAdapter = HotAdapter(ArrayList())
     private lateinit var loadService: LoadService<Any>
-    private var keyQueue: LimitQueue<String> = LimitQueue(12)
+
     override fun setupActivityComponent(appComponent: AppComponent) {
         DaggersearchComponent //如找不到该类,请编译一下项目
                 .builder()
@@ -63,7 +63,6 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, Tex
         return R.layout.activity_search
     }
 
-
     override fun initData(savedInstanceState: Bundle?) {
         loadService = LoadSir.Builder()
                 .addCallback(EmptyCallback())
@@ -73,15 +72,8 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, Tex
                 .setDefaultCallback(LoadingCallback::class.java)
                 .build()
                 .register(smartRefresh)
-        val history = SPUtils.getInstance().getString("search_history", "")
-        if (history.isNotEmpty()) {
-            keyQueue = ArmsUtils.obtainAppComponentFromContext(this)
-                    .gson()
-                    .fromJson(history, object : TypeToken<LimitQueue<String>>() {}.type)
-        }
-        showHistory()
 
-        smartRefresh.setOnLoadMoreListener { loadData(false) }
+        smartRefresh.setOnLoadMoreListener { mPresenter?.search("", false) }
         etSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -91,7 +83,7 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, Tex
                 return false
             }
         })
-        etSearch.addTextChangedListener(this)
+
         rvData.layoutManager = LinearLayoutManager(this)
         rvData.addItemDecoration(HotPageRvDecoration(12))
         hotAdapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
@@ -104,17 +96,22 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, Tex
             PictureBrowserActivity.open(current = current, subjectId = subject.id, context = this)
         }
         rvData.adapter = hotAdapter
+
+
     }
 
-    private fun loadData(clear: Boolean) {
-        if (clear) {
-            keyQueue.offer(curKey, true)
-            SPUtils.getInstance().put("search_history",
-                    ArmsUtils.obtainAppComponentFromContext(this)
-                            .gson()
-                            .toJson(keyQueue))
+    override fun onEnterAnimationComplete() {
+        super.onEnterAnimationComplete()
+        GlobalScope.launch {
+            delay(400)
+            runOnUiThread {
+                etSearch.requestFocus()
+            }
         }
-        mPresenter?.searchKey(curKey, clear)
+    }
+
+    override fun getEtSearch(): EditText {
+        return etSearch
     }
 
     override fun showContent() {
@@ -153,12 +150,13 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, Tex
         }
     }
 
-    override fun showHistory() {
+    override fun showHistory(queue: LimitQueue<String>) {
+        Timber.e(queue.size().toString())
         loadService.setCallBack(SearchHistoryCallback::class.java) { context, view ->
             val chipGroup = view?.findViewById<ChipGroup>(R.id.chipGroup)
             chipGroup?.removeAllViews()
             val lp = ChipGroup.LayoutParams(-2, ConvertUtils.dp2px(30.0f))
-            for (key in keyQueue.queue) {
+            for (key in queue.queue) {
                 val chip = Chip(context)
                 chip.chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(
                         this, R.color.colorAccent))
@@ -166,32 +164,16 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View, Tex
                 chip.chipBackgroundColor = ColorStateList.valueOf(Color.WHITE)
                 chip.text = key
                 chip.setOnClickListener {
-                    curKey = chip.text.toString()
-                    etSearch.setText(curKey)
-                    etSearch.setSelection(etSearch.length())
-                    loadData(true)
+                    val keyStr = chip.text.toString()
+                    etSearch.setText(keyStr)
+                    etSearch.setSelection(etSearch.text.length)
+                    etSearch.requestFocus()
+                    mPresenter?.search(keyStr, true)
                 }
                 chipGroup?.addView(chip, lp)
             }
         }
         loadService.showCallback(SearchHistoryCallback::class.java)
-    }
-
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-    }
-
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-    }
-
-    override fun afterTextChanged(s: Editable?) {
-        curKey = s.toString()
-        if (TextUtils.isEmpty(curKey)) {
-            showHistory()
-            return
-        }
-        loadData(true)
     }
 
     override fun showMessage(message: String) {

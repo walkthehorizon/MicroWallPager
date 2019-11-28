@@ -21,7 +21,6 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:focusable="true"
             android:background="@drawable/bg_home_search"
             android:drawableStart="@drawable/ic_search_white_24dp"
             android:drawablePadding="10dp"
@@ -30,11 +29,15 @@
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:maxLines="1"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:textColor="@color/colorIcon"
             android:textSize="@dimen/sp_15"
-            android:transitionName="@string/search_transitionName" />
+            android:transitionName="@string/search_transitionName">
+            <requestFocus/>
+        </EditText>
 
     </com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar>
 
@@ -42,12 +45,14 @@
         android:layout_marginTop="@dimen/activity_divider_height"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:focusable="false"
         android:layout_weight="1">
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/smartRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:focusable="false"
             app:srlEnableRefresh="false">
 
             <androidx.recyclerview.widget.RecyclerView

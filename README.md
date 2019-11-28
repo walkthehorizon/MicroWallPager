@@ -154,6 +154,12 @@ Select text used for describing the plants (in `plants.json`) are used from Wiki
 
 "[seed](https://thenounproject.com/search/?q=seed&i=1585971)" by [Aisyah](https://thenounproject.com/aisyahalmasyira/) is licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/us/legalcode)
 
+为什么下载要扣除看豆？
+-------------------
+
+萌幻Cos致力于打造一个自由开源的Cos图文浏览环境，图源来自于爬虫自动化收集，但为防图片被下载后用于非法用途，所以增加下载限制，即下载需要扣除少量看豆。
+此外，该项目完全由我个人在工作之余独立维护，每个月都会产生服务器，数据库，存储，流量等额外的费用，目前完全由我个人承担，如果你觉得这个项目对你有用，可适当投喂以支持该产品未来更好健康的发展，谢！
+
 License
 -------
 

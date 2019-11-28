@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_toolbar_height"
+        app:tl_title="最新" />
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/smartRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvNew"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    <com.shentu.wallpaper.mvp.ui.widget.stickyHead.StickyHeadContainer
+        android:id="@+id/stickyHead"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <include layout="@layout/item_home_newest_section" />
+    </com.shentu.wallpaper.mvp.ui.widget.stickyHead.StickyHeadContainer>
+
+</RelativeLayout>
+

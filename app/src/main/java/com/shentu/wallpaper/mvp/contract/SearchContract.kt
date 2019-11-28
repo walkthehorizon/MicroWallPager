@@ -1,7 +1,9 @@
 package com.shentu.wallpaper.mvp.contract
 
+import android.widget.EditText
 import com.jess.arms.mvp.IModel
 import com.jess.arms.mvp.IView
+import com.shentu.wallpaper.app.utils.LimitQueue
 import com.shentu.wallpaper.model.entity.Subject
 import com.shentu.wallpaper.model.response.SubjectPageResponse
 import io.reactivex.Observable
@@ -12,7 +14,9 @@ interface SearchContract {
     interface View : IView {
         fun showResults(subjects: MutableList<Subject>, clear: Boolean)
 
-        fun showHistory()
+        fun showHistory(queue:LimitQueue<String>)
+
+        fun getEtSearch():EditText
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存

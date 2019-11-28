@@ -92,7 +92,9 @@ public interface IView {
      *
      * @param message 消息内容, 不能为 {@code null}
      */
-    void showMessage(@NonNull String message);
+    default void showMessage(@NonNull String message){
+
+    }
 
     /**
      * 跳转 {@link Activity}

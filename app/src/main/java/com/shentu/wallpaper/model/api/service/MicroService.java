@@ -65,6 +65,14 @@ public interface MicroService {
     getRecommendWallpapers(@Query("limit") int limit,
                            @Query("offset") int offset);
 
+    /**
+     * 获取最新papers
+     * */
+    @GET("wallpaper/newest")
+    Observable<WallpaperPageResponse>
+    getNewestPapers(@Query("limit") int limit,
+                    @Query("offset") int offset);
+
     @GET("categories")
     Observable<CategoryPageResponse>
     getCategories(@Query("offset") int offset,

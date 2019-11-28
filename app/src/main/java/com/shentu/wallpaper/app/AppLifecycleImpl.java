@@ -58,19 +58,17 @@ public class AppLifecycleImpl implements AppLifecycles {
         if (BuildConfig.LOG_DEBUG) {//Timber初始化
             Timber.plant(new Timber.DebugTree());
         }
-        long start = System.currentTimeMillis();
         new Thread(() -> init(application)).start();
-
-        Timber.d("init use time: %s ms", String.valueOf(System.currentTimeMillis() - start));
     }
 
     private void init(Application application) {
+        long start = System.currentTimeMillis();
         Utils.init(application);
         NetBus.getInstance().init(application);
-//        if (BuildConfig.Debug) {           // 这两行必须写在init之前，否则这些配置在init过程中将无效
-//            ARouter.openLog();     // 打印日志
-//            ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
-//        }
+        if (BuildConfig.Debug) {           // 这两行必须写在init之前，否则这些配置在init过程中将无效
+            ARouter.openLog();     // 打印日志
+            ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
+        }
         ARouter.init(application); // 尽可能早，推荐在Application中初始化
         MobSDK.init(application);
         MobLink.setRestoreSceneListener(new SceneListener());
@@ -88,6 +86,7 @@ public class AppLifecycleImpl implements AppLifecycles {
                 .commit();
         FileDownloader.setup(application);
         BigImageViewer.initialize(GlideImageLoader.with(application));
+        Timber.d("init use time: %s ms", String.valueOf(System.currentTimeMillis() - start));
     }
 
     @Override

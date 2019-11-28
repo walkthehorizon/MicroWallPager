@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Debug
 import android.util.SparseIntArray
 import android.view.*
 import androidx.core.app.ActivityOptionsCompat
@@ -45,6 +46,7 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.max
@@ -52,7 +54,6 @@ import kotlin.math.max
 
 class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
         , OnRefreshListener, OnLoadMoreListener, ViewPager.OnPageChangeListener, PictureBrowserActivity.Callback {
-
 
     private var popWindow: CustomPopWindow? = null
     private var subType = -1//主题分类
@@ -91,7 +92,7 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
         recommendAdapter = RecommendAdapter(mContext, ArrayList(), 12f)
         recommendAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, view, position ->
             if (position == 0) {//主题列表
-                AppManager.getAppManager().startActivity(Intent(context, BannerListActivity::class.java))
+                startActivity(Intent(context, HomeNewActivity::class.java))
                 return@OnItemClickListener
             }
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
@@ -152,6 +153,14 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
         })
         refreshLayout.autoRefresh()
         mPresenter?.getBanners()
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if(isVisibleToUser){
+            Timber.e("init main:"+System.currentTimeMillis())
+//            Debug.stopMethodTracing()
+        }
     }
 
     override fun onResume() {
