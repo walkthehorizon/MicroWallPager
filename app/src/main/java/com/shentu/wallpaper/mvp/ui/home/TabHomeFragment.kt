@@ -21,8 +21,10 @@ import com.google.android.material.appbar.AppBarLayout
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.integration.AppManager
+import com.jess.arms.mvp.IView
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
+import com.jess.arms.utils.RxLifecycleUtils
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
@@ -42,7 +44,10 @@ import com.shentu.wallpaper.mvp.ui.adapter.RecommendAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.RandomRecommendDecoration
 import com.shentu.wallpaper.mvp.ui.browser.PictureBrowserActivity
 import com.shentu.wallpaper.mvp.ui.widget.CustomPopWindow
+import com.trello.rxlifecycle2.android.FragmentEvent
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
@@ -155,17 +160,18 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
         mPresenter?.getBanners()
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if(isVisibleToUser){
-            Timber.e("init main:"+System.currentTimeMillis())
-//            Debug.stopMethodTracing()
-        }
-    }
-
     override fun onResume() {
         super.onResume()
+//        Timber.e("开始计时")
         startCountDown()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (disposable != null && !disposable!!.isDisposed) {
+//            Timber.e("停止计时")
+            disposable!!.dispose()
+        }
     }
 
     fun scrollToTop() {
@@ -180,7 +186,7 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
      * 是否已滚动
      * */
     fun isScrolled(): Boolean {
-        return rvHot!=null && rvHot.canScrollVertically(-1)
+        return rvHot != null && rvHot.canScrollVertically(-1)
     }
 
     override fun hideRefresh(clear: Boolean) {
@@ -307,17 +313,25 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
 //        arc1.setImageResource(Color.parseColor(banners[position].color))
     }
 
+    private var disposable: Disposable? = null
+
     private fun startCountDown() {
-        Observable.interval(8, 8, TimeUnit.SECONDS)
-                .compose(RxUtils.applyClearSchedulers(this))
+        Observable.interval(3, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { t -> disposable = t }
                 .subscribe(object : ErrorHandleSubscriber<Long>(appComponent.rxErrorHandler()) {
                     override fun onNext(t: Long) {
+//                        Timber.e("首页正在计时...")
                         if (!countdown || bannerAdapter == null) {
                             return
                         }
                         bannerPager.currentItem =
                                 if (bannerAdapter!!.count - bannerPager.currentItem < 1) 0
                                 else bannerPager.currentItem + 1
+                    }
+
+                    override fun onError(t: Throwable) {
+                        Timber.e(t)
                     }
                 })
     }

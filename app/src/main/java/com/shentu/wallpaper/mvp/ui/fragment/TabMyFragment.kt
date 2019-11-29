@@ -1,20 +1,13 @@
 package com.shentu.wallpaper.mvp.ui.fragment
 
-import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.alibaba.android.arouter.launcher.ARouter
+import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.TimeUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -156,6 +149,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                     .into(circle_avatar)
             itMoney.setEndValue("")
         }
+        itCache.setEndValue(FileUtils.getDirSize(ArmsUtils.obtainAppComponentFromContext(mContext).cacheFile()))
     }
 
     override fun onResume() {
@@ -187,14 +181,13 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     }
 
     private fun clickCache() {
-        Completable.fromAction { Glide.get(mContext).clearMemory() }
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe()
-        Completable.fromAction {
-            Glide.get(mContext).clearDiskCache()
-        }.subscribeOn(Schedulers.io())
+        Completable.fromAction { Glide.get(mContext).clearDiskCache() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete {
+                    Glide.get(mContext).clearMemory()
                     ToastUtils.showShort("清理完成")
+                    itCache.setEndValue(FileUtils.getDirSize(ArmsUtils.obtainAppComponentFromContext(mContext).cacheFile()))
                 }
                 .subscribe()
         if (BuildConfig.DEBUG) {

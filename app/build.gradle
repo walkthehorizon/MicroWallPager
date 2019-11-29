@@ -139,10 +139,10 @@ buildscript {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     api project(':arms')
-    implementation(rootProject.ext.dependencies["support-v4"])
-    implementation(rootProject.ext.dependencies["appcompat-v7"])
-    implementation(rootProject.ext.dependencies["recyclerview-v7"])
-    implementation rootProject.ext.dependencies["annotations"]
+//    implementation(rootProject.ext.dependencies["support-v4"])
+//    implementation(rootProject.ext.dependencies["appcompat"])
+    implementation(rootProject.ext.dependencies["recyclerview"])
+//    implementation rootProject.ext.dependencies["annotation"]
     implementation rootProject.ext.dependencies["viewpager2"]
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //support
@@ -150,7 +150,7 @@ dependencies {
     implementation rootProject.ext.dependencies["constraint-layout"]
     implementation rootProject.ext.dependencies["vector-drawable"]
     implementation rootProject.ext.dependencies["multidex"]
-    implementation rootProject.ext.dependencies["design"]
+    implementation rootProject.ext.dependencies["material"]
     implementation rootProject.ext.dependencies["lifecycle-extensions"]
     //tools
     implementation rootProject.ext.dependencies["progressmanager"]

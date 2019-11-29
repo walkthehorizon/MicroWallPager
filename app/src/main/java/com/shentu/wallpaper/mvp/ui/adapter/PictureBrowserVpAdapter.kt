@@ -1,6 +1,7 @@
 package com.shentu.wallpaper.mvp.ui.adapter
 
 
+import android.annotation.SuppressLint
 import android.util.SparseArray
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
@@ -8,9 +9,10 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.ui.fragment.PictureFragment
 
+@SuppressLint("WrongConstant")
 class PictureBrowserVpAdapter(fm: FragmentManager, private val wallpapers: List<Wallpaper>,
                               val callback: PictureFragment.Callback) :
-        FragmentStatePagerAdapter(fm) {
+        FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     private val fragments: SparseArray<PictureFragment> = SparseArray()
 
     override fun getItem(pos: Int): androidx.fragment.app.Fragment {

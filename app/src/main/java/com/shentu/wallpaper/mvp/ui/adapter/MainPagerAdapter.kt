@@ -1,10 +1,13 @@
 package com.shentu.wallpaper.mvp.ui.adapter
 
+import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
-class MainPagerAdapter(fm: FragmentManager, private val fragments: List<Fragment>) : FragmentPagerAdapter(fm) {
+@SuppressLint("WrongConstant")
+class MainPagerAdapter(fm: FragmentManager, private val fragments: List<Fragment>) : FragmentPagerAdapter(fm
+        , BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val titles: List<String> = listOf("推荐", "分类", "我的")
 
