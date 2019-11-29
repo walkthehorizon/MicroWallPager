@@ -3,162 +3,75 @@
 [![Build Status](https://travis-ci.org/walkthehorizon/MicroWallPager.svg?branch=master)](https://travis-ci.org/walkthehorizon/MicroWallPager)
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
 
-A gardening app illustrating Android development best practices with Android Jetpack.
+一个基于Android开发的轻量且精致的Cos美图浏览客户端
 
-Android Sunflower is currently under heavy development.
-Note that some changes (such as database schema modifications) are not backwards
-compatible during this alpha period and may cause the app to crash. In this
-case, please uninstall and re-install the app.
-
-Introduction
+简介
 ------------
 
-Android Jetpack is a set of components, tools and guidance to make great Android apps. They bring
-together the existing Support Library and Architecture Components and arrange them into four
-categories:
+**后台**：为该项目提供后台相关的服务，如接口，数据管理后台，基于Django,暂未开源
 
-![Android Jetpack](screenshots/jetpack_donut.png "Android Jetpack Components")
+**数据**：基于Scrapy自动化爬取网络，部署在阿里云ECS上，每日会根据计划自动化爬取相关数据，暂未开源  
 
-Android Sunflower demonstrates utilizing these components to create a simple gardening app.
-Read the
-[Introducing Android Sunflower](https://medium.com/androiddevelopers/introducing-android-sunflower-e421b43fe0c2)
-article for a walkthrough of the app.
+**官网**：基于React，已开源，主要是用于app的下载，提供app分享支持，可与app联动还原分享页场景，有兴趣可点击查看                                     [micro-react](https://github.com/walkthehorizon/micro-react)
 
-Getting Started
+
+开始使用
 ---------------
-This project uses the Gradle build system. To build this project, use the
-`gradlew build` command or use "Import Project" in Android Studio.
+[点击下载安装应用](https://wmmt119.top/)
 
-There are two Gradle tasks for testing the project:
-* `connectedAndroidTest` - for running Espresso on a connected device
-* `test` - for running unit tests
-
-For more resources on learning Android development, visit the
-[Developer Guides](https://developer.android.com/guide/) at
-[developer.android.com](https://developer.android.com).
-
-Screenshots
+截图
 -----------
 
-![List of plants](screenshots/phone_plant_list.png "A list of plants")
-![Plant details](screenshots/phone_plant_detail.png "Details for a specific plant")
-![My Garden](screenshots/phone_my_garden.png "Plants that have been added to your garden")
+![image](screenshots/555b2a6665253a9c0ba59cdf78bb2e2.jpg)
+![image](screenshots/a0cba0e547cda6c6219e02338e2324d.jpg)
+![image](screenshots/2a1b4f9a10cd5d4cff6733beff77f2b.jpg)
+![image](screenshots/27cb095c5eda51e6e56e40cec2491fb.jpg)
 
-Libraries Used
+核心库
 --------------
-* [Foundation][0] - Components for core system capabilities, Kotlin extensions and support for
-  multidex and automated testing.
-  * [AppCompat][1] - Degrade gracefully on older versions of Android.
-  * [Android KTX][2] - Write more concise, idiomatic Kotlin code.
-  * [Test][4] - An Android testing framework for unit and runtime UI tests.
-* [Architecture][10] - A collection of libraries that help you design robust, testable, and
-  maintainable apps. Start with classes for managing your UI component lifecycle and handling data
-  persistence.
-  * [Data Binding][11] - Declaratively bind observable data to UI elements.
-  * [Lifecycles][12] - Create a UI that automatically responds to lifecycle events.
-  * [LiveData][13] - Build data objects that notify views when the underlying database changes.
-  * [Navigation][14] - Handle everything needed for in-app navigation.
-  * [Room][16] - Access your app's SQLite database with in-app objects and compile-time checks.
-  * [ViewModel][17] - Store UI-related data that isn't destroyed on app rotations. Easily schedule
-     asynchronous tasks for optimal execution.
-  * [WorkManager][18] - Manage your Android background jobs.
-* [UI][30] - Details on why and how to use UI Components in your apps - together or separate
-  * [Animations & Transitions][31] - Move widgets and transition between screens.
-  * [Fragment][34] - A basic unit of composable UI.
-  * [Layout][35] - Lay out widgets using different algorithms.
-* Third party
-  * [Glide][90] for image loading
-  * [Kotlin Coroutines][91] for managing background threads with simplified code and reducing needs for callbacks
+* [Glide][0] - Glide是一个快速高效的Android图片加载库，注重于平滑的滚动。
+* [android-gif-drawable][1] - 一个基于giflib高效加载gif图片的开源库，对于gif的性能表现极好，因为同一时间只会有一帧的内存消耗。
+* [subsampling-scale-image-view][2] - 一个高度可配置，易于扩展的深度缩放视图，可显示巨大图像而不会丢失细节。
+* [BigImageViewer][3] - BigImageViewer封装了android-gif-drawable和subsampling-scale-image-view的使用细节，
+提供对Fresco, Glide, and Picasso的支持。
+* [lottie][4] - Lottie是适用于Android和iOS的移动库，它可以使用Bodymovin解析以json格式导出的Adobe After Effects动画，并在移动设备上进行本地渲染！
 
-[0]: https://developer.android.com/jetpack/components
-[1]: https://developer.android.com/topic/libraries/support-library/packages#v7-appcompat
-[2]: https://developer.android.com/kotlin/ktx
-[4]: https://developer.android.com/training/testing/
-[10]: https://developer.android.com/jetpack/arch/
-[11]: https://developer.android.com/topic/libraries/data-binding/
-[12]: https://developer.android.com/topic/libraries/architecture/lifecycle
-[13]: https://developer.android.com/topic/libraries/architecture/livedata
-[14]: https://developer.android.com/topic/libraries/architecture/navigation/
-[16]: https://developer.android.com/topic/libraries/architecture/room
-[17]: https://developer.android.com/topic/libraries/architecture/viewmodel
-[18]: https://developer.android.com/topic/libraries/architecture/workmanager
-[30]: https://developer.android.com/guide/topics/ui
-[31]: https://developer.android.com/training/animation/
-[34]: https://developer.android.com/guide/components/fragments
-[35]: https://developer.android.com/guide/topics/ui/declaring-layout
-[90]: https://bumptech.github.io/glide/
-[91]: https://kotlinlang.org/docs/reference/coroutines-overview.html
+[0]: https://github.com/bumptech/glide
+[1]: https://github.com/koral--/android-gif-drawable
+[2]: https://github.com/davemorrissey/subsampling-scale-image-view
+[3]: https://github.com/Piasy/BigImageViewer
+[4]: https://github.com/airbnb/lottie-android
 
-Upcoming features
+未来...
 -----------------
-Updates will include incorporating additional Jetpack components and updating existing components
-as the component libraries evolve.
+目前主要有以下计划：
+- 图片的压缩和裁剪问题，在有限的条件下，目前这方面都仍有很大的改进空间
+- 将该项目完全升级为Kotlin
+- 基于Flutter实现该项目，以期提供对ios系统的支持
 
-Interested in seeing a particular feature of the Android Framework or Jetpack implemented in this
-app? Please open a new [issue](https://github.com/android/sunflower/issues).
+此外，如果你有好的建议，请提交新的 [issue](https://github.com/walkthehorizon/MicroWallPager/issues)
 
-Android Studio IDE setup
-------------------------
-For development, the latest version of Android Studio is required. The latest version can be
-downloaded from [here](https://developer.android.com/studio/).
-
-Sunflower uses [ktlint](https://ktlint.github.io/) to enforce Kotlin coding styles.
-Here's how to configure it for use with Android Studio (instructions adapted
-from the ktlint [README](https://github.com/shyiko/ktlint/blob/master/README.md)):
-
-- Close Android Studio if it's open
-
-- Download ktlint using these [installation instructions](https://github.com/shyiko/ktlint/blob/master/README.md#installation)
-
-- Inside the project root directory run:
-
-  `./ktlint --apply-to-idea-project --android`
-
-- Start Android Studio
-
-Additional resources
---------------------
-Check out these Wiki pages to learn more about Android Sunflower:
-
-- [Notable Community Contributions](https://github.com/android/sunflower/wiki/Notable-Community-Contributions)
-
-- [Publications](https://github.com/android/sunflower/wiki/Sunflower-Publications)
-
-Non-Goals
----------
-The focus of this project is on Android Jetpack and the Android framework.
-Thus, there are no immediate plans to implement features outside of this scope.
-
-A note on dependency injection - while many projects (such as
-[Plaid](https://github.com/nickbutcher/plaid)) use
-[Dagger 2](https://github.com/google/dagger) for DI, there are no plans to
-incorporate DI into Sunflower.  This allows developers unfamiliar with dependency
-injection to better understand Sunflower's code without having to learn DI.
-
-Support
--------
-
-- Stack Overflow:
-  - http://stackoverflow.com/questions/tagged/android
-  - http://stackoverflow.com/questions/tagged/android-jetpack
-
-If you've found an error in this sample, please file an issue:
-https://github.com/android/sunflower/issues
-
-Patches are encouraged, and may be submitted by forking this project and submitting a pull request
-through GitHub.
-
-Third Party Content
--------------------
-Select text used for describing the plants (in `plants.json`) are used from Wikipedia via CC BY-SA 3.0 US (license in `ASSETS_LICENSE`).
-
-"[seed](https://thenounproject.com/search/?q=seed&i=1585971)" by [Aisyah](https://thenounproject.com/aisyahalmasyira/) is licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/us/legalcode)
-
-为什么下载要扣除看豆？
+为什么下载要收费？
 -------------------
 
 萌幻Cos致力于打造一个自由开源的Cos图文浏览环境，图源来自于爬虫自动化收集，但为防图片被下载后用于非法用途，所以增加下载限制，即下载需要扣除少量看豆。
-此外，该项目完全由我个人在工作之余独立维护，每个月都会产生服务器，数据库，存储，流量等额外的费用，目前完全由我个人承担，如果你觉得这个项目对你有用，可适当投喂以支持该产品未来更好健康的发展，谢！
+此外，该项目完全由我个人在工作之余独立维护，每个月都会产生服务器，数据库，存储，流量等额外的费用，完全由我个人承担，如果你觉得这个项目对你有用，可适当投喂以支持该萌幻Cos未来更好更强壮的发展，谢！
+
+支持
+-------
+QQ：1308311472  
+微信：walkthehorizon
+
+如果你发现应用内有任何错误，请创建并提交 [issue](https://github.com/walkthehorizon/MicroWallPager/issues)
+
+历史版本
+------------------------
+- *1.1.0*   
+暂无计划
+
+- *1.0.0*  
+初版,已发布
+
 
 License
 -------
