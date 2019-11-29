@@ -12,7 +12,7 @@
 
 **数据**：基于Scrapy自动化爬取网络，部署在阿里云ECS上，每日会根据计划自动化爬取相关数据，暂未开源  
 
-**官网**：基于React，已开源，主要是用于app的下载，提供app分享支持，可与app联动还原分享页场景，有兴趣可点击查看                                     [micro-react](https://github.com/walkthehorizon/micro-react)
+**官网**：基于React，已开源，暂时用于app的下载，app分享支持以及联动还原分享页场景，有兴趣可点击查看[micro-react](https://github.com/walkthehorizon/micro-react)
 
 
 开始使用
