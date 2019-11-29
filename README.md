@@ -23,9 +23,8 @@
 -----------
 
 ![image](screenshots/555b2a6665253a9c0ba59cdf78bb2e2.jpg)
-![image](screenshots/a0cba0e547cda6c6219e02338e2324d.jpg)
-![image](screenshots/2a1b4f9a10cd5d4cff6733beff77f2b.jpg)
 ![image](screenshots/27cb095c5eda51e6e56e40cec2491fb.jpg)
+![image](screenshots/2a1b4f9a10cd5d4cff6733beff77f2b.jpg)
 
 核心库
 --------------
