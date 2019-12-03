@@ -6,9 +6,9 @@
     android:background="@color/colorDivider"
     android:gravity="center_vertical"
     android:paddingStart="@dimen/activity_horizontal_margin"
-    android:textColor="@color/colorSecondText"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:textColor="@color/colorPrimaryText"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:text="2019-11-28"
-    android:orientation="vertical">
+    tools:text="2019-11-28">
 
 </TextView>

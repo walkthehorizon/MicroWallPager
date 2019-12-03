@@ -225,4 +225,8 @@ class HkUtils private constructor() {
         canvas.drawBitmap(srcBitmap, Matrix(), paint)
         return bitmap
     }
+
+    fun get2x2Image(url:String):String{
+        return url.replace("cos.ap-beijing","picbj")+"!2x2"
+    }
 }

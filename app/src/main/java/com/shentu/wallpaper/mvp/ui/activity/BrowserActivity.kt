@@ -4,37 +4,19 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
-import android.view.View
 import android.view.ViewGroup
-import android.webkit.DownloadListener
-import android.webkit.WebView
-
-import androidx.annotation.ColorInt
-import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.IPresenter
-import com.just.agentweb.AgentWeb
-import com.just.agentweb.AgentWebSettingsImpl
-import com.just.agentweb.AgentWebUIControllerImplBase
-import com.just.agentweb.DefaultWebClient
-import com.just.agentweb.IAgentWebSettings
-import com.just.agentweb.IWebLayout
-import com.just.agentweb.MiddlewareWebChromeBase
-import com.just.agentweb.MiddlewareWebClientBase
-import com.just.agentweb.PermissionInterceptor
-import com.just.agentweb.WebChromeClient
-import com.just.agentweb.WebViewClient
+import com.just.agentweb.*
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.utils.UIController
 import kotlinx.android.synthetic.main.activity_browser.*
 
 class BrowserActivity : BaseActivity<IPresenter>() {
 
     private var agentWeb: AgentWeb? = null
-    private val mAgentWebUIController: AgentWebUIControllerImplBase? = null
     private var mMiddleWareWebChrome: MiddlewareWebChromeBase = object : MiddlewareWebChromeBase() {
 
     }
@@ -58,14 +40,11 @@ class BrowserActivity : BaseActivity<IPresenter>() {
         agentWeb = AgentWeb.with(this)
                 .setAgentWebParent(container, ViewGroup.LayoutParams(-1, -1))
                 .useDefaultIndicator(ContextCompat.getColor(this,R.color.colorAccent), -1)
-                .setWebChromeClient(null)
-                .setWebViewClient(null)
-                .setWebView(null)
                 .setPermissionInterceptor(null)
                 .setWebLayout(null)
-                .setAgentWebUIController(mAgentWebUIController)
+                .setAgentWebUIController(UIController(this))
                 .interceptUnkownUrl()
-                .setOpenOtherPageWays(null)
+                .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK)
                 .useMiddlewareWebChrome(mMiddleWareWebChrome)
                 .useMiddlewareWebClient(mMiddleWareWebClient)
                 .setAgentWebWebSettings(AgentWebSettingsImpl.getInstance())

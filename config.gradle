@@ -110,6 +110,7 @@ ext {
             "firebase-perf"            : "com.google.firebase:firebase-perf:18.0.1",
             "crashlytics"              : "com.crashlytics.sdk.android:crashlytics:2.10.1",
             "agentweb"                 : "com.just.agentweb:agentweb:4.1.2",
+            "agentweb-filechooser"     : "com.just.agentweb:filechooser:4.1.2",
 
             //test
             "junit"                    : "junit:junit:4.12",

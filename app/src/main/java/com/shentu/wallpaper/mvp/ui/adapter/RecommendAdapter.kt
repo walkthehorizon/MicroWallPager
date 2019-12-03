@@ -19,6 +19,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.github.florent37.glidepalette.BitmapPalette.Profile.MUTED_LIGHT
 import com.github.florent37.glidepalette.GlidePalette
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.model.entity.Wallpaper
 import java.util.*
 
@@ -39,7 +40,7 @@ class RecommendAdapter(val context: Context, private var wallpapers: List<Wallpa
             ivPicture.layoutParams = lp
         }
         Glide.with(mContext)
-                .load(item.url)
+                .load(HkUtils.instance.get2x2Image(item.url))
                 .listener(GlidePalette.with(item.url)
                         .use(MUTED_LIGHT)
                         .intoCallBack { palette ->
