@@ -41,7 +41,7 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
     override fun getBanners(): Observable<BannerPageResponse> {
         return Observable.just(mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
-                .getBanners(Constant.BANNER_COUNT + 1, 0))
+                .getBanners(Constant.BANNER_COUNT, 0))
                 .flatMap { ob ->
                     mRepositoryManager.obtainCacheService(MicroCache::class.java)
                             .getBanners(ob, EvictProvider(NetworkUtils.isConnected()))

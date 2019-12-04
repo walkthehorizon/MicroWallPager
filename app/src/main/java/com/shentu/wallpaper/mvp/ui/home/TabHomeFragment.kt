@@ -4,11 +4,15 @@ import android.animation.ArgbEvaluator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.media.Image
 import android.os.Bundle
 import android.os.Debug
 import android.util.SparseIntArray
 import android.view.*
+import android.widget.ImageView
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +20,13 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
+import com.blankj.utilcode.util.ScreenUtils
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.material.appbar.AppBarLayout
 import com.jess.arms.base.BaseFragment
@@ -48,8 +59,10 @@ import com.trello.rxlifecycle2.android.FragmentEvent
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
+import kotlinx.android.synthetic.main.item_rv_recommend.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -70,7 +83,7 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
     private var isLightMode = false
     private var banners: MutableList<Banner> = arrayListOf()
     private var countdown: Boolean = true
-    private var historyBanner = Banner()
+//    private var historyBanner = Banner()
 
     override fun setupFragmentComponent(appComponent: AppComponent) {
         DaggerHotPagerComponent //如找不到该类,请编译一下项目
@@ -94,17 +107,15 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
         typeSparse!!.append(R.id.mTvCos, 2)
         typeSparse!!.append(R.id.mTvGirl, 3)
 
-        recommendAdapter = RecommendAdapter(mContext, ArrayList(), 12f)
+        recommendAdapter = RecommendAdapter(mContext, mutableListOf())
         recommendAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, view, position ->
-            if (position == 0) {//主题列表
-                startActivity(Intent(context, HomeNewActivity::class.java))
-                return@OnItemClickListener
-            }
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                     , view.width / 2, view.height / 2
                     , 0, 0)
             PictureBrowserActivity.open(position, this, compat, context = mContext)
         }
+
+        recommendAdapter.addHeaderView(getRecommendHead(), 0, StaggeredGridLayoutManager.VERTICAL)
         rvHot.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         rvHot.addItemDecoration(RandomRecommendDecoration(ConvertUtils.dp2px(12.0f)))
         rvHot.adapter = recommendAdapter
@@ -158,6 +169,22 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
         })
         refreshLayout.autoRefresh()
         mPresenter?.getBanners()
+    }
+
+    private fun getRecommendHead(): View {
+        val ivHead = ImageView(context)
+        val lp = ViewGroup.LayoutParams(-1, -2)
+        lp.height = ((ScreenUtils.getScreenWidth() - ConvertUtils.dp2px(12f * 3)) /
+                2 * 383 / 900f).toInt()
+        ivHead.layoutParams = lp
+        ivHead.setOnClickListener {
+            startActivity(Intent(context, HomeNewActivity::class.java))
+        }
+        Glide.with(this)
+                .load(R.drawable.ic_home_newest_entrance)
+                .transform(RoundedCorners(ConvertUtils.dp2px(5f)))
+                .into(ivHead)
+        return ivHead
     }
 
     override fun onResume() {
@@ -223,10 +250,8 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
     }
 
     override fun showBanners(banners: MutableList<Banner>) {
-        if (banners.size > Constant.BANNER_COUNT) {
-            historyBanner = banners.removeAt(banners.size - 1)
-        }
         this.banners = banners
+        banners.add(Banner(1, "#85A7D6"))
         if (bannerAdapter == null) {
             bannerAdapter = HomeBannerAdapter(banners, mContext)
             bannerPager.offscreenPageLimit = banners.size
@@ -250,7 +275,7 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
 
     override fun showRecommends(wallpapers: MutableList<Wallpaper>, clear: Boolean) {
         if (clear) {
-            wallpapers.add(0, Wallpaper(historyBanner.imageUrl))
+//            wallpapers.add(Wallpaper(""))
             recommendAdapter.setNewData(wallpapers)
         } else {
             isLoading = false
@@ -316,7 +341,7 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
     private var disposable: Disposable? = null
 
     private fun startCountDown() {
-        Observable.interval(3, TimeUnit.SECONDS)
+        Observable.interval(6, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { t -> disposable = t }
                 .subscribe(object : ErrorHandleSubscriber<Long>(appComponent.rxErrorHandler()) {

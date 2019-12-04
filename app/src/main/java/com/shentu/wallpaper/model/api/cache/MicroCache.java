@@ -28,7 +28,7 @@ public interface MicroCache {
 //    @LifeCache(duration = 1,timeUnit = TimeUnit.DAYS)
 //    Observable<Reply<CategorysEntity>> getCategories(Observable<CategorysEntity> observable, EvictProvider evictProvider);
 //
-    @ProviderKey("subject-detail-one-week")
+    @ProviderKey("subject-list-one-week")
     @LifeCache(duration = 7, timeUnit = TimeUnit.DAYS)
     Observable<Reply<WallpaperPageResponse>>
     getWallPapersBySubjectId(Observable<WallpaperPageResponse> ob

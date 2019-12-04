@@ -94,13 +94,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         BigImageViewer.initialize(GlideImageLoader.with(application))
         when {
             callback != null -> {
-                if (callback is TabHomeFragment) {
-                    current -= 1
-                    wallpapers.addAll(callback!!.getWallpaperList().subList(1,
-                            callback!!.getWallpaperList().size - 1))
-                } else {
-                    wallpapers.addAll(callback!!.getWallpaperList())
-                }
+                wallpapers.addAll(callback!!.getWallpaperList())
                 initViewPager()
             }
             subjectId != -1 -> mPresenter?.getPictures(subjectId)
@@ -111,7 +105,6 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             mPresenter?.getShareData(wallpapers[viewPager.currentItem])
         }
         initSetCover()
-        Timber.e("presenter:"+(mPresenter==null))
     }
 
     /**

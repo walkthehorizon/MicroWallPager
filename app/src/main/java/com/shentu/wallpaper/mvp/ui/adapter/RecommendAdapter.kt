@@ -3,12 +3,12 @@ package com.shentu.wallpaper.mvp.ui.adapter
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.palette.graphics.Palette
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.blankj.utilcode.util.ConvertUtils
-import com.blankj.utilcode.util.ScreenUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -23,22 +23,12 @@ import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.model.entity.Wallpaper
 import java.util.*
 
-class RecommendAdapter(val context: Context, private var wallpapers: List<Wallpaper>,
-                       private var decoration: Float) : BaseQuickAdapter<Wallpaper, BaseViewHolder>(
+class RecommendAdapter(val context: Context, private var wallpapers: List<Wallpaper>) : BaseQuickAdapter<Wallpaper, BaseViewHolder>(
         R.layout.item_rv_recommend, wallpapers) {
 
     override fun convert(helper: BaseViewHolder, item: Wallpaper) {
         val cardView: CardView = helper.getView(R.id.cardView)
         val ivPicture: ImageView = helper.getView(R.id.ivPicture)
-        val lp: ViewGroup.LayoutParams = ivPicture.layoutParams
-        if (helper.layoutPosition == 0) {
-            lp.height = ((ScreenUtils.getScreenWidth() - ConvertUtils.dp2px(decoration * 3)) /
-                    2 * 383 / 900f).toInt()
-            ivPicture.layoutParams = lp
-        } else {
-            lp.height = ConvertUtils.dp2px(300.0f)
-            ivPicture.layoutParams = lp
-        }
         Glide.with(mContext)
                 .load(HkUtils.instance.get2x2Image(item.url))
                 .listener(GlidePalette.with(item.url)
@@ -55,6 +45,16 @@ class RecommendAdapter(val context: Context, private var wallpapers: List<Wallpa
     override fun setNewData(data: MutableList<Wallpaper>?) {
         this.wallpapers = data!!
         super.setNewData(data)
+    }
+
+    /**
+     * 重写以实现瀑布流布局时无缝嵌入head
+     * */
+    override fun setFullSpan(holder: RecyclerView.ViewHolder?) {
+        if (holder!!.itemView.layoutParams is StaggeredGridLayoutManager.LayoutParams) {
+            val params: StaggeredGridLayoutManager.LayoutParams = holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
+            params.isFullSpan = false
+        }
     }
 
 }

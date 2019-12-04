@@ -31,14 +31,14 @@ import java.io.InputStream;
  */
 @GlideModule(glideName = "GlideArms")
 public class GlideConfiguration extends AppGlideModule {
-    public static final int IMAGE_DISK_CACHE_MAX_SIZE = 300 * 1024 * 1024;//图片缓存文件最大值为300Mb
+    public static final int IMAGE_DISK_CACHE_MAX_SIZE = 1024 * 1024 * 1024;//图片缓存文件最大值为1G
 
     @Override
     public void applyOptions(Context context, GlideBuilder builder) {
         final AppComponent appComponent = ArmsUtils.obtainAppComponentFromContext(context);
         builder.setDiskCache(() -> {
             // Careful: the external cache directory doesn't enforce permissions
-            File glide = new File(appComponent.cacheFile(), "Glide");
+            File glide = new File(appComponent.cacheFile(), "image_manager_disk_cache");
             FileUtils.createOrExistsDir(glide);
             return DiskLruCacheWrapper.create(glide, IMAGE_DISK_CACHE_MAX_SIZE);
         });

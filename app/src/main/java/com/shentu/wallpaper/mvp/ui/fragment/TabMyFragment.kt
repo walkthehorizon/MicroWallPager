@@ -19,6 +19,7 @@ import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.BuildConfig
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
+import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.app.utils.RxUtils
@@ -186,15 +187,15 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete {
                     Glide.get(mContext).clearMemory()
-                    ToastUtils.showShort("清理完成")
+                    if (BuildConfig.DEBUG) {
+                        ArmsUtils.obtainAppComponentFromContext(mContext)
+                                .repositoryManager()
+                                .clearAllCache()
+                    }
                     itCache.setEndValue(FileUtils.getDirSize(ArmsUtils.obtainAppComponentFromContext(mContext).cacheFile()))
+                    ToastUtils.showShort("清理完成")
                 }
                 .subscribe()
-        if (BuildConfig.DEBUG) {
-            ArmsUtils.obtainAppComponentFromContext(mContext)
-                    .repositoryManager()
-                    .clearAllCache()
-        }
     }
 
     override fun setData(data: Any?) {
