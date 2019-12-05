@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.blankj.utilcode.util.ConvertUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.Headers
+import com.bumptech.glide.load.model.LazyHeaders
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
@@ -19,6 +22,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.github.florent37.glidepalette.BitmapPalette.Profile.MUTED_LIGHT
 import com.github.florent37.glidepalette.GlidePalette
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.model.entity.Wallpaper
 import java.util.*
@@ -29,7 +33,7 @@ class RecommendAdapter(val context: Context, private var wallpapers: List<Wallpa
     override fun convert(helper: BaseViewHolder, item: Wallpaper) {
         val cardView: CardView = helper.getView(R.id.cardView)
         val ivPicture: ImageView = helper.getView(R.id.ivPicture)
-        Glide.with(mContext)
+        GlideArms.with(mContext)
                 .load(HkUtils.instance.get2x2Image(item.url))
                 .listener(GlidePalette.with(item.url)
                         .use(MUTED_LIGHT)

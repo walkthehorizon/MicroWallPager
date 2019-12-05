@@ -13,6 +13,7 @@ import androidx.multidex.MultiDex;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.Utils;
 import com.github.piasy.biv.BigImageViewer;
+import com.github.piasy.biv.loader.glide.GlideImageLoader;
 import com.horizon.netbus.NetBus;
 import com.jess.arms.base.delegate.AppLifecycles;
 import com.jess.arms.utils.ArmsUtils;
@@ -25,14 +26,21 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.shentu.wallpaper.BuildConfig;
 import com.shentu.wallpaper.R;
-import com.shentu.wallpaper.app.bigimage.GlideImageLoader;
 import com.shentu.wallpaper.app.page.EmptyCallback;
 import com.shentu.wallpaper.app.page.ErrorCallback;
 import com.shentu.wallpaper.app.page.LoadingCallback;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+
 import butterknife.ButterKnife;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import timber.log.Timber;
 
 /**
@@ -85,7 +93,9 @@ public class AppLifecycleImpl implements AppLifecycles {
                 .setDefaultCallback(LoadingCallback.class)//设置默认状态页
                 .commit();
         FileDownloader.setup(application);
-        BigImageViewer.initialize(GlideImageLoader.with(application));
+
+        BigImageViewer.initialize(GlideImageLoader.with(application
+                , HkApplication.getInstance().getImageClient()));
         Timber.d("init use time: %s ms", String.valueOf(System.currentTimeMillis() - start));
     }
 

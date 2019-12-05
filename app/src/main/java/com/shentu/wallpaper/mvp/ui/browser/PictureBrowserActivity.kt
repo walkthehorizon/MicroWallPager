@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.transition.Fade
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
@@ -26,7 +25,6 @@ import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.github.piasy.biv.BigImageViewer
-import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.google.android.material.button.MaterialButton
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
@@ -47,9 +45,7 @@ import com.shentu.wallpaper.mvp.ui.activity.BrowserActivity
 import com.shentu.wallpaper.mvp.ui.activity.SubjectDetailActivity
 import com.shentu.wallpaper.mvp.ui.adapter.PictureBrowserVpAdapter
 import com.shentu.wallpaper.mvp.ui.fragment.PictureFragment
-import com.shentu.wallpaper.mvp.ui.home.TabHomeFragment
 import com.shentu.wallpaper.mvp.ui.login.LoginActivity
-import com.shentu.wallpaper.mvp.ui.my.DonateDialog
 import kotlinx.android.synthetic.main.fragment_picture_browser.*
 import timber.log.Timber
 
@@ -91,7 +87,6 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
     override fun initData(savedInstanceState: Bundle?) {
         ARouter.getInstance().inject(this)
-        BigImageViewer.initialize(GlideImageLoader.with(application))
         when {
             callback != null -> {
                 wallpapers.addAll(callback!!.getWallpaperList())

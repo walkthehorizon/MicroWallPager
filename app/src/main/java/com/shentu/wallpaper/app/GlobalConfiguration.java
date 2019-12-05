@@ -19,16 +19,32 @@ import com.shentu.wallpaper.BuildConfig;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
 import timber.log.Timber;
 
 /**
@@ -82,7 +98,7 @@ public final class GlobalConfiguration implements ConfigModule {
 //                    retrofitBuilder.addConverterFactory(FastJsonConverterFactory.create());//比如使用fastjson替代gson
                 })
                 .okhttpConfiguration((context1, okhttpBuilder) -> {//这里可以自己自定义配置Okhttp的参数
-//                    okhttpBuilder.sslSocketFactory(); //支持 Https,详情请百度
+                    supportHttps(context, okhttpBuilder);
                     okhttpBuilder.writeTimeout(10, TimeUnit.SECONDS);
                     okhttpBuilder.cookieJar(new CookieJar() {//这里可以做cookie传递，保存等操作
                         @Override
@@ -157,4 +173,78 @@ public final class GlobalConfiguration implements ConfigModule {
         });
     }
 
+
+    private void supportHttps(Context context, OkHttpClient.Builder okhttpBuilder) {
+        X509TrustManager trustManager;
+        SSLSocketFactory sslSocketFactory;
+        InputStream certificate = null;
+        try {
+            certificate = context.getAssets().open("api.wmmt119.top.pem");
+        } catch (IOException e) {
+            Timber.e(e);
+        }
+        try {
+            trustManager = trustManagerForCertificates(certificate);
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            //使用构建出的trustManger初始化SSLContext对象
+            sslContext.init(null, new TrustManager[]{trustManager}, null);
+            //获得sslSocketFactory对象
+            sslSocketFactory = sslContext.getSocketFactory();
+        } catch (GeneralSecurityException e) {
+            throw new RuntimeException(e);
+        }
+        okhttpBuilder.sslSocketFactory(sslSocketFactory, trustManager); //支持 Https,详情请百度
+        Timber.e("开启https支持");
+    }
+
+    /**
+     * 获去信任自签证书的trustManager
+     *
+     * @param in 自签证书输入流
+     * @return 信任自签证书的trustManager
+     * @throws GeneralSecurityException
+     */
+    private X509TrustManager trustManagerForCertificates(InputStream in)
+            throws GeneralSecurityException {
+        CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+        //通过证书工厂得到自签证书对象集合
+        Collection<? extends Certificate> certificates = certificateFactory.generateCertificates(in);
+        if (certificates.isEmpty()) {
+            throw new IllegalArgumentException("expected non-empty set of trusted certificates");
+        }
+        //为证书设置一个keyStore
+        char[] password = "password".toCharArray(); // Any password will work.
+        KeyStore keyStore = newEmptyKeyStore(password);
+        int index = 0;
+        //将证书放入keystore中
+        for (Certificate certificate : certificates) {
+            String certificateAlias = Integer.toString(index++);
+            keyStore.setCertificateEntry(certificateAlias, certificate);
+        }
+        // Use it to build an X509 trust manager.
+        //使用包含自签证书信息的keyStore去构建一个X509TrustManager
+        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(
+                KeyManagerFactory.getDefaultAlgorithm());
+        keyManagerFactory.init(keyStore, password);
+        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
+                TrustManagerFactory.getDefaultAlgorithm());
+        trustManagerFactory.init(keyStore);
+        TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+        if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
+            throw new IllegalStateException("Unexpected default trust managers:"
+                    + Arrays.toString(trustManagers));
+        }
+        return (X509TrustManager) trustManagers[0];
+    }
+
+    private KeyStore newEmptyKeyStore(char[] password) throws GeneralSecurityException {
+        try {
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            InputStream in = null; // By convention, 'null' creates an empty key store.
+            keyStore.load(null, password);
+            return keyStore;
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+    }
 }

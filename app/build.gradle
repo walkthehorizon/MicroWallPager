@@ -45,8 +45,7 @@ android {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "String", "Sever", '"http://192.168.10.122/micro/"'
-//            buildConfigField "String", "Sever", '"http://api.wmmt119.top/micro/"'
+            buildConfigField "String", "Sever", '"https://api.wmmt119.top/micro/"'
             buildConfigField "boolean", "Debug", "true"
             minifyEnabled false
             signingConfig signingConfigs.release
@@ -55,7 +54,7 @@ android {
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"
             buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "String", "Sever", '"http://api.wmmt119.top/micro/"'
+            buildConfigField "String", "Sever", '"https://api.wmmt119.top/micro/"'
             buildConfigField "boolean", "Debug", "false"
             minifyEnabled true
             shrinkResources true
@@ -159,7 +158,7 @@ dependencies {
     implementation rootProject.ext.dependencies["glide-transformations"]
     implementation rootProject.ext.dependencies["glide"]
     implementation rootProject.ext.dependencies["okhttp3"]
-    implementation rootProject.ext.dependencies["glide-loader-okhttp3"]
+//    implementation rootProject.ext.dependencies["glide-loader-okhttp3"]
     kapt rootProject.ext.dependencies["glide-compiler"]
     implementation rootProject.ext.dependencies["glidepalette"]
     implementation rootProject.ext.dependencies["loadsir"]
@@ -200,7 +199,7 @@ dependencies {
 
     //bigImage
     implementation rootProject.ext.dependencies["bigImageViewer"]
-    implementation 'com.github.piasy:GlideImageLoader:1.6.1'
+    implementation ('com.github.piasy:GlideImageLoader:1.6.1')
     implementation rootProject.ext.dependencies["bigGifDrawable"]
     //test
     testImplementation rootProject.ext.dependencies["junit"]

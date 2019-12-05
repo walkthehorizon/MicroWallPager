@@ -10,6 +10,7 @@ import com.shentu.wallpaper.app.utils.HkUtils;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
+import timber.log.Timber;
 
 /**
  * ================================================
@@ -61,6 +62,8 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
     // 这里可以在请求服务器之前可以拿到request,做一些操作比如给request统一添加token或者header以及参数加密等操作
     @Override
     public Request onHttpRequestBefore(Interceptor.Chain chain, Request request) {
+//        Timber.e("load url: %s", request.url().toString());
+
         Request.Builder builder = request.newBuilder();
         String token = HkUserManager.getInstance().getToken();
         if (!TextUtils.isEmpty(token)) {
@@ -73,6 +76,7 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
                 .addHeader("systemType", "Android")
                 .addHeader("systemVersion", android.os.Build.VERSION.RELEASE)
                 .addHeader("appVersion", BuildConfig.VERSION_NAME)
+                .addHeader("Referer","wmmt119.top")
 //                .addHeader("X-CSRFToken", SPUtils.getInstance().getString("X-CSRFToken", ""))
                 .build();
     }
