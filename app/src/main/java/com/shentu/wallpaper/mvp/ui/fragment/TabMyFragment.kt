@@ -139,13 +139,13 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
             } else {
                 ivSex.clearColorFilter()
             }
-            Glide.with(this)
+            GlideArms.with(this)
                     .load(HkUserManager.getInstance().user.avatar)
                     .into(circle_avatar)
             itMoney.setEndValue(user.pea.toString())
         } else {
             tvMyName.text = "微梦用户"
-            Glide.with(this)
+            GlideArms.with(this)
                     .load(R.drawable.default_head)
                     .into(circle_avatar)
             itMoney.setEndValue("")
@@ -182,11 +182,11 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     }
 
     private fun clickCache() {
-        Completable.fromAction { Glide.get(mContext).clearDiskCache() }
+        Completable.fromAction { GlideArms.get(mContext).clearDiskCache() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete {
-                    Glide.get(mContext).clearMemory()
+                    GlideArms.get(mContext).clearMemory()
                     if (BuildConfig.DEBUG) {
                         ArmsUtils.obtainAppComponentFromContext(mContext)
                                 .repositoryManager()

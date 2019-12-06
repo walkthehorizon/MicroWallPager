@@ -40,7 +40,9 @@
         android:paddingEnd="12dp"
         android:textColor="@color/colorPrimaryText"
         android:textColorHint="@color/grey_dark"
-        android:textSize="16sp" />
+        android:textSize="16sp">
+        <requestFocus/>
+    </EditText>
 
     <TextView
         android:layout_width="wrap_content"

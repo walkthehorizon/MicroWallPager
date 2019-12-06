@@ -23,6 +23,7 @@ import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.IPresenter
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
+import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.model.entity.Wallpaper
@@ -50,7 +51,7 @@ class PictureShareActivity : BaseActivity<IPresenter>() {
     @SuppressLint("SetTextI18n")
     override fun initData(savedInstanceState: Bundle?) {
         ARouter.getInstance().inject(this)
-        Glide.with(this)
+        GlideArms.with(this)
                 .load(paper.url)
                 .transform(RoundedCornersTransformation(ConvertUtils.dp2px(10f)
                         , 0, RoundedCornersTransformation.CornerType.TOP))

@@ -18,6 +18,7 @@ import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.GlideArms
 
 import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.di.component.DaggerMyEditComponent
@@ -76,7 +77,7 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
      * scrollToTop
      * */
     override fun refreshView() {
-        Glide.with(this)
+        GlideArms.with(this)
                 .load(user.avatar)
                 .transform(CircleCrop())
                 .error(R.drawable.default_head)

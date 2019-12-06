@@ -34,8 +34,12 @@ public class HkApplication extends BaseApplication {
         }
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.addInterceptor(chain -> {
+            String url = chain.request().url().toString();
+//            Timber.e("load image: %s", url);
             Request.Builder builder1 = chain.request().newBuilder();
-            builder1.addHeader("Referer", "wmmt119.top");
+            if (url.contains("wmmt119.top") || url.contains("myqcloud.com")) {
+                builder1.addHeader("Referer", "wmmt119.top");
+            }
             return chain.proceed(builder1.build());
         });
         client = builder.build();

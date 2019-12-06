@@ -9,10 +9,13 @@ import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 import com.blankj.utilcode.util.ConvertUtils
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.jess.arms.integration.AppManager
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.model.entity.Banner
 import com.shentu.wallpaper.mvp.ui.activity.BannerListActivity
 import com.shentu.wallpaper.mvp.ui.activity.SubjectDetailActivity
@@ -38,8 +41,8 @@ class HomeBannerAdapter(private val banners: List<Banner>, private val context: 
             }
             SubjectDetailActivity.open(banners[position], context)
         }
-        Glide.with(container.context)
-                .load(if (banners[position].type==1) R.drawable.ic_banner_more else banners[position].imageUrl)
+        GlideArms.with(container.context)
+                .load(if (banners[position].type == 1) R.drawable.ic_banner_more else banners[position].imageUrl)
                 .transform(CenterCrop(), RoundedCorners(ConvertUtils.dp2px(8.0f)))
                 .into(ivBanner)
         return ivBanner

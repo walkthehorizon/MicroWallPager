@@ -34,6 +34,7 @@ import com.shentu.wallpaper.mvp.ui.adapter.MainPagerAdapter
 import com.shentu.wallpaper.mvp.ui.fragment.TabCategoryFragment
 import com.shentu.wallpaper.mvp.ui.fragment.TabMyFragment
 import com.shentu.wallpaper.mvp.ui.home.TabHomeFragment
+import io.reactivex.exceptions.CompositeException
 import kotlinx.android.synthetic.main.activity_main.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import timber.log.Timber

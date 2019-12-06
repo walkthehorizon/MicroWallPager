@@ -44,7 +44,7 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
                 .getBanners(Constant.BANNER_COUNT, 0))
                 .flatMap { ob ->
                     mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getBanners(ob, EvictProvider(NetworkUtils.isConnected()))
+                            .getBanners(ob)
                             .map { it.data }
                 }
     }

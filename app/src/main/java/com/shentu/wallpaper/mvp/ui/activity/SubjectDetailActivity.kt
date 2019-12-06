@@ -16,6 +16,7 @@ import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.page.EmptyCallback
 import com.shentu.wallpaper.app.page.ErrorCallback
 import com.shentu.wallpaper.app.page.LoadingCallback
@@ -79,7 +80,7 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
         } else {
             mPresenter?.getBannerWallpapers(banner!!.id)
             ivCover.visibility = VISIBLE
-            Glide.with(this)
+            GlideArms.with(this)
                     .load(banner?.imageUrl)
                     .error(R.drawable.default_cover_horizon)
                     .into(ivCover)

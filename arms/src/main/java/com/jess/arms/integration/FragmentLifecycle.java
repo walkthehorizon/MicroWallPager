@@ -24,10 +24,6 @@ import timber.log.Timber;
  * ================================================
  * {@link FragmentManager.FragmentLifecycleCallbacks} 默认实现类
  * 通过 {@link FragmentDelegate} 管理 {@link Fragment}
- * <p>
- * Created by JessYan on 04/09/2017 16:04
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
 @Singleton

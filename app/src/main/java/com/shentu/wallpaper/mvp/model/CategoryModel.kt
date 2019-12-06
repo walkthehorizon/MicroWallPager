@@ -1,6 +1,7 @@
 package com.shentu.wallpaper.mvp.model
 
 import android.app.Application
+import com.blankj.utilcode.util.NetworkUtils
 import com.google.gson.Gson
 import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.integration.IRepositoryManager
@@ -32,7 +33,7 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
                 .getCategories(offset, 50))
                 .flatMap { t ->
                     mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getCategories(t, EvictDynamicKey(clear), DynamicKey(offset))
+                            .getCategories(t, EvictDynamicKey(clear && NetworkUtils.isConnected()), DynamicKey(offset))
                             .map { it.data }
                 }
     }

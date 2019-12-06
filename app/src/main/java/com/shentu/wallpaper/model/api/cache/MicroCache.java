@@ -28,8 +28,8 @@ public interface MicroCache {
 //    @LifeCache(duration = 1,timeUnit = TimeUnit.DAYS)
 //    Observable<Reply<CategorysEntity>> getCategories(Observable<CategorysEntity> observable, EvictProvider evictProvider);
 //
-    @ProviderKey("subject-list-one-week")
-    @LifeCache(duration = 7, timeUnit = TimeUnit.DAYS)
+    @ProviderKey("subject-list-one-day")
+    @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
     Observable<Reply<WallpaperPageResponse>>
     getWallPapersBySubjectId(Observable<WallpaperPageResponse> ob
             , DynamicKey key, EvictDynamicKey dynamicKey);
@@ -38,10 +38,10 @@ public interface MicroCache {
     @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
     Observable<Reply<WallpaperPageResponse>>
     getWallPapersByBannerId(Observable<WallpaperPageResponse> ob
-            , DynamicKey key, EvictDynamicKey dynamicKey);
+            , DynamicKey key);
 
-    @ProviderKey("category-list-one-hour")
-    @LifeCache(duration = 1, timeUnit = TimeUnit.HOURS)
+    @ProviderKey("category-list-one-day")
+    @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
     Observable<Reply<WallpaperPageResponse>>
     getCategoryWallpapers(Observable<WallpaperPageResponse> ob,
                           DynamicKeyGroup filter);
@@ -52,10 +52,10 @@ public interface MicroCache {
     searchKey(Observable<SubjectPageResponse> ob,
               DynamicKeyGroup filter);
 
-    @ProviderKey("banner-one-month")
-    @LifeCache(duration = 30, timeUnit = TimeUnit.DAYS)
+    @ProviderKey("banner-one-hour")
+    @LifeCache(duration = 1, timeUnit = TimeUnit.HOURS)
     Observable<Reply<BannerPageResponse>>
-    getBanners(Observable<BannerPageResponse> ob, EvictProvider evict);
+    getBanners(Observable<BannerPageResponse> ob);
 
     @ProviderKey("categories-one-day")
     @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
@@ -69,14 +69,14 @@ public interface MicroCache {
             DynamicKey page,
             EvictProvider evict);
 
-    @ProviderKey("subject-wallpaper-one-week")
-    @LifeCache(duration = 7, timeUnit = TimeUnit.DAYS)
+    @ProviderKey("subject-wallpaper-one-day")
+    @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
     Observable<WallpaperPageResponse>
     getSubjectWallpapers(Observable<WallpaperPageResponse> observable,
                          DynamicKey subjectId);
 
-    @ProviderKey("subject-detail-one-week")
-    @LifeCache(duration = 7, timeUnit = TimeUnit.DAYS)
+    @ProviderKey("subject-detail-one-day")
+    @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
     Observable<SubjectDetailResponse>
     getSubjectDetail(Observable<SubjectDetailResponse> observable,
                      DynamicKey subjectId);

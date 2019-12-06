@@ -12,6 +12,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withC
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.model.entity.Category
 import com.shentu.wallpaper.mvp.ui.fragment.CategoryListActivity
@@ -29,7 +30,7 @@ class CategoryAdapter(data: MutableList<Category>) : BaseQuickAdapter<Category, 
     }
 
     override fun convert(helper: BaseViewHolder, item: Category) {
-        Glide.with(mContext)
+        GlideArms.with(mContext)
                 .load(HkUtils.instance.get2x2Image(item.logo))
                 .override(480, 270)
                 .placeholder(R.drawable.default_category_placeholder)

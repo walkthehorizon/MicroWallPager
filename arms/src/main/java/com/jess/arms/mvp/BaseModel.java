@@ -11,11 +11,6 @@ import com.jess.arms.integration.IRepositoryManager;
 /**
  * ================================================
  * 基类 Model
- *
- * @see <a href="https://github.com/JessYanCoding/MVPArms/wiki#2.4.3">Model wiki 官方文档</a>
- * Created by JessYan on 08/05/2016 12:55
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
 public class BaseModel implements IModel, LifecycleObserver {

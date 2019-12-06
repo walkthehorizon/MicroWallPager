@@ -45,7 +45,7 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
                 .getBannerWallpapers(id, 100, 0))
                 .flatMap { t ->
                     mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getWallPapersByBannerId(t, DynamicKey(id), EvictDynamicKey(false))
+                            .getWallPapersByBannerId(t, DynamicKey(id))
                             .map { it.data }
                 }
     }

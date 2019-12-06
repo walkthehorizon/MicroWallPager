@@ -84,7 +84,7 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDeta
 
     override fun showCategoryList(wallpapers: MutableList<Wallpaper>) {
         if (rvCategoryList.adapter == null) {
-            rvCategoryList.adapter = CategoryListAdapter(wallpapers, categoryId)
+            rvCategoryList.adapter = CategoryListAdapter(wallpapers)
             (rvCategoryList.adapter as CategoryListAdapter).onItemClickListener = BaseQuickAdapter
                     .OnItemClickListener { _, view, position ->
                         val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view

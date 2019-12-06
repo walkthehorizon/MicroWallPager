@@ -6,6 +6,7 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.model.entity.Wallpaper
 
@@ -14,7 +15,7 @@ class CollectListAdapter(data: List<Wallpaper>?, val decoration: Int) : BaseQuic
     private var multiChecked = false
 
     override fun convert(helper: BaseViewHolder, item: Wallpaper) {
-        Glide.with(mContext)
+        GlideArms.with(mContext)
                 .load(HkUtils.instance.get2x2Image(item.url))
                 .placeholder(R.drawable.ic_pets_black_24dp)
                 .centerCrop()

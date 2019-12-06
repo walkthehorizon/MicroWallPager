@@ -16,10 +16,6 @@ import io.reactivex.annotations.NonNull;
 /**
  * ================================================
  * 使用此类操作 RxLifecycle 的特性
- * <p>
- * Created by JessYan on 26/08/2017 17:52
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
 

@@ -41,6 +41,7 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
+import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.di.component.DaggerHotPagerComponent
 import com.shentu.wallpaper.di.module.TabHomeModule
@@ -180,7 +181,7 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
         ivHead.setOnClickListener {
             startActivity(Intent(context, HomeNewActivity::class.java))
         }
-        Glide.with(this)
+        GlideArms.with(this)
                 .load(R.drawable.ic_home_newest_entrance)
                 .transform(RoundedCorners(ConvertUtils.dp2px(5f)))
                 .into(ivHead)

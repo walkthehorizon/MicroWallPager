@@ -12,6 +12,7 @@ import com.shentu.wallpaper.model.response.BaseResponse;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import io.rx_cache2.RxCacheException;
 
 /**
  * 放置便于使用 RxJava 的一些工具方法
@@ -49,7 +50,15 @@ public class RxUtils {
                     .subscribeOn(Schedulers.io())
 //                    .doOnSubscribe(disposable -> view.showLoading())
                     .doOnNext(t -> handleOnNext(t, view))
-                    .doOnError(throwable -> view.showError())
+                    .doOnError(throwable -> {
+                        if (clear) {
+                            view.showError();
+                        }
+                        //特殊处理缓存异常
+                        if (throwable instanceof RxCacheException) {
+                            ToastUtils.showShort("缓存读取异常");
+                        }
+                    })
                     .doFinally(() -> {
                         view.hideRefresh(clear);
                         view.hideLoading();

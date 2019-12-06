@@ -76,7 +76,6 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
                 .addHeader("systemType", "Android")
                 .addHeader("systemVersion", android.os.Build.VERSION.RELEASE)
                 .addHeader("appVersion", BuildConfig.VERSION_NAME)
-                .addHeader("Referer","wmmt119.top")
 //                .addHeader("X-CSRFToken", SPUtils.getInstance().getString("X-CSRFToken", ""))
                 .build();
     }
