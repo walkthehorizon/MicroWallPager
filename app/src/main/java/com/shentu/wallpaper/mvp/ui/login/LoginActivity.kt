@@ -29,6 +29,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.login_verify.*
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 @Route(path = "/activity/login/account")
@@ -61,11 +62,15 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
                     }
                 }
             } else {
-                val desc = ArmsUtils.obtainAppComponentFromContext(this@LoginActivity)
-                        .gson()
-                        .fromJson((data as Throwable).message, SmsError::class.java)
-                        .description
-                showMessage(desc)
+//                val desc = ArmsUtils.obtainAppComponentFromContext(this@LoginActivity)
+//                        .gson()
+//                        .fromJson((data as Throwable).message, SmsError::class.java)
+//                        .description
+
+                (data as Throwable).message?.let {
+                    showMessage(it)
+                    Timber.e(it)
+                }
             }
         }
     }

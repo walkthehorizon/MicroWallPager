@@ -302,7 +302,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             cornerRadius(12f)
         }
         dialog.getCustomView().findViewById<TextView>(R.id.tvQuestion).setOnClickListener {
-            BrowserActivity.open(this, "https://github.com/walkthehorizon/MicroWallPager#为什么下载需要看豆？")
+            BrowserActivity.open(this, "https://github.com/walkthehorizon/MicroWallPager/blob/master/README.md")
         }
         dialog.getCustomView().findViewById<MaterialButton>(R.id.mbDonate).setOnClickListener {
             HkUtils.contactKefu()

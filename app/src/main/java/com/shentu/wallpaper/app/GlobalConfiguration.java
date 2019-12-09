@@ -98,7 +98,7 @@ public final class GlobalConfiguration implements ConfigModule {
 //                    retrofitBuilder.addConverterFactory(FastJsonConverterFactory.create());//比如使用fastjson替代gson
                 })
                 .okhttpConfiguration((context1, okhttpBuilder) -> {//这里可以自己自定义配置Okhttp的参数
-//                    supportHttps(context, okhttpBuilder);
+                    supportHttps(context, okhttpBuilder);
                     okhttpBuilder.writeTimeout(10, TimeUnit.SECONDS);
                     okhttpBuilder.cookieJar(new CookieJar() {//这里可以做cookie传递，保存等操作
                         @Override

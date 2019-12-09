@@ -23,6 +23,7 @@ import com.shentu.wallpaper.BuildConfig.Debug
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.HkUserManager
+import com.shentu.wallpaper.app.event.LoginSuccessEvent
 import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.di.component.DaggerMainComponent
 import com.shentu.wallpaper.di.module.MainModule
@@ -37,6 +38,8 @@ import com.shentu.wallpaper.mvp.ui.home.TabHomeFragment
 import io.reactivex.exceptions.CompositeException
 import kotlinx.android.synthetic.main.activity_main.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 
 
@@ -163,10 +166,18 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
         mainPagerAdapter = null
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLoginSucess(event: LoginSuccessEvent) {
+        sign()
+    }
+
     /**
      * 签到
      * */
     private fun sign() {
+        if (!HkUserManager.getInstance().isLogin) {
+            return
+        }
         if (TimeUtils.isToday(SPUtils.getInstance().getLong(Constant.LAST_SIGN_TIME, 0))) {
             Timber.i("今日已签到")
             return

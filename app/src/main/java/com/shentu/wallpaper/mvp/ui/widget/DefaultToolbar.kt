@@ -89,11 +89,11 @@ class DefaultToolbar @JvmOverloads constructor(context: Context, attrs: Attribut
 
     private var listeners: MutableList<OnClickListener>? = null
 
-    interface OnClickListener {
-        fun onClickLeftIcon() {}
-        fun onClickRightIcon() {}
-        fun onClickRightIcon2() {}
-        fun clickRightText() {}
+    open class OnClickListener {
+        open fun onClickLeftIcon() {}
+        open fun onClickRightIcon() {}
+        open fun onClickRightIcon2() {}
+        open fun clickRightText() {}
     }
 
     fun addOnClickListener(listener: OnClickListener?) {

@@ -45,7 +45,7 @@ android {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "String", "Sever", '"https://api.wmmt119.top/micro/"'
+            buildConfigField "String", "Sever", '"http://api.wmmt119.top/micro/"'
             buildConfigField "boolean", "Debug", "true"
             minifyEnabled false
             signingConfig signingConfigs.release
@@ -92,7 +92,9 @@ android {
 MobSDK {
     appKey "2726f3a69c300"
     appSecret "5ef67a98fcae47f91163577728158ac3"
-
+    permissions {
+        exclude "android.permission.READ_CONTACTS", "android.permission.READ_PHONE_STATE"
+    }
     SMSSDK {
         gui false
     }
