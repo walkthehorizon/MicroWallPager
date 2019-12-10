@@ -55,7 +55,7 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
 
 
     override fun initData(savedInstanceState: Bundle?) {
-        if (HkUserManager.getInstance().isLogin) {
+        if (HkUserManager.instance.isLogin) {
             mbLogout.visibility = View.VISIBLE
             mbLogout.setOnClickListener {
                 mPresenter?.logout()

@@ -175,7 +175,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
      * 签到
      * */
     private fun sign() {
-        if (!HkUserManager.getInstance().isLogin) {
+        if (!HkUserManager.instance.isLogin) {
             return
         }
         if (TimeUtils.isToday(SPUtils.getInstance().getLong(Constant.LAST_SIGN_TIME, 0))) {
@@ -201,7 +201,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
                         llSign.scaleY = 0f
                         llSign.animate().scaleX(1f).scaleY(1f).setStartDelay(1200).start()
                         lottieSign.playAnimation()
-                        t.data?.let { HkUserManager.getInstance().updateKandou(it) }
+                        t.data?.let { HkUserManager.instance.updateKandou(it) }
                     }
                 })
     }

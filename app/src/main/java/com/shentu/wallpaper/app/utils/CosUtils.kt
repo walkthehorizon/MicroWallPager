@@ -27,7 +27,7 @@ class CosUtils private constructor() {
                 .url(URL(com.shentu.wallpaper.BuildConfig.Sever + "signature"))
                 .method("GET")
                 .build())
-        cosXmlService = CosXmlSimpleService(HkApplication.getInstance(), serviceConfig, credentialProvider)
+        cosXmlService = CosXmlSimpleService(HkApplication.instance, serviceConfig, credentialProvider)
     }
 
     companion object {
@@ -40,7 +40,7 @@ class CosUtils private constructor() {
 
     fun uploadAvatar(srcPath: String, listener: CosXmlResultListener) {
         Timber.e("avatar本地路径：$srcPath")
-        val cosPath = "avatar/" + HkUserManager.getInstance().user.uid + "_" + System.currentTimeMillis() + ".jpg"
+        val cosPath = "avatar/" + HkUserManager.instance.uid + "_" + System.currentTimeMillis() + ".jpg"
         val putObjectRequest = PutObjectRequest(bucket, cosPath, srcPath)
         // 使用异步回调上传
         cosXmlService.putObjectAsync(putObjectRequest, listener)

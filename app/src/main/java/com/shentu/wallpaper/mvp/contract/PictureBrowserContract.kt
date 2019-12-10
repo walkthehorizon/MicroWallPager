@@ -37,11 +37,11 @@ interface PictureBrowserContract {
 
         fun getWallPapersBySubjectId(id: Int): Observable<WallpaperPageResponse>
 
-        fun updateCategoryCover(cid: Int?, logo: String): Observable<BaseResponse<Boolean>>
+        fun updateCategoryCover(cid: Int, logo: String): Observable<BaseResponse<Boolean>>
 
         fun buyPaper(pk: Int, pea: Int): Observable<BaseResponse<Int>>
 
-        fun getPaperDetail(pk: Int?): Observable<BaseResponse<Wallpaper>>
+        fun getPaperDetail(pk: Int): Observable<BaseResponse<Wallpaper>>
     }
 
 }

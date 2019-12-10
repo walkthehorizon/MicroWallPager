@@ -117,7 +117,7 @@ class HomeNewActivity : BaseActivity<IPresenter>(), IView, PictureBrowserActivit
                             return
                         }
                         val newestList = mutableListOf<WallpaerSection>()
-                        var curDate = if (adapter.data.isEmpty()) "" else adapter.data[adapter.data.size - 1].t.created
+                        var curDate = if (adapter.data.isEmpty()) "" else adapter.data[adapter.data.size - 1].t?.created
                         for (paper in t.data.content) {
                             if (paper.created != curDate) {
                                 newestList.add(WallpaerSection(true, if (isToday(paper.created)) "今天" else paper.created))

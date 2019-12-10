@@ -246,7 +246,7 @@ class AppDownloadManager(activity: Activity) : LifecycleObserver {
         weakReference.get()?.let {
             MaterialDialog(it).show {
                 title(text = "权限请求")
-                message(text = "为了正常升级" + HkApplication.getInstance().resources.getString(
+                message(text = "为了正常升级" + HkApplication.instance.resources.getString(
                         R.string.app_name) + "APP，请点击设置按钮，允许安装未知来源应用")
                 positiveButton(text = "设置") {
                     executor.execute()

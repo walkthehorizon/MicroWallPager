@@ -38,7 +38,7 @@ constructor(model: SettingMoreContract.Model, rootView: SettingMoreContract.View
                         if (!t.isSuccess) {
                             return
                         }
-                        HkUserManager.getInstance().clear()
+                        HkUserManager.instance.clear()
                         EventBus.getDefault().post(LogoutEvent())
                         mRootView.killMyself()
                     }

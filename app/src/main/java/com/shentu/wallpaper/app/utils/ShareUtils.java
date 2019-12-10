@@ -28,7 +28,7 @@ public class ShareUtils {
      * @param title 分享标题
      */
     public void showShare(String text, String title, String url, String imageUrl) {
-        Context context = HkApplication.getInstance();
+        Context context = HkApplication.instance;
         OnekeyShare oks = new OnekeyShare();
         oks.disableSSOWhenAuthorize();
         oks.setText(text);

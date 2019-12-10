@@ -195,7 +195,7 @@ class HkUtils private constructor() {
     }
 
     private fun getVectorBitmap(reqWidth: Int, reqHeight: Int,@DrawableRes distId: Int):Bitmap?{
-        val distDrawable = ContextCompat.getDrawable(HkApplication.getInstance(),distId)
+        val distDrawable = ContextCompat.getDrawable(HkApplication.instance,distId)
         if(distDrawable !is VectorDrawable && distDrawable !is VectorDrawableCompat){
             return null
         }

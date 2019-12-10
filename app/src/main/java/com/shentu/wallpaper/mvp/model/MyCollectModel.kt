@@ -27,7 +27,7 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
 
     override fun getMyCollects(clear: Boolean): Observable<WallpaperPageResponse> {
         return mRepositoryManager.obtainRetrofitService(CollectService::class.java)
-                .getMyCollects(HkUserManager.getInstance().uid, getOffset(clear))
+                .getMyCollects(HkUserManager.instance.uid, getOffset(clear))
     }
 
     override fun delCollects(body: DelCollectBody): Observable<BaseResponse<Boolean>> {

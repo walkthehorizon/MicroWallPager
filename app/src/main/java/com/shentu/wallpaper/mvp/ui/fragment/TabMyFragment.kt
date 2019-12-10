@@ -76,14 +76,14 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
             startActivity(Intent(mContext, SettingMoreActivity::class.java))
         }
         rlHead.setOnClickListener {
-            if (!HkUserManager.getInstance().isLogin) {
+            if (!HkUserManager.instance.isLogin) {
                 LoginActivity.open()
                 return@setOnClickListener
             }
             startActivity(Intent(mContext, MyEditActivity::class.java))
         }
         itMoney.setOnClickListener {
-            if (!HkUserManager.getInstance().isLogin) {
+            if (!HkUserManager.instance.isLogin) {
                 launchActivity(Intent(mContext, LoginActivity::class.java))
                 return@setOnClickListener
             }
@@ -126,8 +126,8 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     }
 
     private fun refreshUser() {
-        val user = HkUserManager.getInstance().user
-        if (HkUserManager.getInstance().isLogin) {
+        val user = HkUserManager.instance.user
+        if (HkUserManager.instance.isLogin) {
             tvMyName.text = user.nickname
             ivSex.setImageResource(when (user.sex) {
                 1 -> R.drawable.ic_im_sex_man
@@ -140,7 +140,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                 ivSex.clearColorFilter()
             }
             GlideArms.with(this)
-                    .load(HkUserManager.getInstance().user.avatar)
+                    .load(HkUserManager.instance.user.avatar)
                     .into(circle_avatar)
             itMoney.setEndValue(user.pea.toString())
         } else {
@@ -159,14 +159,14 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     }
 
     private fun clickHead() {
-        if (!HkUserManager.getInstance().isLogin) {
+        if (!HkUserManager.instance.isLogin) {
             launchActivity(Intent(mContext, LoginActivity::class.java))
             return
         }
     }
 
     private fun clickCollect() {
-        if (!HkUserManager.getInstance().isLogin) {
+        if (!HkUserManager.instance.isLogin) {
             launchActivity(Intent(mContext, LoginActivity::class.java))
             return
         }

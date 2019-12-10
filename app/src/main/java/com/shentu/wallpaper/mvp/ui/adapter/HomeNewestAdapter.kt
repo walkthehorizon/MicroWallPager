@@ -26,7 +26,7 @@ class HomeNewestAdapter(data: List<WallpaerSection>)
     override fun convert(helper: BaseViewHolder, item: WallpaerSection) {
         val ivPicture = helper.getView<ImageView>(R.id.ivPicture)
         GlideArms.with(mContext)
-                .load(HkUtils.instance.get2x2Image(item.t.url))
+                .load(HkUtils.instance.get2x2Image(item.t!!.url))
                 .error(R.drawable.ic_error_black_24dp)
                 .placeholder(R.drawable.default_category_placeholder)
                 .transform(CenterCrop(), RoundedCorners(ConvertUtils.dp2px(12f)))

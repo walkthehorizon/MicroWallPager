@@ -12,6 +12,7 @@ import com.shentu.wallpaper.mvp.contract.SearchContract
 import io.reactivex.Observable
 import io.rx_cache2.DynamicKeyGroup
 import io.rx_cache2.Reply
+import timber.log.Timber
 import javax.inject.Inject
 
 

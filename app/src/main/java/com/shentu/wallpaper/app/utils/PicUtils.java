@@ -41,14 +41,14 @@ public class PicUtils {
 
     public String getDownloadPicturePath(String pictureUrl) {
         return PathUtils.getExternalDcimPath() + File.separator
-                + HkApplication.getInstance().getResources().getString(R.string.app_name)
+                + HkApplication.instance.getResources().getString(R.string.app_name)
                 + File.separator
                 + URLUtil.guessFileName(pictureUrl, null, null);
     }
 
     public String getDownloadSharePath(String pictureUrl) {
         return PathUtils.getExternalDcimPath() + File.separator
-                + HkApplication.getInstance().getResources().getString(R.string.app_name)
+                + HkApplication.instance.getResources().getString(R.string.app_name)
                 + File.separator
                 + "share_" + URLUtil.guessFileName(pictureUrl, null, null);
     }

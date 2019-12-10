@@ -40,14 +40,12 @@ constructor(model: SearchContract.Model, rootView: SearchContract.View) :
     @Inject
     lateinit var gson: Gson
 
-    private var clear: Boolean = true
     private lateinit var observable: Observable<String>
     private lateinit var mEmitter: ObservableEmitter<String>
     private var curKey: String = ""
     private lateinit var keyQueue: LimitQueue<String>
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate() {
+    fun init() {
         val history = SPUtils.getInstance().getString("search_history", "")
         Timber.e(history)
         keyQueue = if (history.isEmpty()) {
@@ -56,23 +54,10 @@ constructor(model: SearchContract.Model, rootView: SearchContract.View) :
             gson.fromJson(history, object : TypeToken<LimitQueue<String>>() {}.type)
         }
         Timber.e(keyQueue.queue.toString())
+
+        //首次搜索key
         observable = Observable.create { emitter ->
             mEmitter = emitter
-            mRootView.getEtSearch().addTextChangedListener(object : TextWatcher {
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                }
-
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                }
-
-                override fun afterTextChanged(p0: Editable?) {
-                    clear = true
-                    curKey = p0.toString()
-                    mEmitter.onNext(p0.toString())
-                }
-            })
         }
         observable.debounce(500, TimeUnit.MILLISECONDS)
                 .filter {
@@ -83,30 +68,52 @@ constructor(model: SearchContract.Model, rootView: SearchContract.View) :
                     keyQueue.offer(curKey, true)
                     SPUtils.getInstance().put("search_history", gson.toJson(keyQueue))
                     return@filter true
-                }
-                .doOnNext {
+                }.doOnNext {
                     mRootView.showLoading()
                 }
-                .switchMap { mModel.searchKey(it, clear) }
-                .compose(RxUtils.applySchedulers(mRootView, clear))
+                .switchMap {
+                    Timber.e("load data: $it")
+                    mModel.searchKey(it, true)
+                }
+                .compose(RxUtils.applySchedulers(mRootView, true))
                 .subscribe(object : ErrorHandleSubscriber<SubjectPageResponse>(mErrorHandler) {
                     override fun onNext(t: SubjectPageResponse) {
                         if (!t.isSuccess) {
                             return
                         }
-                        t.data?.content?.let { mRootView.showResults(it, clear) }
+                        t.data?.content?.let { mRootView.showResults(it, true) }
                     }
                 })
-        mRootView.getEtSearch().post {
-            mEmitter.onNext("")
-        }
+
+        mRootView.showHistory(keyQueue)//默认展示历史记录
     }
 
-    fun search(key: String, clear: Boolean) {
-        this.clear = clear
-        if (key.isNotEmpty()) {
-            curKey = key
-        }
+    /**
+     * debounce操作符会自动过滤当前搜索项，所以要实现当前项更多数据显示这里要独立加载
+     * */
+    fun loadMore() {
+        mModel.searchKey(curKey, false)
+                .compose(RxUtils.applySchedulers(mRootView, false))
+                .subscribe(object : ErrorHandleSubscriber<SubjectPageResponse>(mErrorHandler) {
+                    override fun onNext(t: SubjectPageResponse) {
+                        if (!t.isSuccess) {
+                            return
+                        }
+                        t.data?.content?.let { mRootView.showResults(it, false) }
+                    }
+                })
+    }
+
+    /**
+     * 搜索key
+     * */
+    fun search(key: String) {
+        curKey = key
         mEmitter.onNext(curKey)
+    }
+
+    fun clearHistory() {
+        keyQueue.queue.clear()
+        SPUtils.getInstance().remove("search_history")
     }
 }

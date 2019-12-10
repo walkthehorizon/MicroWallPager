@@ -21,7 +21,7 @@ interface SubjectDetailContract {
     interface Model : IModel {
         fun getSubjectWallpapers(subjectId: Int): Observable<WallpaperPageResponse>
 
-        fun getSubjectDetail(pk: Int?): Observable<SubjectDetailResponse>
+        fun getSubjectDetail(pk: Int): Observable<SubjectDetailResponse>
 
         fun getBannerWallpapers(id: Int): Observable<WallpaperPageResponse>
     }

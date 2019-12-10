@@ -111,7 +111,7 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                         if (!t.isSuccess) {
                             return
                         }
-                        HkUserManager.getInstance().updateKandou(-t.data!!)
+                        HkUserManager.instance.updateKandou(-t.data!!)
                         mRootView.savePicture(position, type)
                     }
                 })

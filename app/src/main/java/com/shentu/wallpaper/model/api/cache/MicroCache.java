@@ -46,8 +46,8 @@ public interface MicroCache {
     getCategoryWallpapers(Observable<WallpaperPageResponse> ob,
                           DynamicKeyGroup filter);
 
-    @ProviderKey("subject-search-one-day")
-    @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
+    @ProviderKey("subject-search-third-hours")
+    @LifeCache(duration = 3, timeUnit = TimeUnit.HOURS)
     Observable<Reply<SubjectPageResponse>>
     searchKey(Observable<SubjectPageResponse> ob,
               DynamicKeyGroup filter);

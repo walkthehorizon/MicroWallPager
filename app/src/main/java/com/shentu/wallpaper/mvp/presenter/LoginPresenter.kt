@@ -50,9 +50,9 @@ constructor(model: LoginContract.Model, rootView: LoginContract.View) :
                             return
                         }
                         SPUtils.getInstance().put(Constant.LAST_LOGIN_ACCOUNT, phone)
-                        HkUserManager.getInstance().user = t.data
-                        Timber.e(HkUserManager.getInstance().user.toString())
-                        HkUserManager.getInstance().save()
+                        HkUserManager.instance.user = t.data!!
+                        Timber.e(HkUserManager.instance.user.toString())
+                        HkUserManager.instance.save()
                         EventBusManager.getInstance().post(LoginSuccessEvent())
                         mRootView.killMyself()
                     }

@@ -12,14 +12,12 @@ import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.GlideArms
-
 import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.di.component.DaggerMyEditComponent
 import com.shentu.wallpaper.di.module.MyEditModule
@@ -42,7 +40,7 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
 
     //裁剪输出路径
     private val cropImage = File(PathUtils.getExternalPicturesPath(), "avatar_crop.jpg")
-    private val user: MicroUser = HkUserManager.getInstance().user
+    private val user: MicroUser = HkUserManager.instance.user
     private lateinit var loadingDialog: MaterialDialog
 
     override fun setupActivityComponent(appComponent: AppComponent) {
@@ -95,9 +93,9 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
     private fun showNickNameDialog() {
         MaterialDialog(this).show {
             title(text = "昵称")
-            input("新的昵称", prefill = HkUserManager.getInstance().user.nickname
+            input("新的昵称", prefill = HkUserManager.instance.user.nickname
                     , maxLength = 6) { _, sequence ->
-                HkUserManager.getInstance().user.nickname = sequence.toString()
+                HkUserManager.instance.user.nickname = sequence.toString()
                 mPresenter?.updateUser()
             }
         }
@@ -108,7 +106,7 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
             title(text = "性别")
             positiveButton(text = "确认")
             listItemsSingleChoice(items = listOf("保密", "男", "女")) { _, index, _ ->
-                HkUserManager.getInstance().user.sex = index
+                HkUserManager.instance.user.sex = index
                 mPresenter?.updateUser()
             }
         }

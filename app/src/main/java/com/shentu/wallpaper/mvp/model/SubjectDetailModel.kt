@@ -30,7 +30,7 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
                 }
     }
 
-    override fun getSubjectDetail(pk: Int?): Observable<SubjectDetailResponse> {
+    override fun getSubjectDetail(pk: Int): Observable<SubjectDetailResponse> {
         return Observable.just(mRepositoryManager.obtainRetrofitService(MicroService::class.java)
                 .getSubjectDetail(pk))
                 .flatMap {

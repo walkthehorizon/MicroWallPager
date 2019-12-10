@@ -62,7 +62,7 @@ public class GlideConfiguration extends AppGlideModule {
     public void registerComponents(@NonNull Context context, @NonNull Glide glide, @NonNull Registry registry) {
         //Glide 默认使用 HttpURLConnection 做网络请求,在这切换成 Okhttp 请求
         registry.replace(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory(
-                HkApplication.getInstance().getImageClient()));
+                HkApplication.Companion.getInstance().getImageClient()));
     }
 
     @Override

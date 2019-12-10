@@ -4,7 +4,10 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.KeyEvent
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
@@ -15,6 +18,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.KeyboardUtils
+import com.blankj.utilcode.util.SPUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -73,7 +77,7 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
                 .build()
                 .register(smartRefresh)
 
-        smartRefresh.setOnLoadMoreListener { mPresenter?.search("", false) }
+        smartRefresh.setOnLoadMoreListener { mPresenter?.loadMore() }
         etSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -81,6 +85,19 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
                     return true
                 }
                 return false
+            }
+        })
+        etSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                mPresenter?.search(s.toString())
             }
         })
 
@@ -97,7 +114,7 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
         }
         rvData.adapter = hotAdapter
 
-
+        mPresenter?.init()
     }
 
     override fun onEnterAnimationComplete() {
@@ -153,8 +170,9 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
     override fun showHistory(queue: LimitQueue<String>) {
         Timber.e(queue.size().toString())
         loadService.setCallBack(SearchHistoryCallback::class.java) { context, view ->
-            val chipGroup = view?.findViewById<ChipGroup>(R.id.chipGroup)
-            chipGroup?.removeAllViews()
+            val chipGroup = view.findViewById<ChipGroup>(R.id.chipGroup)
+            val tvClear = view.findViewById<TextView>(R.id.tvClear)
+            chipGroup.removeAllViews()
             val lp = ChipGroup.LayoutParams(-2, ConvertUtils.dp2px(30.0f))
             for (key in queue.queue) {
                 val chip = Chip(context)
@@ -168,9 +186,17 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
                     etSearch.setText(keyStr)
                     etSearch.setSelection(etSearch.text.length)
                     etSearch.requestFocus()
-                    mPresenter?.search(keyStr, true)
+                    mPresenter?.search(keyStr)
                 }
-                chipGroup?.addView(chip, lp)
+                chipGroup.addView(chip, lp)
+            }
+            if (chipGroup.childCount > 0) {
+                tvClear.visibility = View.VISIBLE
+                tvClear.setOnClickListener {
+                    chipGroup.removeAllViews()
+                    mPresenter?.clearHistory()
+                    tvClear.visibility = View.GONE
+                }
             }
         }
         loadService.showCallback(SearchHistoryCallback::class.java)
@@ -185,6 +211,7 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
     }
 
     override fun killMyself() {
+
         finishAfterTransition()
     }
 

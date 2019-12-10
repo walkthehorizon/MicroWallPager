@@ -35,10 +35,10 @@ class SplashModel @Inject constructor(repositoryManager: IRepositoryManager?) : 
         return Observable.just(mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
                 .splash)
-                .flatMap(Function<Observable<SplashAdResponse?>?, ObservableSource<SplashAdResponse>> { baseResponseObservable: Observable<SplashAdResponse?>? ->
+                .flatMap { t ->
                     mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getSplashAd(baseResponseObservable, EvictProvider(false))
-                            .map { obj: Reply<SplashAdResponse> -> obj.data }
-                })
+                            .getSplashAd(t, EvictProvider(false))
+                            .map { it.data }
+                }
     }
 }

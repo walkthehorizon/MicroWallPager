@@ -44,7 +44,7 @@ constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager
                 }
     }
 
-    override fun updateCategoryCover(cid: Int?, logo: String): Observable<BaseResponse<Boolean>> {
+    override fun updateCategoryCover(cid: Int, logo: String): Observable<BaseResponse<Boolean>> {
         return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
                 .updateCategoryCover(cid, logo)
     }
@@ -54,7 +54,7 @@ constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager
                 .buyPaper(pk, pea)
     }
 
-    override fun getPaperDetail(pk: Int?): Observable<BaseResponse<Wallpaper>> {
+    override fun getPaperDetail(pk: Int): Observable<BaseResponse<Wallpaper>> {
         return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
                 .getPaperDetail(pk)
     }

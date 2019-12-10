@@ -62,15 +62,15 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
     // 这里可以在请求服务器之前可以拿到request,做一些操作比如给request统一添加token或者header以及参数加密等操作
     @Override
     public Request onHttpRequestBefore(Interceptor.Chain chain, Request request) {
-//        Timber.e("load url: %s", request.url().toString());
+        Timber.e("load url: %s", request.url().toString());
 
         Request.Builder builder = request.newBuilder();
-        String token = HkUserManager.getInstance().getToken();
+        String token = HkUserManager.Companion.getInstance().getToken();
         if (!TextUtils.isEmpty(token)) {
             builder.addHeader("Authorization", "Token " + token);
         }
         return builder
-                .addHeader("uid", HkUserManager.getInstance().getUid() + "")
+                .addHeader("uid", HkUserManager.Companion.getInstance().getUid() + "")
                 .addHeader("Content-Type", "application/json")
                 .addHeader("deviceId", HkUtils.Companion.getInstance().getDeviceId())
                 .addHeader("systemType", "Android")

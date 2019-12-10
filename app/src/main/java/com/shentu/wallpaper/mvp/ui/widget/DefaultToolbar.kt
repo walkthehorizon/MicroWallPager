@@ -14,25 +14,32 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.shentu.wallpaper.R
 import kotlinx.android.synthetic.main.default_toolbar.view.*
+import timber.log.Timber
 import java.util.*
 
-class DefaultToolbar @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : BaseRelativeLayout(context, attrs), View.OnClickListener {
+class DefaultToolbar @JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int = -1)
+    : RelativeLayout(context, attrs, defStyleAttr), View.OnClickListener {
 
-    private val tlTitle: String?
-    private val leftIcon: Int
-    private val rightIcon: Int
-    private val rightIcon2: Int
-    private val rightText: String?
-    private val endTextSize: Float
-    private val startIconColor: Int
-    override fun getLayoutId(): Int {
-        return -1
-    }
+    val isBack: Boolean
 
-    override fun initView(context: Context, attrs: AttributeSet) {}
-
-    fun getLeftIcon(): Int {
-        return leftIcon
+    init {
+        addView(LayoutInflater.from(context).inflate(R.layout.default_toolbar,this,false))
+        val a = context.obtainStyledAttributes(attrs, R.styleable.DefaultToolbar)
+        val tlTitle = a.getString(R.styleable.DefaultToolbar_tl_title)
+        val leftIcon = a.getResourceId(R.styleable.DefaultToolbar_tl_left_icon, -1)
+        val rightIcon = a.getResourceId(R.styleable.DefaultToolbar_tl_right_icon, -1)
+        val rightText = a.getString(R.styleable.DefaultToolbar_tl_right_text)
+        val rightIcon2 = a.getResourceId(R.styleable.DefaultToolbar_tl_right_icon2, -1)
+        val endTextSize = a.getDimension(R.styleable.DefaultToolbar_tl_end_text_size, 16f)
+        val startIconColor = a.getColor(R.styleable.DefaultToolbar_tl_left_tint, Color.WHITE)
+        a.recycle()
+        Timber.e("left:  $leftIcon")
+        isBack = leftIcon == R.drawable.ic_arrow_back_white_24dp
+        setTitle(tlTitle)
+        setLeftIcon(leftIcon, startIconColor)
+        setRightIcon(rightIcon)
+        setRightText(rightText, endTextSize)
+        setRightIcon2(rightIcon2)
     }
 
     private fun setRightIcon2(icon: Int) {
@@ -43,11 +50,11 @@ class DefaultToolbar @JvmOverloads constructor(context: Context, attrs: Attribut
         }
     }
 
-    private fun setLeftIcon(icon: Int) {
-        if (icon != -1) {
+    private fun setLeftIcon(leftIcon: Int, startIconColor: Int) {
+        if (leftIcon != -1) {
             leftIconView.visibility = View.VISIBLE
             leftIconView.imageTintList = ColorStateList.valueOf(startIconColor)
-            leftIconView.setImageResource(icon)
+            leftIconView.setImageResource(leftIcon)
             leftIconView.setOnClickListener(this)
         }
     }
@@ -60,7 +67,7 @@ class DefaultToolbar @JvmOverloads constructor(context: Context, attrs: Attribut
         }
     }
 
-    private fun setRightText(str: String?) {
+    private fun setRightText(str: String?, endTextSize: Float) {
         if (!TextUtils.isEmpty(str)) {
             tvRight!!.visibility = View.VISIBLE
             tvRight!!.text = str
@@ -104,26 +111,5 @@ class DefaultToolbar @JvmOverloads constructor(context: Context, attrs: Attribut
             return
         }
         listeners!!.add(listener)
-    }
-
-    init {
-        val lp = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        lp.addRule(RelativeLayout.CENTER_IN_PARENT)
-        addView(LayoutInflater.from(context).inflate(R.layout.default_toolbar, this, false), lp)
-        ButterKnife.bind(this)
-        val a = context.obtainStyledAttributes(attrs, R.styleable.DefaultToolbar)
-        tlTitle = a.getString(R.styleable.DefaultToolbar_tl_title)
-        leftIcon = a.getResourceId(R.styleable.DefaultToolbar_tl_left_icon, R.drawable.ic_arrow_back_white_24dp)
-        rightIcon = a.getResourceId(R.styleable.DefaultToolbar_tl_right_icon, -1)
-        rightText = a.getString(R.styleable.DefaultToolbar_tl_right_text)
-        rightIcon2 = a.getResourceId(R.styleable.DefaultToolbar_tl_right_icon2, -1)
-        endTextSize = a.getDimension(R.styleable.DefaultToolbar_tl_end_text_size, 16f)
-        startIconColor = a.getColor(R.styleable.DefaultToolbar_tl_left_tint, Color.WHITE)
-        a.recycle()
-        setTitle(tlTitle)
-        setLeftIcon(leftIcon)
-        setRightIcon(rightIcon)
-        setRightText(rightText)
-        setRightIcon2(rightIcon2)
     }
 }

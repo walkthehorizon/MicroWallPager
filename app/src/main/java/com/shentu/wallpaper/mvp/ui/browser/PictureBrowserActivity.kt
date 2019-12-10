@@ -185,7 +185,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
     private fun initSetCover() {
         Timber.e("admin:$categoryId")
-        if (!HkUserManager.getInstance().isAdmin || categoryId == -1) {
+        if (!HkUserManager.instance.isAdmin || categoryId == -1) {
             return
         }
         tvSetCover.visibility = View.VISIBLE
@@ -210,7 +210,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             vpAdapter.getFragment(viewPager.currentItem).loadOriginPicture(Behavior.ONLY_LOAD)
         }
         ivDownload.setOnClickListener {
-            if (!HkUserManager.getInstance().isLogin) {
+            if (!HkUserManager.instance.isLogin) {
                 launchActivity(Intent(this@PictureBrowserActivity, LoginActivity::class.java))
                 return@setOnClickListener
             }
@@ -220,7 +220,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             showMenu()
         }
         ivCollect.setOnClickListener {
-            if (!HkUserManager.getInstance().isLogin) {
+            if (!HkUserManager.instance.isLogin) {
                 launchActivity(Intent(this, LoginActivity::class.java))
                 return@setOnClickListener
             }

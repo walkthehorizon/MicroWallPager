@@ -24,6 +24,7 @@ import com.shentu.wallpaper.di.module.LoginModule
 import com.shentu.wallpaper.model.entity.SmsError
 import com.shentu.wallpaper.mvp.contract.LoginContract
 import com.shentu.wallpaper.mvp.presenter.LoginPresenter
+import com.shentu.wallpaper.mvp.ui.widget.VerificationCodeInput
 import com.trello.rxlifecycle2.android.ActivityEvent
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -142,10 +143,12 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
                 .cancelable(false)
                 .title(text = "验证手机号")
                 .customView(R.layout.login_verify, scrollable = false)
-        dialog.vc_input.setOnCompleteListener { content ->
-            ToastUtils.showShort(content)
-            dialog.dismiss()
-        }
+        dialog.vc_input.setOnCompleteListener(object : VerificationCodeInput.Listener {
+            override fun onComplete(content: String?) {
+                ToastUtils.showShort(content)
+                dialog.dismiss()
+            }
+        })
         dialog.show()
     }
 

@@ -11,7 +11,7 @@ class Wallpaper(var url: String = "") : Serializable{
     var subjectId = 0
     @SerializedName("collect_num")
     var collectNum = 0
-    var created=""
+    var created = ""
     /**
      * 判断原图是否存在
      */
