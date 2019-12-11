@@ -62,8 +62,14 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     @Autowired
     @JvmField
     var categoryId: Int = -1
+
+    /**
+     * 是否已经显示过DonateDialog
+     * */
+    var hasShowDonate = false
+
     //from web
-    private var paperId:Int=-1
+    private var paperId: Int = -1
 
     private var popupMenu: PopupMenu? = null
 
@@ -93,7 +99,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                 initViewPager()
             }
             subjectId != -1 -> mPresenter?.getPictures(subjectId)
-            paperId !=-1 ->mPresenter?.getPaperDetail(paperId)
+            paperId != -1 -> mPresenter?.getPaperDetail(paperId)
             else -> throw IllegalArgumentException("参数异常")
         }
         ivShare.setOnClickListener {
@@ -158,6 +164,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 //            ivDownload.visibility = View.GONE
             mPresenter?.buyPaper(viewPager.currentItem, paper
                     , if (type == 1) SaveType.NORMAL else SaveType.ORIGIN)
+            showDonateDialog()
         } else {
             var checked = false
             var result = SaveType.NORMAL.value
@@ -170,6 +177,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                         result = saveType.value
                         mPresenter?.buyPaper(viewPager.currentItem, wallpapers[viewPager.currentItem]
                                 , if (index == 0) SaveType.NORMAL else SaveType.ORIGIN)
+                        showDonateDialog()
                     }
                     .positiveButton(text = "确认") {
                         if (checked) {
@@ -297,8 +305,13 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     }
 
     override fun showDonateDialog() {
+        if (hasShowDonate) {
+            return
+        }
+        hasShowDonate = true
         val dialog = MaterialDialog(this).show {
             customView(R.layout.activity_donate)
+            cancelable(false)
             cornerRadius(12f)
         }
         dialog.getCustomView().findViewById<TextView>(R.id.tvQuestion).setOnClickListener {
@@ -306,6 +319,9 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         }
         dialog.getCustomView().findViewById<MaterialButton>(R.id.mbDonate).setOnClickListener {
             HkUtils.contactKefu()
+        }
+        dialog.getCustomView().findViewById<TextView>(R.id.tvJump).setOnClickListener {
+            dialog.dismiss()
         }
     }
 

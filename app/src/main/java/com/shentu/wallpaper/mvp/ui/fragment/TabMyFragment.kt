@@ -87,7 +87,6 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                 launchActivity(Intent(mContext, LoginActivity::class.java))
                 return@setOnClickListener
             }
-            HkUtils.instance.showChargeDialog(mContext)
         }
         if (!TimeUtils.isToday(SPUtils.getInstance().getLong(Constant.LAST_NOTIFY_TIME))) {
             checkUpdate(false)

@@ -47,8 +47,7 @@
         <activity android:name=".mvp.ui.activity.MyCollectActivity" />
         <activity android:name=".mvp.ui.activity.BannerListActivity" />
         <activity android:name=".mvp.ui.activity.SubjectDetailActivity" />
-        <activity android:name=".mvp.ui.activity.SearchActivity"
-            android:windowSoftInputMode="stateAlwaysVisible"/>
+        <activity android:name=".mvp.ui.activity.SearchActivity" />
         <!--        <activity-->
         <!--            android:name=".mvp.ui.login.SplashActivity"-->
         <!--            android:screenOrientation="portrait"-->

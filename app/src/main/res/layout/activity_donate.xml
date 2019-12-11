@@ -22,7 +22,7 @@
         android:drawableEnd="@drawable/ic_send_black_24dp"
         android:drawablePadding="12dp"
         android:gravity="center"
-        android:text="为什么需要投喂?"
+        android:text="为什么需要打赏?"
         android:textColor="@color/colorSecondText"
         android:textSize="12sp" />
 
@@ -34,6 +34,14 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="24dp"
-        android:text="立即投喂"
+        android:text="做的不错，赏一个"
         app:cornerRadius="20dp" />
+
+    <TextView
+        android:id="@+id/tvJump"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="暂时跳过" />
 </LinearLayout>

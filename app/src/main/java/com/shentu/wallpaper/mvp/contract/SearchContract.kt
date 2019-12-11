@@ -15,8 +15,6 @@ interface SearchContract {
         fun showResults(subjects: MutableList<Subject>, clear: Boolean)
 
         fun showHistory(queue:LimitQueue<String>)
-
-        fun getEtSearch():EditText
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存

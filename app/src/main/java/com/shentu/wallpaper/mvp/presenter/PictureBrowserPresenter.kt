@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.bumptech.glide.Glide
 import com.jess.arms.di.scope.ActivityScope
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
@@ -16,7 +15,6 @@ import com.shentu.wallpaper.model.response.BaseResponse
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import com.shentu.wallpaper.mvp.ui.browser.SaveType
-import com.shentu.wallpaper.mvp.ui.my.DonateDialog
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
@@ -100,12 +98,12 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                 .compose(RxUtils.applyClearSchedulers(mRootView))
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<Int>>(mErrorHandler) {
                     override fun onNext(t: BaseResponse<Int>) {
-                        if(t.code==1401){//已购
+                        if (t.code == 1401) {//已购
                             mRootView.savePicture(position, type)
                             return
                         }
                         if (t.code == 1402) {//看豆不足
-                            mRootView.showDonateDialog()
+                            ToastUtils.showLong("很抱歉，看豆不足！")
                             return
                         }
                         if (!t.isSuccess) {

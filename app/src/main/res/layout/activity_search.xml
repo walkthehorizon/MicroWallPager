@@ -26,6 +26,7 @@
             android:drawablePadding="10dp"
             android:gravity="center_vertical|start"
             android:hint="@string/action_search"
+            android:textColorHint="@color/colorIcon"
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:maxLines="1"
@@ -37,7 +38,6 @@
             android:textColor="@color/colorPrimaryText"
             android:textSize="@dimen/sp_15"
             android:transitionName="@string/search_transitionName">
-            <requestFocus/>
         </EditText>
 
     </com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar>

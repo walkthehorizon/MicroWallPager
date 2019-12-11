@@ -54,17 +54,6 @@ class HkUtils private constructor() {
         }
     }
 
-    fun showChargeDialog(context: Context) {
-        MaterialDialog(context).show {
-            title(text = "看豆获取")
-            message(text = "看豆，看豆，在多也不够！")
-            positiveButton(text = "打赏获取") {
-                contactKefu()
-            }
-            negativeButton(text = "还是算了")
-        }
-    }
-
     companion object {
 
         val instance: HkUtils
@@ -73,7 +62,7 @@ class HkUtils private constructor() {
         fun contactKefu() {
             try {
                 AppManager.getAppManager().startActivity((Intent(Intent.ACTION_VIEW,
-                        Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin=160585515"))))
+                        Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin=1308311472"))))
             } catch (e: ActivityNotFoundException) {
                 Timber.e(e)
             }

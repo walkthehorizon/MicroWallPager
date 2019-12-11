@@ -127,10 +127,6 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
         }
     }
 
-    override fun getEtSearch(): EditText {
-        return etSearch
-    }
-
     override fun showContent() {
         loadService.showSuccess()
     }
