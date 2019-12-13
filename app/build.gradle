@@ -45,7 +45,7 @@ android {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "String", "Sever", '"http://api.wmmt119.top/micro/"'
+            buildConfigField "String", "Sever", '"http://192.168.10.122/micro/"'
             buildConfigField "boolean", "Debug", "true"
             minifyEnabled false
             signingConfig signingConfigs.release

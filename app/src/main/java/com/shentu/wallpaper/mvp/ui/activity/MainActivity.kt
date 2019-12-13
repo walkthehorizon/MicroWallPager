@@ -178,11 +178,11 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
         if (!HkUserManager.instance.isLogin) {
             return
         }
-//        val lastSignMillis = SPUtils.getInstance().getLong(Constant.LAST_SIGN_TIME, 0)
-//        if (TimeUtils.isToday(lastSignMillis)) {
-//            Timber.e("今日已签到,签到时间：%s", TimeUtils.millis2String(lastSignMillis))
-//            return
-//        }
+        val lastSignMillis = SPUtils.getInstance().getLong(Constant.LAST_SIGN_TIME, 0)
+        if (TimeUtils.isToday(lastSignMillis)) {
+            Timber.i("今日已签到,签到时间：%s", TimeUtils.millis2String(lastSignMillis))
+            return
+        }
         SPUtils.getInstance().put(Constant.LAST_SIGN_TIME, System.currentTimeMillis())
         ArmsUtils.obtainAppComponentFromContext(this)
                 .repositoryManager()
