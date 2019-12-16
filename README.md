@@ -14,13 +14,17 @@
 
 **官网**：基于React，已开源，暂时用于app的下载，app分享支持以及联动还原分享页场景，有兴趣可点击查看[micro-react](https://github.com/walkthehorizon/micro-react)
 
+免责声明
+-------------
+本项目仅用于学习交流，无任何商业利益，如应用内Cos对您产生了侵权，请通过下方qq或微信联系我删除或署名作者，谢谢理解
+
 
 开始使用
 ---------------
 [点击下载安装应用](https://wmmt119.top/)
 
 截图
------------
+--------------
 
 ![image](screenshots/555b2a6665253a9c0ba59cdf78bb2e2.jpg)
 ![image](screenshots/27cb095c5eda51e6e56e40cec2491fb.jpg)
@@ -50,7 +54,7 @@
 
 此外，如果你有好的建议，请提交新的 [issue](https://github.com/walkthehorizon/MicroWallPager/issues)
 
-为什么下载需要看豆？
+为什么下载需要萌豆？
 -------------------
 萌幻Cos致力于打造一个免费自由开源的Cos图文浏览环境
 - 应用下载和使用完全免费，应用内无任何内购项目

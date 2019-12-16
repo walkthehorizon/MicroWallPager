@@ -63,15 +63,15 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
                     }
                 }
             } else {
-//                val desc = ArmsUtils.obtainAppComponentFromContext(this@LoginActivity)
-//                        .gson()
-//                        .fromJson((data as Throwable).message, SmsError::class.java)
-//                        .description
-
-                (data as Throwable).message?.let {
-                    showMessage(it)
-                    Timber.e(it)
-                }
+                val desc = ArmsUtils.obtainAppComponentFromContext(this@LoginActivity)
+                        .gson()
+                        .fromJson((data as Throwable).message, SmsError::class.java)
+                        .description
+                showMessage(desc)
+//                (data as Throwable).message?.let {
+//                    showMessage(it)
+//                    Timber.e(it)
+//                }
             }
         }
     }
@@ -91,6 +91,7 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
     }
 
     override fun initData(savedInstanceState: Bundle?) {
+        ivBg.setBackgroundResource(R.drawable.app_bg_login)
         SPUtils.getInstance().getString(Constant.LAST_LOGIN_ACCOUNT)?.let {
             etPhone.setText(it)
             etPhone.setSelection(it.length)

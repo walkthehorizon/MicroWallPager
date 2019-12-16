@@ -20,6 +20,7 @@ import com.shentu.wallpaper.BuildConfig
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.GlideArms
+import com.shentu.wallpaper.app.GlideConfiguration
 import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.app.utils.RxUtils
@@ -39,6 +40,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_my.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import timber.log.Timber
+import java.io.File
 
 
 class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
@@ -49,6 +52,8 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
         }
     }
 
+    private lateinit var glideCache: File
+
     override fun setupFragmentComponent(appComponent: AppComponent) {
         DaggerMyComponent //如找不到该类,请编译一下项目
                 .builder()
@@ -56,6 +61,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                 .myModule(MyModule(this))
                 .build()
                 .inject(this)
+        glideCache = File(appComponent.cacheFile(), GlideConfiguration.IMAGE_DISK_CACHE_PATH)
     }
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -149,7 +155,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                     .into(circle_avatar)
             itMoney.setEndValue("")
         }
-        itCache.setEndValue(FileUtils.getDirSize(ArmsUtils.obtainAppComponentFromContext(mContext).cacheFile()))
+        itCache.setEndValue(FileUtils.getDirSize(glideCache))
     }
 
     override fun onResume() {
@@ -191,7 +197,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                                 .repositoryManager()
                                 .clearAllCache()
                     }
-                    itCache.setEndValue(FileUtils.getDirSize(ArmsUtils.obtainAppComponentFromContext(mContext).cacheFile()))
+                    itCache.setEndValue(FileUtils.getDirSize(glideCache))
                     ToastUtils.showShort("清理完成")
                 }
                 .subscribe()

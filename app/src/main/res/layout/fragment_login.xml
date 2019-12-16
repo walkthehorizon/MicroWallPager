@@ -6,9 +6,9 @@
     android:orientation="vertical">
 
     <ImageView
+        android:id="@+id/ivBg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/app_bg_login"
         android:scaleType="centerCrop" />
 
 
@@ -41,7 +41,8 @@
         android:textColor="@color/colorPrimaryText"
         android:textColorHint="@color/grey_dark"
         android:textSize="16sp">
-        <requestFocus/>
+
+        <requestFocus />
     </EditText>
 
     <TextView

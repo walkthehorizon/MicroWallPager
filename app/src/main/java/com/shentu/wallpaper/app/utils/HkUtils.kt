@@ -25,6 +25,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
 import com.jess.arms.integration.AppManager
+import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.BuildConfig
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.HkApplication
@@ -183,12 +184,12 @@ class HkUtils private constructor() {
         return null
     }
 
-    private fun getVectorBitmap(reqWidth: Int, reqHeight: Int,@DrawableRes distId: Int):Bitmap?{
-        val distDrawable = ContextCompat.getDrawable(HkApplication.instance,distId)
-        if(distDrawable !is VectorDrawable && distDrawable !is VectorDrawableCompat){
+    private fun getVectorBitmap(reqWidth: Int, reqHeight: Int, @DrawableRes distId: Int): Bitmap? {
+        val distDrawable = ContextCompat.getDrawable(HkApplication.instance, distId)
+        if (distDrawable !is VectorDrawable && distDrawable !is VectorDrawableCompat) {
             return null
         }
-        val distBitmap =  Bitmap.createBitmap(reqWidth,reqHeight,Bitmap.Config.ARGB_8888)
+        val distBitmap = Bitmap.createBitmap(reqWidth, reqHeight, Bitmap.Config.ARGB_8888)
         val distCanvas = Canvas(distBitmap)
         distDrawable.setBounds(0, 0, reqWidth, reqHeight)
         distDrawable.draw(distCanvas)
@@ -198,8 +199,8 @@ class HkUtils private constructor() {
     /**
      * 获取不规则图片
      * */
-    fun getSvgBitmap(reqWidth: Int, reqHeight: Int, @DrawableRes srcId: Int,@DrawableRes distId: Int): Bitmap {
-        val distBitmap = getVectorBitmap(reqWidth,reqHeight, distId)
+    fun getSvgBitmap(reqWidth: Int, reqHeight: Int, @DrawableRes srcId: Int, @DrawableRes distId: Int): Bitmap {
+        val distBitmap = getVectorBitmap(reqWidth, reqHeight, distId)
                 ?: throw IllegalArgumentException("目标图不是VectorDrawable")
 
         val srcBitmap = ImageUtils.getBitmap(srcId, reqWidth, reqHeight)
@@ -215,7 +216,7 @@ class HkUtils private constructor() {
         return bitmap
     }
 
-    fun get2x2Image(url:String):String{
-        return url.replace("cos.ap-beijing","picbj")+"!2x2"
+    fun get2x2Image(url: String): String {
+        return url.replace("cos.ap-beijing", "picbj") + "!2x2"
     }
 }
