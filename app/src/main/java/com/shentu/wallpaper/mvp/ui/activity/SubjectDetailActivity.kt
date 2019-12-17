@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
-import com.bumptech.glide.Glide
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
@@ -78,6 +77,7 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
             mPresenter?.getSubjectDetail(subjectId)
             mPresenter?.getSubjectWallpapers(subjectId)
         } else {
+            toolbar.setTitle(banner?.title)
             mPresenter?.getBannerWallpapers(banner!!.id)
             ivCover.visibility = VISIBLE
             GlideArms.with(this)

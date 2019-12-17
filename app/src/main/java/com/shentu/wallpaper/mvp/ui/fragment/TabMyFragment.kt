@@ -11,7 +11,6 @@ import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.TimeUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.bumptech.glide.Glide
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
@@ -40,7 +39,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_my.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
-import timber.log.Timber
 import java.io.File
 
 
@@ -192,11 +190,9 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete {
                     GlideArms.get(mContext).clearMemory()
-                    if (BuildConfig.DEBUG) {
-                        ArmsUtils.obtainAppComponentFromContext(mContext)
-                                .repositoryManager()
-                                .clearAllCache()
-                    }
+                    ArmsUtils.obtainAppComponentFromContext(mContext)
+                            .repositoryManager()
+                            .clearAllCache()
                     itCache.setEndValue(FileUtils.getDirSize(glideCache))
                     ToastUtils.showShort("清理完成")
                 }
