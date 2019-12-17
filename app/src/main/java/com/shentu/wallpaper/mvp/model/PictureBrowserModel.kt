@@ -59,6 +59,11 @@ constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager
                 .getPaperDetail(pk)
     }
 
+    override fun addPaper2Banner(bid: Int, pid: Int): Observable<BaseResponse<Boolean>> {
+        return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
+                .addPaper2Banner(bid, pid)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
     }

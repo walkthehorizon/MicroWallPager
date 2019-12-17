@@ -128,6 +128,19 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                 })
     }
 
+    fun addPaper2Banner(bid:Int , pid:Int){
+        mModel.addPaper2Banner(bid, pid)
+                .compose(RxUtils.applyClearSchedulers(mRootView))
+                .subscribe(object : ErrorHandleSubscriber<BaseResponse<Boolean>>(mErrorHandler) {
+                    override fun onNext(t: BaseResponse<Boolean>) {
+                        if (!t.isSuccess) {
+                            return
+                        }
+                        ToastUtils.showShort("修改成功!")
+                    }
+                })
+    }
+
     fun getShareData(paper: Wallpaper) {
         mModel.getPaperDetail(paper.id)
                 .compose(RxUtils.applyClearSchedulers(mRootView))

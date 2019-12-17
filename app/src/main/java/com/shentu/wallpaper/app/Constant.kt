@@ -17,4 +17,5 @@ object Constant {
     var LAST_NOTIFY_TIME = "LAST_NOTIFY_TIME"
     var MICRO_BASE_URL = "https://wmmt119.top"
     const val BASE_WALLPAPER_SHARE_URL = "https://wmmt119.top/wallpaper/"
+    const val GITHUB_URL = "https://github.com/walkthehorizon/MicroWallPager/blob/master/README.md"
 }

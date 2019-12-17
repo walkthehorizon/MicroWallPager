@@ -69,8 +69,11 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
             showDownloadDialog(type)
         }
         mIvCover.post {
-            mIvCover.setImageBitmap(HkUtils.instance.getSvgBitmap(mIvCover.width,mIvCover.height
-                    ,R.drawable.ic_launcher,R.drawable.ic_favorite_black_24dp))
+            mIvCover.setImageBitmap(HkUtils.instance.getSvgBitmap(mIvCover.width, mIvCover.height
+                    , R.drawable.ic_launcher, R.drawable.ic_favorite_black_24dp))
+        }
+        rivAbout.setOnClickListener {
+            BrowserActivity.open(this, Constant.GITHUB_URL)
         }
     }
 
@@ -83,7 +86,6 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
                 }
                 .show()
     }
-
 
 
     override fun showLoading() {

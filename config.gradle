@@ -104,7 +104,7 @@ ext {
             "utilcode"                 : "com.blankj:utilcode:1.22.10",
             "filedownloader"           : "com.liulishuo.filedownloader:library:1.7.5",
             "AndPermission"            : "com.yanzhenjie:permission:2.0.0-rc12",
-            "matisse"                  : "com.zhihu.android:matisse:0.5.2-beta3",
+            "matisse"                  : "com.zhihu.android:matisse:0.5.3-beta3",
             "cosxml-lite"              : "com.tencent.qcloud:cosxml-lite:5.4.25",
             "firebase"                 : "com.google.firebase:firebase-core:17.0.0",
             "firebase-perf"            : "com.google.firebase:firebase-perf:18.0.1",

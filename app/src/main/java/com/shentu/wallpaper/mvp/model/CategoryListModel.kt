@@ -19,11 +19,14 @@ class CategoryListModel
 @Inject
 constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryManager), CategoryDetailContract.Model {
 
-
     @Inject
     lateinit var mGson: Gson
     @Inject
     lateinit var mApplication: Application
+
+    init {
+        limit = 60
+    }
 
     override fun getCategoryWallpapers(id: Int, clear: Boolean): Observable<WallpaperPageResponse> {
         offset = getOffset(clear)

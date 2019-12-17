@@ -73,7 +73,13 @@ interface MicroService {
 
     @FormUrlEncoded
     @POST("category/update/")
-    fun updateCategoryCover(@Field("cid") cid: Int, @Field("logo") logo: String): Observable<BaseResponse<Boolean>>
+    fun updateCategoryCover(@Field("cid") cid: Int,
+                            @Field("logo") logo: String): Observable<BaseResponse<Boolean>>
+
+    @FormUrlEncoded
+    @POST("paper/set/banner")
+    fun addPaper2Banner(@Field("bid") bid: Int,
+                         @Field("pid") pid: Int): Observable<BaseResponse<Boolean>>
 
     @PATCH("user/update/{pk}")
     fun updateUser(@Body user: MicroUser, @Path("pk") pk: Int): Observable<MicroUser>

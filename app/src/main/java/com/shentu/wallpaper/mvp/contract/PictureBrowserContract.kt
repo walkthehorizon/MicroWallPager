@@ -42,6 +42,8 @@ interface PictureBrowserContract {
         fun buyPaper(pk: Int, pea: Int): Observable<BaseResponse<Int>>
 
         fun getPaperDetail(pk: Int): Observable<BaseResponse<Wallpaper>>
+
+        fun addPaper2Banner(bid: Int, pid: Int): Observable<BaseResponse<Boolean>>
     }
 
 }

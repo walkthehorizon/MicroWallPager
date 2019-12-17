@@ -24,10 +24,13 @@ import com.shentu.wallpaper.di.module.MyEditModule
 import com.shentu.wallpaper.model.entity.MicroUser
 import com.shentu.wallpaper.mvp.contract.MyEditContract
 import com.shentu.wallpaper.mvp.presenter.MyEditPresenter
+import com.yanzhenjie.permission.AndPermission
+import com.yanzhenjie.permission.Permission
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.internal.entity.CaptureStrategy
 import kotlinx.android.synthetic.main.activity_my_edit.*
+import timber.log.Timber
 import java.io.File
 
 
@@ -61,7 +64,20 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
     override fun initData(savedInstanceState: Bundle?) {
         refreshView()
         rlAvatar.setOnClickListener {
-            openMatisse()
+            AndPermission.with(this)
+                    .runtime()
+                    .permission(Permission.Group.STORAGE)
+                    .onGranted { openMatisse() }
+                    .rationale { _, _, executor ->
+                        MaterialDialog(this).show {
+                            title(text = "提示")
+                            message(text = "请允许获取存储权限以读取本地图片")
+                            positiveButton(text = "好") { executor.execute() }
+                        }
+                    }
+                    .onDenied{
+                        Timber.e("存储权限被拒绝")
+                    }.start()
         }
         rivNickName.setOnClickListener {
             showNickNameDialog()

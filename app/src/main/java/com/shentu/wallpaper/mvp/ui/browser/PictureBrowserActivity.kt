@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.InputType
 import android.transition.Fade
 import android.view.Gravity
 import android.view.View
@@ -17,6 +18,8 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.checkbox.checkBoxPrompt
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
+import com.afollestad.materialdialogs.input.getInputField
+import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -71,7 +74,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     //from web
     private var paperId: Int = -1
 
-    private var popupMenu: PopupMenu? = null
+    private lateinit var popupMenu: PopupMenu
 
     private var wallpapers: MutableList<Wallpaper> = arrayListOf()
     private lateinit var vpAdapter: PictureBrowserVpAdapter
@@ -105,7 +108,6 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         ivShare.setOnClickListener {
             mPresenter?.getShareData(wallpapers[viewPager.currentItem])
         }
-        initSetCover()
     }
 
     /**
@@ -136,18 +138,38 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     }
 
     private fun showMenu() {
-        if (popupMenu == null) {
+        if (!this::popupMenu.isInitialized) {
             popupMenu = PopupMenu(this, ivMore, Gravity.BOTTOM)
-            popupMenu!!.menuInflater.inflate(R.menu.menu_picture_detail, popupMenu!!.menu)
-            popupMenu!!.setOnMenuItemClickListener { item ->
+            popupMenu.menuInflater.inflate(R.menu.menu_picture_detail, popupMenu.menu)
+            if (!HkUserManager.instance.isAdmin || categoryId == -1) {
+                popupMenu.menu.findItem(R.id.itSetBanner).isVisible = false
+                popupMenu.menu.findItem(R.id.itSetCover).isVisible = false
+            }
+            popupMenu.setOnMenuItemClickListener { item ->
                 when (item?.itemId) {
                     R.id.itSetPaper -> vpAdapter.getFragment(viewPager.currentItem).loadOriginPicture(Behavior.SET_WALLPAPER)
                     R.id.itSubject -> SubjectDetailActivity.open(wallpapers[viewPager.currentItem].subjectId, this)
+                    R.id.itSetCover -> MaterialDialog(this).show {
+                        title(text = "分类")
+                        message(text = "确定设为当前分类封面？")
+                        positiveButton(text = "确定") {
+                            val index = this@PictureBrowserActivity.viewPager.currentItem
+                            mPresenter?.updateCategoryCover(categoryId, wallpapers[index].url)
+                        }
+                        negativeButton(text = "取消")
+                    }
+                    R.id.itSetBanner -> MaterialDialog(this).show {
+                        input(hint = "输入banner_id", inputType = InputType.TYPE_CLASS_NUMBER)
+                        positiveButton(text = "确定") {
+                            val index = this@PictureBrowserActivity.viewPager.currentItem
+                            mPresenter?.addPaper2Banner(it.getInputField().text.toString().toInt(), wallpapers[index].id)
+                        }
+                    }
                 }
                 true
             }
         }
-        popupMenu!!.show()
+        popupMenu.show()
     }
 
     override fun setWallpaper(path: String) {
@@ -191,29 +213,14 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         }
     }
 
-    private fun initSetCover() {
-        Timber.e("admin:$categoryId")
-        if (!HkUserManager.instance.isAdmin || categoryId == -1) {
-            return
-        }
-        tvSetCover.visibility = View.VISIBLE
-        tvSetCover.setOnClickListener {
-            MaterialDialog(this).show {
-                title(text = "分类")
-                message(text = "确定设为当前分类封面？")
-                positiveButton(text = "确定") {
-                    val index = this@PictureBrowserActivity.viewPager.currentItem
-                    mPresenter?.updateCategoryCover(categoryId, wallpapers[index].url)
-                }
-                negativeButton(text = "取消")
-            }
-        }
-    }
-
     private fun initViewPager() {
         check(wallpapers.isNotEmpty()) { "wallpapers size can not < 1" }
 
         mbLoadOrigin.setOnClickListener {
+            if (!HkUserManager.instance.isLogin) {
+                launchActivity(Intent(this, LoginActivity::class.java))
+                return@setOnClickListener
+            }
             //            mbLoadOrigin.isEnabled = false//在结果回调前禁用二次点击
             vpAdapter.getFragment(viewPager.currentItem).loadOriginPicture(Behavior.ONLY_LOAD)
         }
@@ -315,7 +322,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             cornerRadius(12f)
         }
         dialog.getCustomView().findViewById<TextView>(R.id.tvQuestion).setOnClickListener {
-            BrowserActivity.open(this, "https://github.com/walkthehorizon/MicroWallPager/blob/master/README.md")
+            BrowserActivity.open(this, Constant.GITHUB_URL + "#为什么下载需要萌豆")
         }
         dialog.getCustomView().findViewById<MaterialButton>(R.id.mbDonate).setOnClickListener {
             HkUtils.contactKefu()

@@ -21,8 +21,17 @@
         app:riv_icon="@drawable/ic_file_download_black_24dp"
         android:layout_below="@+id/toolbar"
         app:riv_arrow_visible="false"
-        app:riv_divider_visible="false"
+        app:riv_divider_visible="true"
         app:riv_title="下载提示"/>
+
+    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+        android:id="@+id/rivAbout"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/rivDownload"
+        app:riv_title="关于"
+        app:riv_arrow_visible="false"
+        app:riv_icon="@drawable/ic_toys_black_24dp"
+        android:layout_height="50dp"/>
 
     <ImageView
         android:id="@+id/mIvCover"
