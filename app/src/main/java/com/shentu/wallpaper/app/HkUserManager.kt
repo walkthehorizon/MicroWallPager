@@ -15,6 +15,8 @@ class HkUserManager private constructor() {
     private val USER_SEX = "user_sex"
     private val USER_PEA = "user_pea"
     private val USER_TOKEN = "user_token"
+    private val USER_VIP = "user_vip"
+    private val USER_SVIP = "user_svip"
     var user: MicroUser = MicroUser()
     /**
      * 参考python,存储变化前请先更新user
@@ -31,6 +33,8 @@ class HkUserManager private constructor() {
         SPUtils.getInstance().put(USER_SEX, user.sex)
         SPUtils.getInstance().put(USER_PEA, user.pea)
         SPUtils.getInstance().put(USER_TOKEN, user.token)
+        SPUtils.getInstance().put(USER_VIP, user.vip)
+        SPUtils.getInstance().put(USER_SVIP, user.svip)
     }
 
     /**
@@ -49,6 +53,8 @@ class HkUserManager private constructor() {
         SPUtils.getInstance().remove(USER_SEX)
         SPUtils.getInstance().remove(USER_PEA)
         SPUtils.getInstance().remove(USER_TOKEN)
+        SPUtils.getInstance().remove(USER_VIP)
+        SPUtils.getInstance().remove(USER_SVIP)
     }
 
     fun updateKandou(change: Int) {
@@ -85,6 +91,8 @@ class HkUserManager private constructor() {
             user.sex = SPUtils.getInstance().getInt(USER_SEX, 0)
             user.pea = SPUtils.getInstance().getInt(USER_PEA, 0)
             user.token = SPUtils.getInstance().getString(USER_TOKEN, "")
+            user.vip = SPUtils.getInstance().getBoolean(USER_VIP, false)
+            user.svip = SPUtils.getInstance().getBoolean(USER_SVIP, false)
         }
     }
 }

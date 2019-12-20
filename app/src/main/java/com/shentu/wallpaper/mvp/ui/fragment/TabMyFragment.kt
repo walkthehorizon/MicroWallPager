@@ -148,6 +148,19 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                     .load(HkUserManager.instance.user.avatar)
                     .into(circle_avatar)
             itMoney.setEndValue(user.pea.toString())
+            when {
+                HkUserManager.instance.user.vip -> {
+                    tvIdentify.text = "VIP"
+                    tvIdentify.setTextColor(ContextCompat.getColor(mContext, R.color.red_dark))
+                }
+                HkUserManager.instance.user.svip -> {
+                    tvIdentify.text = "SVIP"
+                    tvIdentify.setTextColor(ContextCompat.getColor(mContext, R.color.yellow_dark))
+                }
+                else -> {
+                    tvIdentify.text = ""
+                }
+            }
         } else {
             tvMyName.text = "微梦用户"
             GlideArms.with(this)

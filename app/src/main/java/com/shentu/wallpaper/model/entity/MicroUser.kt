@@ -12,9 +12,12 @@ class MicroUser {
     var signature: String? = null
     var date_joined: String? = null
     var last_login: String? = null
-    var sex : Int = 0
+    var sex: Int = 0
     var pea = 0
     var token = ""
+    var vip: Boolean = false
+    var svip: Boolean = false
+
     override fun toString(): String {
         return "uid:" + uid + "nickname:" + nickname + "avatar:" + avatar + "phone:" + phone + "email:" + email
     }

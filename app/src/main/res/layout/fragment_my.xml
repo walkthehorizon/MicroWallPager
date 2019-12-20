@@ -46,10 +46,23 @@
             android:layout_height="26dp"
             android:layout_toEndOf="@+id/tvMyName"
             android:scaleType="centerInside"
+            android:layout_marginStart="4dp"
             app:layout_constraintBottom_toBottomOf="@id/tvMyName"
             app:layout_constraintStart_toEndOf="@+id/tvMyName"
             app:layout_constraintTop_toTopOf="@id/tvMyName"
             tools:src="@drawable/ic_im_sex_man" />
+
+        <TextView
+            android:id="@+id/tvIdentify"
+            android:layout_width="wrap_content"
+            android:textColor="@color/red_dark"
+            tools:text = "SVIP"
+            android:layout_marginStart="4dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/ivSex"
+            app:layout_constraintTop_toTopOf="@+id/tvMyName"
+            app:layout_constraintBottom_toBottomOf="@+id/tvMyName"
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:layout_width="wrap_content"
