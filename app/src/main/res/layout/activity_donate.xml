@@ -14,17 +14,6 @@
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/donate" />
 
-    <TextView
-        android:id="@+id/tvQuestion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:drawableEnd="@drawable/ic_send_black_24dp"
-        android:drawablePadding="12dp"
-        android:gravity="center"
-        android:text="为什么需要打赏?"
-        android:textColor="@color/colorSecondText"
-        android:textSize="12sp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mbDonate"

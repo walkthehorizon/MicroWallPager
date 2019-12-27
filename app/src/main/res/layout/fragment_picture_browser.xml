@@ -16,7 +16,8 @@
         android:id="@+id/rl_head"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/tvOrder"
@@ -38,60 +39,48 @@
             android:src="@drawable/ic_more_horiz_white_24dp" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tvSetCover"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:layout_alignBottom="@+id/ivShare"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
+        android:scaleType="centerInside"
+        android:layout_alignParentBottom="true"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:text="设为封面"
-        android:textColor="@color/colorDivider"
-        android:textSize="18sp"
-        android:visibility="gone" />
+        android:layout_marginBottom="100dp"
+        app:srcCompat="@drawable/ic_comment_black_24dp" />
 
     <ImageView
-        android:visibility="gone"
         android:id="@+id/ivShare"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="60dp"
         android:scaleType="centerInside"
         android:src="@drawable/ic_share_black_24dp"
-        android:tint="@color/white" />
+        android:tint="@color/white"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rl_bottom"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        tools:visibility="visible">
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/ivCollect"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:lottie_rawRes="@raw/anim_collect" />
-
-        <TextView
-            android:id="@+id/tvCollectNum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/ivDownload"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginStart="52dp"
-            android:textColor="@color/white"
-            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="1700" />
+            app:srcCompat="@drawable/ic_file_download_black_24dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mbLoadOrigin"
@@ -109,17 +98,30 @@
             app:strokeColor="@color/colorDivider"
             app:strokeWidth="1dp" />
 
-        <ImageView
-            android:id="@+id/ivDownload"
-            android:layout_width="0dp"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/ivCollect"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_rawRes="@raw/anim_collect" />
+
+        <TextView
+            android:id="@+id/tvCollectNum"
+            android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:padding="6dp"
+            android:gravity="center"
+            android:maxWidth="60dp"
+            android:textColor="@color/white"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_file_download_black_24dp" />
+            tools:text="17" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

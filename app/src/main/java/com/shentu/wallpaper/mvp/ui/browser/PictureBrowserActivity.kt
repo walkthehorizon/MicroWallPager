@@ -321,9 +321,6 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             cancelable(false)
             cornerRadius(12f)
         }
-        dialog.getCustomView().findViewById<TextView>(R.id.tvQuestion).setOnClickListener {
-            BrowserActivity.open(this, Constant.GITHUB_URL + "#为什么下载需要萌豆")
-        }
         dialog.getCustomView().findViewById<MaterialButton>(R.id.mbDonate).setOnClickListener {
             HkUtils.contactKefu()
         }
