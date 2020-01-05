@@ -11,8 +11,6 @@ import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.horizon.netbus.NetBus
 import com.jess.arms.base.delegate.AppLifecycles
-import com.jess.arms.integration.cache.IntelligentCache
-import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadSir
 import com.liulishuo.filedownloader.FileDownloader
 import com.mob.MobSDK
@@ -26,8 +24,6 @@ import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.page.EmptyCallback
 import com.shentu.wallpaper.app.page.ErrorCallback
 import com.shentu.wallpaper.app.page.LoadingCallback
-import com.squareup.leakcanary.LeakCanary
-import com.squareup.leakcanary.RefWatcher
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
@@ -61,10 +57,6 @@ class AppLifecycleImpl : AppLifecycles {
         MobSDK.init(application)
         MobLink.setRestoreSceneListener(SceneListener())
         ButterKnife.setDebug(BuildConfig.Debug)
-        //使用 IntelligentCache.KEY_KEEP 作为 key 的前缀, 可以使储存的数据永久存储在内存中
-//否则存储在 LRU 算法的存储空间中, 前提是 extras 使用的是 IntelligentCache (框架默认使用)
-        ArmsUtils.obtainAppComponentFromContext(application).extras().put(IntelligentCache.KEY_KEEP
-                + RefWatcher::class.java.name, if (BuildConfig.USE_CANARY) LeakCanary.install(application) else RefWatcher.DISABLED)
         LoadSir.beginBuilder()
                 .addCallback(ErrorCallback()) //添加各种状态页
                 .addCallback(EmptyCallback())
@@ -73,7 +65,7 @@ class AppLifecycleImpl : AppLifecycles {
                 .commit()
         FileDownloader.setup(application)
         BigImageViewer.initialize(GlideImageLoader.with(application
-                , HkApplication.instance?.imageClient))
+                , HkApplication.instance.imageClient))
         Timber.d("init use time: %s ms", (System.currentTimeMillis() - start).toString())
     }
 
