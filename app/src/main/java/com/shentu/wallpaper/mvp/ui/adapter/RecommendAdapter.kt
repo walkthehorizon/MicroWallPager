@@ -44,6 +44,7 @@ class RecommendAdapter(val context: Context, private var wallpapers: List<Wallpa
                 .transform(MultiTransformation<Bitmap>(CenterCrop(), RoundedCorners(ConvertUtils.dp2px(5f))))
                 .transition(withCrossFade())
                 .into(ivPicture)
+        helper.setText(R.id.tvLikeNum, item.collectNum.toString())
     }
 
     override fun setNewData(data: MutableList<Wallpaper>?) {

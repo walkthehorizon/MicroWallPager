@@ -13,6 +13,8 @@ import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityOptionsCompat
 import androidx.viewpager.widget.ViewPager
+import cn.sharesdk.framework.Platform
+import cn.sharesdk.framework.PlatformActionListener
 import cn.sharesdk.onekeyshare.OnekeyShare
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.checkbox.checkBoxPrompt
@@ -38,20 +40,24 @@ import com.mob.moblink.SceneRestorable
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.HkUserManager
+import com.shentu.wallpaper.app.event.LikeEvent
 import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.di.component.DaggerPictureBrowserComponent
 import com.shentu.wallpaper.di.module.PictureBrowserModule
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.contract.PictureBrowserContract
 import com.shentu.wallpaper.mvp.presenter.PictureBrowserPresenter
-import com.shentu.wallpaper.mvp.ui.activity.BrowserActivity
 import com.shentu.wallpaper.mvp.ui.activity.SubjectDetailActivity
 import com.shentu.wallpaper.mvp.ui.adapter.PictureBrowserVpAdapter
 import com.shentu.wallpaper.mvp.ui.fragment.PictureFragment
 import com.shentu.wallpaper.mvp.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.fragment_picture_browser.*
-import timber.log.Timber
+import org.greenrobot.eventbus.EventBus
+import java.util.HashMap
 
+/**
+ * 图片浏览核心界面
+ * */
 @Route(path = "/picture/browser/activity")
 class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureBrowserContract.View
         , ViewPager.OnPageChangeListener, PictureFragment.Callback, SceneRestorable {
@@ -59,9 +65,9 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     @Autowired
     @JvmField
     var subjectId: Int = -1
-    @Autowired
-    @JvmField
-    var current: Int = 0
+    //    @Autowired
+//    @JvmField
+//    var current: Int = 0
     @Autowired
     @JvmField
     var categoryId: Int = -1
@@ -69,7 +75,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     /**
      * 是否已经显示过DonateDialog
      * */
-    var hasShowDonate = false
+    private var hasShowDonate = false
 
     //from web
     private var paperId: Int = -1
@@ -78,6 +84,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
     private var wallpapers: MutableList<Wallpaper> = arrayListOf()
     private lateinit var vpAdapter: PictureBrowserVpAdapter
+    private lateinit var curPaper: Wallpaper
 
     override fun setupActivityComponent(appComponent: AppComponent) {
         DaggerPictureBrowserComponent //如找不到该类,请编译一下项目
@@ -99,14 +106,11 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         when {
             callback != null -> {
                 wallpapers.addAll(callback!!.getWallpaperList())
-                initViewPager()
+                initView()
             }
             subjectId != -1 -> mPresenter?.getPictures(subjectId)
             paperId != -1 -> mPresenter?.getPaperDetail(paperId)
             else -> throw IllegalArgumentException("参数异常")
-        }
-        ivShare.setOnClickListener {
-            mPresenter?.getShareData(wallpapers[viewPager.currentItem])
         }
     }
 
@@ -148,7 +152,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item?.itemId) {
                     R.id.itSetPaper -> vpAdapter.getFragment(viewPager.currentItem).loadOriginPicture(Behavior.SET_WALLPAPER)
-                    R.id.itSubject -> SubjectDetailActivity.open(wallpapers[viewPager.currentItem].subjectId, this)
+                    R.id.itSubject -> SubjectDetailActivity.open(curPaper.subjectId, this)
                     R.id.itSetCover -> MaterialDialog(this).show {
                         title(text = "分类")
                         message(text = "确定设为当前分类封面？")
@@ -197,7 +201,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                             , initialSelection = 0) { _, index, _ ->
                         val saveType = if (index == 0) SaveType.NORMAL else SaveType.ORIGIN
                         result = saveType.value
-                        mPresenter?.buyPaper(viewPager.currentItem, wallpapers[viewPager.currentItem]
+                        mPresenter?.buyPaper(viewPager.currentItem, curPaper
                                 , if (index == 0) SaveType.NORMAL else SaveType.ORIGIN)
                         showDonateDialog()
                     }
@@ -213,8 +217,15 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         }
     }
 
-    private fun initViewPager() {
+    private fun initView() {
         check(wallpapers.isNotEmpty()) { "wallpapers size can not < 1" }
+
+        viewPager.addOnPageChangeListener(this)
+        viewPager.offscreenPageLimit = 4
+        vpAdapter = PictureBrowserVpAdapter(supportFragmentManager, wallpapers, this)
+        viewPager.adapter = vpAdapter
+        viewPager.currentItem = intent.getIntExtra("current", 0)
+        onPageSelected(viewPager.currentItem)
 
         mbLoadOrigin.setOnClickListener {
             if (!HkUserManager.instance.isLogin) {
@@ -229,41 +240,46 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                 launchActivity(Intent(this@PictureBrowserActivity, LoginActivity::class.java))
                 return@setOnClickListener
             }
-            showDownloadDialog(wallpapers[viewPager.currentItem])
+            showDownloadDialog(curPaper)
         }
         ivMore.setOnClickListener {
             showMenu()
         }
-        ivCollect.setOnClickListener {
+
+        tvLike.text = curPaper.collectNum.toString()
+        tvLike.setOnClickListener {
             if (!HkUserManager.instance.isLogin) {
                 launchActivity(Intent(this, LoginActivity::class.java))
                 return@setOnClickListener
             }
-            ivCollect.isClickable = false
-            mPresenter?.addCollect(wallpapers[viewPager.currentItem].id, viewPager.currentItem)
+            tvLike.isClickable = false
+            mPresenter?.addCollect(curPaper.id, viewPager.currentItem)
         }
 
-        viewPager.addOnPageChangeListener(this)
-        viewPager.offscreenPageLimit = 4
-        vpAdapter = PictureBrowserVpAdapter(supportFragmentManager, wallpapers, this)
-        viewPager.adapter = vpAdapter
-        viewPager.currentItem = current
-        onPageSelected(current)
+        ivShare.setOnClickListener {
+            mPresenter?.getShareData(curPaper)
+        }
+
+        tvComment.text = curPaper.commentNum.toString()
+        tvComment.setOnClickListener {
+            showCommentDialog()
+        }
     }
 
     override fun resetCollect() {
-        ivCollect.isClickable = true
+        tvLike.isClickable = true
     }
 
-    override fun showCollectAnim(position: Int) {
-        val wallpaper = wallpapers[position]
-        wallpaper.collected = true
-        wallpaper.collectNum = wallpaper.collectNum + 1
+    override fun showLikeStatus(position: Int) {
+        curPaper.collected = true
+        curPaper.collectNum = curPaper.collectNum + 1
         if (position == viewPager.currentItem) {
-            tvCollectNum.text = wallpaper.collectNum.toString()
-            ivCollect.isClickable = false
-            ivCollect.playAnimation()
+            tvLike.text = curPaper.collectNum.toString()
+            tvLike.isClickable = false
+            tvLike.setCompoundDrawablesRelativeWithIntrinsicBounds(0
+                    , R.drawable.ic_favorite_black_24dp, 0, 0)
         }
+        EventBus.getDefault().post(LikeEvent(position))
     }
 
     override fun showMessage(message: String) {
@@ -286,7 +302,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
     override fun showPictures(pictures: MutableList<Wallpaper>) {
         wallpapers = pictures as ArrayList<Wallpaper>
-        initViewPager()
+        initView()
     }
 
     override fun onPageScrollStateChanged(state: Int) {
@@ -299,16 +315,13 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
     @SuppressLint("SetTextI18n", "CheckResult")
     override fun onPageSelected(position: Int) {
-        if (ivCollect.isAnimating) {
-            ivCollect.cancelAnimation()
-        }
+        curPaper = wallpapers[position]
         tvOrder.text = "${position + 1}/${vpAdapter.count}"
-//        mbLoadOrigin.visibility = if (wallpapers[position].isOriginExist) View.GONE else View.VISIBLE
-//        ivDownload.visibility = if (FileUtils.isFileExists(PicUtils.getInstance().getDownloadPicturePath(
-//                        wallpapers[position].originUrl))) View.GONE else View.VISIBLE
-        tvCollectNum.text = wallpapers[position].collectNum.toString()
-        ivCollect.isClickable = !wallpapers[position].collected
-        ivCollect.progress = if (wallpapers[position].collected) 1f else 0f
+        tvLike.text = curPaper.collectNum.toString()
+        tvLike.setCompoundDrawablesRelativeWithIntrinsicBounds(0
+                , if (curPaper.collected) R.drawable.ic_favorite_black_24dp else
+            R.drawable.ic_favorite_border_black_24dp, 0, 0)
+        tvLike.isClickable = !curPaper.collected
     }
 
     override fun showDonateDialog() {
@@ -329,16 +342,27 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         }
     }
 
+    override fun showCommentDialog() {
+        val commentDialog = CommentDialog.newInstance(curPaper.id)
+        commentDialog.setCallback(object : CommentDialog.Callback {
+            override fun commentAdd() {
+                curPaper.commentNum += 1
+                tvComment.text = curPaper.commentNum.toString()
+            }
+        })
+        commentDialog.show(supportFragmentManager, null)
+    }
+
     override fun showNavigation() {
         rl_head.visibility = View.VISIBLE
         rl_bottom.visibility = View.VISIBLE
-        ivShare.visibility = View.VISIBLE
+        llRight.visibility = View.VISIBLE
     }
 
     override fun hideNavigation() {
         rl_head.visibility = View.GONE
         rl_bottom.visibility = View.GONE
-        ivShare.visibility = View.GONE
+        llRight.visibility = View.GONE
     }
 
     override fun switchNavigation() {

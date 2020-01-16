@@ -20,7 +20,7 @@ interface PictureBrowserContract {
 
         fun setWallpaper(path: String)
 
-        fun showCollectAnim(position: Int)
+        fun showLikeStatus(position: Int)
 
         fun savePicture(currentItem: Int, type: SaveType)
 
@@ -29,6 +29,8 @@ interface PictureBrowserContract {
         fun showShare(paper: Wallpaper)
 
         fun showDonateDialog()
+
+        fun showCommentDialog()
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
