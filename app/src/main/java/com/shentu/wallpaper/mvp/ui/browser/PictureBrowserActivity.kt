@@ -13,8 +13,6 @@ import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityOptionsCompat
 import androidx.viewpager.widget.ViewPager
-import cn.sharesdk.framework.Platform
-import cn.sharesdk.framework.PlatformActionListener
 import cn.sharesdk.onekeyshare.OnekeyShare
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.checkbox.checkBoxPrompt
@@ -53,7 +51,6 @@ import com.shentu.wallpaper.mvp.ui.fragment.PictureFragment
 import com.shentu.wallpaper.mvp.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.fragment_picture_browser.*
 import org.greenrobot.eventbus.EventBus
-import java.util.HashMap
 
 /**
  * 图片浏览核心界面
@@ -65,9 +62,6 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     @Autowired
     @JvmField
     var subjectId: Int = -1
-    //    @Autowired
-//    @JvmField
-//    var current: Int = 0
     @Autowired
     @JvmField
     var categoryId: Int = -1
@@ -152,7 +146,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item?.itemId) {
                     R.id.itSetPaper -> vpAdapter.getFragment(viewPager.currentItem).loadOriginPicture(Behavior.SET_WALLPAPER)
-                    R.id.itSubject -> SubjectDetailActivity.open(curPaper.subjectId, this)
+                    R.id.itSubject -> SubjectDetailActivity.open(curPaper.subject, this)
                     R.id.itSetCover -> MaterialDialog(this).show {
                         title(text = "分类")
                         message(text = "确定设为当前分类封面？")
