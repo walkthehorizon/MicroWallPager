@@ -6,7 +6,9 @@ import android.webkit.URLUtil;
 import com.blankj.utilcode.util.PathUtils;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
+import com.jess.arms.utils.ArmsUtils;
 import com.shentu.wallpaper.R;
+import com.shentu.wallpaper.app.GlideConfiguration;
 import com.shentu.wallpaper.app.HkApplication;
 
 import java.io.File;
@@ -37,6 +39,13 @@ public class PicUtils {
 
     public String buildtl200(String picUrl) {
         return picUrl + "!tl200";
+    }
+
+    public String getCachePicturePath(String imgUrl) {
+        return new File(ArmsUtils.obtainAppComponentFromContext(HkApplication.instance).cacheFile()
+                + File.separator
+                + GlideConfiguration.IMAGE_DISK_CACHE_PATH
+                , URLUtil.guessFileName(imgUrl, null, null)).getAbsolutePath();
     }
 
     public String getDownloadPicturePath(String pictureUrl) {

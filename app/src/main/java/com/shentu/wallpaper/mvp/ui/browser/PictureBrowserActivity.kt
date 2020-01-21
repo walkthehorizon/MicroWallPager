@@ -145,7 +145,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             }
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item?.itemId) {
-                    R.id.itSetPaper -> vpAdapter.getFragment(viewPager.currentItem).loadOriginPicture(Behavior.SET_WALLPAPER)
+                    R.id.itSetPaper -> vpAdapter.getFragment(viewPager.currentItem).loadPicture(Behavior.SET_WALLPAPER)
                     R.id.itSubject -> SubjectDetailActivity.open(curPaper.subject, this)
                     R.id.itSetCover -> MaterialDialog(this).show {
                         title(text = "分类")
@@ -175,7 +175,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     }
 
     override fun savePicture(currentItem: Int, type: SaveType) {
-        vpAdapter.getFragment(currentItem).savePicture(type)
+        vpAdapter.getFragment(currentItem).downLoadPicture(type)
     }
 
     private fun showDownloadDialog(paper: Wallpaper) {
@@ -227,7 +227,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                 return@setOnClickListener
             }
             //            mbLoadOrigin.isEnabled = false//在结果回调前禁用二次点击
-            vpAdapter.getFragment(viewPager.currentItem).loadOriginPicture(Behavior.ONLY_LOAD)
+            vpAdapter.getFragment(viewPager.currentItem).loadPicture(Behavior.LOAD_ORIGIN)
         }
         ivDownload.setOnClickListener {
             if (!HkUserManager.instance.isLogin) {

@@ -42,6 +42,8 @@
     <LinearLayout
         android:id="@+id/llRight"
         android:layout_width="60dp"
+        tools:visibility="visible"
+        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
