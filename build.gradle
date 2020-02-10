@@ -36,9 +36,9 @@ allprojects {
         jcenter()
         google()
         maven { url "https://jitpack.io" }
-        flatDir {
-            dirs 'libs'
-        }
+//        flatDir {
+//            dirs 'libs'
+//        }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 
         maven {

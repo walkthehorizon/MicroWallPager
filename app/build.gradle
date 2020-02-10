@@ -51,13 +51,13 @@ android {
             signingConfig signingConfigs.release
         }
 
-        pre {
-            buildConfigField "boolean", "LOG_DEBUG", "true"
-            buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "boolean", "Debug", "true"
-            buildConfigField "String", "Sever", '"http://api.wmmt119.top/micro/"'
-            signingConfig signingConfigs.release
-        }
+//        pre {
+//            buildConfigField "boolean", "LOG_DEBUG", "true"
+//            buildConfigField "boolean", "USE_CANARY", "false"
+//            buildConfigField "boolean", "Debug", "true"
+//            buildConfigField "String", "Sever", '"http://api.wmmt119.top/micro/"'
+//            signingConfig signingConfigs.release
+//        }
 
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"
