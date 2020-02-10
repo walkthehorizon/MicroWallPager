@@ -5,23 +5,58 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.ViewGroup
+import android.webkit.ConsoleMessage
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
 import androidx.core.content.ContextCompat
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.IPresenter
 import com.just.agentweb.*
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.AndroidInterface
 import com.shentu.wallpaper.app.utils.UIController
 import kotlinx.android.synthetic.main.activity_browser.*
+import timber.log.Timber
+
 
 class BrowserActivity : BaseActivity<IPresenter>() {
 
-    private var agentWeb: AgentWeb? = null
+    private lateinit var agentWeb: AgentWeb
     private var mMiddleWareWebChrome: MiddlewareWebChromeBase = object : MiddlewareWebChromeBase() {
-
+        override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
+            if (consoleMessage?.messageLevel() == ConsoleMessage.MessageLevel.ERROR) {
+                Timber.e(consoleMessage.message())
+            }
+            return super.onConsoleMessage(consoleMessage)
+        }
     }
-    private var mMiddleWareWebClient: MiddlewareWebClientBase = object : MiddlewareWebClientBase() {
 
+    private var mMiddleWareWebClient: MiddlewareWebClientBase = object : MiddlewareWebClientBase() {
+        override fun onPageFinished(view: WebView, url: String) {
+            super.onPageFinished(view, url)
+            Timber.e("onPageFinished：%s", url)
+            agentWeb.webCreator.webView.evaluateJavascript("(function(){"
+//                    + "let imgs = document.getElementsByClassName('rich_pages');"
+                    + "let imgs = document.getElementsByTagName('img');"
+                    + "let pictures = new Array();"
+                    + "for(let i=0;i<imgs.length;i++){"
+                    + "    console.error(imgs[i].getAttribute('data-src'));"
+                    + "    pictures[i] = imgs[i].getAttribute('data-src');"
+                    + "}"
+                    + "for(let i=0;i<imgs.length;i++){"
+                    + "    imgs[i].addEventListener('click',function(event){"
+                    + "        window.android.showImages(pictures,i);"
+                    + "    });"
+                    + "}"
+                    + "})()", null)
+        }
+
+        override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+            super.onReceivedError(view, request, error)
+            Timber.e(error.toString())
+        }
     }
 
     override fun setupActivityComponent(appComponent: AppComponent) {
@@ -39,7 +74,7 @@ class BrowserActivity : BaseActivity<IPresenter>() {
     private fun buildAgentWeb() {
         agentWeb = AgentWeb.with(this)
                 .setAgentWebParent(container, ViewGroup.LayoutParams(-1, -1))
-                .useDefaultIndicator(ContextCompat.getColor(this,R.color.colorAccent), -1)
+                .useDefaultIndicator(ContextCompat.getColor(this, R.color.colorAccent), -1)
                 .setPermissionInterceptor(null)
                 .setWebLayout(null)
                 .setAgentWebUIController(UIController(this))
@@ -50,6 +85,7 @@ class BrowserActivity : BaseActivity<IPresenter>() {
                 .setAgentWebWebSettings(AgentWebSettingsImpl.getInstance())
                 .setMainFrameErrorView(R.layout.layout_default_error, -1)
                 .setSecurityType(AgentWeb.SecurityType.STRICT_CHECK)
+                .addJavascriptInterface("android", AndroidInterface(this))
                 .createAgentWeb()
                 .ready()
                 .go(intent.getStringExtra("url"))
@@ -57,30 +93,24 @@ class BrowserActivity : BaseActivity<IPresenter>() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
 
-        return if (agentWeb != null && agentWeb!!.handleKeyEvent(keyCode, event)) {
+        return if (agentWeb.handleKeyEvent(keyCode, event)) {
             true
         } else super.onKeyDown(keyCode, event)
     }
 
     override fun onPause() {
-        if (agentWeb != null) {
-            agentWeb!!.webLifeCycle.onPause()
-        }
+        agentWeb.webLifeCycle.onPause()
         super.onPause()
 
     }
 
     override fun onResume() {
-        if (agentWeb != null) {
-            agentWeb!!.webLifeCycle.onResume()
-        }
+        agentWeb.webLifeCycle.onResume()
         super.onResume()
     }
 
     override fun onDestroy() {
-        if (agentWeb != null) {
-            agentWeb!!.webLifeCycle.onDestroy()
-        }
+        agentWeb.webLifeCycle.onDestroy()
         super.onDestroy()
     }
 

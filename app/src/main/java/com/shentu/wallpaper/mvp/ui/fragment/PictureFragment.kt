@@ -1,15 +1,20 @@
 package com.shentu.wallpaper.mvp.ui.fragment
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.os.ParcelFileDescriptor
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.github.piasy.biv.loader.ImageLoader
-
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.IPresenter
@@ -19,17 +24,19 @@ import com.shentu.wallpaper.app.utils.PicUtils
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.ui.browser.Behavior
 import com.shentu.wallpaper.mvp.ui.browser.SaveType
-import com.shentu.wallpaper.mvp.ui.widget.progress.DefaultLoadCallback
 import com.shentu.wallpaper.mvp.ui.widget.progress.ProgressPieIndicator
+import com.yanzhenjie.permission.AndPermission
+import com.yanzhenjie.permission.Permission
 import kotlinx.android.synthetic.main.fragment_picture.*
 import java.io.File
 
-
 class PictureFragment : BaseFragment<IPresenter>() {
 
-    private var normalLoad = false
-    private var originLoad = false
-    private var isOriginLoading = false
+    //    private var normalLoad = false
+//    private var originLoad = false
+    private var isLoading = false
+    private var normalFile: File? = null
+    private var originFile: File? = null
 
     companion object {
         fun newInstance(wallpaper: Wallpaper, pos: Int): PictureFragment {
@@ -57,55 +64,54 @@ class PictureFragment : BaseFragment<IPresenter>() {
         pos = arguments?.get("pos") as Int
         wallpaper = arguments!!["wallpaper"] as Wallpaper
         photoView.setImageViewFactory(GlideImageViewFactory())
-        photoView.setImageLoaderCallback(object : DefaultLoadCallback {
-            override fun onSuccess(image: File?) {
-                normalLoad = true
-            }
-        })
         photoView.setOnClickListener {
             callback?.switchNavigation()
         }
-
-        //若原图存在直接加载原图
-        context?.let {
-            photoView.showImage(if (wallpaper.isOriginExist)
-                Uri.parse(wallpaper.originUrl)
-            else
-                Uri.parse(wallpaper.url))
-        }
+        loadPicture(Behavior.LOAD_NORMAL)
     }
 
     override fun setData(data: Any?) {
 
     }
 
-    fun loadOriginPicture(behavior: Behavior) {
-        if (isOriginLoading) {
+    fun loadPicture(behavior: Behavior) {
+        if (isLoading) {
             return
         }
         context?.let {
             photoView.setProgressIndicator(ProgressPieIndicator())
             photoView.setImageLoaderCallback(getImageLoadCallback(behavior))
-            photoView.showImage(Uri.parse(wallpaper.originUrl))
+            photoView.showImage(Uri.parse(if (behavior == Behavior.ONLY_DOWNLOAD_ORIGIN
+                    || behavior == Behavior.LOAD_ORIGIN)
+                wallpaper.originUrl else wallpaper.url))
         }
     }
 
     private fun getImageLoadCallback(behavior: Behavior): ImageLoader.Callback {
         return object : ImageLoader.Callback {
             override fun onFinish() {
-                isOriginLoading = false
+                isLoading = false
             }
 
             @SuppressLint("MissingPermission")
             override fun onSuccess(image: File?) {
-//                Timber.e(image?.absolutePath)
-                originLoad = true
                 callback?.onLoadOrigin(pos, true)
-                if (behavior == Behavior.SET_WALLPAPER) {
-                    image?.absolutePath?.let { HkUtils.setWallpaper(mContext, it) }
-                }
-                if (behavior == Behavior.ONLY_DOWNLOAD) {
-                    copyPictureToLocal(SaveType.ORIGIN)
+                when (behavior) {
+                    Behavior.SET_WALLPAPER -> {
+                        image?.absolutePath?.let { HkUtils.setWallpaper(mContext, it) }
+                    }
+                    Behavior.LOAD_NORMAL -> {
+                        normalFile = image
+                    }
+                    Behavior.LOAD_ORIGIN -> {
+                        originFile = image
+                    }
+                    Behavior.ONLY_DOWNLOAD_ORIGIN -> {
+                        savePicture(wallpaper.originUrl, image)
+                    }
+                    Behavior.ONLY_DOWNLOAD_NORMAL -> {
+                        savePicture(wallpaper.url, image)
+                    }
                 }
             }
 
@@ -124,37 +130,72 @@ class PictureFragment : BaseFragment<IPresenter>() {
             }
 
             override fun onStart() {
-                isOriginLoading = true
+                isLoading = true
             }
         }
+    }
+
+    fun downLoadPicture(type: SaveType) {
+        val destUrl: String
+        val curFile: File?
+        if (type == SaveType.NORMAL) {
+            if (normalFile == null) {
+                loadPicture(Behavior.ONLY_DOWNLOAD_NORMAL)
+                return
+            }
+            destUrl = wallpaper.url
+            curFile = normalFile
+        } else {
+            if (originFile == null) {
+                loadPicture(Behavior.ONLY_DOWNLOAD_ORIGIN)
+                return
+            }
+            destUrl = wallpaper.originUrl
+            curFile = originFile
+        }
+        savePicture(destUrl, curFile)
     }
 
     /**
-     * @param type
-     * @see SaveType
+     * 兼容Android10的沙盒下载
      * */
-    fun savePicture(type: SaveType) {
-        if (normalLoad && type == SaveType.NORMAL) {
-            copyPictureToLocal(type)
-            return
-        }
-        if (type == SaveType.ORIGIN) {
-            if (originLoad) {
-                copyPictureToLocal(type)
-            } else {
-                loadOriginPicture(Behavior.ONLY_DOWNLOAD)
+    fun savePicture(destUrl: String, curFile: File?) {
+        val destPath = PicUtils.getInstance().getDownloadPicturePath(destUrl)
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+            val values = ContentValues()
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/*")
+            values.put(MediaStore.Images.Media.DISPLAY_NAME, URLUtil.guessFileName(destUrl
+                    , null, null))
+            values.put(MediaStore.Images.ImageColumns.IS_PENDING, true)
+            values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM + "/萌幻Cos")
+            val uri = context?.contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            if (uri == null) {
+                ToastUtils.showShort("下载失败")
+                return
             }
-            return
+            val ous: ParcelFileDescriptor? = context?.contentResolver?.openFileDescriptor(AndPermission.getFileUri(context, File(destPath)), "rw")
+            val ins = context?.contentResolver?.openFileDescriptor(AndPermission.getFileUri(context, curFile), "rw")
+            if (ins == null || ous == null) {
+                ToastUtils.showShort("下载失败")
+                return
+            }
+            android.os.FileUtils.copy(ins.fileDescriptor, ous.fileDescriptor)
+            values.clear()
+            values.put(MediaStore.Images.ImageColumns.IS_PENDING, false)
+            uri.let { context?.contentResolver?.update(it, values, null, null) }
+        } else {
+            AndPermission.with(context)
+                    .runtime()
+                    .permission(Permission.WRITE_EXTERNAL_STORAGE)
+                    .onGranted {
+                        FileUtils.copyFile(curFile, File(destPath))
+                        MediaStore.Images.Media.insertImage(context!!.contentResolver,
+                                destPath, URLUtil.guessFileName(destUrl, null, null), "")
+                    }
+                    .onDenied {
+                        ToastUtils.showShort("权限被拒,无法下载")
+                    }
         }
-        ToastUtils.showShort("下载失败")
-    }
-
-    private fun copyPictureToLocal(type: SaveType) {
-        val destPath = if (type == SaveType.NORMAL)
-            PicUtils.getInstance().getDownloadPicturePath(wallpaper.url)
-        else
-            PicUtils.getInstance().getDownloadPicturePath(wallpaper.originUrl)
-        FileUtils.copyFile(photoView.currentImageFile, File(destPath))
         ToastUtils.showShort("图片已保存在 手机相册》萌幻Cos")
     }
 

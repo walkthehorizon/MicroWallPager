@@ -61,7 +61,7 @@ public final class GlobalConfiguration implements ConfigModule {
 
     @Override
     public void applyOptions(Context context, GlobalConfigModule.Builder builder) {
-        String cachePath = PathUtils.getInternalAppCachePath();
+        String cachePath = PathUtils.getExternalAppCachePath();
         cookieStore = new ConcurrentHashMap<>();
         globalHttpHandler = new GlobalHttpHandlerImpl(context);
         if (!BuildConfig.LOG_DEBUG) { //Release 时,让框架不再打印 Http 请求和响应的信息

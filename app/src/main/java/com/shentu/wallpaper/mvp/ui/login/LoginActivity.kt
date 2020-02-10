@@ -3,16 +3,16 @@ package com.shentu.wallpaper.mvp.ui.login
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.view.View
 import cn.smssdk.EventHandler
 import cn.smssdk.SMSSDK
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
-import com.blankj.utilcode.util.BarUtils
-import com.blankj.utilcode.util.RegexUtils
-import com.blankj.utilcode.util.SPUtils
-import com.blankj.utilcode.util.ToastUtils
+import com.blankj.utilcode.util.*
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
@@ -24,6 +24,7 @@ import com.shentu.wallpaper.di.module.LoginModule
 import com.shentu.wallpaper.model.entity.SmsError
 import com.shentu.wallpaper.mvp.contract.LoginContract
 import com.shentu.wallpaper.mvp.presenter.LoginPresenter
+import com.shentu.wallpaper.mvp.ui.activity.BrowserActivity
 import com.shentu.wallpaper.mvp.ui.widget.VerificationCodeInput
 import com.trello.rxlifecycle2.android.ActivityEvent
 import io.reactivex.Observable
@@ -97,6 +98,10 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
             etPhone.setSelection(it.length)
         }
         mb_login.setOnClickListener {
+            if (!checkAgreement.isChecked) {
+                ToastUtils.showLong("请确认阅读并同意用户协议和隐私政策")
+                return@setOnClickListener
+            }
             if (!RegexUtils.isMobileSimple(etPhone.text)) {
                 showMessage("手机号错误！")
                 return@setOnClickListener
@@ -108,9 +113,6 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
             }
             SMSSDK.submitVerificationCode("86", etPhone.text.toString(), etCode.text.toString())
         }
-        tvSee.setOnClickListener {
-            killMyself()
-        }
         tvSendCode.setOnClickListener {
             if (!RegexUtils.isMobileSimple(etPhone.text)) {
                 showMessage("手机号错误！")
@@ -119,6 +121,23 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
             SMSSDK.getVerificationCode("86", etPhone.text.toString())
         }
         SMSSDK.registerEventHandler(eh)
+        tvAgreement.movementMethod = LinkMovementMethod.getInstance()
+        tvAgreement.text = SpanUtils()
+                .append("未注册用户登录时将自动创建账号，且代表您已同意")
+                .append("《用户协议》")
+                .setClickSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        BrowserActivity.open(this@LoginActivity, Constant.WEB_SERVER)
+                    }
+                })
+                .append("和")
+                .append("《隐私政策》")
+                .setClickSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        BrowserActivity.open(this@LoginActivity, Constant.WEB_PRIVACY)
+                    }
+                })
+                .create()
     }
 
     @SuppressLint("CheckResult", "SetTextI18n")

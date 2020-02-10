@@ -11,7 +11,7 @@
         android:drawablePadding="6dp"
         android:textSize="12sp"
         android:visibility="gone"
-        android:drawableStart="@drawable/ic_share_black_24dp"
+        android:drawableStart="@drawable/ic_share_white_24dp"
         android:gravity="center"
         android:textColor="@color/colorSecondText"
         app:layout_constraintEnd_toStartOf="@+id/tv_comment"

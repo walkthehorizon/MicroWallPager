@@ -46,7 +46,7 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                             mRootView.resetCollect()
                             return
                         }
-                        mRootView.showCollectAnim(position)
+                        mRootView.showLikeStatus(position)
                     }
 
                     override fun onError(t: Throwable) {

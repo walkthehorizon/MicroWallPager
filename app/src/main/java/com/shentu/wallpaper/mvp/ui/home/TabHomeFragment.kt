@@ -42,6 +42,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.GlideArms
+import com.shentu.wallpaper.app.event.LikeEvent
 import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.di.component.DaggerHotPagerComponent
 import com.shentu.wallpaper.di.module.TabHomeModule
@@ -65,6 +66,8 @@ import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
 import kotlinx.android.synthetic.main.item_rv_recommend.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
@@ -360,6 +363,11 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
                         Timber.e(t)
                     }
                 })
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun addLike(event: LikeEvent) {
+        recommendAdapter.refreshNotifyItemChanged(event.position)
     }
 
     fun getIsLightMode(): Boolean {

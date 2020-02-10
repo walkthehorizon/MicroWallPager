@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:background="@color/black">
 
     <ImageView
         android:id="@+id/ivBg"
@@ -102,15 +104,23 @@
         android:textSize="16sp"
         app:backgroundTint="@color/colorPrimary" />
 
-    <TextView
-        android:id="@+id/tvSee"
+    <CheckBox
+        android:id="@+id/checkAgreement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/mb_login"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="36dp"
+        android:layout_alignStart="@+id/mb_login"
+        android:buttonTint="@color/white" />
+
+    <TextView
+        android:id="@+id/tvAgreement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mb_login"
         android:layout_marginEnd="36dp"
-        android:text="随便看看 》"
-        android:textColor="@color/colorPrimary" />
+        android:layout_toEndOf="@+id/checkAgreement"
+        android:text="未注册用户登录时将自动创建账号，且代表您已同意《用户协议》和《隐私政策》"
+        android:textColor="@color/white" />
+
 
 </RelativeLayout>

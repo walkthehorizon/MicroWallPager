@@ -69,20 +69,20 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
      */
     var textSize = DEFAULT_TEXT_SIZE
         private set
-    private var mText: String? = null
+    private var mText: String?=null
     private var mTypeface: String? = null
     /**
      * Gets the show image state.
      */
     var isImageShowing = true
         private set
-    private var mImage: Drawable? = null
-    private var mImageRect: Rect? = null
-    private var mStrokePaint: Paint? = null
-    private var mTextPaint: Paint? = null
-    private var mProgressPaint: Paint? = null
-    private var mBackgroundPaint: Paint? = null
-    private var mInnerRectF: RectF? = null
+    private var mImage: Drawable?=null
+    private lateinit var mImageRect: Rect
+    private lateinit var mStrokePaint: Paint
+    private lateinit var mTextPaint: Paint
+    private lateinit var mProgressPaint: Paint
+    private lateinit var mBackgroundPaint: Paint
+    private lateinit var mInnerRectF: RectF
     /**
      * Gets the progress fill type.
      */
@@ -130,19 +130,19 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
         progressFillType = a.getInteger(R.styleable.ProgressPieView_ppvProgressFillType, progressFillType)
         a.recycle()
         mBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mBackgroundPaint!!.color = backgroundColor
-        mBackgroundPaint!!.style = Paint.Style.FILL
+        mBackgroundPaint.color = backgroundColor
+        mBackgroundPaint.style = Paint.Style.FILL
         mProgressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mProgressPaint!!.color = progressColor
-        mProgressPaint!!.style = Paint.Style.FILL
+        mProgressPaint.color = progressColor
+        mProgressPaint.style = Paint.Style.FILL
         mStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mStrokePaint!!.color = strokeColor
-        mStrokePaint!!.style = Paint.Style.STROKE
-        mStrokePaint!!.strokeWidth = strokeWidth
+        mStrokePaint.color = strokeColor
+        mStrokePaint.style = Paint.Style.STROKE
+        mStrokePaint.strokeWidth = strokeWidth
         mTextPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mTextPaint!!.color = textColor
-        mTextPaint!!.textSize = textSize
-        mTextPaint!!.textAlign = Paint.Align.CENTER
+        mTextPaint.color = textColor
+        mTextPaint.textSize = textSize
+        mTextPaint.textAlign = Paint.Align.CENTER
         mInnerRectF = RectF()
         mImageRect = Rect()
     }
@@ -157,14 +157,14 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        mInnerRectF!![0f, 0f, mViewSize.toFloat()] = mViewSize.toFloat()
-        mInnerRectF!!.offset((width - mViewSize) / 2.toFloat(), (height - mViewSize) / 2.toFloat())
+        mInnerRectF[0f, 0f, mViewSize.toFloat()] = mViewSize.toFloat()
+        mInnerRectF.offset((width - mViewSize) / 2.toFloat(), (height - mViewSize) / 2.toFloat())
         if (isStrokeShowing) {
-            val halfBorder = (mStrokePaint!!.strokeWidth / 2f + 0.5f).toInt()
-            mInnerRectF!!.inset(halfBorder.toFloat(), halfBorder.toFloat())
+            val halfBorder = (mStrokePaint.strokeWidth / 2f + 0.5f).toInt()
+            mInnerRectF.inset(halfBorder.toFloat(), halfBorder.toFloat())
         }
-        val centerX = mInnerRectF!!.centerX()
-        val centerY = mInnerRectF!!.centerY()
+        val centerX = mInnerRectF.centerX()
+        val centerY = mInnerRectF.centerY()
         canvas.drawArc(mInnerRectF, 0f, 360f, true, mBackgroundPaint)
         when (progressFillType) {
             FILL_TYPE_RADIAL -> {
@@ -180,11 +180,11 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
             FILL_TYPE_CENTER -> {
                 var radius = mViewSize / 2 * (mProgress.toFloat() / mMax)
                 if (isStrokeShowing) {
-                    radius = radius + 0.5f - mStrokePaint!!.strokeWidth
+                    radius = radius + 0.5f - mStrokePaint.strokeWidth
                 }
                 canvas.drawCircle(centerX, centerY, radius, mProgressPaint)
             }
-            else -> throw IllegalArgumentException("Invalid Progress Fill = " + progressFillType)
+            else -> throw IllegalArgumentException("Invalid Progress Fill = $progressFillType")
         }
         if (!TextUtils.isEmpty(mText) && isTextShowing) {
             if (!TextUtils.isEmpty(mTypeface)) {
@@ -196,16 +196,16 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
                         sTypefaceCache.put(mTypeface, typeface)
                     }
                 }
-                mTextPaint!!.typeface = typeface
+                mTextPaint.typeface = typeface
             }
             val xPos = centerX.toInt()
-            val yPos = (centerY - (mTextPaint!!.descent() + mTextPaint!!.ascent()) / 2).toInt()
-            canvas.drawText(mText, xPos.toFloat(), yPos.toFloat(), mTextPaint)
+            val yPos = (centerY - (mTextPaint.descent() + mTextPaint.ascent()) / 2).toInt()
+            mText?.let { canvas.drawText(it, xPos.toFloat(), yPos.toFloat(), mTextPaint) }
         }
         if (null != mImage && isImageShowing) {
             val drawableSize = mImage!!.intrinsicWidth
-            mImageRect!![0, 0, drawableSize] = drawableSize
-            mImageRect!!.offset((width - drawableSize) / 2, (height - drawableSize) / 2)
+            mImageRect[0, 0, drawableSize] = drawableSize
+            mImageRect.offset((width - drawableSize) / 2, (height - drawableSize) / 2)
             mImage!!.bounds = mImageRect
             mImage!!.draw(canvas)
         }
@@ -290,9 +290,9 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
      * @param color - color of the progress part of the view
      */
     var progressColor: Int
-        get() = mProgressPaint!!.color
+        get() = mProgressPaint.color
         set(color) {
-            mProgressPaint!!.color = color
+            mProgressPaint.color = color
             invalidate()
         }
 
@@ -300,7 +300,7 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
      * Gets the color used to display the background of the view.
      */
     fun getBackgroundColor(): Int {
-        return mBackgroundPaint!!.color
+        return mBackgroundPaint.color
     }
 
     /**
@@ -309,7 +309,7 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
      * @param color - color of the background part of the view
      */
     override fun setBackgroundColor(color: Int) {
-        mBackgroundPaint!!.color = color
+        mBackgroundPaint.color = color
         invalidate()
     }
 
@@ -322,9 +322,9 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
      * @param color - color of the text part of the view
      */
     var textColor: Int
-        get() = mTextPaint!!.color
+        get() = mTextPaint.color
         set(color) {
-            mTextPaint!!.color = color
+            mTextPaint.color = color
             invalidate()
         }
 
@@ -334,8 +334,8 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
      * @param sizeSp in sp for the text
      */
     fun setTextSize(sizeSp: Int) {
-        textSize = sizeSp * mDisplayMetrics!!.scaledDensity
-        mTextPaint!!.textSize = textSize
+        textSize = sizeSp * mDisplayMetrics.scaledDensity
+        mTextPaint.textSize = textSize
         invalidate()
     }
 
@@ -347,12 +347,10 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
      *
      * @param text to be displayed in the view
      */
-    var text: String?
-        get() = mText
-        set(text) {
-            mText = text
-            invalidate()
-        }
+    fun setText(text: String){
+        mText = text
+        invalidate()
+    }
 
     /**
      * Gets the typeface of the text.
@@ -389,9 +387,9 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
      * @param color - color of the stroke part of the view
      */
     var strokeColor: Int
-        get() = mStrokePaint!!.color
+        get() = mStrokePaint.color
         set(color) {
-            mStrokePaint!!.color = color
+            mStrokePaint.color = color
             invalidate()
         }
 
@@ -401,8 +399,8 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
      * @param widthDp in dp for the pie border
      */
     fun setStrokeWidth(widthDp: Int) {
-        strokeWidth = widthDp * mDisplayMetrics!!.density
-        mStrokePaint!!.strokeWidth = strokeWidth
+        strokeWidth = widthDp * mDisplayMetrics.density
+        mStrokePaint.strokeWidth = strokeWidth
         invalidate()
     }
 

@@ -23,7 +23,7 @@ class ProgressPieIndicator : ProgressIndicator {
             return
         }
         mProgressPieView!!.progress = progress
-        mProgressPieView!!.text = String.format(Locale.getDefault(), "%d%%", progress)
+        mProgressPieView!!.setText(String.format(Locale.getDefault(), "%d%%", progress))
     }
 
     override fun onFinish() { // not interested

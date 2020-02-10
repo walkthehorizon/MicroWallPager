@@ -1,6 +1,7 @@
 package com.shentu.wallpaper.model.api.service
 
 import com.shentu.wallpaper.model.entity.AppUpdate
+import com.shentu.wallpaper.model.entity.Comment
 import com.shentu.wallpaper.model.entity.MicroUser
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.model.response.*
@@ -79,7 +80,7 @@ interface MicroService {
     @FormUrlEncoded
     @POST("paper/set/banner")
     fun addPaper2Banner(@Field("bid") bid: Int,
-                         @Field("pid") pid: Int): Observable<BaseResponse<Boolean>>
+                        @Field("pid") pid: Int): Observable<BaseResponse<Boolean>>
 
     @PATCH("user/update/{pk}")
     fun updateUser(@Body user: MicroUser, @Path("pk") pk: Int): Observable<MicroUser>
@@ -91,11 +92,13 @@ interface MicroService {
     @GET("wallpaper/detail/{pk}")
     fun getPaperDetail(@Path("pk") pk: Int): Observable<BaseResponse<Wallpaper>> //    /**
 
-    //     * collect
-//     * */
-//    @GET("collect/my")
-//    Observable<WallpaperPageResponse>
-//    getMyCollects(@Query("offset") int offset);
+    /**
+     * 更新分享次数
+     * */
+    @FormUrlEncoded
+    @POST("paper/share/num")
+    fun updatePaperShareNum(@Field("pid") pid: Int)
+
     companion object {
         const val PAGE_LIMIT = 20
         const val PAGE_START = 0

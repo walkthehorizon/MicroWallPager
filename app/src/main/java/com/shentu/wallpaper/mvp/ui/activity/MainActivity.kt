@@ -19,7 +19,6 @@ import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
-import com.shentu.wallpaper.BuildConfig.Debug
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.HkUserManager
@@ -35,7 +34,6 @@ import com.shentu.wallpaper.mvp.ui.adapter.MainPagerAdapter
 import com.shentu.wallpaper.mvp.ui.fragment.TabCategoryFragment
 import com.shentu.wallpaper.mvp.ui.fragment.TabMyFragment
 import com.shentu.wallpaper.mvp.ui.home.TabHomeFragment
-import io.reactivex.exceptions.CompositeException
 import kotlinx.android.synthetic.main.activity_main.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import org.greenrobot.eventbus.Subscribe
@@ -80,6 +78,9 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
             }
         })
         sign()
+
+//        BrowserActivity.open(this,"https://webinterdev.innodealing.com/international-auth-service/login/mobile")
+//        BrowserActivity.open(this,"https://mp.weixin.qq.com/s/9a5ZC1jFeYvs0_awAyYvEQ")
     }
 
     override fun showMessage(message: String) {

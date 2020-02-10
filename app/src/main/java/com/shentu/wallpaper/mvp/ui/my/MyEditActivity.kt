@@ -75,7 +75,7 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
                             positiveButton(text = "好") { executor.execute() }
                         }
                     }
-                    .onDenied{
+                    .onDenied {
                         Timber.e("存储权限被拒绝")
                     }.start()
         }
@@ -121,7 +121,8 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
         MaterialDialog(this).show {
             title(text = "性别")
             positiveButton(text = "确认")
-            listItemsSingleChoice(items = listOf("保密", "男", "女")) { _, index, _ ->
+            listItemsSingleChoice(items = listOf("保密", "男", "女")
+                    , initialSelection = HkUserManager.instance.user.sex) { _, index, _ ->
                 HkUserManager.instance.user.sex = index
                 mPresenter?.updateUser()
             }

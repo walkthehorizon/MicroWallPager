@@ -18,4 +18,6 @@ object Constant {
     var MICRO_BASE_URL = "https://wmmt119.top"
     const val BASE_WALLPAPER_SHARE_URL = "https://wmmt119.top/wallpaper/"
     const val GITHUB_URL = "https://github.com/walkthehorizon/MicroWallPager/blob/master/README.md"
+    const val WEB_PRIVACY = "https://wmmt119.top/privacy"
+    const val WEB_SERVER = "https://wmmt119.top/agreement"
 }

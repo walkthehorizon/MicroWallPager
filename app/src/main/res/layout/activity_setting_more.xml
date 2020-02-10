@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorActivityBackground"
     android:orientation="vertical">
 
     <com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
@@ -18,27 +19,43 @@
         android:id="@+id/rivDownload"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:riv_icon="@drawable/ic_file_download_black_24dp"
         android:layout_below="@+id/toolbar"
         app:riv_arrow_visible="false"
         app:riv_divider_visible="true"
-        app:riv_title="下载提示"/>
+        app:riv_title="下载询问" />
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
         android:id="@+id/rivAbout"
         android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_below="@+id/rivDownload"
-        app:riv_title="关于"
         app:riv_arrow_visible="false"
-        app:riv_icon="@drawable/ic_toys_black_24dp"
-        android:layout_height="50dp"/>
+        app:riv_title="关于" />
+
+    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+        android:id="@+id/rivServer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/rivAbout"
+        app:riv_arrow_visible="false"
+        app:riv_title="服务协议" />
+
+    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+        android:id="@+id/rivPrivacy"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/rivServer"
+        app:riv_arrow_visible="false"
+        app:riv_title="隐私政策" />
 
     <ImageView
         android:id="@+id/mIvCover"
-        android:layout_width="320dp"
-        tools:background="@color/red"
-        android:layout_height="320dp"
-        android:layout_centerInParent="true" />
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:layout_below="@+id/rivPrivacy"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        tools:background="@color/red" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mbLogout"
