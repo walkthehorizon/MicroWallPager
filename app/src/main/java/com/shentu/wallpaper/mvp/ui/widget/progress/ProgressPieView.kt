@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.LruCache
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.shentu.wallpaper.R
 
 class ProgressPieView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
@@ -18,7 +19,7 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
         fun onProgressCompleted()
     }
 
-    private var mListener: OnProgressListener? =null
+    private var mListener: OnProgressListener? = null
     private lateinit var mDisplayMetrics: DisplayMetrics
     private var mMax = DEFAULT_MAX
     private var mProgress = DEFAULT_PROGRESS
@@ -69,14 +70,14 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
      */
     var textSize = DEFAULT_TEXT_SIZE
         private set
-    private var mText: String?=null
+    private var mText: String? = null
     private var mTypeface: String? = null
     /**
      * Gets the show image state.
      */
     var isImageShowing = true
         private set
-    private var mImage: Drawable?=null
+    private var mImage: Drawable? = null
     private lateinit var mImageRect: Rect
     private lateinit var mStrokePaint: Paint
     private lateinit var mTextPaint: Paint
@@ -119,11 +120,11 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
         isStrokeShowing = a.getBoolean(R.styleable.ProgressPieView_ppvShowStroke, isStrokeShowing)
         isTextShowing = a.getBoolean(R.styleable.ProgressPieView_ppvShowText, isTextShowing)
         mImage = a.getDrawable(R.styleable.ProgressPieView_ppvImage)
-        var backgroundColor = res.getColor(R.color.default_background_color)
+        var backgroundColor = ContextCompat.getColor(context, R.color.default_background_color)
         backgroundColor = a.getColor(R.styleable.ProgressPieView_ppvBackgroundColor, backgroundColor)
-        var progressColor = res.getColor(R.color.default_progress_color)
+        var progressColor = ContextCompat.getColor(context, R.color.default_progress_color)
         progressColor = a.getColor(R.styleable.ProgressPieView_ppvProgressColor, progressColor)
-        var strokeColor = res.getColor(R.color.default_stroke_color)
+        var strokeColor = ContextCompat.getColor(context, R.color.default_stroke_color)
         strokeColor = a.getColor(R.styleable.ProgressPieView_ppvStrokeColor, strokeColor)
         var textColor = res.getColor(R.color.default_text_color)
         textColor = a.getColor(R.styleable.ProgressPieView_android_textColor, textColor)
@@ -347,7 +348,7 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
      *
      * @param text to be displayed in the view
      */
-    fun setText(text: String){
+    fun setText(text: String) {
         mText = text
         invalidate()
     }
@@ -436,7 +437,7 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
      */
     fun setImageResource(resId: Int) {
         if (null != resources) {
-            mImage = resources.getDrawable(resId)
+            mImage = ContextCompat.getDrawable(context, resId)
             invalidate()
         }
     }

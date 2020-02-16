@@ -3,8 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.mob.sdk'
-apply plugin: 'io.fabric'
-apply plugin: 'com.google.firebase.firebase-perf'
+//apply plugin: 'io.fabric'
+//apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -43,8 +43,9 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "String", "Sever", '"http://192.168.10.122/micro/"'
-//            buildConfigField "String", "Sever", '"http://192.168.1.3/micro/"'
+//            buildConfigField "String", "Sever", '"http://192.168.10.122/micro/"'
+            buildConfigField "String", "Sever", '"http://192.168.1.3/micro/"'
+//            buildConfigField "String", "Sever", '"https://api.wmmt119.top/micro/"'
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "false"
             buildConfigField "boolean", "Debug", "true"
@@ -160,6 +161,7 @@ dependencies {
     implementation rootProject.ext.dependencies["material"]
     implementation rootProject.ext.dependencies["lifecycle-extensions"]
     //tools
+    implementation rootProject.ext.dependencies["hotfix"]
     implementation rootProject.ext.dependencies["progressmanager"]
     implementation rootProject.ext.dependencies["retrofit-url-manager"]
     implementation rootProject.ext.dependencies["lifecyclemodel"]
@@ -168,7 +170,7 @@ dependencies {
     implementation rootProject.ext.dependencies["glide-transformations"]
     implementation rootProject.ext.dependencies["glide"]
     implementation rootProject.ext.dependencies["okhttp3"]
-//    implementation rootProject.ext.dependencies["glide-loader-okhttp3"]
+    //    implementation rootProject.ext.dependencies["glide-loader-okhttp3"]
     kapt rootProject.ext.dependencies["glide-compiler"]
     implementation rootProject.ext.dependencies["glidepalette"]
     implementation rootProject.ext.dependencies["loadsir"]
@@ -201,17 +203,15 @@ dependencies {
         exclude group: 'com.tencent.qcloud', module: 'mtaUtils' //关闭 mta上报功能
     }
     implementation rootProject.ext.dependencies["circleindicator"]
-    implementation rootProject.ext.dependencies["firebase"]
-    implementation rootProject.ext.dependencies["crashlytics"]
-    implementation rootProject.ext.dependencies["firebase-perf"]
-
+//    implementation rootProject.ext.dependencies["firebase"]
+//    implementation rootProject.ext.dependencies["crashlytics"]
+//    implementation rootProject.ext.dependencies["firebase-perf"]
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2'
-
     //bigImage
     implementation rootProject.ext.dependencies["bigImageViewer"]
-    implementation ('com.github.piasy:GlideImageLoader:1.6.1')
+    implementation 'com.github.piasy:GlideImageLoader:1.6.1'
     implementation rootProject.ext.dependencies["bigGifDrawable"]
     //test
     testImplementation rootProject.ext.dependencies["junit"]
 }
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'

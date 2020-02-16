@@ -15,11 +15,10 @@
 -optimizations !code/simplification/artithmetic,!field/*,!class/merging/*
 
 ################common###############
-
+#-keep class com.jess.arms.** { *; }
 -keep public class * implements com.jess.arms.integration.ConfigModule
 
  #实体类不参与混淆
--keep class com.jess.arms.widget.** { *; } #自定义控件不参与混淆
 -keep class com.shentu.wallpaper.mvp.ui.widget.** { *; }
 -keep class com.shentu.wallpaper.model.** { *; }#自定义实体，理论上全都实现Serializable
 -keep class * implements android.os.Parcelable {
@@ -48,6 +47,14 @@
 -keep interface android.support.** { *; }
 -dontwarn android.support.**
 
+###############androidx#####################
+-keep class com.google.android.material.** {*;}
+-keep class androidx.** {*;}
+-keep public class * extends androidx.**
+-keep interface androidx.** {*;}
+-dontwarn com.google.android.material.**
+-dontnote com.google.android.material.**
+-dontwarn androidx.**
 
 ################alipay###############
 
@@ -262,3 +269,17 @@
 
 # 如果使用了 单类注入，即不定义接口实现 IProvider，需添加下面规则，保护实现
 # -keep class * implements com.alibaba.android.arouter.facade.template.IProvider
+
+#################hotfix########################
+#基线包使用，生成mapping.txt
+#-printmapping mapping.txt
+#生成的mapping.txt在app/build/outputs/mapping/release路径下，移动到/app路径下
+#修复后的项目使用，保证混淆结果一致
+-applymapping mapping.txt
+
+-keep class com.taobao.sophix.**{*;}
+-keep class com.ta.utdid2.device.**{*;}
+-dontwarn com.alibaba.sdk.android.utils.**
+-keepclassmembers class com.shentu.wallpaper.app.HkApplication {
+    public <init>();
+}

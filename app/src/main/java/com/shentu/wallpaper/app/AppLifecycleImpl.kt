@@ -3,7 +3,6 @@ package com.shentu.wallpaper.app
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import androidx.multidex.MultiDex
 import butterknife.ButterKnife
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.Utils
@@ -34,7 +33,7 @@ import timber.log.Timber.DebugTree
  */
 class AppLifecycleImpl : AppLifecycles {
     override fun attachBaseContext(base: Context) {
-        MultiDex.install(base) //这里比 onCreate 先执行,常用于 MultiDex 初始化,插件化框架的初始化
+//        MultiDex.install(base) //这里比 onCreate 先执行,常用于 MultiDex 初始化,插件化框架的初始化
     }
 
     @SuppressLint("CheckResult")
@@ -79,7 +78,7 @@ class AppLifecycleImpl : AppLifecycles {
                 MaterialHeader(context) //.setTimeFormat(new DynamicTimeFormat("更新于 %s"));//指定为经典Header，默认是 贝塞尔雷达Header
             }
             //设置全局的Footer构建器
-            SmartRefreshLayout.setDefaultRefreshFooterCreator { context: Context, layout: RefreshLayout? ->
+            SmartRefreshLayout.setDefaultRefreshFooterCreator { context: Context, _: RefreshLayout? ->
                 ClassicsFooter(context).setDrawableSize(20f)
             }
         }

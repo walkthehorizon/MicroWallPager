@@ -21,30 +21,29 @@
 
     <LinearLayout
         android:id="@+id/llSign"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tvSign"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:text="每日登录：+5"
             android:textColor="@color/yellow"
             android:textSize="24sp"
-            android:text="每日登录：+5" />
+            android:textStyle="bold" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieSign"
             android:layout_width="200dp"
-            app:lottie_repeatCount="3"
             android:layout_height="200dp"
-            app:lottie_rawRes="@raw/has_sign" />
+            app:lottie_rawRes="@raw/has_sign"
+            app:lottie_repeatCount="3" />
 
     </LinearLayout>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

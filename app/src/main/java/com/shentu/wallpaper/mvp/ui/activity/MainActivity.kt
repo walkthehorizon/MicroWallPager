@@ -78,7 +78,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
             }
         })
         sign()
-
 //        BrowserActivity.open(this,"https://webinterdev.innodealing.com/international-auth-service/login/mobile")
 //        BrowserActivity.open(this,"https://mp.weixin.qq.com/s/9a5ZC1jFeYvs0_awAyYvEQ")
     }
