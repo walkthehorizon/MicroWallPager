@@ -7,7 +7,8 @@ class Wallpaper(var url: String = "") : Serializable {
     var id: Int = -1
     @SerializedName("origin_url")
     var originUrl: String = ""
-    var subject = -1
+    @SerializedName("subject_id")
+    var subjectId = -1
     var category = -1
     @SerializedName("collect_num")
     var collectNum = 0

@@ -36,8 +36,7 @@ import com.shentu.wallpaper.mvp.ui.browser.PictureBrowserActivity
 import kotlinx.android.synthetic.main.activity_my_collect.*
 
 @Route(path = "/activity/my/collect/")
-class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.View,
-        PictureBrowserActivity.Callback {
+class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.View {
 
     private lateinit var loadingDialog: MaterialDialog
 
@@ -112,7 +111,16 @@ class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.
             }
             ViewCompat.setTransitionName(view, resources.getString(R.string.picture_transitionName))
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
-            PictureBrowserActivity.open(position, this, compat, context = this)
+            PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
+                override fun getWallpaperList(): List<Wallpaper> {
+                    return adapter.data
+                }
+
+                override fun loadMore() {
+                    mPresenter?.getMyCollects(true)
+                }
+
+            }, compat, context = this)
         }
         tvDelete.setOnClickListener {
             showDelDialog()
@@ -192,10 +200,6 @@ class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.
             return
         }
         super.onBackPressed()
-    }
-
-    override fun getWallpaperList(): MutableList<Wallpaper> {
-        return adapter.data
     }
 
     override fun openDelMode() {

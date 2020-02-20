@@ -1,7 +1,11 @@
 package com.shentu.wallpaper.app
 
+import android.content.Context
+import android.content.Intent
 import com.blankj.utilcode.util.SPUtils
+import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.model.entity.MicroUser
+import com.shentu.wallpaper.mvp.ui.login.LoginActivity
 
 class HkUserManager private constructor() {
     private val UUID = "user_uid"
@@ -73,6 +77,14 @@ class HkUserManager private constructor() {
 
     val token: String
         get() = if (isLogin) user.token else ""
+
+    fun needLogin(context: Context): Boolean {
+        if (!isLogin) {
+            ArmsUtils.startActivity(Intent(context, LoginActivity::class.java))
+            return true
+        }
+        return false
+    }
 
     companion object {
         val instance = HkUserManager()

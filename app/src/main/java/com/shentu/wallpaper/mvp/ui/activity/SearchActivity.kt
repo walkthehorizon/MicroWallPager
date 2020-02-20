@@ -6,10 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
@@ -18,7 +15,6 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.KeyboardUtils
-import com.blankj.utilcode.util.SPUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -78,15 +74,15 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
                 .register(smartRefresh)
 
         smartRefresh.setOnLoadMoreListener { mPresenter?.loadMore() }
-        etSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    KeyboardUtils.hideSoftInput(etSearch)
-                    return true
-                }
-                return false
-            }
-        })
+//        etSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+//            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+//                if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                    KeyboardUtils.hideSoftInput(etSearch)
+//                    return true
+//                }
+//                return false
+//            }
+//        })
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 
@@ -120,9 +116,12 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
     override fun onEnterAnimationComplete() {
         super.onEnterAnimationComplete()
         GlobalScope.launch {
-            delay(400)
+            delay(500)
             runOnUiThread {
+                etSearch.isFocusable = true
+                etSearch.isFocusableInTouchMode = true
                 etSearch.requestFocus()
+                KeyboardUtils.showSoftInput(etSearch)
             }
         }
     }

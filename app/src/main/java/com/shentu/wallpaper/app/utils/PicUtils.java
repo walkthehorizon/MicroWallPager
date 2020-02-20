@@ -49,7 +49,8 @@ public class PicUtils {
     }
 
     public String getDownloadPicturePath(String pictureUrl) {
-        return PathUtils.getExternalDcimPath() + File.separator
+        return PathUtils.getExternalDcimPath()
+                + File.separator
                 + HkApplication.instance.getResources().getString(R.string.app_name)
                 + File.separator
                 + URLUtil.guessFileName(pictureUrl, null, null);

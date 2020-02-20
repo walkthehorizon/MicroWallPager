@@ -4,15 +4,11 @@ import android.animation.ArgbEvaluator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.media.Image
 import android.os.Bundle
-import android.os.Debug
 import android.util.SparseIntArray
 import android.view.*
 import android.widget.ImageView
-import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -21,50 +17,36 @@ import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.ScreenUtils
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.MultiTransformation
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.material.appbar.AppBarLayout
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
-import com.jess.arms.integration.AppManager
-import com.jess.arms.mvp.IView
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
-import com.jess.arms.utils.RxLifecycleUtils
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.shentu.wallpaper.R
-import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.event.LikeEvent
-import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.di.component.DaggerHotPagerComponent
 import com.shentu.wallpaper.di.module.TabHomeModule
 import com.shentu.wallpaper.model.entity.Banner
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.contract.TabHomeContract
 import com.shentu.wallpaper.mvp.presenter.TabHomePresenter
-import com.shentu.wallpaper.mvp.ui.activity.BannerListActivity
 import com.shentu.wallpaper.mvp.ui.activity.SearchActivity
 import com.shentu.wallpaper.mvp.ui.adapter.HomeBannerAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.RecommendAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.RandomRecommendDecoration
 import com.shentu.wallpaper.mvp.ui.browser.PictureBrowserActivity
 import com.shentu.wallpaper.mvp.ui.widget.CustomPopWindow
-import com.trello.rxlifecycle2.android.FragmentEvent
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
-import kotlinx.android.synthetic.main.item_rv_recommend.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -75,7 +57,7 @@ import kotlin.math.max
 
 
 class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
-        , OnRefreshListener, OnLoadMoreListener, ViewPager.OnPageChangeListener, PictureBrowserActivity.Callback {
+        , OnRefreshListener, OnLoadMoreListener, ViewPager.OnPageChangeListener {
 
     private var popWindow: CustomPopWindow? = null
     private var subType = -1//主题分类
@@ -116,7 +98,16 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                     , view.width / 2, view.height / 2
                     , 0, 0)
-            PictureBrowserActivity.open(position, this, compat, context = mContext)
+            PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
+                override fun getWallpaperList(): List<Wallpaper> {
+                    return recommendAdapter.data
+                }
+
+                override fun loadMore() {
+                    mPresenter?.getData(false)
+                }
+
+            }, compat, context = mContext)
         }
 
         recommendAdapter.addHeaderView(getRecommendHead(), 0, StaggeredGridLayoutManager.VERTICAL)
@@ -182,7 +173,7 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
                 2 * 383 / 900f).toInt()
         ivHead.layoutParams = lp
         ivHead.setOnClickListener {
-            startActivity(Intent(context, HomeNewActivity::class.java))
+            startActivity(Intent(context, PaperSummaryActivity::class.java))
         }
         GlideArms.with(this)
                 .load(R.drawable.ic_home_newest_entrance)
@@ -225,10 +216,6 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
             refreshLayout.finishRefresh(500)
         } else
             refreshLayout.finishLoadMore()
-    }
-
-    override fun getWallpaperList(): MutableList<Wallpaper> {
-        return recommendAdapter.data
     }
 
     override fun showMessage(message: String) {

@@ -26,7 +26,6 @@ import com.shentu.wallpaper.mvp.ui.browser.Behavior
 import com.shentu.wallpaper.mvp.ui.browser.SaveType
 import com.shentu.wallpaper.mvp.ui.widget.progress.ProgressPieIndicator
 import com.yanzhenjie.permission.AndPermission
-import com.yanzhenjie.permission.Permission
 import kotlinx.android.synthetic.main.fragment_picture.*
 import java.io.File
 
@@ -167,7 +166,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
             values.put(MediaStore.Images.Media.DISPLAY_NAME, URLUtil.guessFileName(destUrl
                     , null, null))
             values.put(MediaStore.Images.ImageColumns.IS_PENDING, true)
-            values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM + "/萌幻Cos")
+            values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM + File.separator + "萌幻Cos")
             val uri = context?.contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
             if (uri == null) {
                 ToastUtils.showShort("下载失败")
@@ -184,17 +183,18 @@ class PictureFragment : BaseFragment<IPresenter>() {
             values.put(MediaStore.Images.ImageColumns.IS_PENDING, false)
             uri.let { context?.contentResolver?.update(it, values, null, null) }
         } else {
-            AndPermission.with(context)
-                    .runtime()
-                    .permission(Permission.WRITE_EXTERNAL_STORAGE)
-                    .onGranted {
-                        FileUtils.copyFile(curFile, File(destPath))
-                        MediaStore.Images.Media.insertImage(context!!.contentResolver,
-                                destPath, URLUtil.guessFileName(destUrl, null, null), "")
-                    }
-                    .onDenied {
-                        ToastUtils.showShort("权限被拒,无法下载")
-                    }
+            val created = FileUtils.createOrExistsFile(destPath)
+            if (!created) {
+                ToastUtils.showShort("创建文件失败")
+                return
+            }
+            val copy = FileUtils.copyFile(curFile, File(destPath))
+            if (!copy) {
+                ToastUtils.showShort("生成文件失败")
+                return
+            }
+            MediaStore.Images.Media.insertImage(context!!.contentResolver,
+                    destPath, URLUtil.guessFileName(destUrl, null, null), "")
         }
         ToastUtils.showShort("图片已保存在 手机相册》萌幻Cos")
     }

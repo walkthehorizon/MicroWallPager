@@ -9,7 +9,7 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvNew"
+            android:id="@+id/rvRank"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -18,13 +18,6 @@
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-    <com.shentu.wallpaper.mvp.ui.widget.stickyHead.StickyHeadContainer
-        android:id="@+id/stickyHead"
-        android:layout_width="match_parent"
-        android:layout_height="30dp">
-
-        <include layout="@layout/item_home_newest_section" />
-    </com.shentu.wallpaper.mvp.ui.widget.stickyHead.StickyHeadContainer>
-
 </RelativeLayout>
+
 

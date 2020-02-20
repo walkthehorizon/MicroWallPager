@@ -31,10 +31,7 @@ import kotlinx.android.synthetic.main.fragment_category_list.*
 
 
 class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDetailContract.View
-        , OnRefreshListener, OnLoadMoreListener, PictureBrowserActivity.Callback {
-    override fun getWallpaperList(): List<Wallpaper> {
-        return (rvCategoryList.adapter as CategoryListAdapter).data
-    }
+        , OnRefreshListener, OnLoadMoreListener {
 
     private var categoryId: Int = 0
     private lateinit var loadService: LoadService<Any>
@@ -90,7 +87,17 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDeta
                         val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                                 , view.width / 2, view.height / 2
                                 , 0, 0)
-                        PictureBrowserActivity.open(position, compat = compat, callback = this
+                        PictureBrowserActivity.open(position, compat = compat, callback =
+                        object : PictureBrowserActivity.Callback {
+                            override fun getWallpaperList(): List<Wallpaper> {
+                                return (rvCategoryList.adapter as CategoryListAdapter).data
+                            }
+
+                            override fun loadMore() {
+                                mPresenter?.getCategoryList(categoryId, false)
+                            }
+
+                        }
                                 , context = mContext, categoryId = categoryId)
                     }
         } else {

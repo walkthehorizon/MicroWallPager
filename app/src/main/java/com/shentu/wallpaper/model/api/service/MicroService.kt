@@ -1,7 +1,6 @@
 package com.shentu.wallpaper.model.api.service
 
 import com.shentu.wallpaper.model.entity.AppUpdate
-import com.shentu.wallpaper.model.entity.Comment
 import com.shentu.wallpaper.model.entity.MicroUser
 import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.model.response.*
@@ -43,9 +42,16 @@ interface MicroService {
     /**
      * 获取最新papers
      */
-    @GET("wallpaper/newest")
+    @GET("paper/newest")
     fun getNewestPapers(@Query("limit") limit: Int,
                         @Query("offset") offset: Int): Observable<WallpaperPageResponse>
+
+    /**
+     * 获取排行
+     * */
+    @GET("paper/ranks")
+    fun getRankPapers(@Query("limit") limit: Int,
+                      @Query("offset") offset: Int): Observable<WallpaperPageResponse>
 
     @GET("categories")
     fun getCategories(@Query("offset") offset: Int,

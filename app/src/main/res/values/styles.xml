@@ -90,4 +90,8 @@
             <enum name="center" value="1" />
         </attr>
     </declare-styleable>
+
+    <style name="TabTextSize16" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>

@@ -3,6 +3,7 @@ package com.shentu.wallpaper.mvp.ui.login
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
@@ -31,7 +32,6 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.login_verify.*
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 @Route(path = "/activity/login/account")
@@ -129,12 +129,22 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
                     override fun onClick(widget: View) {
                         BrowserActivity.open(this@LoginActivity, Constant.WEB_SERVER)
                     }
+
+                    override fun updateDrawState(ds: TextPaint) {
+                        super.updateDrawState(ds)
+                        ds.isUnderlineText = false
+                    }
                 })
                 .append("和")
                 .append("《隐私政策》")
                 .setClickSpan(object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         BrowserActivity.open(this@LoginActivity, Constant.WEB_PRIVACY)
+                    }
+
+                    override fun updateDrawState(ds: TextPaint) {
+                        super.updateDrawState(ds)
+                        ds.isUnderlineText = false
                     }
                 })
                 .create()

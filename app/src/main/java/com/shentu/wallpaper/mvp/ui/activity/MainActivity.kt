@@ -82,6 +82,11 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
 //        BrowserActivity.open(this,"https://mp.weixin.qq.com/s/9a5ZC1jFeYvs0_awAyYvEQ")
     }
 
+    override fun onResume() {
+        super.onResume()
+        switchStatusBar()
+    }
+
     override fun showMessage(message: String) {
         checkNotNull(message)
         ToastUtils.showShort(message)
@@ -123,17 +128,15 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
         when (item.itemId) {
             R.id.navigation_hot -> {
                 viewPager.setCurrentItem(0, false);lastPos = 0
-                BarUtils.setStatusBarLightMode(this
-                        , (fragments[0] as TabHomeFragment).getIsLightMode())
             }
             R.id.navigation_category -> {
                 viewPager.setCurrentItem(1, false);lastPos = 1
-                BarUtils.setStatusBarLightMode(this, true)
             }
             R.id.navigation_my -> {
                 viewPager.setCurrentItem(2, false);lastPos = 2
             }
         }
+        switchStatusBar()
         return true
     }
 
@@ -156,6 +159,20 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
             } else {
                 ToastUtils.showShort("再点一次返回")
                 lastTime = System.currentTimeMillis()
+            }
+        }
+    }
+
+    fun switchStatusBar() {
+        when (viewPager.currentItem) {
+            0 -> {
+                BarUtils.setStatusBarLightMode(this, (fragments[0] as TabHomeFragment).getIsLightMode())
+            }
+            1 -> {
+                BarUtils.setStatusBarLightMode(this, true)
+            }
+            else -> {
+                BarUtils.setStatusBarLightMode(this, false)
             }
         }
     }

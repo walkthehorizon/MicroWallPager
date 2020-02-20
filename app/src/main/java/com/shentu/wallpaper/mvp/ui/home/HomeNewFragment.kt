@@ -1,11 +1,14 @@
 package com.shentu.wallpaper.mvp.ui.home
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.TimeUtils
-import com.jess.arms.base.BaseActivity
+import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.IPresenter
 import com.jess.arms.mvp.IView
@@ -27,24 +30,25 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HomeNewActivity : BaseActivity<IPresenter>(), IView, PictureBrowserActivity.Callback {
+class HomeNewFragment : BaseFragment<IPresenter>(), IView {
 
     private lateinit var adapter: HomeNewestAdapter
     private lateinit var appComponent: AppComponent
     private lateinit var loadService: LoadService<Any>
 
-    override fun setupActivityComponent(appComponent: AppComponent) {
+
+    override fun setupFragmentComponent(appComponent: AppComponent) {
         this.appComponent = appComponent
     }
 
-    override fun initView(savedInstanceState: Bundle?): Int {
-        return R.layout.activity_home_new
+    override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.activity_home_new, container, false)
     }
 
     override fun initData(savedInstanceState: Bundle?) {
         loadService = LoadSir.getDefault().register(smartRefresh) {
-            showContent()
-            smartRefresh.autoRefresh()
+            showLoading()
+            getNewest(true)
         }
 
         smartRefresh.setOnRefreshListener {
@@ -59,21 +63,28 @@ class HomeNewActivity : BaseActivity<IPresenter>(), IView, PictureBrowserActivit
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                     , view.width / 2, view.height / 2
                     , 0, 0)
-            PictureBrowserActivity.open(position, this, compat, context = this)
+            context?.let {
+                PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
+                    override fun getWallpaperList(): List<Wallpaper> {
+                        return papers
+                    }
+
+                    override fun loadMore() {
+                        getNewest(false)
+                    }
+
+                }, compat, context = it)
+            }
         }
 
         stickyHead.setDataCallback { pos ->
             stickyHead.findViewById<TextView>(R.id.tvTime).text = adapter.data[pos].header
         }
-        rvNew.layoutManager = LinearLayoutManager(this)
+        rvNew.layoutManager = LinearLayoutManager(context)
         rvNew.addItemDecoration(StickyItemDecoration(stickyHead, adapter.getHeadType()))
         rvNew.adapter = adapter
 
         getNewest(true)
-    }
-
-    override fun getWallpaperList(): List<Wallpaper> {
-        return papers
     }
 
     override fun showEmpty() {
@@ -131,9 +142,9 @@ class HomeNewActivity : BaseActivity<IPresenter>(), IView, PictureBrowserActivit
                         } else {
                             papers.addAll(t.data.content)
                         }
-                        if(clear){
+                        if (clear) {
                             adapter.setNewData(newestList)
-                        }else{
+                        } else {
                             adapter.addData(newestList)
                         }
                     }
@@ -142,5 +153,11 @@ class HomeNewActivity : BaseActivity<IPresenter>(), IView, PictureBrowserActivit
 
     private fun isToday(date: String): Boolean {
         return TimeUtils.isToday(TimeUtils.string2Millis(date, SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)))
+    }
+
+    companion object {
+        fun newInstance(): HomeNewFragment {
+            return HomeNewFragment()
+        }
     }
 }

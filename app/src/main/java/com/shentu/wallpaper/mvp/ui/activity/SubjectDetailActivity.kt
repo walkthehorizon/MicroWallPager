@@ -31,8 +31,7 @@ import com.shentu.wallpaper.mvp.ui.browser.PictureBrowserActivity
 import kotlinx.android.synthetic.main.activity_subject_detail.*
 
 @Route(path = "/activity/subject/detail")
-class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDetailContract.View
-        , PictureBrowserActivity.Callback {
+class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDetailContract.View {
 
     @Autowired
     @JvmField
@@ -98,15 +97,20 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                     , view.width / 2, view.height / 2
                     , 0, 0)
-            PictureBrowserActivity.open(position, this, compat = compat, context = this)
+            PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
+                override fun getWallpaperList(): List<Wallpaper> {
+                    return adapter.data
+                }
+
+                override fun loadMore() {
+
+                }
+
+            }, compat = compat, context = this)
         }
         rvSubject.layoutManager = GridLayoutManager(this, 2)
         rvSubject.setHasFixedSize(true)
         rvSubject.adapter = adapter
-    }
-
-    override fun getWallpaperList(): List<Wallpaper> {
-        return adapter.data
     }
 
     override fun showLoading() {

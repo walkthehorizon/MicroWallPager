@@ -49,6 +49,8 @@ import com.shentu.wallpaper.mvp.ui.activity.SubjectDetailActivity
 import com.shentu.wallpaper.mvp.ui.adapter.PictureBrowserVpAdapter
 import com.shentu.wallpaper.mvp.ui.fragment.PictureFragment
 import com.shentu.wallpaper.mvp.ui.login.LoginActivity
+import com.yanzhenjie.permission.AndPermission
+import com.yanzhenjie.permission.Permission
 import kotlinx.android.synthetic.main.fragment_picture_browser.*
 import org.greenrobot.eventbus.EventBus
 
@@ -146,7 +148,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item?.itemId) {
                     R.id.itSetPaper -> vpAdapter.getFragment(viewPager.currentItem).loadPicture(Behavior.SET_WALLPAPER)
-                    R.id.itSubject -> SubjectDetailActivity.open(curPaper.subject, this)
+                    R.id.itSubject -> SubjectDetailActivity.open(curPaper.subjectId, this)
                     R.id.itSetCover -> MaterialDialog(this).show {
                         title(text = "分类")
                         message(text = "确定设为当前分类封面？")
@@ -175,7 +177,15 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     }
 
     override fun savePicture(currentItem: Int, type: SaveType) {
-        vpAdapter.getFragment(currentItem).downLoadPicture(type)
+        AndPermission.with(this)
+                .runtime()
+                .permission(Permission.WRITE_EXTERNAL_STORAGE)
+                .onGranted {
+                    vpAdapter.getFragment(currentItem).downLoadPicture(type)
+                }
+                .onDenied {
+                    ToastUtils.showShort("未获取权限,请授予存储权限后再试")
+                }.start()
     }
 
     private fun showDownloadDialog(paper: Wallpaper) {
@@ -256,6 +266,9 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
         tvComment.text = curPaper.commentNum.toString()
         tvComment.setOnClickListener {
+            if (HkUserManager.instance.needLogin(this)) {
+                return@setOnClickListener
+            }
             showCommentDialog()
         }
     }
@@ -412,5 +425,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
     interface Callback {
         fun getWallpaperList(): List<Wallpaper>
+
+        fun loadMore()
     }
 }

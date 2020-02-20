@@ -6,6 +6,7 @@ buildscript {
         maven {
             url "http://mvn.mob.com/android"
         }
+
 //        maven {
 //            url 'https://maven.fabric.io/public'
 //        }
@@ -42,10 +43,10 @@ allprojects {
             url "https://dl.bintray.com/tencentqcloudterminal/maven"
         }
         jcenter()
-        google()
         maven {
             url "http://maven.aliyun.com/nexus/content/repositories/releases"
         }
+        google()
     }
 }
 
