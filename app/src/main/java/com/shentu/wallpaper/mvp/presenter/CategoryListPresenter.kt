@@ -5,7 +5,6 @@ import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.wallpaper.app.utils.RxUtils
-import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.CategoryDetailContract
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
@@ -33,7 +32,7 @@ constructor(model: CategoryDetailContract.Model, rootView: CategoryDetailContrac
                         if (!t.isSuccess) {
                             return
                         }
-                        mRootView.showCategoryList(t.data?.content as MutableList<Wallpaper>)
+                        t.data?.content?.let { mRootView.showCategoryList(it) }
                     }
                 })
     }

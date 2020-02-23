@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager.widget.ViewPager
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
@@ -20,6 +22,7 @@ import com.shentu.wallpaper.model.entity.Wallpaper
 import com.shentu.wallpaper.mvp.contract.HomeRankContract
 import com.shentu.wallpaper.mvp.presenter.HomeRankPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.HomeRankAdapter
+import com.shentu.wallpaper.mvp.ui.browser.PictureBrowserActivity
 import kotlinx.android.synthetic.main.activity_home_new.smartRefresh
 import kotlinx.android.synthetic.main.fragment_home_rank.*
 
@@ -28,6 +31,7 @@ class HomeRankFragment : BaseFragment<HomeRankPresenter>(), HomeRankContract.Vie
 
     private lateinit var loadService: LoadService<Any>
     private lateinit var adapter: HomeRankAdapter
+    private var bViewPager: ViewPager? = null
 
 
     override fun setupFragmentComponent(appComponent: AppComponent) {
@@ -83,6 +87,24 @@ class HomeRankFragment : BaseFragment<HomeRankPresenter>(), HomeRankContract.Vie
         if (clear) {
             if (!this::adapter.isInitialized) {
                 adapter = HomeRankAdapter(papers)
+                adapter.setOnItemClickListener { _, view, position ->
+                    val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
+                            , view.width / 2, view.height / 2
+                            , 0, 0)
+                    context?.let {
+                        PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
+                            override fun getWallpaperList(): MutableList<Wallpaper> {
+                                return papers
+                            }
+
+                            override fun loadMore(viewPager: ViewPager) {
+                                bViewPager = viewPager
+                                mPresenter?.getRankPapers(false)
+                            }
+
+                        }, compat, context = it)
+                    }
+                }
                 rvRank.layoutManager = LinearLayoutManager(context)
                 rvRank.setHasFixedSize(true)
                 rvRank.adapter = adapter
@@ -90,6 +112,9 @@ class HomeRankFragment : BaseFragment<HomeRankPresenter>(), HomeRankContract.Vie
             adapter.setNewData(papers)
         } else {
             adapter.addData(papers)
+        }
+        if (papers.size > 0) {
+            bViewPager?.adapter?.notifyDataSetChanged()
         }
     }
 

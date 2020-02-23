@@ -12,7 +12,7 @@ import com.shentu.wallpaper.model.response.WallpaperPageResponse
 import com.shentu.wallpaper.mvp.contract.SubjectDetailContract
 import io.reactivex.Observable
 import io.rx_cache2.DynamicKey
-import io.rx_cache2.EvictDynamicKey
+import io.rx_cache2.DynamicKeyGroup
 import javax.inject.Inject
 
 
@@ -21,12 +21,13 @@ class SubjectDetailModel
 @Inject
 constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryManager), SubjectDetailContract.Model {
 
-    override fun getSubjectWallpapers(subjectId: Int): Observable<WallpaperPageResponse> {
+    override fun getSubjectWallpapers(subjectId: Int, clear: Boolean): Observable<WallpaperPageResponse> {
+        val offset = getOffset(clear)
         return Observable.just(mRepositoryManager.obtainRetrofitService(MicroService::class.java)
-                .getSubjectWallpapers(subjectId, 100, 0))
+                .getSubjectWallpapers(subjectId, MicroService.PAGE_LIMIT, offset))
                 .flatMap {
                     mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getSubjectWallpapers(it, DynamicKey(subjectId))
+                            .getSubjectWallpapers(it, DynamicKeyGroup(subjectId, offset))
                 }
     }
 

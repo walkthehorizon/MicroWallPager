@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.TimeUtils
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
@@ -35,7 +36,7 @@ class HomeNewFragment : BaseFragment<IPresenter>(), IView {
     private lateinit var adapter: HomeNewestAdapter
     private lateinit var appComponent: AppComponent
     private lateinit var loadService: LoadService<Any>
-
+    private var bViewPager: ViewPager? = null
 
     override fun setupFragmentComponent(appComponent: AppComponent) {
         this.appComponent = appComponent
@@ -65,11 +66,12 @@ class HomeNewFragment : BaseFragment<IPresenter>(), IView {
                     , 0, 0)
             context?.let {
                 PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
-                    override fun getWallpaperList(): List<Wallpaper> {
+                    override fun getWallpaperList(): MutableList<Wallpaper> {
                         return papers
                     }
 
-                    override fun loadMore() {
+                    override fun loadMore(viewPager: ViewPager) {
+                        bViewPager = viewPager
                         getNewest(false)
                     }
 
@@ -146,6 +148,9 @@ class HomeNewFragment : BaseFragment<IPresenter>(), IView {
                             adapter.setNewData(newestList)
                         } else {
                             adapter.addData(newestList)
+                        }
+                        if (papers.size > 0) {
+                            bViewPager?.adapter?.notifyDataSetChanged()
                         }
                     }
                 })

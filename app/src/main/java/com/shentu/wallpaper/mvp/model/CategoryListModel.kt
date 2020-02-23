@@ -25,7 +25,7 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
     lateinit var mApplication: Application
 
     init {
-        limit = 60
+        limit = 30
     }
 
     override fun getCategoryWallpapers(id: Int, clear: Boolean): Observable<WallpaperPageResponse> {

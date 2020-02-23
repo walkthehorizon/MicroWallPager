@@ -73,7 +73,7 @@ public interface MicroCache {
     @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
     Observable<WallpaperPageResponse>
     getSubjectWallpapers(Observable<WallpaperPageResponse> observable,
-                         DynamicKey subjectId);
+                         DynamicKeyGroup keyGroup);
 
     @ProviderKey("subject-detail-one-day")
     @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)

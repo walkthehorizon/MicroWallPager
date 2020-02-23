@@ -69,8 +69,11 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
         if (!TextUtils.isEmpty(token)) {
             builder.addHeader("Authorization", "Token " + token);
         }
+        int uid = HkUserManager.Companion.getInstance().getUid();
+        if (uid != -1) {
+            builder.addHeader("uid", Integer.toString(uid));
+        }
         return builder
-                .addHeader("uid", HkUserManager.Companion.getInstance().getUid() + "")
                 .addHeader("Content-Type", "application/json")
                 .addHeader("deviceId", HkUtils.Companion.getInstance().getDeviceId())
                 .addHeader("systemType", "Android")

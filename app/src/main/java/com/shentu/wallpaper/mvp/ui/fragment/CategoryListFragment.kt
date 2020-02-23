@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.viewpager.widget.ViewPager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
@@ -35,6 +36,8 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDeta
 
     private var categoryId: Int = 0
     private lateinit var loadService: LoadService<Any>
+    private var bViewPager: ViewPager? = null
+    private lateinit var adapter: CategoryListAdapter
 
     companion object {
         const val CATEGORY_ID: String = "category_id"
@@ -70,6 +73,26 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDeta
 
     override fun initData(savedInstanceState: Bundle?) {
         categoryId = arguments?.getInt(CATEGORY_ID)!!
+        adapter = CategoryListAdapter()
+        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, view, position ->
+            val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
+                    , view.width / 2, view.height / 2
+                    , 0, 0)
+            PictureBrowserActivity.open(position, compat = compat, callback =
+            object : PictureBrowserActivity.Callback {
+                override fun getWallpaperList(): MutableList<Wallpaper> {
+                    return (rvCategoryList.adapter as CategoryListAdapter).data
+                }
+
+                override fun loadMore(viewPager: ViewPager) {
+                    bViewPager = viewPager
+                    mPresenter?.getCategoryList(categoryId, false)
+                }
+
+            }
+                    , context = mContext, categoryId = categoryId)
+        }
+        rvCategoryList.adapter = adapter
         rvCategoryList.layoutManager = GridLayoutManager(context
                 , 3)
         rvCategoryList.addItemDecoration(RvCategoryListDecoration(2))
@@ -81,27 +104,12 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDeta
 
     override fun showCategoryList(wallpapers: MutableList<Wallpaper>) {
         if (rvCategoryList.adapter == null) {
-            rvCategoryList.adapter = CategoryListAdapter(wallpapers)
-            (rvCategoryList.adapter as CategoryListAdapter).onItemClickListener = BaseQuickAdapter
-                    .OnItemClickListener { _, view, position ->
-                        val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
-                                , view.width / 2, view.height / 2
-                                , 0, 0)
-                        PictureBrowserActivity.open(position, compat = compat, callback =
-                        object : PictureBrowserActivity.Callback {
-                            override fun getWallpaperList(): List<Wallpaper> {
-                                return (rvCategoryList.adapter as CategoryListAdapter).data
-                            }
-
-                            override fun loadMore() {
-                                mPresenter?.getCategoryList(categoryId, false)
-                            }
-
-                        }
-                                , context = mContext, categoryId = categoryId)
-                    }
+            adapter.setNewData(wallpapers)
         } else {
-            (rvCategoryList.adapter as CategoryListAdapter).addData(wallpapers)
+            adapter.addData(wallpapers)
+        }
+        if (wallpapers.isNotEmpty()) {
+            bViewPager?.adapter?.notifyDataSetChanged()
         }
     }
 

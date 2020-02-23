@@ -9,7 +9,7 @@ import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.model.entity.Wallpaper
 
-class CategoryListAdapter(data: List<Wallpaper>) : BaseQuickAdapter<Wallpaper
+class CategoryListAdapter(data: MutableList<Wallpaper> = mutableListOf()) : BaseQuickAdapter<Wallpaper
         , BaseViewHolder>(R.layout.item_rv_category_list, data) {
     override fun convert(helper: BaseViewHolder, item: Wallpaper) {
         GlideArms.with(mContext)

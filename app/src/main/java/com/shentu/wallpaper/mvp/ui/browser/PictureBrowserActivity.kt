@@ -101,7 +101,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         ARouter.getInstance().inject(this)
         when {
             callback != null -> {
-                wallpapers.addAll(callback!!.getWallpaperList())
+                wallpapers = callback!!.getWallpaperList()
                 initView()
             }
             subjectId != -1 -> mPresenter?.getPictures(subjectId)
@@ -329,6 +329,9 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                 , if (curPaper.collected) R.drawable.ic_favorite_black_24dp else
             R.drawable.ic_favorite_border_black_24dp, 0, 0)
         tvLike.isClickable = !curPaper.collected
+        if (position == wallpapers.size - 5) {
+            callback?.loadMore(viewPager)
+        }
     }
 
     override fun showDonateDialog() {
@@ -424,8 +427,14 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
 
     interface Callback {
-        fun getWallpaperList(): List<Wallpaper>
+        fun getWallpaperList(): MutableList<Wallpaper>
 
-        fun loadMore()
+        fun loadMore() {
+
+        }
+
+        fun loadMore(viewPager: ViewPager) {
+
+        }
     }
 }

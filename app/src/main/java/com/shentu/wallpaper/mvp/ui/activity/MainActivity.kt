@@ -5,20 +5,28 @@ import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
-import com.blankj.utilcode.util.BarUtils
-import com.blankj.utilcode.util.SPUtils
-import com.blankj.utilcode.util.TimeUtils
-import com.blankj.utilcode.util.ToastUtils
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
+import com.blankj.utilcode.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.horizon.netbus.NetBus
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
+import com.jess.arms.integration.AppManager
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
+import com.mob.MobSDK
+import com.mob.OperationCallback
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.HkUserManager
@@ -35,6 +43,7 @@ import com.shentu.wallpaper.mvp.ui.fragment.TabCategoryFragment
 import com.shentu.wallpaper.mvp.ui.fragment.TabMyFragment
 import com.shentu.wallpaper.mvp.ui.home.TabHomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dialog_agreement.view.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -80,6 +89,9 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
         sign()
 //        BrowserActivity.open(this,"https://webinterdev.innodealing.com/international-auth-service/login/mobile")
 //        BrowserActivity.open(this,"https://mp.weixin.qq.com/s/9a5ZC1jFeYvs0_awAyYvEQ")
+        if (SPUtils.getInstance().getBoolean("APP_SHOW_POLICY", true)) {
+            showPolicyDialog()
+        }
     }
 
     override fun onResume() {
@@ -99,6 +111,58 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
 
     override fun killMyself() {
         finish()
+    }
+
+    private fun showPolicyDialog() {
+        val dialog = MaterialDialog(this).show {
+            customView(R.layout.dialog_agreement)
+            cancelable(false)
+        }
+        dialog.window!!.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.bg_dialog_change_tip))
+        val tvContent: TextView = dialog.getCustomView().tvContent
+        tvContent.movementMethod = LinkMovementMethod.getInstance()
+        tvContent.text = SpanUtils()
+                .append("感谢您下载${resources.getString(R.string.app_name)}！我们非常重视您的个人信息和隐私保护。为了更好地保障您的个人利益，在使用我们的产品前，请您务必审慎阅读、充分理解")
+                .append("《服务协议》")
+                .setClickSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        BrowserActivity.open(this@MainActivity, Constant.WEB_SERVER)
+                    }
+
+                    override fun updateDrawState(ds: TextPaint) {
+                        ds.isUnderlineText = false
+                        ds.color = ContextCompat.getColor(this@MainActivity, R.color.colorAccent)
+                    }
+                })
+                .append("《隐私政策》")
+                .setClickSpan(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        BrowserActivity.open(this@MainActivity, Constant.WEB_PRIVACY)
+                    }
+
+                    override fun updateDrawState(ds: TextPaint) {
+                        ds.isUnderlineText = false
+                        ds.color = ContextCompat.getColor(this@MainActivity, R.color.colorAccent)
+                    }
+                })
+                .append("各条款，我们会按照上述政策收集、使用和共享您的个人信息。如您同意，请点击“同意”开始接受我们的服务。")
+                .create()
+        dialog.getCustomView().tvConfirm.setOnClickListener {
+            MobSDK.submitPolicyGrantResult(true, object : OperationCallback<Void>() {
+                override fun onFailure(p0: Throwable?) {
+                    Timber.e(p0?.cause)
+                }
+
+                override fun onComplete(p0: Void) {
+                    Timber.e("mob 授权成功")
+                }
+            })
+            SPUtils.getInstance().put("APP_SHOW_POLICY", false)
+            dialog.dismiss()
+        }
+        dialog.getCustomView().tvCancel.setOnClickListener {
+            AppManager.getAppManager().appExit()
+        }
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {

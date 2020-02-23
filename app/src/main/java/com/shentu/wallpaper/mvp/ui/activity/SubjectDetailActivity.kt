@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View.VISIBLE
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.viewpager.widget.ViewPager
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
@@ -45,6 +46,7 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
 
     private lateinit var adapter: SubjectDetailAdapter
     private lateinit var loadService: LoadService<Any>
+    private var bViewPager: ViewPager? = null
 
     override fun setupActivityComponent(appComponent: AppComponent) {
         DaggerSubjectDetailComponent //如找不到该类,请编译一下项目
@@ -65,16 +67,43 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
         ARouter.getInstance().inject(this)
         loadService = LoadSir.getDefault().register(this) {
             showLoading()
-            loadData()
+            loadData(false)
         }
+        if (type == 1) {
+            smartRefresh.setEnableRefresh(true)
+            smartRefresh.setEnableLoadMore(true)
+            smartRefresh.setOnRefreshListener {
+                loadData(false)
+            }
+        }
+        adapter = SubjectDetailAdapter(emptyList())
+        adapter.setOnItemClickListener { _, view, position ->
+            val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
+                    , view.width / 2, view.height / 2
+                    , 0, 0)
+            PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
+                override fun getWallpaperList(): MutableList<Wallpaper> {
+                    return adapter.data
+                }
 
-        loadData()
+                override fun loadMore(viewPager: ViewPager) {
+                    bViewPager = viewPager
+                    loadData(false)
+                }
+
+            }, compat = compat, context = this)
+        }
+        rvSubject.layoutManager = GridLayoutManager(this, 2)
+        rvSubject.setHasFixedSize(true)
+        rvSubject.adapter = adapter
+
+        loadData(true)
     }
 
-    private fun loadData() {
+    private fun loadData(clear: Boolean) {
         if (type == 1) {
             mPresenter?.getSubjectDetail(subjectId)
-            mPresenter?.getSubjectWallpapers(subjectId)
+            mPresenter?.getSubjectWallpapers(subjectId, clear)
         } else {
             toolbar.setTitle(banner?.title)
             mPresenter?.getBannerWallpapers(banner!!.id)
@@ -91,26 +120,15 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
         tvDesc.loadData(subject.description, "text/html", "utf-8")
     }
 
-    override fun showWallpapers(wallpapers: List<Wallpaper>) {
-        adapter = SubjectDetailAdapter(wallpapers)
-        adapter.setOnItemClickListener { _, view, position ->
-            val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
-                    , view.width / 2, view.height / 2
-                    , 0, 0)
-            PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
-                override fun getWallpaperList(): List<Wallpaper> {
-                    return adapter.data
-                }
-
-                override fun loadMore() {
-
-                }
-
-            }, compat = compat, context = this)
+    override fun showWallpapers(wallpapers: List<Wallpaper>, clear: Boolean) {
+        if (clear) {
+            adapter.setNewData(wallpapers)
+        } else {
+            adapter.addData(wallpapers)
         }
-        rvSubject.layoutManager = GridLayoutManager(this, 2)
-        rvSubject.setHasFixedSize(true)
-        rvSubject.adapter = adapter
+        if (wallpapers.isNotEmpty()) {
+            bViewPager?.adapter?.notifyDataSetChanged()
+        }
     }
 
     override fun showLoading() {

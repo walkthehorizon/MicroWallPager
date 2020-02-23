@@ -9,6 +9,7 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.viewpager.widget.ViewPager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -39,6 +40,7 @@ import kotlinx.android.synthetic.main.activity_my_collect.*
 class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.View {
 
     private lateinit var loadingDialog: MaterialDialog
+    private var bViewPager: ViewPager? = null
 
     override fun showDelDialog() {
         MaterialDialog(this).show {
@@ -112,11 +114,12 @@ class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.
             ViewCompat.setTransitionName(view, resources.getString(R.string.picture_transitionName))
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
             PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
-                override fun getWallpaperList(): List<Wallpaper> {
+                override fun getWallpaperList(): MutableList<Wallpaper> {
                     return adapter.data
                 }
 
-                override fun loadMore() {
+                override fun loadMore(viewPager: ViewPager) {
+                    bViewPager = viewPager
                     mPresenter?.getMyCollects(true)
                 }
 
@@ -148,6 +151,9 @@ class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.
             adapter.setNewData(wallpapers)
         } else {
             adapter.addData(wallpapers)
+        }
+        if (wallpapers.isNotEmpty()) {
+            bViewPager?.adapter?.notifyDataSetChanged()
         }
     }
 

@@ -27,15 +27,15 @@ constructor(model: SubjectDetailContract.Model, rootView: SubjectDetailContract.
     @Inject
     lateinit var mAppManager: AppManager
 
-    fun getSubjectWallpapers(id: Int) {
-        mModel.getSubjectWallpapers(id)
-                .compose(RxUtils.applySchedulers(mRootView))
+    fun getSubjectWallpapers(id: Int, clear: Boolean) {
+        mModel.getSubjectWallpapers(id, clear)
+                .compose(RxUtils.applySchedulers(mRootView, clear))
                 .subscribe(object : ErrorHandleSubscriber<WallpaperPageResponse>(mErrorHandler) {
                     override fun onNext(t: WallpaperPageResponse) {
                         if (!t.isSuccess) {
                             return
                         }
-                        t.data?.content?.let { mRootView.showWallpapers(it) }
+                        t.data?.content?.let { mRootView.showWallpapers(it, clear) }
                     }
                 })
     }
@@ -61,7 +61,7 @@ constructor(model: SubjectDetailContract.Model, rootView: SubjectDetailContract.
                         if (!t.isSuccess) {
                             return
                         }
-                        t.data?.content?.let { mRootView.showWallpapers(it) }
+                        t.data?.content?.let { mRootView.showWallpapers(it, true) }
                     }
                 })
     }

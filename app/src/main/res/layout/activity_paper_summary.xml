@@ -5,18 +5,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabPaper"
+    <com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        tab:tabIndicatorFullWidth="true"
-        tab:tabIndicatorColor="@color/white"
-        android:background="@color/colorAccent"
-        tab:tabMode="fixed"
-        tab:tabGravity="center"
-        tab:tabTextAppearance="@style/TabTextSize16"
-        tab:tabSelectedTextColor="@color/white"
-        tab:tabTextColor="@color/grey_81" />
+        android:id="@+id/toolbar"
+        tab:tl_left_icon="@drawable/ic_arrow_back_white_24dp"
+        android:layout_height="40dp">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabPaper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent"
+            tab:tabGravity="center"
+            tab:tabIndicatorColor="@color/white"
+            tab:tabIndicatorFullWidth="true"
+            tab:tabMode="fixed"
+            tab:tabSelectedTextColor="@color/white"
+            tab:tabTextAppearance="@style/TabTextSize16"
+            tab:tabTextColor="@color/grey_81" />
+
+    </com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/summaryVp"

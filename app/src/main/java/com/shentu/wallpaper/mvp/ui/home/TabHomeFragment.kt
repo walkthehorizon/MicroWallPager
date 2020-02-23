@@ -68,7 +68,9 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
     private lateinit var appComponent: AppComponent
     private var isLightMode = false
     private var banners: MutableList<Banner> = arrayListOf()
+    private var wallpapers: MutableList<Wallpaper> = mutableListOf()
     private var countdown: Boolean = true
+    private var bViewPager: ViewPager? = null
 //    private var historyBanner = Banner()
 
     override fun setupFragmentComponent(appComponent: AppComponent) {
@@ -99,12 +101,13 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
                     , view.width / 2, view.height / 2
                     , 0, 0)
             PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
-                override fun getWallpaperList(): List<Wallpaper> {
-                    return recommendAdapter.data
+                override fun getWallpaperList(): MutableList<Wallpaper> {
+                    return wallpapers
                 }
 
-                override fun loadMore() {
+                override fun loadMore(viewPager: ViewPager) {
                     mPresenter?.getData(false)
+                    bViewPager = viewPager
                 }
 
             }, compat, context = mContext)
@@ -214,8 +217,9 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
     override fun hideRefresh(clear: Boolean) {
         if (clear) {
             refreshLayout.finishRefresh(500)
-        } else
+        } else {
             refreshLayout.finishLoadMore()
+        }
     }
 
     override fun showMessage(message: String) {
@@ -266,11 +270,14 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
 
     override fun showRecommends(wallpapers: MutableList<Wallpaper>, clear: Boolean) {
         if (clear) {
-//            wallpapers.add(Wallpaper(""))
+            this.wallpapers = wallpapers
             recommendAdapter.setNewData(wallpapers)
         } else {
             isLoading = false
             recommendAdapter.addData(wallpapers)
+        }
+        if (wallpapers.size > 0) {
+            bViewPager?.adapter?.notifyDataSetChanged()
         }
     }
 
