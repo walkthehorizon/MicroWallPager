@@ -58,6 +58,9 @@ class ResponseErrorListenerImpl : ResponseErrorListener {
             httpException.code() == 307 -> {
                 "请求被重定向到其他页面"
             }
+            httpException.code() == 504 -> {
+                "请检查网络 504"
+            }
             else -> {
                 httpException.message()
             }

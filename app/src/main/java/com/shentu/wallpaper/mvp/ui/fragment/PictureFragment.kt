@@ -61,7 +61,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
 
     override fun initData(savedInstanceState: Bundle?) {
         pos = arguments?.get("pos") as Int
-        wallpaper = arguments!!["wallpaper"] as Wallpaper
+        wallpaper = requireArguments()["wallpaper"] as Wallpaper
         photoView.setImageViewFactory(GlideImageViewFactory())
         photoView.setOnClickListener {
             callback?.switchNavigation()
@@ -159,7 +159,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
      * 兼容Android10的沙盒下载
      * */
     fun savePicture(destUrl: String, curFile: File?) {
-        val destPath = PicUtils.getInstance().getDownloadPicturePath(destUrl)
+        val destPath = PicUtils.getInstance().getDownloadPicturePath(mContext,destUrl)
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
             val values = ContentValues()
             values.put(MediaStore.Images.Media.MIME_TYPE, "image/*")
@@ -193,7 +193,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
                 ToastUtils.showShort("生成文件失败")
                 return
             }
-            MediaStore.Images.Media.insertImage(context!!.contentResolver,
+            MediaStore.Images.Media.insertImage(context?.contentResolver,
                     destPath, URLUtil.guessFileName(destUrl, null, null), "")
         }
         ToastUtils.showShort("图片已保存在 手机相册》萌幻Cos")

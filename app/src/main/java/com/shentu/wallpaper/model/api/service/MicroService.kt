@@ -35,6 +35,7 @@ interface MicroService {
     /**
      * 获取推荐的WallPaper
      */
+    @Headers("Cache-Control: max-age=0")
     @GET("recommend")
     fun getRecommendWallpapers(@Query("limit") limit: Int,
                                @Query("offset") offset: Int): Observable<WallpaperPageResponse>
@@ -56,18 +57,6 @@ interface MicroService {
     @GET("categories")
     fun getCategories(@Query("offset") offset: Int,
                       @Query("limit") limit: Int): Observable<CategoryPageResponse>
-
-    @FormUrlEncoded
-    @POST("account/register/")
-    fun getRegisterAccount(@Field("phone") phone: String,
-                           @Field("password") password: String): Observable<BaseResponse<Boolean>>
-
-    @FormUrlEncoded
-    @POST("account/login/")
-    fun loginAccount(@Field("phone") phone: String): Observable<BaseResponse<MicroUser>>
-
-    @POST("account/logout/")
-    fun logout(): Observable<BaseResponse<String>>
 
     @GET("subjects/")
     fun searchKey(@Query("key") key: String,

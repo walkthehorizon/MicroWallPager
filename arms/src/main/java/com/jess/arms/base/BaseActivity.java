@@ -1,5 +1,6 @@
 package com.jess.arms.base;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -17,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.horizon.netbus.NetBus;
 import com.horizon.netbus.NetType;
 import com.horizon.netbus.NetWork;
+import com.horizon.tsnackbar.TSnackbar;
 import com.jess.arms.base.delegate.IActivity;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.integration.cache.CacheType;
@@ -69,6 +71,7 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
         return super.onCreateView(name, context, attrs);
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +88,7 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
             if (e instanceof InflateException) throw e;
             e.printStackTrace();
         }
-        snackbar = Snackbar.make(findViewById(android.R.id.content), "网络已断开连接", Snackbar.LENGTH_INDEFINITE);
+//        snackbar = TSnackbar.make(findViewById(android.R.id.content), "网络已断开连接", Snackbar.LENGTH_INDEFINITE);
         initData(savedInstanceState);
     }
 
@@ -137,17 +140,17 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
         NetBus.getInstance().unRegister(this);
     }
 
-    private Snackbar snackbar;
+//    private TSnackbar snackbar;
 
     @NetWork
     public void onNetChange(NetType type) {
         switch (type) {
             case WIFI:
             case GPRS:
-                snackbar.dismiss();
+//                snackbar.dismiss();
                 break;
             case NONE:
-                snackbar.show();
+//                snackbar.show();
                 break;
         }
     }

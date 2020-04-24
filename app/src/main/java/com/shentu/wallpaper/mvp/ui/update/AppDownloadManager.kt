@@ -22,6 +22,7 @@ import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.shentu.wallpaper.BuildConfig
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.AppLifecycleImpl
 import com.shentu.wallpaper.app.HkApplication
 import com.yanzhenjie.permission.AndPermission
 import com.yanzhenjie.permission.RequestExecutor
@@ -246,7 +247,7 @@ class AppDownloadManager(activity: Activity) : LifecycleObserver {
         weakReference.get()?.let {
             MaterialDialog(it).show {
                 title(text = "权限请求")
-                message(text = "为了正常升级" + HkApplication.instance.resources.getString(
+                message(text = "为了正常升级" + AppLifecycleImpl.instance.resources.getString(
                         R.string.app_name) + "APP，请点击设置按钮，允许安装未知来源应用")
                 positiveButton(text = "设置") {
                     executor.execute()

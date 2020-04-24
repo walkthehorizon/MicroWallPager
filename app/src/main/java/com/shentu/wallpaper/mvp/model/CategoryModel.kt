@@ -28,13 +28,9 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
 
     override fun getCategories(clear: Boolean): Observable<CategoryPageResponse> {
         offset = if (clear) 0 else offset + 50
-        return Observable.just(mRepositoryManager
+        return mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
-                .getCategories(offset, 50))
-                .flatMap { t ->
-                    mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getCategories(t, EvictDynamicKey(clear && NetworkUtils.isConnected()), DynamicKey(offset))
-                            .map { it.data }
-                }
+                .getCategories(offset, 50)
+
     }
 }

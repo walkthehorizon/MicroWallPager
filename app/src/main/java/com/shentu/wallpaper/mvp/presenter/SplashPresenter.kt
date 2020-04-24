@@ -1,15 +1,24 @@
 package com.shentu.wallpaper.mvp.presenter
 
 import android.app.Application
+import com.blankj.utilcode.util.SPUtils
 import com.jess.arms.di.scope.FragmentScope
 
 import com.jess.arms.integration.AppManager
+import com.jess.arms.integration.EventBusManager
 import com.jess.arms.mvp.BasePresenter
+import com.shentu.wallpaper.app.Constant
+import com.shentu.wallpaper.app.HkUserManager
+import com.shentu.wallpaper.app.StateCode
+import com.shentu.wallpaper.app.event.LoginSuccessEvent
 import com.shentu.wallpaper.app.utils.RxUtils
+import com.shentu.wallpaper.model.entity.MicroUser
+import com.shentu.wallpaper.model.response.BaseResponse
 import com.shentu.wallpaper.model.response.SplashAdResponse
 import com.shentu.wallpaper.mvp.contract.SplashContract
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -23,16 +32,6 @@ constructor(model: SplashContract.Model, rootView: SplashContract.View) : BasePr
 
     @Inject
     lateinit var mAppManager: AppManager
-
-    fun getAd() {
-        mModel.splashAd
-                .compose(RxUtils.applyClearSchedulers(mRootView))
-                .subscribe(object : ErrorHandleSubscriber<SplashAdResponse>(mErrorHandler) {
-                    override fun onNext(response: SplashAdResponse) {
-                        mRootView.showSplash(response.data)
-                    }
-                })
-    }
 
     override fun onDestroy() {
         super.onDestroy()

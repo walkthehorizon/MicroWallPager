@@ -43,22 +43,21 @@ android {
     }
     buildTypes {
         debug {
-//            buildConfigField "String", "Sever", '"http://192.168.10.122/micro/"'
-            buildConfigField "String", "Sever", '"http://192.168.1.3/micro/"'
-//            buildConfigField "String", "Sever", '"https://api.wmmt119.top/micro/"'
+            buildConfigField "String", "Sever", '"http://192.168.10.122/micro/"'
+//            buildConfigField "String", "Sever", '"http://192.168.1.3/micro/"'
             buildConfigField "boolean", "LOG_DEBUG", "true"
             buildConfigField "boolean", "USE_CANARY", "false"
             buildConfigField "boolean", "Debug", "true"
             signingConfig signingConfigs.release
         }
 
-//        pre {
-//            buildConfigField "boolean", "LOG_DEBUG", "true"
-//            buildConfigField "boolean", "USE_CANARY", "false"
-//            buildConfigField "boolean", "Debug", "true"
-//            buildConfigField "String", "Sever", '"http://api.wmmt119.top/micro/"'
-//            signingConfig signingConfigs.release
-//        }
+        pre {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            buildConfigField "boolean", "USE_CANARY", "false"
+            buildConfigField "boolean", "Debug", "true"
+            buildConfigField "String", "Sever", '"http://api.wmmt119.top/micro/"'
+            signingConfig signingConfigs.release
+        }
 
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"

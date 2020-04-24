@@ -61,7 +61,7 @@ ext {
             "mdialogs-input"           : "com.afollestad.material-dialogs:input:3.1.0",
             "qmui"                     : "com.qmuiteam:qmui:1.1.3",
             "circleimageview"          : "de.hdodenhof:circleimageview:2.2.0",
-            "loadsir"                  : "com.kingja.loadsir:loadsir:1.3.6",
+            "loadsir"                  : "com.kingja.loadsir:loadsir:1.3.8",
             "glidepalette"             : "com.github.florent37:glidepalette:2.1.2",
             "circleindicator"          : "me.relex:circleindicator:2.1.0",
             "bigImageViewer"           : "com.github.piasy:BigImageViewer:1.6.1",

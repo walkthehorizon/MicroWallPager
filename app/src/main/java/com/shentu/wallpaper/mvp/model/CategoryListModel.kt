@@ -30,14 +30,9 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
 
     override fun getCategoryWallpapers(id: Int, clear: Boolean): Observable<WallpaperPageResponse> {
         offset = getOffset(clear)
-        return Observable.just(mRepositoryManager
+        return mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
-                .getCategoryWallpapers(id, limit, offset))
-                .flatMap<WallpaperPageResponse> { observable ->
-                    mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getCategoryWallpapers(observable, DynamicKeyGroup(id, offset))
-                            .map { reply -> reply.data }
-                }
+                .getCategoryWallpapers(id, limit, offset)
     }
 
     override fun onDestroy() {

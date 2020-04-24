@@ -12,6 +12,7 @@ import android.content.res.Configuration;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.jess.arms.base.App;
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.di.component.AppComponent;
@@ -155,7 +156,6 @@ public class AppDelegate implements App, AppLifecycles {
         this.mApplication = null;
     }
 
-
     /**
      * 将app的全局配置信息封装进module(使用Dagger注入到需要配置信息的地方)
      * 需要在AndroidManifest中声明{@link ConfigModule}的实现类,和Glide的配置方式相似
@@ -219,6 +219,11 @@ public class AppDelegate implements App, AppLifecycles {
          */
         @Override
         public void onTrimMemory(int level) {
+            if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
+                Glide.get(mApplication).clearMemory();
+            }
+            Glide.get(mApplication).trimMemory(level);
+
             //状态1. 当开发者的 App 正在运行
             //设备开始运行缓慢, 不会被 kill, 也不会被列为可杀死的, 但是设备此时正运行于低内存状态下, 系统开始触发杀死 LRU 列表中的进程的机制
 //                case TRIM_MEMORY_RUNNING_MODERATE:

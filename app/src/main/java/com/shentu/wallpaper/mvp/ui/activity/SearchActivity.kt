@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -74,15 +75,6 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
                 .register(smartRefresh)
 
         smartRefresh.setOnLoadMoreListener { mPresenter?.loadMore() }
-//        etSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-//            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-//                if (actionId == EditorInfo.IME_ACTION_DONE) {
-//                    KeyboardUtils.hideSoftInput(etSearch)
-//                    return true
-//                }
-//                return false
-//            }
-//        })
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 
@@ -96,7 +88,6 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
                 mPresenter?.search(s.toString())
             }
         })
-
         rvData.layoutManager = LinearLayoutManager(this)
         rvData.addItemDecoration(HotPageRvDecoration(12))
         hotAdapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
@@ -110,11 +101,13 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
         }
         rvData.adapter = hotAdapter
 
-        mPresenter?.init()
+        rvData.post {
+            mPresenter?.init()
+        }
     }
 
-    override fun onEnterAnimationComplete() {
-        super.onEnterAnimationComplete()
+    override fun onStart() {
+        super.onStart()
         GlobalScope.launch {
             delay(500)
             runOnUiThread {
@@ -125,6 +118,25 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
             }
         }
     }
+
+    override fun onStop() {
+        super.onStop()
+        etSearch.clearFocus()
+        KeyboardUtils.hideSoftInput(etSearch)
+    }
+
+//    override fun onEnterAnimationComplete() {
+//        super.onEnterAnimationComplete()
+//        GlobalScope.launch {
+//            delay(500)
+//            runOnUiThread {
+//                etSearch.isFocusable = true
+//                etSearch.isFocusableInTouchMode = true
+//                etSearch.requestFocus()
+//                KeyboardUtils.showSoftInput(etSearch)
+//            }
+//        }
+//    }
 
     override fun showContent() {
         loadService.showSuccess()
@@ -163,6 +175,7 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
     }
 
     override fun showHistory(queue: LimitQueue<String>) {
+
         Timber.e(queue.size().toString())
         loadService.setCallBack(SearchHistoryCallback::class.java) { context, view ->
             val chipGroup = view.findViewById<ChipGroup>(R.id.chipGroup)

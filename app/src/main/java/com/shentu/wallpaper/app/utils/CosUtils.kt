@@ -1,6 +1,7 @@
 package com.shentu.wallpaper.app.utils
 
 import com.shentu.wallpaper.BuildConfig
+import com.shentu.wallpaper.app.AppLifecycleImpl
 import com.shentu.wallpaper.app.HkApplication
 import com.shentu.wallpaper.app.HkUserManager
 import com.tencent.cos.xml.CosXmlServiceConfig
@@ -28,7 +29,7 @@ class CosUtils private constructor() {
                 .url(URL(BuildConfig.Sever + "signature"))
                 .method("GET")
                 .build())
-        cosXmlService = CosXmlSimpleService(HkApplication.instance, serviceConfig,credentialProvider)
+        cosXmlService = CosXmlSimpleService(AppLifecycleImpl.instance, serviceConfig,credentialProvider)
     }
 
     companion object {

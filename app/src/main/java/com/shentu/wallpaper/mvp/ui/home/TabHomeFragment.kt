@@ -87,7 +87,13 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
         return inflater.inflate(R.layout.fragment_tab_home, container, false)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun initData(savedInstanceState: Bundle?) {
+        val lp = bgSearch.layoutParams
+        lp.height = BarUtils.getStatusBarHeight() + ConvertUtils.dp2px(40.0f)
+        bgSearch.layoutParams = lp
+        BarUtils.addMarginTopEqualStatusBarHeight(tvSearch)
+
         //初始化筛选项
         typeSparse = SparseIntArray()
         typeSparse!!.append(R.id.mTvDefault, -1)
@@ -149,7 +155,7 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
         ViewCompat.setTransitionName(tvSearch, getString(R.string.search_transitionName))
         tvSearch.setOnClickListener {
             val compact: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    this.activity!!, tvSearch, getString(R.string.search_transitionName)
+                    requireActivity(), tvSearch, getString(R.string.search_transitionName)
             )
             startActivity(Intent(mContext, SearchActivity::class.java), compact.toBundle())
         }
@@ -159,6 +165,10 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
                 val manager: StaggeredGridLayoutManager = (recyclerView.layoutManager) as StaggeredGridLayoutManager
                 val into = manager.findLastVisibleItemPositions(null)
                 val total = manager.itemCount
+                Timber.e("total %s , into %s", total, into[0])
+                if (total <= 1) {
+                    return
+                }
                 if (total - into[0] < 12 && !isLoading) {
                     isLoading = true
                     mPresenter?.getRecommends(false)

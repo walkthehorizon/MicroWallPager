@@ -24,28 +24,21 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
 
     @Inject
     lateinit var mGson: Gson
+
     @Inject
     lateinit var mApplication: Application
 
     override fun getRecommends(clear: Boolean): Observable<WallpaperPageResponse> {
         offset = if (clear) 0 else limit + offset
-        return Observable.just(mRepositoryManager
+        return mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
-                .getRecommendWallpapers(limit, offset))
-                .flatMap { ob ->
-                    mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getRecommends(ob, DynamicKey(offset), EvictProvider(NetworkUtils.isConnected()))
-                }
+                .getRecommendWallpapers(limit, offset)
     }
 
     override fun getBanners(): Observable<BannerPageResponse> {
-        return Observable.just(mRepositoryManager
+        return mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
-                .getBanners(Constant.BANNER_COUNT, 0))
-                .flatMap { ob ->
-                    mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getBanners(ob)
-                            .map { it.data }
-                }
+                .getBanners(Constant.BANNER_COUNT, 0)
+
     }
 }

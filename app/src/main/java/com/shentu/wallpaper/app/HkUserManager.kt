@@ -1,14 +1,11 @@
 package com.shentu.wallpaper.app
 
-import android.content.Context
-import android.content.Intent
+import android.provider.Settings
 import com.blankj.utilcode.util.SPUtils
-import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.model.entity.MicroUser
-import com.shentu.wallpaper.mvp.ui.login.LoginActivity
 
 class HkUserManager private constructor() {
-    private val UUID = "user_uid"
+    private val UID = "user_uid"
     private val USER_AVATAR = "user_avatar"
     private val USER_NICKNAME = "user_nickname"
     private val USER_PHONE = "user_phone"
@@ -22,11 +19,12 @@ class HkUserManager private constructor() {
     private val USER_VIP = "user_vip"
     private val USER_SVIP = "user_svip"
     var user: MicroUser = MicroUser()
+
     /**
      * 参考python,存储变化前请先更新user
      */
     fun save() {
-        SPUtils.getInstance().put(UUID, user.uid)
+        SPUtils.getInstance().put(UID, user.uid)
         SPUtils.getInstance().put(USER_NICKNAME, user.nickname)
         SPUtils.getInstance().put(USER_AVATAR, user.avatar)
         SPUtils.getInstance().put(USER_EMAIL, user.email)
@@ -46,7 +44,7 @@ class HkUserManager private constructor() {
      */
     fun clear() {
         user = MicroUser()//重置
-        SPUtils.getInstance().remove(UUID)
+        SPUtils.getInstance().remove(UID)
         SPUtils.getInstance().remove(USER_NICKNAME)
         SPUtils.getInstance().remove(USER_AVATAR)
         SPUtils.getInstance().remove(USER_EMAIL)
@@ -66,8 +64,11 @@ class HkUserManager private constructor() {
         SPUtils.getInstance().put(USER_PEA, user.pea)
     }
 
+    val uuid: String
+        get() = Settings.System.getString(AppLifecycleImpl.instance.contentResolver, Settings.Secure.ANDROID_ID)
+
     val isLogin: Boolean
-        get() = SPUtils.getInstance().getInt(UUID, -1) != -1
+        get() = SPUtils.getInstance().getInt(UID, -1) != -1
 
     val isAdmin: Boolean
         get() = isLogin && user.uid == 1
@@ -78,21 +79,13 @@ class HkUserManager private constructor() {
     val token: String
         get() = if (isLogin) user.token else ""
 
-    fun needLogin(context: Context): Boolean {
-        if (!isLogin) {
-            ArmsUtils.startActivity(Intent(context, LoginActivity::class.java))
-            return true
-        }
-        return false
-    }
-
     companion object {
         val instance = HkUserManager()
     }
 
     init {
         if (isLogin) {
-            user.uid = SPUtils.getInstance().getInt(UUID, -1)
+            user.uid = SPUtils.getInstance().getInt(UID, -1)
             user.nickname = SPUtils.getInstance().getString(USER_NICKNAME, "")
             user.avatar = SPUtils.getInstance().getString(USER_AVATAR, "")
             user.email = SPUtils.getInstance().getString(USER_EMAIL, "")

@@ -23,32 +23,19 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
 
     override fun getSubjectWallpapers(subjectId: Int, clear: Boolean): Observable<WallpaperPageResponse> {
         val offset = getOffset(clear)
-        return Observable.just(mRepositoryManager.obtainRetrofitService(MicroService::class.java)
-                .getSubjectWallpapers(subjectId, MicroService.PAGE_LIMIT, offset))
-                .flatMap {
-                    mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getSubjectWallpapers(it, DynamicKeyGroup(subjectId, offset))
-                }
+        return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
+                .getSubjectWallpapers(subjectId, MicroService.PAGE_LIMIT, offset)
     }
 
     override fun getSubjectDetail(pk: Int): Observable<SubjectDetailResponse> {
-        return Observable.just(mRepositoryManager.obtainRetrofitService(MicroService::class.java)
-                .getSubjectDetail(pk))
-                .flatMap {
-                    mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getSubjectDetail(it, DynamicKey(pk))
-                }
+        return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
+                .getSubjectDetail(pk)
     }
 
     override fun getBannerWallpapers(id: Int): Observable<WallpaperPageResponse> {
-        return Observable.just(mRepositoryManager
+        return mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
-                .getBannerWallpapers(id, 100, 0))
-                .flatMap { t ->
-                    mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .getWallPapersByBannerId(t, DynamicKey(id))
-                            .map { it.data }
-                }
+                .getBannerWallpapers(id, 100, 0)
     }
 
     @Inject

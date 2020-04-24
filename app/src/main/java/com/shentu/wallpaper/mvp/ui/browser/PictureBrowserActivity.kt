@@ -266,9 +266,9 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
         tvComment.text = curPaper.commentNum.toString()
         tvComment.setOnClickListener {
-            if (HkUserManager.instance.needLogin(this)) {
-                return@setOnClickListener
-            }
+//            if (HkUserManager.instance.needLogin(this)) {
+//                return@setOnClickListener
+//            }
             showCommentDialog()
         }
     }

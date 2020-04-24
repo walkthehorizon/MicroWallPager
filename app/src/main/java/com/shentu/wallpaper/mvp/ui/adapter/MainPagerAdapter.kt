@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 class MainPagerAdapter(fm: FragmentManager, private val fragments: List<Fragment>) : FragmentPagerAdapter(fm
         , BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-    private val titles: List<String> = listOf("推荐", "分类", "我的")
+    private val titles: List<String> = listOf("推荐", "精选", "我的")
 
     override fun getItem(position: Int): Fragment {
         return fragments[position]

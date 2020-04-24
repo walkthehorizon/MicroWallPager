@@ -28,6 +28,7 @@ import com.jess.arms.integration.AppManager
 import com.jess.arms.utils.ArmsUtils
 import com.shentu.wallpaper.BuildConfig
 import com.shentu.wallpaper.R
+import com.shentu.wallpaper.app.AppLifecycleImpl
 import com.shentu.wallpaper.app.HkApplication
 import com.shentu.wallpaper.mvp.contract.MainContract
 import kotlinx.android.synthetic.main.activity_setting_more.*
@@ -185,7 +186,7 @@ class HkUtils private constructor() {
     }
 
     private fun getVectorBitmap(reqWidth: Int, reqHeight: Int, @DrawableRes distId: Int): Bitmap? {
-        val distDrawable = ContextCompat.getDrawable(HkApplication.instance, distId)
+        val distDrawable = ContextCompat.getDrawable(AppLifecycleImpl.instance, distId)
         if (distDrawable !is VectorDrawable && distDrawable !is VectorDrawableCompat) {
             return null
         }

@@ -2,10 +2,12 @@ package com.shentu.wallpaper.app
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.ComponentCallbacks2
 import android.content.Context
 import butterknife.ButterKnife
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.Utils
+import com.bumptech.glide.Glide
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.horizon.netbus.NetBus
@@ -32,20 +34,17 @@ import timber.log.Timber.DebugTree
  * ================================================
  */
 class AppLifecycleImpl : AppLifecycles {
+
     override fun attachBaseContext(base: Context) {
 //        MultiDex.install(base) //这里比 onCreate 先执行,常用于 MultiDex 初始化,插件化框架的初始化
     }
 
     @SuppressLint("CheckResult")
     override fun onCreate(application: Application) {
+        instance = application
         if (BuildConfig.LOG_DEBUG) { //Timber初始化
             Timber.plant(DebugTree())
         }
-        Thread(Runnable { init(application) }).start()
-    }
-
-    private fun init(application: Application) {
-        val start = System.currentTimeMillis()
         Utils.init(application)
         NetBus.getInstance().init(application)
         if (BuildConfig.Debug) { // 这两行必须写在init之前，否则这些配置在init过程中将无效
@@ -56,21 +55,28 @@ class AppLifecycleImpl : AppLifecycles {
         MobSDK.init(application)
         MobLink.setRestoreSceneListener(SceneListener())
         ButterKnife.setDebug(BuildConfig.Debug)
+        FileDownloader.setup(application)
+        BigImageViewer.initialize(GlideImageLoader.with(application
+                , GlideConfiguration.imageClient))
         LoadSir.beginBuilder()
                 .addCallback(ErrorCallback()) //添加各种状态页
                 .addCallback(EmptyCallback())
                 .addCallback(LoadingCallback())
                 .setDefaultCallback(LoadingCallback::class.java) //设置默认状态页
                 .commit()
-        FileDownloader.setup(application)
-        BigImageViewer.initialize(GlideImageLoader.with(application
-                , HkApplication.instance.imageClient))
+//        Thread(Runnable { init(application) }).start()
+    }
+
+    private fun init(application: Application) {
+        val start = System.currentTimeMillis()
         Timber.d("init use time: %s ms", (System.currentTimeMillis() - start).toString())
     }
 
     override fun onTerminate(application: Application) {}
 
     companion object {
+        lateinit var instance: Application
+
         //static 代码段可以防止内存泄露
         init { //设置全局的Header构建器
             SmartRefreshLayout.setDefaultRefreshHeaderCreator { context: Context, layout: RefreshLayout ->

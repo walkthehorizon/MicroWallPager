@@ -12,6 +12,7 @@ import com.shentu.wallpaper.mvp.contract.TabHomeContract
 import io.reactivex.Observable
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -48,6 +49,7 @@ constructor(model: TabHomeContract.Model, rootView: TabHomeContract.View) : Base
     }
 
     fun getRecommends(clear: Boolean) {
+        Timber.e("load recommend")
         mModel.getRecommends(clear)
                 .compose(RxUtils.applySchedulers(mRootView, clear))
                 .subscribe(object : ErrorHandleSubscriber<WallpaperPageResponse>(mErrorHandler) {

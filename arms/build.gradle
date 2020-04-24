@@ -100,6 +100,7 @@ dependencies {
     api rootProject.ext.dependencies["gson"]
     implementation rootProject.ext.dependencies["loadsir"]
     api project(':netbus')
+    api project(':tsnackbar')
 
     //test
     api rootProject.ext.dependencies["timber"]

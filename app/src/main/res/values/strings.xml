@@ -2,7 +2,7 @@
     <string name="app_name">萌幻Cos</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_recommend">推荐</string>
-    <string name="title_category">分类</string>
+    <string name="title_category">精选</string>
     <string name="title_rank">排行</string>
     <string name="title_my">我的</string>
 
@@ -11,7 +11,7 @@
     <string name="action_login_confirm">确认</string>
     <string name="action_login_submit">提交</string>
     <string name="action_login_cancel">取消</string>
-    <string name="tip_please_wait">登录中，请稍等...</string>
+    <string name="tip_please_wait">登录中，请稍等…</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

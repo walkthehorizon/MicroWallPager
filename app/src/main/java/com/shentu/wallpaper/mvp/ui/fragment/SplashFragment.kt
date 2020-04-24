@@ -88,29 +88,29 @@ class SplashFragment : BaseFragment<SplashPresenter>(), SplashContract.View {
         activity?.finish()
     }
 
-    override fun showSplash(splashAd: SplashAd) {
-        if (splashAd.duration == 0) {
-            toMainPage()
-            return
-        }
-        context?.let {
-            GlideArms.with(it)
-                    .load(splashAd.cover_url)
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Drawable>, isFirstResource: Boolean): Boolean {
-                            toMainPage()
-                            return false
-                        }
-
-                        override fun onResourceReady(resource: Drawable, model: Any, target: Target<Drawable>, dataSource: DataSource, isFirstResource: Boolean): Boolean {
-                            startCountDown(splashAd.duration / 1000)
-                            return false
-                        }
-                    })
-                    .centerCrop()
-                    .into(ivSplash)
-        }
-    }
+//    override fun showSplash(splashAd: SplashAd) {
+//        if (splashAd.duration == 0) {
+//            toMainPage()
+//            return
+//        }
+//        context?.let {
+//            GlideArms.with(it)
+//                    .load(splashAd.cover_url)
+//                    .listener(object : RequestListener<Drawable> {
+//                        override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Drawable>, isFirstResource: Boolean): Boolean {
+//                            toMainPage()
+//                            return false
+//                        }
+//
+//                        override fun onResourceReady(resource: Drawable, model: Any, target: Target<Drawable>, dataSource: DataSource, isFirstResource: Boolean): Boolean {
+//                            startCountDown(splashAd.duration / 1000)
+//                            return false
+//                        }
+//                    })
+//                    .centerCrop()
+//                    .into(ivSplash)
+//        }
+//    }
 
     override fun toMainPage() {
         launchActivity(Intent(mContext, MainActivity::class.java))

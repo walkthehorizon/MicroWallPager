@@ -38,14 +38,14 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
 
 
     override fun initData(savedInstanceState: Bundle?) {
-        if (HkUserManager.instance.isLogin) {
-            mbLogout.visibility = View.VISIBLE
-            mbLogout.setOnClickListener {
-                mPresenter?.logout()
-            }
-        } else {
-            mbLogout.visibility = View.GONE
-        }
+//        if (HkUserManager.instance.isLogin) {
+//            mbLogout.visibility = View.VISIBLE
+//            mbLogout.setOnClickListener {
+//                mPresenter?.logout()
+//            }
+//        } else {
+//            mbLogout.visibility = View.GONE
+//        }
         val type = SPUtils.getInstance().getInt(Constant.DOWNLOAD_TYPE, 0)
         rivDownload.setEndValue("")
         rivDownload.setOnClickListener {
