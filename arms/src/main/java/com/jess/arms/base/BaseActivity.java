@@ -35,6 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
+import pub.devrel.easypermissions.EasyPermissions;
 
 
 /**
@@ -153,5 +154,11 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
 //                snackbar.show();
                 break;
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 }

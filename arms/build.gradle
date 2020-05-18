@@ -86,6 +86,7 @@ dependencies {
     }
     implementation rootProject.ext.dependencies["okhttp3"]
     compileOnly rootProject.ext.dependencies["glide"]
+    api rootProject.ext.dependencies['easypermissions']
 //    implementation rootProject.ext.dependencies["glide-loader-okhttp3"]
 //    annotationProcessor(rootProject.ext.dependencies["glide-compiler"]) {
 //        exclude module: 'jsr305'

@@ -1,5 +1,6 @@
 package com.shentu.wallpaper.mvp.ui.my
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -10,12 +11,15 @@ import android.provider.MediaStore
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
+import com.blankj.utilcode.constant.PermissionConstants
 import com.blankj.utilcode.util.PathUtils
+import com.blankj.utilcode.util.PermissionUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
+import com.just.agentweb.AgentWebUtils.hasPermission
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.HkUserManager
@@ -30,6 +34,8 @@ import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.internal.entity.CaptureStrategy
 import kotlinx.android.synthetic.main.activity_my_edit.*
+import pub.devrel.easypermissions.AfterPermissionGranted
+import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 import java.io.File
 
@@ -42,7 +48,7 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
     }
 
     //裁剪输出路径
-    private val cropImage = File(PathUtils.getExternalPicturesPath(), "avatar_crop.jpg")
+    private val cropImage = File(PathUtils.getExternalAppCachePath(), "avatar_crop.jpg")
     private val user: MicroUser = HkUserManager.instance.user
     private lateinit var loadingDialog: MaterialDialog
 
@@ -64,20 +70,24 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
     override fun initData(savedInstanceState: Bundle?) {
         refreshView()
         rlAvatar.setOnClickListener {
-            AndPermission.with(this)
-                    .runtime()
-                    .permission(Permission.Group.STORAGE)
-                    .onGranted { openMatisse() }
-                    .rationale { _, _, executor ->
-                        MaterialDialog(this).show {
+            PermissionUtils.permission(PermissionConstants.STORAGE)
+                    .rationale { shouldRequest ->
+                        MaterialDialog(this@MyEditActivity).show {
                             title(text = "提示")
                             message(text = "请允许获取存储权限以读取本地图片")
-                            positiveButton(text = "好") { executor.execute() }
+                            positiveButton(text = "好") { shouldRequest?.again(true) }
                         }
                     }
-                    .onDenied {
-                        Timber.e("存储权限被拒绝")
-                    }.start()
+                    .callback(object : PermissionUtils.SimpleCallback {
+                        override fun onGranted() {
+                            openMatisse()
+                        }
+
+                        override fun onDenied() {
+                            ToastUtils.showShort("权限被拒绝")
+                        }
+                    })
+                    .request()
         }
         rivNickName.setOnClickListener {
             showNickNameDialog()

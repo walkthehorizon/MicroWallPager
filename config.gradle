@@ -24,7 +24,7 @@ ext {
     dependencies = [
             //google
             "appcompat"                : "androidx.appcompat:appcompat:1.1.0",
-            "material"                 : "com.google.android.material:material:1.0.0",
+            "material"                 : "com.google.android.material:material:1.1.0",
             "annotation"               : "androidx.annotation:annotation:1.1.0",
             "recyclerview"             : "androidx.recyclerview:recyclerview:1.1.0",
             "vector-drawable"          : "androidx.vectordrawable:vectordrawable:1.1.0",
@@ -113,6 +113,7 @@ ext {
             "agentweb"                 : "com.just.agentweb:agentweb:4.1.2",
             "agentweb-filechooser"     : "com.just.agentweb:filechooser:4.1.2",
             "emoji-bundled"            : "androidx.emoji:emoji-bundled:1.0.0",
+            "easypermissions"         : "pub.devrel:easypermissions:3.0.0",
 
             //test
             "junit"                    : "junit:junit:4.12",
