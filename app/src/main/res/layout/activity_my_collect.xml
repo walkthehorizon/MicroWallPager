@@ -53,7 +53,7 @@
             android:src="@drawable/ic_more_vert_white_24dp" />
     </com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar>
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/smartRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -64,6 +64,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 </LinearLayout>
 

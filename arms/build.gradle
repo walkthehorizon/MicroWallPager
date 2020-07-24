@@ -9,7 +9,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
     }
-
+    viewBinding {
+        enabled = true
+    }
     defaultConfig {
         minSdkVersion rootProject.ext.android["minSdkVersion"]
         targetSdkVersion rootProject.ext.android["targetSdkVersion"]
@@ -18,6 +20,12 @@ android {
     }
 
     buildTypes {
+        debug{
+
+        }
+        pre{
+
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

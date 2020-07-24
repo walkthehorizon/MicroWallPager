@@ -126,7 +126,7 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
         progressColor = a.getColor(R.styleable.ProgressPieView_ppvProgressColor, progressColor)
         var strokeColor = ContextCompat.getColor(context, R.color.default_stroke_color)
         strokeColor = a.getColor(R.styleable.ProgressPieView_ppvStrokeColor, strokeColor)
-        var textColor = res.getColor(R.color.default_text_color)
+        var textColor = ContextCompat.getColor(context,R.color.default_text_color)
         textColor = a.getColor(R.styleable.ProgressPieView_android_textColor, textColor)
         progressFillType = a.getInteger(R.styleable.ProgressPieView_ppvProgressFillType, progressFillType)
         a.recycle()

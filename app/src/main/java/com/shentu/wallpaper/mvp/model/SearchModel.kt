@@ -12,7 +12,6 @@ import com.shentu.wallpaper.mvp.contract.SearchContract
 import io.reactivex.Observable
 import io.rx_cache2.DynamicKeyGroup
 import io.rx_cache2.Reply
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -30,7 +29,7 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
         offset = getOffset(clear)
         return Observable.just(mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
-                .searchKey(key, limit, offset))
+                .searchSubject(key, limit, offset))
                 .flatMap {
                     mRepositoryManager.obtainCacheService(MicroCache::class.java)
                             .searchKey(it, DynamicKeyGroup(key, offset))

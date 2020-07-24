@@ -31,6 +31,9 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * 最新
+ * */
 class HomeNewFragment : BaseFragment<IPresenter>(), IView {
 
     private lateinit var adapter: HomeNewestAdapter
@@ -65,8 +68,14 @@ class HomeNewFragment : BaseFragment<IPresenter>(), IView {
                     , view.width / 2, view.height / 2
                     , 0, 0)
             context?.let {
-                PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
+                PictureBrowserActivity.open(getRealPos(position), object : PictureBrowserActivity.Callback {
                     override fun getWallpaperList(): MutableList<Wallpaper> {
+                        val papers = mutableListOf<Wallpaper>()
+                        for (paper in adapter.data) {
+                            if (!paper.isHeader) {
+                                papers.add((paper as WallpaerSection).t!!)
+                            }
+                        }
                         return papers
                     }
 
@@ -89,6 +98,19 @@ class HomeNewFragment : BaseFragment<IPresenter>(), IView {
         getNewest(true)
     }
 
+    private fun getRealPos(pos: Int): Int {
+        var realPos: Int = pos
+        for (data in adapter.data) {
+            if (data == adapter.data[pos]) {
+                break
+            }
+            if (data.isHeader) {
+                realPos -= 1
+            }
+        }
+        return realPos
+    }
+
     override fun showEmpty() {
         loadService.showCallback(EmptyCallback::class.java)
     }
@@ -109,49 +131,40 @@ class HomeNewFragment : BaseFragment<IPresenter>(), IView {
         }
     }
 
+    override fun showNoMoreData() {
+        smartRefresh.setNoMoreData(true)
+    }
+
     private var offset: Int = MicroService.PAGE_START
-    private var papers: MutableList<Wallpaper> = mutableListOf()
 
     private fun getNewest(clear: Boolean) {
         offset = if (clear) MicroService.PAGE_START else offset + MicroService.PAGE_LIMIT
-        if (clear) {
-            papers.clear()
-        }
         appComponent.repositoryManager()
                 .obtainRetrofitService(MicroService::class.java)
                 .getNewestPapers(MicroService.PAGE_LIMIT, offset)
                 .compose(RxUtils.applySchedulers(this, clear))
                 .subscribe(object : ErrorHandleSubscriber<WallpaperPageResponse>(appComponent.rxErrorHandler()) {
                     override fun onNext(t: WallpaperPageResponse) {
-                        if (!t.isSuccess) {
+                        if (!t.isSuccess || t.data == null || t.data.content.isEmpty()) {
                             return
                         }
-                        if (t.data == null || t.data.content.isEmpty()) {
-                            return
-                        }
+                        //获取当前列表的最后一个时间标签
+                        var curDate = if (clear || adapter.data.isEmpty()) "" else adapter.data[adapter.data.size - 1].t?.created
+                        //遍历新列表，更新时间标签
                         val newestList = mutableListOf<WallpaerSection>()
-                        var curDate = if (adapter.data.isEmpty()) "" else adapter.data[adapter.data.size - 1].t?.created
                         for (paper in t.data.content) {
                             if (paper.created != curDate) {
                                 newestList.add(WallpaerSection(true, if (isToday(paper.created)) "今天" else paper.created))
                                 curDate = paper.created
-                                continue
                             }
                             newestList.add(WallpaerSection(paper))
-                        }
-                        if (clear) {
-                            papers = t.data.content
-                        } else {
-                            papers.addAll(t.data.content)
                         }
                         if (clear) {
                             adapter.setNewData(newestList)
                         } else {
                             adapter.addData(newestList)
                         }
-                        if (papers.size > 0) {
-                            bViewPager?.adapter?.notifyDataSetChanged()
-                        }
+                        bViewPager?.adapter?.notifyDataSetChanged()
                     }
                 })
     }

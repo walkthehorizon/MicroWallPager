@@ -22,7 +22,7 @@
         android:layout_below="@+id/toolbar"
         app:riv_arrow_visible="false"
         app:riv_divider_visible="true"
-        app:riv_title="下载询问" />
+        app:riv_title="下载设置" />
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
         android:id="@+id/rivAbout"

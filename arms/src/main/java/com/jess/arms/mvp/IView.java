@@ -61,7 +61,7 @@ public interface IView {
     /**
      * 没有更多数据
      */
-    default void showNOMoreData() {
+    default void showNoMoreData() {
 
     }
 

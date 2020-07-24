@@ -1,9 +1,11 @@
 package com.shentu.wallpaper.app.utils
 
+import androidx.core.util.TimeUtils
 import com.shentu.wallpaper.BuildConfig
 import com.shentu.wallpaper.app.AppLifecycleImpl
 import com.shentu.wallpaper.app.HkApplication
 import com.shentu.wallpaper.app.HkUserManager
+import com.shentu.wallpaper.app.config.Config
 import com.tencent.cos.xml.CosXmlServiceConfig
 import com.tencent.cos.xml.CosXmlSimpleService
 import com.tencent.cos.xml.listener.CosXmlResultListener
@@ -26,10 +28,10 @@ class CosUtils private constructor() {
                 .setDebuggable(true)
                 .builder()
         val credentialProvider = SessionCredentialProvider(HttpRequest.Builder<String>()
-                .url(URL(BuildConfig.Sever + "signature"))
+                .url(URL(Config.appServer + "signature"))
                 .method("GET")
                 .build())
-        cosXmlService = CosXmlSimpleService(AppLifecycleImpl.instance, serviceConfig,credentialProvider)
+        cosXmlService = CosXmlSimpleService(AppLifecycleImpl.instance, serviceConfig, credentialProvider)
     }
 
     companion object {
@@ -42,7 +44,7 @@ class CosUtils private constructor() {
 
     fun uploadAvatar(srcPath: String, listener: CosXmlResultListener) {
         Timber.e("avatar本地路径：$srcPath")
-        val cosPath = "avatar/" + HkUserManager.instance.uid + "_" + HkUserManager.instance.user.phone + ".jpg"
+        val cosPath = "avatar/" + HkUserManager.instance.uid + "/" + System.currentTimeMillis() + ".jpg"
         val putObjectRequest = PutObjectRequest(bucket, cosPath, srcPath)
         // 使用异步回调上传
         cosXmlService.putObjectAsync(putObjectRequest, listener)

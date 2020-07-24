@@ -50,7 +50,7 @@ class VerificationCodeInput(context: Context, attrs: AttributeSet?) : ViewGroup(
                 }
             }
         }
-        val onKeyListener = OnKeyListener { v, keyCode, event ->
+        val onKeyListener = OnKeyListener { _, keyCode, _ ->
             if (keyCode == KeyEvent.KEYCODE_DEL) {
                 backFocus()
             }

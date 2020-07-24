@@ -11,8 +11,6 @@ import com.jess.arms.mvp.IView
 import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
-import com.scwang.smartrefresh.layout.api.RefreshLayout
-import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.page.EmptyCallback
 import com.shentu.wallpaper.app.page.ErrorCallback

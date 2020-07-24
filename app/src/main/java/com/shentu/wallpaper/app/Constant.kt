@@ -8,7 +8,8 @@ object Constant {
     var MAIN_TAB_TITLES = Arrays.asList("推荐", "我的")
     var BANNER_COUNT = 5
     var URGE_AD_DIALOG = "urge_ad_dialog"
-    var LAST_SIGN_TIME = "last_sign_time"
+    const val LAST_SIGN_TIME = "last_sign_time"
+    const val CONTENT_MODE = "CONTENT_MODE";
     /**
      * 下载询问
      */
@@ -16,8 +17,8 @@ object Constant {
     var appUpdate: AppUpdate? = null
     var LAST_NOTIFY_TIME = "LAST_NOTIFY_TIME"
     var MICRO_BASE_URL = "https://wmmt119.top"
-    const val BASE_WALLPAPER_SHARE_URL = "https://wmmt119.top/wallpaper/"
+    const val BASE_WALLPAPER_SHARE_URL = "https://web.wmmt119.top/wallpaper/"
     const val GITHUB_URL = "https://github.com/walkthehorizon/MicroWallPager/blob/master/README.md"
-    const val WEB_PRIVACY = "https://wmmt119.top/privacy"
-    const val WEB_SERVER = "https://wmmt119.top/agreement"
+    const val WEB_PRIVACY = "https://web.wmmt119.top/privacy"
+    const val WEB_SERVER = "https://web.wmmt119.top/agreement"
 }

@@ -3,7 +3,7 @@ package com.shentu.wallpaper.di.component
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.di.scope.FragmentScope
 import com.shentu.wallpaper.di.module.MyModule
-import com.shentu.wallpaper.mvp.ui.fragment.TabMyFragment
+import com.shentu.wallpaper.mvp.ui.my.TabMyFragment
 import dagger.Component
 
 @FragmentScope

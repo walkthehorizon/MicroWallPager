@@ -68,8 +68,8 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
 
     private fun showDownloadDialog(type: Int) {
         MaterialDialog(this)
-                .title(text = "下载")
-                .listItemsSingleChoice(items = listOf("询问", "默认", "原图")
+                .title(text = "图片清晰度选择")
+                .listItemsSingleChoice(items = listOf("每次询问", "高清", "原图")
                         , initialSelection = type) { _, index, _ ->
                     SPUtils.getInstance().put(Constant.DOWNLOAD_TYPE, index)
                 }

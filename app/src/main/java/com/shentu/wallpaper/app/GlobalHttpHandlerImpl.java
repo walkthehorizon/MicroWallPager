@@ -1,9 +1,12 @@
 package com.shentu.wallpaper.app;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.text.TextUtils;
 
 import com.jess.arms.http.GlobalHttpHandler;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.utils.ArmsUtils;
 import com.shentu.wallpaper.BuildConfig;
 import com.shentu.wallpaper.app.utils.HkUtils;
 
@@ -75,10 +78,12 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
         }
         return builder
                 .addHeader("Content-Type", "application/json")
-                .addHeader("deviceId", HkUtils.Companion.getInstance().getDeviceId())
-                .addHeader("systemType", "Android")
-                .addHeader("systemVersion", android.os.Build.VERSION.RELEASE)
-                .addHeader("appVersion", BuildConfig.VERSION_NAME)
+                .addHeader("Device-Id", Settings.System.getString(context.getContentResolver()
+                        , Settings.Secure.ANDROID_ID))
+                .addHeader("System-Type", "Android")
+                .addHeader("System-Version", android.os.Build.VERSION.RELEASE)
+                .addHeader("Version-Name", BuildConfig.VERSION_NAME)
+                .addHeader("Version-Code", String.valueOf(BuildConfig.VERSION_CODE))
 //                .addHeader("X-CSRFToken", SPUtils.getInstance().getString("X-CSRFToken", ""))
                 .build();
     }

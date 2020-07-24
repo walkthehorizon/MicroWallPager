@@ -4,9 +4,8 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
@@ -21,15 +20,12 @@ import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.blankj.utilcode.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
 import com.horizon.netbus.NetBus
-import com.horizon.tsnackbar.TSnackbar
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.integration.AppManager
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
-import com.kingja.loadsir.callback.Callback
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.mob.MobSDK
@@ -37,10 +33,7 @@ import com.mob.OperationCallback
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.HkUserManager
-import com.shentu.wallpaper.app.event.LoginSuccessEvent
-import com.shentu.wallpaper.app.page.EmptyCallback
 import com.shentu.wallpaper.app.page.ErrorCallback
-import com.shentu.wallpaper.app.page.LoadingCallback
 import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.di.component.DaggerMainComponent
 import com.shentu.wallpaper.di.module.MainModule
@@ -50,16 +43,13 @@ import com.shentu.wallpaper.mvp.contract.MainContract
 import com.shentu.wallpaper.mvp.presenter.MainPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.MainPagerAdapter
 import com.shentu.wallpaper.mvp.ui.fragment.TabCategoryFragment
-import com.shentu.wallpaper.mvp.ui.fragment.TabMyFragment
 import com.shentu.wallpaper.mvp.ui.home.TabHomeFragment
+import com.shentu.wallpaper.mvp.ui.my.TabMyFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_agreement.view.*
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 
 

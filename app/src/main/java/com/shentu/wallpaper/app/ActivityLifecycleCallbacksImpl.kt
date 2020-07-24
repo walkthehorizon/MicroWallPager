@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application.ActivityLifecycleCallbacks
 import android.os.Bundle
 import android.view.View
+import com.blankj.utilcode.util.BarUtils
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
 import timber.log.Timber

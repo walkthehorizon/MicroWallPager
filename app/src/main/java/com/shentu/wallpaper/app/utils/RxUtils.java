@@ -87,7 +87,7 @@ public class RxUtils {
                 return;
             }
             if (pageResponse != null && TextUtils.isEmpty(pageResponse.getNext())) {
-                view.showNOMoreData();
+                view.showNoMoreData();
             }
             view.showContent();
         } else {

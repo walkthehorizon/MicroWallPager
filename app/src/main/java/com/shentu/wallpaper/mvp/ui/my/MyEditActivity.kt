@@ -15,6 +15,8 @@ import com.blankj.utilcode.constant.PermissionConstants
 import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.PermissionUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent

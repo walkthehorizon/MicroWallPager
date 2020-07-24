@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
@@ -17,6 +18,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.KeyboardUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.jess.arms.base.BaseActivity
@@ -38,6 +40,7 @@ import com.shentu.wallpaper.mvp.presenter.SearchPresenter
 import com.shentu.wallpaper.mvp.ui.adapter.HotAdapter
 import com.shentu.wallpaper.mvp.ui.adapter.decoration.HotPageRvDecoration
 import com.shentu.wallpaper.mvp.ui.browser.PictureBrowserActivity
+import com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -74,6 +77,12 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
                 .build()
                 .register(smartRefresh)
 
+        toolbar.addOnClickListener(object : DefaultToolbar.OnClickListener() {
+            override fun onClickLeftIcon() {
+                KeyboardUtils.hideSoftInput(etSearch)
+                etSearch.clearFocus()
+            }
+        })
         smartRefresh.setOnLoadMoreListener { mPresenter?.loadMore() }
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -104,10 +113,7 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
         rvData.post {
             mPresenter?.init()
         }
-    }
 
-    override fun onStart() {
-        super.onStart()
         GlobalScope.launch {
             delay(500)
             runOnUiThread {
@@ -121,8 +127,8 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
 
     override fun onStop() {
         super.onStop()
-        etSearch.clearFocus()
         KeyboardUtils.hideSoftInput(etSearch)
+        etSearch.clearFocus()
     }
 
 //    override fun onEnterAnimationComplete() {
@@ -162,7 +168,7 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
         loadService.showCallback(ErrorCallback::class.java)
     }
 
-    override fun showNOMoreData() {
+    override fun showNoMoreData() {
         smartRefresh.finishLoadMoreWithNoMoreData()
     }
 
@@ -175,20 +181,26 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
     }
 
     override fun showHistory(queue: LimitQueue<String>) {
-
         Timber.e(queue.size().toString())
         loadService.setCallBack(SearchHistoryCallback::class.java) { context, view ->
             val chipGroup = view.findViewById<ChipGroup>(R.id.chipGroup)
             val tvClear = view.findViewById<TextView>(R.id.tvClear)
             chipGroup.removeAllViews()
-            val lp = ChipGroup.LayoutParams(-2, ConvertUtils.dp2px(30.0f))
+            val lp = ChipGroup.LayoutParams(-2, ConvertUtils.dp2px(20f))
+            chipGroup.chipSpacingVertical = ConvertUtils.dp2px(6f)
             for (key in queue.queue) {
-                val chip = Chip(context)
-                chip.chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(
-                        this, R.color.colorAccent))
-                chip.chipStrokeWidth = ConvertUtils.dp2px(1.0f).toFloat()
-                chip.chipBackgroundColor = ColorStateList.valueOf(Color.WHITE)
+                val chip = TextView(context)
+                chip.minWidth = ConvertUtils.dp2px(40f)
+                chip.setTextColor(ContextCompat.getColor(context,R.color.colorNormalText))
+                val padding = ConvertUtils.dp2px(8.0f)
+                chip.setPadding(padding,0,padding,0)
+                chip.setBackgroundResource(R.drawable.bg_search_history_item)
+//                chip.chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(
+//                        this, R.color.colorAccent))
+//                chip.chipStrokeWidth = ConvertUtils.dp2px(1.0f).toFloat()
+//                chip.chipBackgroundColor = ColorStateList.valueOf(Color.WHITE)
                 chip.text = key
+                chip.gravity = Gravity.CENTER
                 chip.setOnClickListener {
                     val keyStr = chip.text.toString()
                     etSearch.setText(keyStr)

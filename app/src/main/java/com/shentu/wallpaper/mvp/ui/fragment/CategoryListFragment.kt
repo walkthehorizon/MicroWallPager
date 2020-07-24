@@ -14,9 +14,9 @@ import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
-import com.scwang.smartrefresh.layout.api.RefreshLayout
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.page.EmptyCallback
 import com.shentu.wallpaper.app.page.ErrorCallback
@@ -102,8 +102,8 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDeta
         smartRefresh.autoRefresh()
     }
 
-    override fun showCategoryList(wallpapers: MutableList<Wallpaper>) {
-        if (rvCategoryList.adapter == null) {
+    override fun showCategoryList(wallpapers: MutableList<Wallpaper> , clear: Boolean) {
+        if (clear) {
             adapter.setNewData(wallpapers)
         } else {
             adapter.addData(wallpapers)
@@ -131,6 +131,10 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDeta
 
     override fun showError() {
         loadService.showCallback(ErrorCallback::class.java)
+    }
+
+    override fun showNoMoreData() {
+        smartRefresh.setNoMoreData(true)
     }
 
     override fun hideRefresh(clear: Boolean) {

@@ -35,9 +35,6 @@ import java.util.Set;
  * 调用 {@link IntelligentCache#put(Object, Object)} 方法, 使用 {@link #KEY_KEEP} + {@code key} 作为 key 传入的
  * {@code value} 可存储至 {@link #mMap} (数据永久存储至内存中, 适合比较重要的数据) 中, 否则储存至 {@link #mCache}
  * <p>
- * Created by JessYan on 12/04/2018 16:06
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
 public class IntelligentCache<V> implements Cache<String, V> {

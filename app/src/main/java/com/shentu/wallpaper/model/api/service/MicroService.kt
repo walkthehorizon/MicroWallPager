@@ -58,10 +58,13 @@ interface MicroService {
     fun getCategories(@Query("offset") offset: Int,
                       @Query("limit") limit: Int): Observable<CategoryPageResponse>
 
-    @GET("subjects/")
-    fun searchKey(@Query("key") key: String,
-                  @Query("limit") limit: Int,
-                  @Query("offset") offset: Int): Observable<SubjectPageResponse>
+    /**
+     * 搜索subject
+     * */
+    @GET("subject/search")
+    fun searchSubject(@Query("search") key: String,
+                      @Query("limit") limit: Int,
+                      @Query("offset") offset: Int): Observable<SubjectPageResponse>
 
     @GET("banners/")
     fun getBanners(@Query("limit") limit: Int,

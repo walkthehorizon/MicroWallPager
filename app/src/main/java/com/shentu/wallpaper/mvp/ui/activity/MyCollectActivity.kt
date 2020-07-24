@@ -20,11 +20,12 @@ import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
-import com.scwang.smartrefresh.layout.api.RefreshLayout
-import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.page.EmptyCallback
 import com.shentu.wallpaper.app.page.ErrorCallback
+import com.shentu.wallpaper.databinding.ActivityMyCollectBinding
 import com.shentu.wallpaper.di.component.DaggerMyCollectComponent
 import com.shentu.wallpaper.di.module.MyCollectModule
 import com.shentu.wallpaper.model.body.DelCollectBody
@@ -41,6 +42,7 @@ class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.
 
     private lateinit var loadingDialog: MaterialDialog
     private var bViewPager: ViewPager? = null
+    private lateinit var binding:ActivityMyCollectBinding
 
     override fun showDelDialog() {
         MaterialDialog(this).show {
@@ -71,12 +73,13 @@ class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {
+        binding = ActivityMyCollectBinding.inflate(layoutInflater)
         return R.layout.activity_my_collect
     }
 
     override fun initData(savedInstanceState: Bundle?) {
         window.exitTransition = Slide(GravityCompat.START)
-        loadService = LoadSir.getDefault().register(this) {
+        loadService = LoadSir.getDefault().register(smartRefresh) {
             showContent()
             smartRefresh.autoRefresh()
         }

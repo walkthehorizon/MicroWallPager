@@ -15,7 +15,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
     }
-
+    viewBinding {
+        enabled = true
+    }
     defaultConfig {
         applicationId "com.shentu.wallpaper"
         minSdkVersion rootProject.ext.android["minSdkVersion"]
@@ -42,31 +44,16 @@ android {
         }
     }
     buildTypes {
-        debug {
-            buildConfigField "String", "Sever", '"http://192.168.10.122/micro/"'
-//            buildConfigField "String", "Sever", '"http://192.168.1.3/micro/"'
-            buildConfigField "boolean", "LOG_DEBUG", "true"
-            buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "boolean", "Debug", "true"
-            signingConfig signingConfigs.release
-        }
-
-        pre {
-            buildConfigField "boolean", "LOG_DEBUG", "true"
-            buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "boolean", "Debug", "true"
-            buildConfigField "String", "Sever", '"http://api.wmmt119.top/micro/"'
+        debug{
+            debuggable true
             signingConfig signingConfigs.release
         }
 
         release {
-            buildConfigField "boolean", "LOG_DEBUG", "false"
-            buildConfigField "boolean", "USE_CANARY", "false"
-            buildConfigField "String", "Sever", '"https://api.wmmt119.top/micro/"'
-            buildConfigField "boolean", "Debug", "false"
             minifyEnabled true
             shrinkResources true
             zipAlignEnabled true
+            debuggable false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -134,6 +121,7 @@ kapt {
     generateStubs = true
     arguments {
         arg("AROUTER_MODULE_NAME", project.getName())
+        includeCompileClasspath = true
         arg('eventBusIndex', 'com.shentu.wallpaper.app.MicroEventBusIndex')
     }
 }
@@ -160,7 +148,7 @@ dependencies {
     implementation rootProject.ext.dependencies["material"]
     implementation rootProject.ext.dependencies["lifecycle-extensions"]
     //tools
-    implementation rootProject.ext.dependencies["hotfix"]
+//    implementation rootProject.ext.dependencies["hotfix"]
     implementation rootProject.ext.dependencies["progressmanager"]
     implementation rootProject.ext.dependencies["retrofit-url-manager"]
     implementation rootProject.ext.dependencies["lifecyclemodel"]
@@ -189,8 +177,8 @@ dependencies {
     //view
     implementation rootProject.ext.dependencies["BRVAdapterHelper"]
     implementation rootProject.ext.dependencies["circleimageview"]
-    implementation rootProject.ext.dependencies["SmartRefreshLayout"]
-    implementation rootProject.ext.dependencies["SmartRefreshHeader"]
+    implementation rootProject.ext.dependencies["smartrefresh"]
+    implementation rootProject.ext.dependencies["refresh-header-material"]
     implementation rootProject.ext.dependencies["photoview"]
     implementation rootProject.ext.dependencies["autosize"]
     //    implementation rootProject.ext.dependencies["material-dialogs"]

@@ -32,7 +32,7 @@ constructor(model: CategoryDetailContract.Model, rootView: CategoryDetailContrac
                         if (!t.isSuccess) {
                             return
                         }
-                        t.data?.content?.let { mRootView.showCategoryList(it) }
+                        t.data?.content?.let { mRootView.showCategoryList(it,clear) }
                     }
                 })
     }

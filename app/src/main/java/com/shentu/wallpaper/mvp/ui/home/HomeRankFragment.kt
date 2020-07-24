@@ -26,7 +26,9 @@ import com.shentu.wallpaper.mvp.ui.browser.PictureBrowserActivity
 import kotlinx.android.synthetic.main.activity_home_new.smartRefresh
 import kotlinx.android.synthetic.main.fragment_home_rank.*
 
-
+/**
+ * 最热
+ * */
 class HomeRankFragment : BaseFragment<HomeRankPresenter>(), HomeRankContract.View {
 
     private lateinit var loadService: LoadService<Any>
@@ -77,6 +79,10 @@ class HomeRankFragment : BaseFragment<HomeRankPresenter>(), HomeRankContract.Vie
         } else {
             smartRefresh.finishLoadMore()
         }
+    }
+
+    override fun showNoMoreData() {
+        smartRefresh.setNoMoreData(true)
     }
 
     override fun showMessage(message: String) {

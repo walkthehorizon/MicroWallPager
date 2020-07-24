@@ -24,9 +24,9 @@ import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
-import com.scwang.smartrefresh.layout.api.RefreshLayout
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.GlideArms
 import com.shentu.wallpaper.app.event.LikeEvent

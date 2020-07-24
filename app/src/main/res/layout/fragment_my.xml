@@ -94,8 +94,8 @@
         android:layout_below="@+id/itCollect"
         app:riv_arrow_visible="true"
         app:riv_divider_visible="true"
-        app:riv_icon="@drawable/ic_collections_black_24dp"
-        app:riv_title="我的看豆">
+        app:riv_icon="@drawable/ic_all_inclusive_black_24dp"
+        app:riv_title="我的萌豆">
 
     </com.shentu.wallpaper.mvp.ui.widget.RippleItemView>
 
@@ -119,10 +119,19 @@
         app:riv_title="检查更新" />
 
     <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+        android:id="@+id/itMode"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:visibility="gone"
+        android:layout_below="@+id/itUpdate"
+        app:riv_icon="@drawable/ic_filter_vintage_black_24dp"
+        app:riv_title="内容模式" />
+
+    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
         android:id="@+id/itCache"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@+id/itUpdate"
+        android:layout_below="@+id/itMode"
         app:riv_arrow_visible="true"
         app:riv_icon="@drawable/ic_delete_forever_black_24dp"
         app:riv_title="清除缓存" />

@@ -16,6 +16,7 @@ import com.jess.arms.di.module.GlobalConfigModule
 import com.jess.arms.http.log.RequestInterceptor
 import com.jess.arms.integration.ConfigModule
 import com.shentu.wallpaper.BuildConfig
+import com.shentu.wallpaper.app.config.Config
 import io.rx_cache2.internal.RxCache
 import okhttp3.*
 import retrofit2.Retrofit
@@ -23,6 +24,8 @@ import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
+import java.net.InetAddress
+import java.net.UnknownHostException
 import java.security.GeneralSecurityException
 import java.security.KeyStore
 import java.security.cert.CertificateFactory
@@ -51,24 +54,42 @@ class GlobalConfiguration : ConfigModule {
         val cacheFile = File(cachePath)
         cookieStore = ConcurrentHashMap()
         globalHttpHandler = GlobalHttpHandlerImpl(context)
-        if (!BuildConfig.LOG_DEBUG) { //Release 时,让框架不再打印 Http 请求和响应的信息
+        if (!BuildConfig.DEBUG) { //Release 时,让框架不再打印 Http 请求和响应的信息
             builder.printHttpLogLevel(RequestInterceptor.Level.NONE)
         }
-        builder.baseurl(BuildConfig.Sever)
+        builder.baseurl(Config.appServer)
                 .cacheFile(cacheFile)
                 // 这里提供一个全局处理 Http 请求和响应结果的处理类,可以比客户端提前一步拿到服务器返回的结果,可以做一些操作,比如token超时,重新获取
                 .globalHttpHandler(globalHttpHandler) // 用来处理 rxjava 中发生的所有错误,rxjava 中发生的每个错误都会回调此接口
                 // rxjava必要要使用ErrorHandleSubscriber(默认实现Subscriber的onError方法),此监听才生效
                 .responseErrorListener(ResponseErrorListenerImpl())
-                .gsonConfiguration { context1: Context?, gsonBuilder: GsonBuilder ->  //这里可以自己自定义配置Gson的参数
+                .gsonConfiguration { _: Context?, gsonBuilder: GsonBuilder ->  //这里可以自己自定义配置Gson的参数
                     gsonBuilder
                             .serializeNulls() //支持序列化null的参数
                             .enableComplexMapKeySerialization() //支持将序列化key为object的map,默认只能序列化key为string的map
                 }
-                .retrofitConfiguration { context1: Context?, retrofitBuilder: Retrofit.Builder? -> }
-                .okhttpConfiguration { context1: Context?, okhttpBuilder: OkHttpClient.Builder ->  //这里可以自己自定义配置Okhttp的参数
-                    supportHttps(context, okhttpBuilder)
-                    okhttpBuilder.writeTimeout(10, TimeUnit.SECONDS)
+                .retrofitConfiguration { _: Context?, _: Retrofit.Builder? -> }
+                .okhttpConfiguration { _: Context?, builder: OkHttpClient.Builder ->  //这里可以自己自定义配置Okhttp的参数
+                    supportHttps(context, builder)
+//                    builder.dns(object : Dns {
+//                        override fun lookup(hostname: String): List<InetAddress> {
+//                            val inetAddresses: MutableList<InetAddress> = mutableListOf()
+//                            var hostnameAddresses: List<InetAddress>? = null
+//                            try {
+//                                hostnameAddresses = Dns.SYSTEM.lookup(hostname)
+//                            } catch (e: UnknownHostException) {
+//                                Timber.e(e)
+//                            }
+//                            hostnameAddresses?.let { inetAddresses.addAll(it) }
+//                            try {
+//                                inetAddresses.add(InetAddress.getByName("47.105.40.169:8000"))
+//                            } catch (e: UnknownHostException) {
+//                                Timber.e(e)
+//                            }
+//                            return inetAddresses
+//                        }
+//                    })
+                    builder.writeTimeout(10, TimeUnit.SECONDS)
                             .connectTimeout(10, TimeUnit.SECONDS)
                             .cookieJar(object : CookieJar {
                                 override fun loadForRequest(url: HttpUrl): List<Cookie> {
@@ -96,13 +117,13 @@ class GlobalConfiguration : ConfigModule {
                                     val request = chain.request()
                                     val response = chain.proceed(request)
                                     Timber.e("url %s , head %s", request.url.toString(), request.header("Cache-Control"))
-                                    var onlineCacheTime = 30L //在线的时候的缓存过期时间，如果想要不缓存，直接时间设置为0
+                                    var onlineCacheTime = 10L //在线的时候的缓存过期时间，如果想要不缓存，直接时间设置为0
                                     if (!TextUtils.isEmpty(request.header("Cache-Control"))) {
                                         onlineCacheTime = try {
                                             request.header("Cache-Control")!!.split("=").toTypedArray()[1].toLong()
                                         } catch (e: ClassCastException) {
                                             Timber.e(e)
-                                            30L
+                                            10L
                                         }
                                     }
                                     return response.newBuilder()
@@ -225,7 +246,6 @@ class GlobalConfiguration : ConfigModule {
     private fun newEmptyKeyStore(password: CharArray): KeyStore {
         return try {
             val keyStore = KeyStore.getInstance(KeyStore.getDefaultType())
-            val `in`: InputStream? = null // By convention, 'null' creates an empty key store.
             keyStore.load(null, password)
             keyStore
         } catch (e: IOException) {

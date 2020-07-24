@@ -10,7 +10,7 @@
         android:id="@+id/toolbar"
         app:tl_title="编辑"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/default_toolbar_height"></com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar>
+        android:layout_height="@dimen/default_toolbar_height" />
 
     <RelativeLayout
         android:layout_marginTop="12dp"

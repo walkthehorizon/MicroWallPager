@@ -1,4 +1,4 @@
-package com.shentu.wallpaper.mvp.ui.fragment
+package com.shentu.wallpaper.mvp.ui.my
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,11 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.list.ItemListener
+import com.afollestad.materialdialogs.list.MultiChoiceListener
+import com.afollestad.materialdialogs.list.listItems
+import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.TimeUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.google.gson.reflect.TypeToken
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
@@ -23,6 +29,7 @@ import com.shentu.wallpaper.app.GlideConfiguration
 import com.shentu.wallpaper.app.HkUserManager
 import com.shentu.wallpaper.app.utils.HkUtils
 import com.shentu.wallpaper.app.utils.RxUtils
+import com.shentu.wallpaper.databinding.FragmentMyBinding
 import com.shentu.wallpaper.di.component.DaggerMyComponent
 import com.shentu.wallpaper.di.module.MyModule
 import com.shentu.wallpaper.model.api.service.MicroService
@@ -32,7 +39,6 @@ import com.shentu.wallpaper.mvp.contract.MyContract
 import com.shentu.wallpaper.mvp.presenter.MyPresenter
 import com.shentu.wallpaper.mvp.ui.activity.SettingMoreActivity
 import com.shentu.wallpaper.mvp.ui.login.LoginActivity
-import com.shentu.wallpaper.mvp.ui.my.MyEditActivity
 import com.shentu.wallpaper.mvp.ui.update.AppUpdateDialog
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -43,6 +49,9 @@ import java.io.File
 
 
 class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
+
+    private lateinit var binding: FragmentMyBinding
+    private lateinit var initModes: List<String>
 
     companion object {
         fun newInstance(): TabMyFragment {
@@ -63,7 +72,8 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     }
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_my, container, false)
+        binding = FragmentMyBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun initData(savedInstanceState: Bundle?) {
@@ -92,10 +102,24 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                 return@setOnClickListener
             }
         }
+        val modeSp = SPUtils.getInstance().getString(Constant.CONTENT_MODE, "")
+        initModes = if (modeSp.isEmpty()) {
+            listOf(ContentMode.ANIM.name)
+        } else {
+            ArmsUtils.obtainAppComponentFromContext(mContext).gson()
+                    .fromJson(modeSp, object : TypeToken<List<String>>() {}.type)
+        }
+        binding.itMode.setEndValue(ContentMode.getModeStr(initModes))
+        binding.itMode.setOnClickListener {
+            if (!HkUserManager.instance.isLogin) {
+                launchActivity(Intent(mContext, LoginActivity::class.java))
+                return@setOnClickListener
+            }
+            showContentModeDialog()
+        }
         if (!TimeUtils.isToday(SPUtils.getInstance().getLong(Constant.LAST_NOTIFY_TIME))) {
             checkUpdate(false)
         }
-
     }
 
     private fun checkUpdate(isUser: Boolean) {
@@ -120,6 +144,32 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                         }
                     }
                 })
+    }
+
+
+    private fun showContentModeDialog() {
+        val initSelects = IntArray(initModes.size)
+        if (initModes.contains(ContentMode.ANIM.name)) {
+            initSelects[0] = 0
+        }
+        if (initModes.contains(ContentMode.COS.name)) {
+            initSelects[1] = 1
+        }
+        var selectModes: List<String> = emptyList()
+        MaterialDialog(mContext)
+                .listItemsMultiChoice(initialSelection = initSelects, items = listOf(ContentMode.ANIM.name, ContentMode.COS.name), selection = object : MultiChoiceListener {
+                    override fun invoke(dialog: MaterialDialog, indices: IntArray, items: List<String>) {
+                        selectModes = items
+                    }
+                })
+                .positiveButton {
+                    initModes = selectModes
+                    SPUtils.getInstance().put(Constant.CONTENT_MODE, ArmsUtils.obtainAppComponentFromContext(mContext)
+                            .gson().toJson(selectModes))
+                    binding.itMode.setEndValue(ContentMode.getModeStr(selectModes))
+                    //TODO 刷新数据
+                }
+                .show()
     }
 
     private fun showUpdateDialog(update: AppUpdate) {
@@ -203,9 +253,6 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete {
                     GlideArms.get(mContext).clearMemory()
-                    ArmsUtils.obtainAppComponentFromContext(mContext)
-                            .repositoryManager()
-                            .clearAllCache()
                     itCache.setEndValue(FileUtils.getDirSize(glideCache))
                     ToastUtils.showShort("清理完成")
                 }

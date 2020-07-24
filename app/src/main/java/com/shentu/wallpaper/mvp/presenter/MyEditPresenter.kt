@@ -64,8 +64,9 @@ constructor(model: MyEditContract.Model, rootView: MyEditContract.View) :
                 .doFinally { mRootView.hideLoading() }
                 .subscribe(object : ErrorHandleSubscriber<MicroUser>(mErrorHandler) {
                     override fun onNext(t: MicroUser) {
-                        mRootView.refreshView()
+                        HkUserManager.instance.user = t
                         HkUserManager.instance.save()
+                        mRootView.refreshView()
                     }
                 })
     }
