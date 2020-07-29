@@ -51,7 +51,7 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
 
     //裁剪输出路径
     private val cropImage = File(PathUtils.getExternalAppCachePath(), "avatar_crop.jpg")
-    private val user: MicroUser = HkUserManager.instance.user
+    private val user: MicroUser = HkUserManager.user
     private lateinit var loadingDialog: MaterialDialog
 
     override fun setupActivityComponent(appComponent: AppComponent) {
@@ -121,9 +121,9 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
     private fun showNickNameDialog() {
         MaterialDialog(this).show {
             title(text = "昵称")
-            input("新的昵称", prefill = HkUserManager.instance.user.nickname
+            input("新的昵称", prefill = HkUserManager.user.nickname
                     , maxLength = 6) { _, sequence ->
-                HkUserManager.instance.user.nickname = sequence.toString()
+                HkUserManager.user.nickname = sequence.toString()
                 mPresenter?.updateUser()
             }
         }
@@ -134,8 +134,8 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
             title(text = "性别")
             positiveButton(text = "确认")
             listItemsSingleChoice(items = listOf("保密", "男", "女")
-                    , initialSelection = HkUserManager.instance.user.sex) { _, index, _ ->
-                HkUserManager.instance.user.sex = index
+                    , initialSelection = HkUserManager.user.sex) { _, index, _ ->
+                HkUserManager.user.sex = index
                 mPresenter?.updateUser()
             }
         }

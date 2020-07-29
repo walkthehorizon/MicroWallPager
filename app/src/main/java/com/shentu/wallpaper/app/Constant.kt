@@ -5,9 +5,8 @@ import java.util.*
 
 object Constant {
     var LAST_LOGIN_ACCOUNT = "last_login_account"
-    var MAIN_TAB_TITLES = Arrays.asList("推荐", "我的")
+    var LAST_SHOW_DONATE = "last_show_donate"
     var BANNER_COUNT = 5
-    var URGE_AD_DIALOG = "urge_ad_dialog"
     const val LAST_SIGN_TIME = "last_sign_time"
     const val CONTENT_MODE = "CONTENT_MODE";
     /**
@@ -19,6 +18,6 @@ object Constant {
     var MICRO_BASE_URL = "https://wmmt119.top"
     const val BASE_WALLPAPER_SHARE_URL = "https://web.wmmt119.top/wallpaper/"
     const val GITHUB_URL = "https://github.com/walkthehorizon/MicroWallPager/blob/master/README.md"
-    const val WEB_PRIVACY = "https://web.wmmt119.top/privacy"
-    const val WEB_SERVER = "https://web.wmmt119.top/agreement"
+    const val WEB_PRIVACY = "http://web.wmmt119.top/privacy"
+    const val WEB_SERVER = "http://web.wmmt119.top/agreement"
 }

@@ -5,8 +5,6 @@ enum class ContentMode(name: String , id:Int) {
     COS("Cos",1),//Cos
     PHOTO("写真",2);//写真
 
-
-
     companion object{
         fun getContentMode(name: String): ContentMode {
             return when (name) {

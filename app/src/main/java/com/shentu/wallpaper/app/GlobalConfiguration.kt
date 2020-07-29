@@ -69,8 +69,8 @@ class GlobalConfiguration : ConfigModule {
                             .enableComplexMapKeySerialization() //支持将序列化key为object的map,默认只能序列化key为string的map
                 }
                 .retrofitConfiguration { _: Context?, _: Retrofit.Builder? -> }
-                .okhttpConfiguration { _: Context?, builder: OkHttpClient.Builder ->  //这里可以自己自定义配置Okhttp的参数
-                    supportHttps(context, builder)
+                .okhttpConfiguration { _: Context?, builder1: OkHttpClient.Builder ->  //这里可以自己自定义配置Okhttp的参数
+                    supportHttps(context, builder1)
 //                    builder.dns(object : Dns {
 //                        override fun lookup(hostname: String): List<InetAddress> {
 //                            val inetAddresses: MutableList<InetAddress> = mutableListOf()
@@ -89,7 +89,7 @@ class GlobalConfiguration : ConfigModule {
 //                            return inetAddresses
 //                        }
 //                    })
-                    builder.writeTimeout(10, TimeUnit.SECONDS)
+                    builder1.writeTimeout(10, TimeUnit.SECONDS)
                             .connectTimeout(10, TimeUnit.SECONDS)
                             .cookieJar(object : CookieJar {
                                 override fun loadForRequest(url: HttpUrl): List<Cookie> {

@@ -103,13 +103,13 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                             return
                         }
                         if (t.code == 1402) {//看豆不足
-                            ToastUtils.showLong("很抱歉，看豆不足！")
+                            ToastUtils.showLong("很抱歉，萌豆不足！")
                             return
                         }
                         if (!t.isSuccess) {
                             return
                         }
-                        HkUserManager.instance.updateKandou(-t.data!!)
+                        HkUserManager.updateKandou(-t.data!!)
                         mRootView.savePicture(position, type)
                     }
                 })

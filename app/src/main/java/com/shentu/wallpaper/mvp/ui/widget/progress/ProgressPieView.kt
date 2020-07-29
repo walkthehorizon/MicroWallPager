@@ -107,7 +107,6 @@ class ProgressPieView @JvmOverloads constructor(context: Context, attrs: Attribu
         strokeWidth = (strokeWidth * mDisplayMetrics.density)
         textSize = (textSize * mDisplayMetrics.scaledDensity)
         val a = context.obtainStyledAttributes(attrs, R.styleable.ProgressPieView)
-        val res = resources
         mMax = a.getInteger(R.styleable.ProgressPieView_ppvMax, mMax)
         mProgress = a.getInteger(R.styleable.ProgressPieView_ppvProgress, mProgress)
         startAngle = a.getInt(R.styleable.ProgressPieView_ppvStartAngle, startAngle)

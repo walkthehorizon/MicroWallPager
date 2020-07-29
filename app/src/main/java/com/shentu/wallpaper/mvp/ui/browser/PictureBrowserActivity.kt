@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.UserManager
 import android.text.InputType
 import android.transition.Fade
 import android.view.Gravity
@@ -64,14 +65,10 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     @Autowired
     @JvmField
     var subjectId: Int = -1
+
     @Autowired
     @JvmField
     var categoryId: Int = -1
-
-    /**
-     * 是否已经显示过DonateDialog
-     * */
-    private var hasShowDonate = false
 
     //from web
     private var paperId: Int = -1
@@ -141,7 +138,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         if (!this::popupMenu.isInitialized) {
             popupMenu = PopupMenu(this, ivMore, Gravity.BOTTOM)
             popupMenu.menuInflater.inflate(R.menu.menu_picture_detail, popupMenu.menu)
-            if (!HkUserManager.instance.isAdmin || categoryId == -1) {
+            if (!HkUserManager.isAdmin || categoryId == -1) {
                 popupMenu.menu.findItem(R.id.itSetBanner).isVisible = false
                 popupMenu.menu.findItem(R.id.itSetCover).isVisible = false
             }
@@ -200,8 +197,8 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             var result = SaveType.NORMAL.value
             MaterialDialog(this)
                     .title(text = "下载")
-                    .listItemsSingleChoice(items = listOf("默认（${paper.normalPrice}看豆）"
-                            , "原图（${paper.originPrice}看豆）")
+                    .listItemsSingleChoice(items = listOf("默认（${HkUserManager.user.nPrice}看豆）"
+                            , "原图（${HkUserManager.user.oPrice}看豆）")
                             , initialSelection = 0) { _, index, _ ->
                         val saveType = if (index == 0) SaveType.NORMAL else SaveType.ORIGIN
                         result = saveType.value
@@ -232,7 +229,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
         onPageSelected(viewPager.currentItem)
 
         mbLoadOrigin.setOnClickListener {
-            if (!HkUserManager.instance.isLogin) {
+            if (!HkUserManager.isLogin) {
                 launchActivity(Intent(this, LoginActivity::class.java))
                 return@setOnClickListener
             }
@@ -240,7 +237,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             vpAdapter.getFragment(viewPager.currentItem).loadPicture(Behavior.LOAD_ORIGIN)
         }
         ivDownload.setOnClickListener {
-            if (!HkUserManager.instance.isLogin) {
+            if (!HkUserManager.isLogin) {
                 launchActivity(Intent(this@PictureBrowserActivity, LoginActivity::class.java))
                 return@setOnClickListener
             }
@@ -252,7 +249,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
         tvLike.text = curPaper.collectNum.toString()
         tvLike.setOnClickListener {
-            if (!HkUserManager.instance.isLogin) {
+            if (!HkUserManager.isLogin) {
                 launchActivity(Intent(this, LoginActivity::class.java))
                 return@setOnClickListener
             }
@@ -266,7 +263,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
 
         tvComment.text = curPaper.commentNum.toString()
         tvComment.setOnClickListener {
-//            if (HkUserManager.instance.needLogin(this)) {
+//            if (HkUserManager.needLogin(this)) {
 //                return@setOnClickListener
 //            }
             showCommentDialog()
@@ -335,10 +332,10 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     }
 
     override fun showDonateDialog() {
-        if (hasShowDonate) {
+        if (System.currentTimeMillis() - SPUtils.getInstance().getLong(Constant.LAST_SHOW_DONATE) < HkUserManager.user.showDonateInterval) {
             return
         }
-        hasShowDonate = true
+        SPUtils.getInstance().put(Constant.LAST_SHOW_DONATE, System.currentTimeMillis())
         val dialog = MaterialDialog(this).show {
             customView(R.layout.activity_donate)
             cancelable(false)

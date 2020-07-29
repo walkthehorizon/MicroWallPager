@@ -28,7 +28,7 @@ class MainModel @Inject constructor(repositoryManager: IRepositoryManager?) : Ba
     override fun loginAccount(): Observable<BaseResponse<MicroUser>> {
         return mRepositoryManager
                 .obtainRetrofitService(UserService::class.java)
-                .loginAccount(HkUserManager.instance.uuid)
+                .loginAccount(HkUserManager.uuid)
     }
 
     override fun onDestroy() {

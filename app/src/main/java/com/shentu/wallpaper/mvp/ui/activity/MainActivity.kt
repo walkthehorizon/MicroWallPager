@@ -80,12 +80,13 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
 
     override fun initData(savedInstanceState: Bundle?) {
         loadService = LoadSir.getDefault().register(this) { initData(null) }
-        if (HkUserManager.instance.isLogin) {
+        if(HkUserManager.isLogin){
             showMainView()
             GlobalScope.launch {
                 showContent()
             }
-        } else {
+        }
+        if (NetworkUtils.isConnected()) {
             mPresenter?.loginAccount()
         }
     }
@@ -275,7 +276,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
      * 签到
      * */
     private fun sign() {
-        if (!HkUserManager.instance.isLogin) {
+        if (!HkUserManager.isLogin) {
             return
         }
         val lastSignMillis = SPUtils.getInstance().getLong(Constant.LAST_SIGN_TIME, 0)
@@ -302,7 +303,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
                         llSign.scaleY = 0f
                         llSign.animate().scaleX(1f).scaleY(1f).setStartDelay(1200).start()
                         lottieSign.playAnimation()
-                        t.data?.let { HkUserManager.instance.updateKandou(it) }
+                        t.data?.let { HkUserManager.updateKandou(it) }
                     }
                 })
     }

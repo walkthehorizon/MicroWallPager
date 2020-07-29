@@ -27,6 +27,7 @@ import com.shentu.wallpaper.mvp.ui.browser.SaveType
 import com.shentu.wallpaper.mvp.ui.widget.progress.ProgressPieIndicator
 import com.yanzhenjie.permission.AndPermission
 import kotlinx.android.synthetic.main.fragment_picture.*
+import timber.log.Timber
 import java.io.File
 
 class PictureFragment : BaseFragment<IPresenter>() {
@@ -159,23 +160,24 @@ class PictureFragment : BaseFragment<IPresenter>() {
      * 兼容Android10的沙盒下载
      * */
     fun savePicture(destUrl: String, curFile: File?) {
-        val destPath = PicUtils.getInstance().getDownloadPicturePath(mContext,destUrl)
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+        Timber.d("save picture url %s", destUrl)
+        val destPath = PicUtils.getInstance().getDownloadPicturePath(mContext, destUrl)
+        if (false) {
             val values = ContentValues()
             values.put(MediaStore.Images.Media.MIME_TYPE, "image/*")
             values.put(MediaStore.Images.Media.DISPLAY_NAME, URLUtil.guessFileName(destUrl
                     , null, null))
             values.put(MediaStore.Images.ImageColumns.IS_PENDING, true)
             values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM + File.separator + "萌幻Cos")
-            val uri = context?.contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            val uri = requireContext().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
             if (uri == null) {
-                ToastUtils.showShort("下载失败")
+                ToastUtils.showShort("下载失败 uri null")
                 return
             }
             val ous: ParcelFileDescriptor? = context?.contentResolver?.openFileDescriptor(AndPermission.getFileUri(context, File(destPath)), "rw")
             val ins = context?.contentResolver?.openFileDescriptor(AndPermission.getFileUri(context, curFile), "rw")
             if (ins == null || ous == null) {
-                ToastUtils.showShort("下载失败")
+                ToastUtils.showShort("下载失败 ins==null||ous==null ")
                 return
             }
             android.os.FileUtils.copy(ins.fileDescriptor, ous.fileDescriptor)

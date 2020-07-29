@@ -90,14 +90,14 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
             startActivity(Intent(mContext, SettingMoreActivity::class.java))
         }
         rlHead.setOnClickListener {
-            if (!HkUserManager.instance.isLogin) {
+            if (!HkUserManager.isLogin) {
                 LoginActivity.open()
                 return@setOnClickListener
             }
             startActivity(Intent(mContext, MyEditActivity::class.java))
         }
         itMoney.setOnClickListener {
-            if (!HkUserManager.instance.isLogin) {
+            if (!HkUserManager.isLogin) {
                 launchActivity(Intent(mContext, LoginActivity::class.java))
                 return@setOnClickListener
             }
@@ -111,7 +111,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
         }
         binding.itMode.setEndValue(ContentMode.getModeStr(initModes))
         binding.itMode.setOnClickListener {
-            if (!HkUserManager.instance.isLogin) {
+            if (!HkUserManager.isLogin) {
                 launchActivity(Intent(mContext, LoginActivity::class.java))
                 return@setOnClickListener
             }
@@ -179,8 +179,8 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     }
 
     private fun refreshUser() {
-        val user = HkUserManager.instance.user
-        if (HkUserManager.instance.isLogin) {
+        val user = HkUserManager.user
+        if (HkUserManager.isLogin) {
             tvMyName.text = user.nickname
             ivSex.setImageResource(when (user.sex) {
                 1 -> R.drawable.ic_im_sex_man
@@ -193,18 +193,18 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                 ivSex.clearColorFilter()
             }
             GlideArms.with(this)
-                    .load(HkUserManager.instance.user.avatar)
+                    .load(HkUserManager.user.avatar)
                     .into(circle_avatar)
             itMoney.setEndValue(user.pea.toString())
             when {
-                HkUserManager.instance.user.vip -> {
+                HkUserManager.user.vip -> {
                     tvIdentify.text = "VIP"
                     tvIdentify.setTextColor(ContextCompat.getColor(mContext, R.color.red_dark))
                 }
-                HkUserManager.instance.user.svip -> {
-                    tvIdentify.text = "SVIP"
-                    tvIdentify.setTextColor(ContextCompat.getColor(mContext, R.color.yellow_dark))
-                }
+//                HkUserManager.instance.user.svip -> {
+//                    tvIdentify.text = "SVIP"
+//                    tvIdentify.setTextColor(ContextCompat.getColor(mContext, R.color.yellow_dark))
+//                }
                 else -> {
                     tvIdentify.text = ""
                 }
@@ -225,14 +225,14 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     }
 
     private fun clickHead() {
-        if (!HkUserManager.instance.isLogin) {
+        if (!HkUserManager.isLogin) {
             launchActivity(Intent(mContext, LoginActivity::class.java))
             return
         }
     }
 
     private fun clickCollect() {
-        if (!HkUserManager.instance.isLogin) {
+        if (!HkUserManager.isLogin) {
             launchActivity(Intent(mContext, LoginActivity::class.java))
             return
         }

@@ -40,7 +40,7 @@ constructor(model: MyEditContract.Model, rootView: MyEditContract.View) :
         CosUtils.instance.uploadAvatar(path, object : CosXmlResultListener {
             override fun onSuccess(request: CosXmlRequest?, result: CosXmlResult?) {
                 val putObjectResult = result as PutObjectResult
-                HkUserManager.instance.user.avatar = putObjectResult.accessUrl
+                HkUserManager.user.avatar = putObjectResult.accessUrl
                 updateUser()
             }
 
@@ -58,14 +58,14 @@ constructor(model: MyEditContract.Model, rootView: MyEditContract.View) :
     }
 
     fun updateUser() {
-        mModel.updateUser(HkUserManager.instance.user)
+        mModel.updateUser(HkUserManager.user)
                 .compose(RxUtils.applyClearSchedulers(mRootView))
                 .doOnSubscribe { mRootView.showLoading() }
                 .doFinally { mRootView.hideLoading() }
                 .subscribe(object : ErrorHandleSubscriber<MicroUser>(mErrorHandler) {
                     override fun onNext(t: MicroUser) {
-                        HkUserManager.instance.user = t
-                        HkUserManager.instance.save()
+                        HkUserManager.user = t
+                        HkUserManager.save()
                         mRootView.refreshView()
                     }
                 })

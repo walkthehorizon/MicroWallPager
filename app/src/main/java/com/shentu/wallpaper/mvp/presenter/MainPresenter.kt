@@ -43,10 +43,11 @@ constructor(model: MainContract.Model, rootView: MainContract.View) : BasePresen
                             mRootView.showError()
                             return
                         }
-                        HkUserManager.instance.user = t.data!!
-                        HkUserManager.instance.save()
-                        mRootView.showMainView()
-                        Timber.e(HkUserManager.instance.user.toString())
+                        HkUserManager.user = t.data!!
+                        HkUserManager.save()
+//                            Timber.d(HkUserManager.user.toString())
+//                        mRootView.showMainView()
+
                     }
 
                     override fun onError(t: Throwable) {
