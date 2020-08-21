@@ -66,9 +66,8 @@ interface MicroService {
                       @Query("limit") limit: Int,
                       @Query("offset") offset: Int): Observable<SubjectPageResponse>
 
-    @GET("banners/")
-    fun getBanners(@Query("limit") limit: Int,
-                   @Query("offset") offset: Int): Observable<BannerPageResponse>
+    @GET("banners")
+    fun getBanners(): Observable<BannerPageResponse>
 
     @FormUrlEncoded
     @POST("category/update/")

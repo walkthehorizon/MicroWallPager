@@ -274,7 +274,7 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
                 false
             }
         } else {
-            bannerAdapter!!.notifyDataSetChanged()
+            bannerAdapter?.notifyDataSetChanged()
         }
     }
 

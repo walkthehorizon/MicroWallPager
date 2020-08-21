@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
@@ -33,6 +32,7 @@ import com.mob.OperationCallback
 import com.shentu.wallpaper.R
 import com.shentu.wallpaper.app.Constant
 import com.shentu.wallpaper.app.HkUserManager
+import com.shentu.wallpaper.app.config.Config
 import com.shentu.wallpaper.app.page.ErrorCallback
 import com.shentu.wallpaper.app.utils.RxUtils
 import com.shentu.wallpaper.di.component.DaggerMainComponent
@@ -79,6 +79,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
     }
 
     override fun initData(savedInstanceState: Bundle?) {
+        Config.init(this)
         loadService = LoadSir.getDefault().register(this) { initData(null) }
         if(HkUserManager.isLogin){
             showMainView()

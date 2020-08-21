@@ -5,54 +5,54 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import com.blankj.utilcode.util.ActivityUtils
+import com.blankj.utilcode.util.AppUtils
 
-class SensorHelper(private val context: Context) : SensorEventListener {
+class SensorHelper(context: Context) : SensorEventListener, LifecycleObserver {
     // 速度阈值，当摇晃速度达到这值后产生作用
-    private val SPEED_SHRESHOLD = 5000
+    private val SPEED_SHRESHOLD = 8000
+
     // 两次检测的时间间隔
     private val UPTATE_INTERVAL_TIME = 50
+
     // 传感器管理器
     private var sensorManager: SensorManager? = null
+
     // 传感器
     private var sensor: Sensor? = null
+
     // 重力感应监听器
     private var onShakeListener: OnShakeListener? = null
+
     // 手机上一个位置时重力感应坐标
     private var lastX: Float = 0.toFloat()
     private var lastY: Float = 0.toFloat()
     private var lastZ: Float = 0.toFloat()
+
     // 上次检测时间
     private var lastUpdateTime: Long = 0
 
     init {
-        start()
-    }
-
-    /**
-     * 开始检测
-     */
-    fun start() {
         // 获得传感器管理器
         sensorManager = context
-            .getSystemService(Context.SENSOR_SERVICE) as SensorManager
+                .getSystemService(Context.SENSOR_SERVICE) as SensorManager
         if (sensorManager != null) {
             // 获得重力传感器
             sensor = sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         }
+
         // 注册
-        if (sensor != null) {
-            sensorManager!!.registerListener(
+        sensorManager?.registerListener(
                 this, sensor,
                 SensorManager.SENSOR_DELAY_GAME
-            )
-        }
+        )
     }
 
-    /**
-     * 停止检测
-     */
     fun stop() {
-        sensorManager!!.unregisterListener(this)
+        sensorManager?.unregisterListener(this)
     }
 
     // 摇晃监听接口
@@ -61,7 +61,7 @@ class SensorHelper(private val context: Context) : SensorEventListener {
     }
 
     // 设置重力感应监听器
-    fun setOnShakeListener(listener: OnShakeListener) {
+    fun setOnShakeListener(listener: OnShakeListener?) {
         onShakeListener = listener
     }
 
@@ -94,7 +94,7 @@ class SensorHelper(private val context: Context) : SensorEventListener {
         val speed = Math.sqrt((deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ).toDouble()) / timeInterval * 10000
         // 达到速度阀值，发出提示
         if (speed >= SPEED_SHRESHOLD) {
-            onShakeListener!!.onShake()
+            onShakeListener?.onShake()
         }
     }
 

@@ -217,7 +217,7 @@ class HkUtils private constructor() {
         return bitmap
     }
 
-    fun get2x2Image(url: String): String {
-        return url.replace("cos.ap-beijing", "picbj") + "!2x2"
+    fun get2x2Image(url: String?): String {
+        return url?.replace("cos.ap-beijing", "picbj") + "!2x2"
     }
 }

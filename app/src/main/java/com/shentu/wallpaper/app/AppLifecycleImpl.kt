@@ -61,7 +61,6 @@ class AppLifecycleImpl : AppLifecycles {
         FileDownloader.setup(application)
         BigImageViewer.initialize(GlideImageLoader.with(application
                 , GlideConfiguration.imageClient))
-        Config.initShake(application)
         LoadSir.beginBuilder()
                 .addCallback(ErrorCallback()) //添加各种状态页
                 .addCallback(EmptyCallback())

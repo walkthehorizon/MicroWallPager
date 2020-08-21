@@ -3,8 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.mob.sdk'
-//apply plugin: 'io.fabric'
-//apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -201,4 +199,3 @@ dependencies {
     //test
     testImplementation rootProject.ext.dependencies["junit"]
 }
-//apply plugin: 'com.google.gms.google-services'

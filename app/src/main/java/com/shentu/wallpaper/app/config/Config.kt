@@ -1,32 +1,50 @@
 package com.shentu.wallpaper.app.config
 
+import android.app.Activity
+import android.app.ActivityManager
 import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.ItemListener
 import com.afollestad.materialdialogs.list.listItems
-import com.blankj.utilcode.util.AppUtils
-import com.blankj.utilcode.util.ObjectUtils
-import com.blankj.utilcode.util.SPUtils
+import com.blankj.utilcode.util.*
 import com.shentu.wallpaper.BuildConfig
+import com.shentu.wallpaper.app.HkApplication
 import com.shentu.wallpaper.app.config.SensorHelper.OnShakeListener
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-object Config {
+object Config : LifecycleObserver {
 
     private var env: Environment = Environment.valueOf(SPUtils.getInstance().getString("Environment", if (BuildConfig.DEBUG) Environment.DEBUG.name else Environment.RELEASE.name))
+    private lateinit var sensorHelper: SensorHelper
+    private lateinit var context: Context
 
-    fun initShake(context: Context) {
-        if (env != Environment.RELEASE) {
-            val helper = SensorHelper(context)
-            helper.setOnShakeListener(object : OnShakeListener {
-                override fun onShake() {
-                    showEnvDialog(context)
-                }
-            })
+    fun init(context: Context) {
+        if (env == Environment.RELEASE) {
+            return
         }
+        if (context !is Activity) {
+            throw IllegalArgumentException("context is not activity")
+        }
+        this.context = context
+        sensorHelper = SensorHelper(context)
+        sensorHelper.setOnShakeListener(object : OnShakeListener {
+            override fun onShake() {
+                showEnvDialog()
+            }
+        })
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy() {
+        sensorHelper.stop()
+        sensorHelper.setOnShakeListener(null)
     }
 
     val appServer: String
@@ -35,8 +53,11 @@ object Config {
             else -> "http://api.wmmt119.top/micro/"
         }
 
-    private fun showEnvDialog(context: Context) {
-        MaterialDialog(context).show {
+    private fun showEnvDialog() {
+        if (!AppUtils.isAppForeground()) {//应用不在前台，return
+            return
+        }
+        MaterialDialog(ActivityUtils.getTopActivity()).show {
             title(text = env.name)
             listItems(items = listOf(Environment.DEBUG.name, Environment.PRE.name), waitForPositiveButton = false
                     , selection = object : ItemListener {

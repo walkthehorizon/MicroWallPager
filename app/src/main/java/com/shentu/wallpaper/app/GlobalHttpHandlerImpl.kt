@@ -61,7 +61,7 @@ class GlobalHttpHandlerImpl(private val context: Context) : GlobalHttpHandler {
         }
         val uid = uid
         if (uid != -1) {
-            builder.addHeader("uid", Integer.toString(uid))
+            builder.addHeader("uid", uid.toString())
         }
         return builder
                 .addHeader("Content-Type", "application/json")

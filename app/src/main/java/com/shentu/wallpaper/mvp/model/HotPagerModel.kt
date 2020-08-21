@@ -38,7 +38,7 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
     override fun getBanners(): Observable<BannerPageResponse> {
         return mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
-                .getBanners(Constant.BANNER_COUNT, 0)
+                .getBanners()
 
     }
 }

@@ -37,9 +37,9 @@ class BannerListActivity : BaseActivity<IPresenter>(), IView {
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-        loadService = LoadSir.getDefault().register(this) {
-            showContent()
-            smartRefresh.autoRefresh()
+        loadService = LoadSir.getDefault().register(smartRefresh) {
+            showLoading()
+            getBanners(true)
         }
         smartRefresh.setOnLoadMoreListener {
             getBanners(false)
@@ -93,7 +93,7 @@ class BannerListActivity : BaseActivity<IPresenter>(), IView {
         ArmsUtils.obtainAppComponentFromContext(this)
                 .repositoryManager()
                 .obtainRetrofitService(MicroService::class.java)
-                .getBanners(MicroService.PAGE_LIMIT, offset)
+                .getBanners()
                 .compose(RxUtils.applySchedulers(this, clear))
                 .subscribe(object : ErrorHandleSubscriber<BannerPageResponse>(
                         ArmsUtils.obtainAppComponentFromContext(this).rxErrorHandler()) {
