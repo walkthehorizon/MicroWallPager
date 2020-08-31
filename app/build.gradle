@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.mob.sdk'
+apply plugin: 'channel'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -17,7 +18,7 @@ android {
         enabled = true
     }
     defaultConfig {
-        applicationId "com.shentu.wallpaper"
+        applicationId "com.shentu.paper"
         minSdkVersion rootProject.ext.android["minSdkVersion"]
         targetSdkVersion rootProject.ext.android["targetSdkVersion"]
         versionCode rootProject.ext.android["versionCode"]
@@ -82,6 +83,19 @@ android {
     }
 }
 
+channel{
+    //多渠道包的输出目录，默认为new File(project.buildDir,"channel")
+    baseOutputDir = new File(project.buildDir,"channel")
+    //多渠道包的命名规则，默认为：${appName}-${versionName}-${versionCode}-${flavorName}-${buildType}
+    apkNameFormat ='${appName}-${versionName}-${versionCode}-${flavorName}-${buildType}'
+    //快速模式：生成渠道包时不进行校验（速度可以提升10倍以上，默认为false）
+    isFastMode = false
+    //buildTime的时间格式，默认格式：yyyyMMdd-HHmmss
+    buildTimeDateFormat = 'yyyyMMdd'
+    //低内存模式（仅针对V2签名，默认为false）：只把签名块、中央目录和EOCD读取到内存，不把最大头的内容块读取到内存，在手机上合成APK时，可以使用该模式
+    lowMemory = false
+}
+
 MobSDK {
     appKey "2726f3a69c300"
     appSecret "5ef67a98fcae47f91163577728158ac3"
@@ -92,8 +106,8 @@ MobSDK {
         gui false
     }
     MobLink {
-        uriScheme "mlink://com.shentu.wallpaper"
-        appLinkHost "9mo0.t4m.cn"
+        uriScheme "mlink://com.shentu.paper"
+        appLinkHost "bg7g.t4m.cn"
     }
     ShareSDK {
         //平台配置信息
@@ -120,7 +134,7 @@ kapt {
     arguments {
         arg("AROUTER_MODULE_NAME", project.getName())
         includeCompileClasspath = true
-        arg('eventBusIndex', 'com.shentu.wallpaper.app.MicroEventBusIndex')
+        arg('eventBusIndex', 'com.shentu.paper.app.MicroEventBusIndex')
     }
 }
 
@@ -188,9 +202,7 @@ dependencies {
         exclude group: 'com.tencent.qcloud', module: 'mtaUtils' //关闭 mta上报功能
     }
     implementation rootProject.ext.dependencies["circleindicator"]
-//    implementation rootProject.ext.dependencies["firebase"]
-//    implementation rootProject.ext.dependencies["crashlytics"]
-//    implementation rootProject.ext.dependencies["firebase-perf"]
+    api 'com.leon.channel:helper:2.0.3'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2'
     //bigImage
     implementation rootProject.ext.dependencies["bigImageViewer"]

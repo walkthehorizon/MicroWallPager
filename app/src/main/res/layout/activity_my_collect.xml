@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
+    <com.shentu.paper.mvp.ui.widget.DefaultToolbar
         android:id="@+id/toolbar"
         app:tl_title="收藏"
         app:tl_left_icon="@drawable/ic_arrow_back_white_24dp"
@@ -51,7 +51,7 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="16dp"
             android:src="@drawable/ic_more_vert_white_24dp" />
-    </com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar>
+    </com.shentu.paper.mvp.ui.widget.DefaultToolbar>
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/smartRefresh"

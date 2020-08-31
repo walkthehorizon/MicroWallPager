@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
+    <com.shentu.paper.mvp.ui.widget.DefaultToolbar
         android:layout_width="match_parent"
         android:id="@+id/toolbar"
         tab:tl_left_icon="@drawable/ic_arrow_back_white_24dp"
@@ -24,7 +24,7 @@
             tab:tabTextAppearance="@style/TabTextSize16"
             tab:tabTextColor="@color/grey_81" />
 
-    </com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar>
+    </com.shentu.paper.mvp.ui.widget.DefaultToolbar>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/summaryVp"

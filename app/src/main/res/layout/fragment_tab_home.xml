@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.shentu.wallpaper.mvp.ui.widget.ArcImageView
+    <com.shentu.paper.mvp.ui.widget.ArcImageView
         android:id="@+id/arc1"
         android:layout_width="match_parent"
         android:layout_height="210dp"
@@ -41,7 +41,7 @@
                     android:paddingBottom="12dp"
                     app:layout_scrollFlags="scroll">
 
-                    <com.shentu.wallpaper.mvp.ui.widget.loopviewpager.LoopViewPager
+                    <com.shentu.paper.mvp.ui.widget.loopviewpager.LoopViewPager
                         android:id="@+id/bannerPager"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"

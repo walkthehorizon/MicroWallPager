@@ -6,7 +6,7 @@
     android:background="@color/colorActivityBackground"
     android:orientation="vertical">
 
-    <com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
+    <com.shentu.paper.mvp.ui.widget.DefaultToolbar
         android:layout_width="match_parent"
         android:layout_height="@dimen/default_toolbar_height"
         app:tl_left_icon="@drawable/ic_arrow_back_white_24dp"

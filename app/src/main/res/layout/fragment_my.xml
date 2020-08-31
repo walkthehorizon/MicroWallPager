@@ -76,7 +76,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+    <com.shentu.paper.mvp.ui.widget.RippleItemView
         android:id="@+id/itCollect"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -87,7 +87,7 @@
         app:riv_icon="@drawable/ic_collections_black_24dp"
         app:riv_title="我的收藏" />
 
-    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+    <com.shentu.paper.mvp.ui.widget.RippleItemView
         android:id="@+id/itMoney"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -97,9 +97,9 @@
         app:riv_icon="@drawable/ic_all_inclusive_black_24dp"
         app:riv_title="我的萌豆">
 
-    </com.shentu.wallpaper.mvp.ui.widget.RippleItemView>
+    </com.shentu.paper.mvp.ui.widget.RippleItemView>
 
-    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+    <com.shentu.paper.mvp.ui.widget.RippleItemView
         android:id="@+id/itBrowser"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -109,7 +109,7 @@
         app:riv_icon="@drawable/ic_pets_pink_24dp"
         app:riv_title="浏览记录" />
 
-    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+    <com.shentu.paper.mvp.ui.widget.RippleItemView
         android:id="@+id/itUpdate"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -118,7 +118,7 @@
         app:riv_icon="@drawable/ic_update_black_24dp"
         app:riv_title="检查更新" />
 
-    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+    <com.shentu.paper.mvp.ui.widget.RippleItemView
         android:id="@+id/itMode"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -127,7 +127,7 @@
         app:riv_icon="@drawable/ic_filter_vintage_black_24dp"
         app:riv_title="内容模式" />
 
-    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+    <com.shentu.paper.mvp.ui.widget.RippleItemView
         android:id="@+id/itCache"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -136,7 +136,7 @@
         app:riv_icon="@drawable/ic_delete_forever_black_24dp"
         app:riv_title="清除缓存" />
 
-    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+    <com.shentu.paper.mvp.ui.widget.RippleItemView
         android:id="@+id/itFeedback"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -146,7 +146,7 @@
         app:riv_icon="@drawable/ic_feedback_black_24dp"
         app:riv_title="意见反馈" />
 
-    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+    <com.shentu.paper.mvp.ui.widget.RippleItemView
         android:id="@+id/itMore"
         android:layout_width="match_parent"
         android:layout_height="60dp"

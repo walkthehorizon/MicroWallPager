@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.shentu.wallpaper">
+    package="com.shentu.paper">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -13,17 +13,18 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
-        android:name=".app.HkApplication"
+        android:name="com.shentu.paper.app.HkApplication"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_new_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
+        android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
         tools:replace="android:allowBackup,android:name">
         <meta-data
-            android:name="com.shentu.wallpaper.app.GlobalConfiguration"
+            android:name="com.shentu.paper.app.GlobalConfiguration"
             android:value="ConfigModule" />
         <meta-data
             android:name="design_width_in_dp"
@@ -34,7 +35,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.shentu.wallpaper.fileProvider"
+            android:authorities="com.shentu.paper.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -42,39 +43,39 @@
                 android:resource="@xml/file_paths_public" />
         </provider>
 
-        <activity android:name=".mvp.ui.my.MyEditActivity" />
-        <activity android:name=".mvp.ui.activity.MyCollectActivity" />
-        <activity android:name=".mvp.ui.activity.BannerListActivity" />
-        <activity android:name=".mvp.ui.activity.SubjectDetailActivity" />
-        <activity android:name=".mvp.ui.activity.SearchActivity" />
+        <activity android:name="com.shentu.paper.mvp.ui.my.MyEditActivity" />
+        <activity android:name="com.shentu.paper.mvp.ui.activity.MyCollectActivity" />
+        <activity android:name="com.shentu.paper.mvp.ui.activity.BannerListActivity" />
+        <activity android:name="com.shentu.paper.mvp.ui.activity.SubjectDetailActivity" />
+        <activity android:name="com.shentu.paper.mvp.ui.activity.SearchActivity" />
         <activity
-            android:name=".mvp.ui.activity.MainActivity"
-            android:theme="@style/AppTheme.Launcher">
+            android:name="com.shentu.paper.mvp.ui.activity.MainActivity"
+            android:theme="@style/AppTheme.AnimLauncher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".mvp.ui.browser.PictureBrowserActivity"
+            android:name="com.shentu.paper.mvp.ui.browser.PictureBrowserActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="singleTop"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".mvp.ui.fragment.CategoryListActivity"
+            android:name="com.shentu.paper.mvp.ui.fragment.CategoryListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="singleTop" />
 
         <activity
-            android:name=".mvp.ui.login.LoginActivity"
+            android:name="com.shentu.paper.mvp.ui.login.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".mvp.ui.activity.SettingMoreActivity" />
+        <activity android:name="com.shentu.paper.mvp.ui.activity.SettingMoreActivity" />
 
-        <activity android:name=".mvp.ui.activity.PictureShareActivity" />
-        <activity android:name=".mvp.ui.home.PaperSummaryActivity" />
+        <activity android:name="com.shentu.paper.mvp.ui.activity.PictureShareActivity" />
+        <activity android:name="com.shentu.paper.mvp.ui.home.PaperSummaryActivity" />
 
-        <activity android:name=".mvp.ui.activity.BrowserActivity" />
+        <activity android:name="com.shentu.paper.mvp.ui.activity.BrowserActivity" />
     </application>
 
 </manifest>

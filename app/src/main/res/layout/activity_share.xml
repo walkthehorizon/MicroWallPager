@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
+    <com.shentu.paper.mvp.ui.widget.DefaultToolbar
         android:layout_width="match_parent"
         android:layout_height="@dimen/default_toolbar_height">
 
@@ -18,7 +18,7 @@
             android:text="分享"
             android:textColor="@color/white"
             android:textSize="20sp" />
-    </com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar>
+    </com.shentu.paper.mvp.ui.widget.DefaultToolbar>
 
     <androidx.cardview.widget.CardView
         android:layout_width="300dp"

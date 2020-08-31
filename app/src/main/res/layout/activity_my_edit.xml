@@ -6,7 +6,7 @@
     android:background="@color/colorActivityBackground"
     android:orientation="vertical">
 
-    <com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
+    <com.shentu.paper.mvp.ui.widget.DefaultToolbar
         android:id="@+id/toolbar"
         app:tl_title="编辑"
         android:layout_width="match_parent"
@@ -40,7 +40,7 @@
             android:src="@drawable/default_head" />
     </RelativeLayout>
 
-    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+    <com.shentu.paper.mvp.ui.widget.RippleItemView
         android:id="@+id/rivNickName"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -49,12 +49,12 @@
         app:riv_arrow_visible="true"
         app:riv_title="昵称" />
 
-    <com.shentu.wallpaper.mvp.ui.widget.RippleItemView
+    <com.shentu.paper.mvp.ui.widget.RippleItemView
         android:id="@+id/rivSex"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:riv_title="性别">
 
-    </com.shentu.wallpaper.mvp.ui.widget.RippleItemView>
+    </com.shentu.paper.mvp.ui.widget.RippleItemView>
 
 </LinearLayout>

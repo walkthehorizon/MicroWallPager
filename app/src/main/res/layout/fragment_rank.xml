@@ -11,7 +11,7 @@
         android:layout_height="0dp"
         android:background="@color/colorPrimary" />
 
-    <com.shentu.wallpaper.mvp.ui.widget.DefaultToolbar
+    <com.shentu.paper.mvp.ui.widget.DefaultToolbar
         android:id="@+id/toolbarRank"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

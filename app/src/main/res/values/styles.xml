@@ -17,6 +17,11 @@
         <item name="android:windowBackground">@drawable/layer_launcher</item>
     </style>
 
+    <style name="AppTheme.AnimLauncher" parent="AppTheme">
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:windowBackground">@drawable/ic_anim_splash</item>
+    </style>
+
     <style name="AnimaActivity">
         <item name="android:activityOpenEnterAnimation">@anim/translate_right_to_center</item>
         <item name="android:activityOpenExitAnimation">@anim/translate_center_to_left</item>

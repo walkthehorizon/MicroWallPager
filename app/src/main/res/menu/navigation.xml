@@ -6,10 +6,10 @@
         android:icon="@drawable/ic_whatshot_black_24dp"
         android:title="@string/title_recommend" />
 
-    <item
-        android:id="@+id/navigation_category"
-        android:icon="@drawable/ic_spa_black_24dp"
-        android:title="@string/title_category" />
+<!--    <item-->
+<!--        android:id="@+id/navigation_category"-->
+<!--        android:icon="@drawable/ic_spa_black_24dp"-->
+<!--        android:title="@string/title_category" />-->
 
     <!--<item-->
         <!--android:id="@+id/navigation_rank"-->

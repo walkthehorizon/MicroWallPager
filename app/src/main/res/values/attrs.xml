@@ -20,6 +20,7 @@
         <attr name="riv_arrow_visible" format="boolean" />
         <attr name="riv_divider_visible" format="boolean" />
         <attr name="riv_icon_tint" format="color"/>
+        <attr name="riv_end_content" format="string"/>
     </declare-styleable>
 
     <declare-styleable name="DefaultToolbar">

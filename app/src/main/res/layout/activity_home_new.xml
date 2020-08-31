@@ -19,14 +19,14 @@
 
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
-    <com.shentu.wallpaper.mvp.ui.widget.stickyHead.StickyHeadContainer
+    <com.shentu.paper.mvp.ui.widget.stickyHead.StickyHeadContainer
         android:id="@+id/stickyHead"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="30dp">
 
         <include layout="@layout/item_home_newest_section" />
-    </com.shentu.wallpaper.mvp.ui.widget.stickyHead.StickyHeadContainer>
+    </com.shentu.paper.mvp.ui.widget.stickyHead.StickyHeadContainer>
 
 </RelativeLayout>
 
