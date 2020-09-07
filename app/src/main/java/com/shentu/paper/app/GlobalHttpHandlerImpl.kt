@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.provider.Settings
 import android.text.TextUtils
+import com.blankj.utilcode.util.SPUtils
 import com.jess.arms.http.GlobalHttpHandler
 import com.leon.channel.helper.ChannelReaderUtil
 import com.shentu.paper.BuildConfig
@@ -73,7 +74,9 @@ class GlobalHttpHandlerImpl(private val context: Context) : GlobalHttpHandler {
                 .header("Device-Id", Settings.System.getString(context.contentResolver
                         , Settings.Secure.ANDROID_ID))
                 .header("System-Type", "Android")
-                .header("channel", channel)
+                .header("Channel", channel)
+                .header("Content-Mode", SPUtils.getInstance().getInt(Constant.CONTENT_MODE
+                        , HkUserManager.user.defaultContentMode).toString())
                 .header("System-Version", Build.VERSION.RELEASE)
                 .header("Version-Name", BuildConfig.VERSION_NAME)
                 .header("Version-Code", BuildConfig.VERSION_CODE.toString()) //                .addHeader("X-CSRFToken", SPUtils.getInstance().getString("X-CSRFToken", ""))

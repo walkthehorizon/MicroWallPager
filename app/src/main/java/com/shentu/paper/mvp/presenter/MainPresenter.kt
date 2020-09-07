@@ -27,7 +27,7 @@ constructor(model: MainContract.Model, rootView: MainContract.View) : BasePresen
     @Inject
     lateinit var mAppManager: AppManager
 
-    fun loginAccount() {
+    fun getAccountInfo() {
         mModel.loginAccount()
                 .compose(RxUtils.applySchedulers(mRootView))
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<MicroUser>>(mErrorHandler) {

@@ -35,7 +35,6 @@ import com.shentu.paper.app.HkUserManager
 import com.shentu.paper.app.config.Config
 import com.shentu.paper.app.page.ErrorCallback
 import com.shentu.paper.app.utils.RxUtils
-import com.shentu.paper.databinding.ActivityMainBinding
 import com.shentu.paper.di.component.DaggerMainComponent
 import com.shentu.paper.di.module.MainModule
 import com.shentu.paper.model.api.service.UserService
@@ -43,7 +42,6 @@ import com.shentu.paper.model.response.BaseResponse
 import com.shentu.paper.mvp.contract.MainContract
 import com.shentu.paper.mvp.presenter.MainPresenter
 import com.shentu.paper.mvp.ui.adapter.MainPagerAdapter
-import com.shentu.paper.mvp.ui.fragment.TabCategoryFragment
 import com.shentu.paper.mvp.ui.home.TabHomeFragment
 import com.shentu.paper.mvp.ui.my.TabMyFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -82,14 +80,14 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
     override fun initData(savedInstanceState: Bundle?) {
         Config.init(this)
         loadService = LoadSir.getDefault().register(this) { initData(null) }
-        if(HkUserManager.isLogin){
-            showMainView()
-            GlobalScope.launch {
-                showContent()
-            }
-        }else{
-            mPresenter?.loginAccount()
-        }
+//        if(HkUserManager.isLogin){
+//            showMainView()
+//            GlobalScope.launch {
+//                showContent()
+//            }
+//        }else{
+            mPresenter?.getAccountInfo()
+//        }
     }
 
     override fun showMainView() {
