@@ -25,7 +25,6 @@ import com.jess.arms.integration.AppManager
 import com.leon.channel.helper.ChannelReaderUtil
 import com.shentu.paper.BuildConfig
 import com.shentu.paper.app.AppLifecycleImpl
-import com.shentu.paper.app.HkApplication
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
