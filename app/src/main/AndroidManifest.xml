@@ -50,7 +50,7 @@
         <activity android:name="com.shentu.paper.mvp.ui.activity.SearchActivity" />
         <activity
             android:name="com.shentu.paper.mvp.ui.activity.MainActivity"
-            android:theme="@style/AppTheme.AnimLauncher">
+            android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
