@@ -1,4 +1,4 @@
-package com.shentu.paper.app;
+package com.shentu.paper.app.page;
 
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;

@@ -278,7 +278,7 @@
 -keepclassmembers class * {
    public <init>(org.json.JSONObject);
 }
--keep public class [com.innodealing.raymonkey].R$*{
+-keep public class [com.shentu.paper].R$*{
 public static final int *;
 }
 -keep class com.umeng.** {*;}
@@ -289,10 +289,10 @@ public static final int *;
 
 #################Sophix############################
 #基线包使用，生成mapping.txt
-#-printmapping mapping.txt
+-printmapping mapping.txt
 #生成的mapping.txt在app/build/outputs/mapping/release路径下，移动到/app路径下
 #修复后的项目使用，保证混淆结果一致
--applymapping mapping.txt
+#-applymapping mapping.txt
 #hotfix
 -keep class com.taobao.sophix.**{*;}
 -keep class com.ta.utdid2.device.**{*;}
@@ -300,8 +300,6 @@ public static final int *;
 #防止inline
 -dontoptimize
 
--keepclassmembers class com.innodealing.raymonkey.app.HkApplication {
+-keepclassmembers class com.shentu.paper.app.HkApplication {
     public <init>();
 }
-# 如果不使用android.support.annotation.Keep则需加上此行
-# -keep class com.my.pkg.SophixStubApplication$RealApplicationStub

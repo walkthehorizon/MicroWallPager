@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
+import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
@@ -86,7 +87,7 @@ class HomeRankFragment : BaseFragment<HomeRankPresenter>(), HomeRankContract.Vie
     }
 
     override fun showMessage(message: String) {
-        ArmsUtils.snackbarText(message)
+        ToastUtils.showShort(message)
     }
 
     override fun showRanks(papers: MutableList<Wallpaper>, clear: Boolean) {

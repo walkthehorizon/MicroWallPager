@@ -24,7 +24,7 @@ public final class ManifestParser {
     }
 
     public List<ConfigModule> parse() {
-        List<ConfigModule> modules = new ArrayList<ConfigModule>();
+        List<ConfigModule> modules = new ArrayList<>();
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(
                     context.getPackageName(), PackageManager.GET_META_DATA);

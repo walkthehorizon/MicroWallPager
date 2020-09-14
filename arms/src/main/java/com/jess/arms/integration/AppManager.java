@@ -12,7 +12,6 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.jess.arms.base.delegate.AppLifecycles;
 
 import java.util.Arrays;
@@ -116,25 +115,6 @@ public final class AppManager {
     @Deprecated
     public static void post(Message msg) {
         getAppManager().onReceive(msg);
-    }
-
-    /**
-     * 让在前台的 {@link Activity}, 使用 {@link Snackbar} 显示文本内容
-     *
-     * @param message
-     * @param isLong
-     */
-    public void showSnackbar(String message, boolean isLong) {
-        if (getCurrentActivity() == null && getTopActivity() == null) {
-            Timber.tag(TAG).w("mCurrentActivity == null when showSnackbar(String,boolean)");
-            return;
-        }
-        Completable.fromAction(() -> {
-            Activity activity = getCurrentActivity() == null ? getTopActivity() : getCurrentActivity();
-            View view = activity.getWindow().getDecorView().findViewById(android.R.id.content);
-            Snackbar.make(view, message, isLong ? Snackbar.LENGTH_LONG : Snackbar.LENGTH_SHORT).show();
-        }).subscribeOn(AndroidSchedulers.mainThread()).subscribe();
-
     }
 
     /**

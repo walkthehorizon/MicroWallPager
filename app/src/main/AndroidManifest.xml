@@ -11,13 +11,12 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
+    <!--android:networkSecurityConfig="@xml/network_security_config"-->
     <application
-        android:name="com.jess.arms.base.BaseApplication"
+        android:name=".app.HkApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_new_launcher"
         android:label="@string/app_name"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme"

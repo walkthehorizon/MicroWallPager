@@ -18,7 +18,7 @@ import timber.log.Timber
 
 object Config : LifecycleObserver {
 
-    private var env: Environment = Environment.valueOf(SPUtils.getInstance().getString("Environment", if (BuildConfig.DEBUG) Environment.DEBUG.name else Environment.RELEASE.name))
+    private val env: Environment = Environment.valueOf(SPUtils.getInstance().getString("Environment", if (BuildConfig.DEBUG) Environment.DEBUG.name else Environment.RELEASE.name))
     private lateinit var sensorHelper: SensorHelper
     private lateinit var context: Context
 
@@ -47,7 +47,8 @@ object Config : LifecycleObserver {
     val appServer: String
         get() = when (env) {
             Environment.DEBUG -> "http://192.168.10.122/micro/"
-            else -> "http://api.wmmt119.top/micro/"
+            Environment.PRE -> "https://api.wmmt119.top/micro/"
+            else -> "https://api.wmmt119.top/micro/"
         }
 
     private fun showEnvDialog() {

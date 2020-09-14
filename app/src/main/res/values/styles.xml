@@ -13,6 +13,7 @@
     </style>
 
     <style name="AppTheme.FullScreen">
+        <item name="android:windowFullscreen">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <!--    Android9刘海适配    -->
         <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="p">

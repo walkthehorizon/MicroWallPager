@@ -73,7 +73,7 @@ class PictureShareActivity : BaseActivity<IPresenter>() {
         tvQQ.setOnClickListener { showShare(QQ.NAME) }
         tvDownload.setOnClickListener {
             FileIOUtils.writeFileFromBytesByStream(PicUtils.getInstance().getDownloadSharePath(this,
-                    paper.url), ImageUtils.bitmap2Bytes(getCardBitmap(), Bitmap.CompressFormat.JPEG))
+                    paper.url), ImageUtils.bitmap2Bytes(getCardBitmap(), Bitmap.CompressFormat.JPEG,100))
             ToastUtils.showShort("图片已保存在 手机相册》萌幻Cos")
         }
     }
@@ -83,7 +83,7 @@ class PictureShareActivity : BaseActivity<IPresenter>() {
         oks.setPlatform(platform)
         if (platform == QQ.NAME) {
             val sharePath: String = PicUtils.getInstance().getDownloadSharePath(this,paper.url)
-            FileIOUtils.writeFileFromBytesByStream(sharePath, ImageUtils.bitmap2Bytes(getCardBitmap(), Bitmap.CompressFormat.JPEG))
+            FileIOUtils.writeFileFromBytesByStream(sharePath, ImageUtils.bitmap2Bytes(getCardBitmap(), Bitmap.CompressFormat.JPEG,100))
             oks.setImagePath(sharePath)
         } else {
             oks.setImageData(getCardBitmap())

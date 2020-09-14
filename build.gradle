@@ -10,9 +10,7 @@ buildscript {
         maven {
             url "http://mvn.mob.com/android"
         }
-//        maven {
-//            url 'https://maven.fabric.io/public'
-//        }
+        maven { url 'https://dl.bintray.com/umsdk/release' }
         google()
     }
     dependencies {
@@ -39,8 +37,8 @@ allprojects {
         maven {
             url "https://dl.bintray.com/tencentqcloudterminal/maven"
         }
+        maven { url 'https://dl.bintray.com/umsdk/release' }
         jcenter()
-
         google()
     }
 }

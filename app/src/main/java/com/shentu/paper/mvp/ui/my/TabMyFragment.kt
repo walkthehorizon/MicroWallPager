@@ -7,16 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.list.MultiChoiceListener
 import com.afollestad.materialdialogs.list.SingleChoiceListener
-import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.TimeUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.google.gson.reflect.TypeToken
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
@@ -204,7 +201,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                     .into(circle_avatar)
             itMoney.setEndValue("")
         }
-        itCache.setEndValue(FileUtils.getDirSize(glideCache))
+        itCache.setEndValue(FileUtils.getSize(glideCache))
     }
 
     override fun onResume() {
@@ -241,7 +238,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete {
                     GlideArms.get(mContext).clearMemory()
-                    itCache.setEndValue(FileUtils.getDirSize(glideCache))
+                    itCache.setEndValue(FileUtils.getSize(glideCache))
                     ToastUtils.showShort("清理完成")
                 }
                 .subscribe()
@@ -260,7 +257,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     }
 
     override fun showMessage(message: String) {
-        ArmsUtils.snackbarText(message)
+        ToastUtils.showShort(message)
     }
 
     override fun launchActivity(intent: Intent) {

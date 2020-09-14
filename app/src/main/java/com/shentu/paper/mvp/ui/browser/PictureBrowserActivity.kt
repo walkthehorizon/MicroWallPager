@@ -85,7 +85,8 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                 .pictureBrowserModule(PictureBrowserModule(this))
                 .build()
                 .inject(this)
-        ScreenUtils.setFullScreen(this)
+//        ScreenUtils.setFullScreen(this)
+        setTheme(R.style.AppTheme_FullScreen)
         window.enterTransition = Fade()
     }
 
@@ -140,6 +141,9 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
             if (!HkUserManager.isAdmin || categoryId == -1) {
                 popupMenu.menu.findItem(R.id.itSetBanner).isVisible = false
                 popupMenu.menu.findItem(R.id.itSetCover).isVisible = false
+            }
+            if (curPaper.subjectId == -1) {
+                popupMenu.menu.findItem(R.id.itSubject).isVisible = false
             }
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item?.itemId) {

@@ -4,7 +4,7 @@ import android.app.Application
 import com.google.gson.Gson
 import com.jess.arms.di.scope.ActivityScope
 import com.jess.arms.integration.IRepositoryManager
-import com.shentu.paper.app.BasePageModel
+import com.shentu.paper.app.page.BasePageModel
 import com.shentu.paper.model.api.cache.MicroCache
 import com.shentu.paper.model.api.service.MicroService
 import com.shentu.paper.model.response.SubjectPageResponse

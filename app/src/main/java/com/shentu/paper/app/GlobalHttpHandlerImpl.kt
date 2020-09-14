@@ -10,6 +10,7 @@ import com.leon.channel.helper.ChannelReaderUtil
 import com.shentu.paper.BuildConfig
 import com.shentu.paper.app.HkUserManager.token
 import com.shentu.paper.app.HkUserManager.uid
+import com.shentu.paper.app.utils.HkUtils
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -65,16 +66,12 @@ class GlobalHttpHandlerImpl(private val context: Context) : GlobalHttpHandler {
         if (uid != -1) {
             builder.addHeader("uid", uid.toString())
         }
-        val channel = if (ChannelReaderUtil.getChannel(context).isNullOrEmpty())
-            "default"
-        else
-            ChannelReaderUtil.getChannel(context)
         return builder
                 .header("Content-Type", "application/json")
                 .header("Device-Id", Settings.System.getString(context.contentResolver
                         , Settings.Secure.ANDROID_ID))
                 .header("System-Type", "Android")
-                .header("Channel", channel)
+                .header("Channel", HkUtils.getChannel(context))
                 .header("Content-Mode", SPUtils.getInstance().getInt(Constant.CONTENT_MODE
                         , HkUserManager.user.defaultContentMode).toString())
                 .header("System-Version", Build.VERSION.RELEASE)

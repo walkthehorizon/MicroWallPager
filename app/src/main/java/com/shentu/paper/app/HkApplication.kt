@@ -1,0 +1,10 @@
+package com.shentu.paper.app
+
+import com.jess.arms.base.BaseApplication
+
+/**
+ * 如果需要继承其他的Application,必须实现BaseApplication中的逻辑
+ * 因为Application无法通过热更修复，所以此种完全转移Application逻辑到代理的 AppLifecycleImpl 中
+ * 可以完美实现Application生命周期内逻辑的热更能力
+ * */
+class HkApplication : BaseApplication()

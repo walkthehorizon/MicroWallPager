@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.blankj.utilcode.util.BarUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
@@ -100,7 +101,7 @@ class RankFragment : BaseFragment<RankPresenter>(), RankContract.View {
     }
 
     override fun showMessage(message: String) {
-        ArmsUtils.snackbarText(message)
+        ToastUtils.showShort(message)
     }
 
     override fun launchActivity(intent: Intent) {

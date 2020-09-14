@@ -53,6 +53,17 @@ class HkUtils private constructor() {
         val instance: HkUtils
             get() = SingletonHolder.INSTANCE
 
+        /**
+         * google_play分支下固定
+         * */
+        fun getChannel(context: Context): String {
+            return "google_play"
+//            return if (ChannelReaderUtil.getChannel(context).isNullOrEmpty())
+//                "default"
+//            else
+//                ChannelReaderUtil.getChannel(context)
+        }
+
         fun contactKefu() {
             try {
                 AppManager.getAppManager().startActivity((Intent(Intent.ACTION_VIEW,
@@ -211,13 +222,5 @@ class HkUtils private constructor() {
 
     fun get2x2Image(url: String?): String {
         return url?.replace("cos.ap-beijing", "picbj") + "!2x2"
-    }
-
-    fun isGentleManMode(): Boolean {
-        val channel = if (ChannelReaderUtil.getChannel(AppLifecycleImpl.instance).isNullOrEmpty())
-            "default"
-        else
-            ChannelReaderUtil.getChannel(AppLifecycleImpl.instance)
-        return channel == "google_play"
     }
 }

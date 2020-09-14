@@ -2,11 +2,11 @@ ext {
 
     android = [
             compileSdkVersion: 29,
-            buildToolsVersion: "29.0.2",
+            buildToolsVersion: "29.0.3",
             minSdkVersion    : 21,
-            targetSdkVersion : 28,
-            versionCode      : 100,
-            versionName      : "1.0.0"
+            targetSdkVersion : 29,
+            versionCode      : 102,
+            versionName      : "1.0.2"
     ]
 
     version = [
@@ -23,8 +23,8 @@ ext {
 
     dependencies = [
             //google
-            "appcompat"                : "androidx.appcompat:appcompat:1.1.0",
-            "material"                 : "com.google.android.material:material:1.1.0",
+            "appcompat"                : "androidx.appcompat:appcompat:1.2.0",
+            "material"                 : "com.google.android.material:material:1.2.1",
             "annotation"               : "androidx.annotation:annotation:1.1.0",
             "recyclerview"             : "androidx.recyclerview:recyclerview:1.1.0",
             "vector-drawable"          : "androidx.vectordrawable:vectordrawable:1.1.0",
@@ -102,7 +102,7 @@ ext {
             "progressmanager"          : "me.jessyan:progressmanager:1.5.0",
             "retrofit-url-manager"     : "me.jessyan:retrofit-url-manager:1.2.5",
             "lifecyclemodel"           : "me.jessyan:lifecyclemodel:1.0.1",
-            "utilcode"                 : "com.blankj:utilcode:1.22.10",
+            "utilcode"                 : "com.blankj:utilcode:1.29.0",
             "filedownloader"           : "com.liulishuo.filedownloader:library:1.7.5",
             "AndPermission"            : "com.yanzhenjie:permission:2.0.0-rc12",
             "matisse"                  : "com.zhihu.android:matisse:0.5.3-beta3",

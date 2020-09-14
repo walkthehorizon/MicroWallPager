@@ -14,7 +14,6 @@ import android.util.AttributeSet;
 import android.view.InflateException;
 import android.view.View;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.horizon.netbus.NetBus;
 import com.horizon.netbus.NetType;
 import com.horizon.netbus.NetWork;

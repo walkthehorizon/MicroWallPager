@@ -15,6 +15,7 @@ import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.shentu.paper.R
 import com.shentu.paper.app.Constant
+import com.shentu.paper.app.HkUserManager
 import com.shentu.paper.app.utils.HkUtils
 import com.shentu.paper.di.component.DaggerSettingMoreComponent
 import com.shentu.paper.di.module.SettingMoreModule
@@ -54,11 +55,11 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
         rivDownload.setOnClickListener {
             showDownloadDialog(type)
         }
-        mIvCover.post {
-            mIvCover.setImageBitmap(HkUtils.instance.getSvgBitmap(mIvCover.width, mIvCover.height
-                    , R.drawable.ic_launcher, R.drawable.ic_favorite_black_24dp))
-        }
-        if (!HkUtils.instance.isGentleManMode()) {
+//        mIvCover.post {
+//            mIvCover.setImageBitmap(HkUtils.instance.getSvgBitmap(mIvCover.width, mIvCover.height
+//                    , R.drawable.ic_launcher, R.drawable.ic_favorite_black_24dp))
+//        }
+        if (HkUserManager.user.canSetMode) {
             rivAbout.setOnClickListener {
                 BrowserActivity.open(this, Constant.GITHUB_URL)
             }
@@ -99,7 +100,7 @@ class SettingMoreActivity : BaseActivity<SettingMorePresenter>(), SettingMoreCon
     }
 
     override fun showMessage(message: String) {
-        ArmsUtils.snackbarText(message)
+        ToastUtils.showShort(message)
     }
 
     override fun launchActivity(intent: Intent) {

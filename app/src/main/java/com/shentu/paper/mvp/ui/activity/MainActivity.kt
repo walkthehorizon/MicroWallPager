@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
@@ -70,7 +71,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
                 .build()
                 .inject(this)
         setTheme(R.style.AppTheme)
-        BarUtils.setStatusBarAlpha(this)
+        BarUtils.setStatusBarColor(this,Color.TRANSPARENT)
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {

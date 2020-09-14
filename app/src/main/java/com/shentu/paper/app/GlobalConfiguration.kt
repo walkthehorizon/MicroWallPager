@@ -68,7 +68,10 @@ class GlobalConfiguration : ConfigModule {
                 }
                 .retrofitConfiguration { _: Context?, _: Retrofit.Builder? -> }
                 .okhttpConfiguration { _: Context?, builder1: OkHttpClient.Builder ->  //这里可以自己自定义配置Okhttp的参数
-                    supportHttps(context, builder1)
+                    if (Config.appServer.contains("https")) {
+                        supportHttps(context, builder1)
+                    }
+//                    builder1.hostnameVerifier(HostnameVerifier { hostname, _ -> hostname == Constant.HOST_NAME })
 //                    builder.dns(object : Dns {
 //                        override fun lookup(hostname: String): List<InetAddress> {
 //                            val inetAddresses: MutableList<InetAddress> = mutableListOf()

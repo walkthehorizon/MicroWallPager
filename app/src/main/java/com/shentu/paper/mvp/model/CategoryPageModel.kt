@@ -4,7 +4,7 @@ import android.app.Application
 import com.google.gson.Gson
 import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.integration.IRepositoryManager
-import com.shentu.paper.app.BasePageModel
+import com.shentu.paper.app.page.BasePageModel
 import com.shentu.paper.mvp.contract.CategoryPageContract
 import javax.inject.Inject
 
@@ -16,7 +16,7 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
     @Inject
     lateinit var mGson: Gson
     @Inject
-    lateinit var mApplication: Application;
+    lateinit var mApplication: Application
 
 //    override fun getCategoryList(id: Int, page: Int, clear: Boolean): Observable<CategoryListEntity> {
 //        offset = page * limit
