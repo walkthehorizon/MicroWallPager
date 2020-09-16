@@ -2,21 +2,21 @@ package com.shentu.paper.mvp.ui.activity
 
 import android.content.Context
 import android.content.Intent
+import android.net.http.SslCertificate
+import android.net.http.SslError
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.ViewGroup
-import android.webkit.ConsoleMessage
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
+import android.webkit.*
 import androidx.core.content.ContextCompat
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.IPresenter
 import com.just.agentweb.*
 import com.shentu.paper.R
-import com.shentu.paper.app.AndroidInterface
 import com.shentu.paper.app.utils.UIController
+import com.shentu.paper.app.webview.AndroidInterface
+import com.shentu.paper.app.webview.CustomWebSettingsImpl
 import kotlinx.android.synthetic.main.activity_browser.*
 import timber.log.Timber
 
@@ -82,7 +82,7 @@ class BrowserActivity : BaseActivity<IPresenter>() {
                 .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK)
                 .useMiddlewareWebChrome(mMiddleWareWebChrome)
                 .useMiddlewareWebClient(mMiddleWareWebClient)
-                .setAgentWebWebSettings(AgentWebSettingsImpl.getInstance())
+                .setAgentWebWebSettings(CustomWebSettingsImpl)
                 .setMainFrameErrorView(R.layout.layout_default_error, -1)
                 .setSecurityType(AgentWeb.SecurityType.STRICT_CHECK)
                 .addJavascriptInterface("android", AndroidInterface(this))

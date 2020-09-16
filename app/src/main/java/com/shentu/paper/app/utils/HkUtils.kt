@@ -53,15 +53,11 @@ class HkUtils private constructor() {
         val instance: HkUtils
             get() = SingletonHolder.INSTANCE
 
-        /**
-         * google_play分支下固定
-         * */
         fun getChannel(context: Context): String {
-            return "google_play"
-//            return if (ChannelReaderUtil.getChannel(context).isNullOrEmpty())
-//                "default"
-//            else
-//                ChannelReaderUtil.getChannel(context)
+            return if (ChannelReaderUtil.getChannel(context).isNullOrEmpty())
+                "default"
+            else
+                ChannelReaderUtil.getChannel(context)
         }
 
         fun contactKefu() {
