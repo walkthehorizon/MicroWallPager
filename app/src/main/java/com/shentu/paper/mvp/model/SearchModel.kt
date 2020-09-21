@@ -27,13 +27,8 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
 
     override fun searchKey(key: String, clear: Boolean): Observable<SubjectPageResponse> {
         offset = getOffset(clear)
-        return Observable.just(mRepositoryManager
+        return mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
-                .searchSubject(key, limit, offset))
-                .flatMap {
-                    mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .searchKey(it, DynamicKeyGroup(key, offset))
-                            .map { t: Reply<SubjectPageResponse> -> t.data }
-                }
+                .searchSubject(key, limit, offset)
     }
 }

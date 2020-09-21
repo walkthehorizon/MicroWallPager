@@ -29,6 +29,7 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 import javax.inject.Inject;
 
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.LifecycleObserver;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -88,6 +89,7 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
             if (e instanceof InflateException) throw e;
             e.printStackTrace();
         }
+        getLifecycle().addObserver((LifecycleObserver) mPresenter);
 //        snackbar = TSnackbar.make(findViewById(android.R.id.content), "网络已断开连接", Snackbar.LENGTH_INDEFINITE);
         initData(savedInstanceState);
     }
