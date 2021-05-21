@@ -14,7 +14,7 @@ class CategoryListAdapter(data: MutableList<Wallpaper> = mutableListOf()) : Base
     override fun convert(helper: BaseViewHolder, item: Wallpaper) {
         GlideArms.with(mContext)
                 .load(HkUtils.instance.get2x2Image(item.url))
-                .placeholder(R.drawable.default_cover_vertical)
+                .placeholder(R.drawable.ic_twotone_broken_image_24)
                 .into((helper.getView<View>(R.id.iv_small) as ImageView))
     }
 }

@@ -9,9 +9,9 @@
         android:id="@+id/photoView"
         android:transitionName="@string/picture_transitionName"
         android:layout_width="match_parent"
-        app:tapToRetry="true"
+        app:tapToRetry="false"
         android:layout_height="match_parent"
-        app:failureImage="@drawable/default_cover_vertical"
+        app:failureImage="@drawable/ic_twotone_broken_image_24"
         app:failureImageInitScaleType="fitCenter"
         app:optimizeDisplay="true" />
 

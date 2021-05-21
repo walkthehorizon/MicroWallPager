@@ -19,6 +19,7 @@ import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import retrofit2.http.Path
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -31,13 +32,14 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
         BasePresenter<PictureBrowserContract.Model, PictureBrowserContract.View>(model, rootView) {
     @Inject
     lateinit var mErrorHandler: RxErrorHandler
+
     @Inject
     lateinit var mApplication: Application
 
     @Inject
     lateinit var mAppManager: AppManager
 
-    fun addCollect(pid: Int, position: Int) {
+    fun addCollect(pid: Long, position: Int) {
         mModel.addCollect(pid)
                 .compose(RxUtils.applyClearSchedulers(mRootView))
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<Boolean>>(mErrorHandler) {
@@ -128,7 +130,7 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                 })
     }
 
-    fun addPaper2Banner(bid:Int , pid:Int){
+    fun addPaper2Banner(bid: Int, pid: Long) {
         mModel.addPaper2Banner(bid, pid)
                 .compose(RxUtils.applyClearSchedulers(mRootView))
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<Boolean>>(mErrorHandler) {
@@ -155,7 +157,7 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                 })
     }
 
-    fun getPaperDetail(paperId: Int) {
+    fun getPaperDetail(paperId: Long) {
         mModel.getPaperDetail(paperId)
                 .compose(RxUtils.applyClearSchedulers(mRootView))
                 .subscribe(object : ErrorHandleSubscriber<BaseResponse<Wallpaper>>(mErrorHandler) {
@@ -165,4 +167,15 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
                 })
     }
 
+    fun setGarbage(paperId: Long) {
+        mModel.setGarbage(paperId)
+                .compose(RxUtils.applyClearSchedulers(mRootView))
+                .subscribe(object : ErrorHandleSubscriber<BaseResponse<String>>(mErrorHandler) {
+                    override fun onNext(t: BaseResponse<String>) {
+                        if (t.isSuccess) {
+                            ToastUtils.showShort("感谢您的反馈")
+                        }
+                    }
+                })
+    }
 }

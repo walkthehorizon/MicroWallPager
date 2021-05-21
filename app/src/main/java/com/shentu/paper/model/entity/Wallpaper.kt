@@ -3,7 +3,7 @@ package com.shentu.paper.model.entity
 import java.io.Serializable
 
 class Wallpaper(var url: String = "") : Serializable {
-    var id: Int = -1
+    var id: Long = -1
     var originUrl: String = ""
     var subjectId = -1
     var categoryId = -1

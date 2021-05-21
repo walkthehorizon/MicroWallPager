@@ -28,9 +28,6 @@ import okhttp3.Request;
  *
  * @see DefaultFormatPrinter
  * @see GlobalConfigModule.Builder#formatPrinter(FormatPrinter)
- * Created by JessYan on 31/01/2018 17:36
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
 

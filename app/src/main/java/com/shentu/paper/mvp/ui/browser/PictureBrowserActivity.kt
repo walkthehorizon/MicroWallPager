@@ -70,7 +70,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     var categoryId: Int = -1
 
     //from web
-    private var paperId: Int = -1
+    private var paperId: Long = -1
 
     private lateinit var popupMenu: PopupMenu
 
@@ -102,7 +102,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                 initView()
             }
             subjectId != -1 -> mPresenter?.getPictures(subjectId)
-            paperId != -1 -> mPresenter?.getPaperDetail(paperId)
+            paperId != -1L -> mPresenter?.getPaperDetail(paperId)
             else -> throw IllegalArgumentException("参数异常")
         }
     }
@@ -165,6 +165,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                             mPresenter?.addPaper2Banner(it.getInputField().text.toString().toInt(), wallpapers[index].id)
                         }
                     }
+                    R.id.itSetGarbage ->mPresenter?.setGarbage(curPaper.id)
                 }
                 true
             }
@@ -394,7 +395,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
      * 先于initData执行
      * */
     override fun onReturnSceneData(scene: Scene) {
-        paperId = scene.params["id"] as Int
+        paperId = scene.params["id"] as Long
     }
 
     override fun onNewIntent(intent: Intent?) {

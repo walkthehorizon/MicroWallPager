@@ -34,9 +34,6 @@ import timber.log.Timber;
  * 解析框架中的网络请求和响应结果,并以日志形式输出,调试神器
  * 可使用 {@link GlobalConfigModule.Builder#printHttpLogLevel(Level)} 控制或关闭日志
  * <p>
- * Created by JessYan on 7/1/2016.
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
 @Singleton

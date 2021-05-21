@@ -57,8 +57,7 @@
 -----------------
 目前主要有以下计划：
 - 图片的压缩和裁剪问题，在有限的条件下，目前这方面都仍有很大的改进空间
-- 将该项目完全升级为Kotlin,Mvp-Mvvm,更加充分的使用JetPack
-- 基于Flutter实现该项目，以期提供对ios系统的支持
+- 尝试直接升级为ComposeUI
 
 此外，如果你有好的建议，请提交新的 [issue](https://github.com/walkthehorizon/MicroWallPager/issues)
 

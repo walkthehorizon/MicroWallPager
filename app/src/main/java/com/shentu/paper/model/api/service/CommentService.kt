@@ -12,7 +12,7 @@ interface CommentService {
      * 获取paper的评论
      * */
     @GET("paper/comments")
-    fun getPaperComments(@Query("paper_id") paper_id: Int,
+    fun getPaperComments(@Query("paper_id") paper_id: Long,
                          @Query("limit") limit: Int,
                          @Query("offset") offset: Int): Observable<CommentPageResponse>
 
@@ -21,6 +21,6 @@ interface CommentService {
      * */
     @FormUrlEncoded
     @POST("paper/comments/add")
-    fun addPaperComments(@Field("pid") pid: Int,
+    fun addPaperComments(@Field("pid") pid: Long,
                          @Field("content") content: String): Observable<BaseResponse<Comment>>
 }

@@ -49,7 +49,7 @@ class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.
             title(text = "删除")
             message(text = "确定删除所选收藏么")
             positiveButton(text = "确定") {
-                val delList = mutableListOf<Int>()
+                val delList = mutableListOf<Long>()
                 for (paper in adapter.data) {
                     if (paper.checked) delList.add(paper.id)
                 }

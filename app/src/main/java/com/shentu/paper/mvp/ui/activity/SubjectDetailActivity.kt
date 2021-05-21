@@ -111,7 +111,7 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
             ivCover.visibility = VISIBLE
             GlideArms.with(this)
                     .load(banner?.imageUrl)
-                    .error(R.drawable.default_cover_horizon)
+                    .error(R.drawable.ic_twotone_broken_image_24)
                     .into(ivCover)
         }
     }

@@ -37,9 +37,9 @@ class CommentDialog : BaseBottomSheetDialog() {
     private lateinit var inputDialog: MaterialDialog
 
     companion object {
-        fun newInstance(paperId: Int): CommentDialog {
+        fun newInstance(paperId: Long): CommentDialog {
             val args = Bundle()
-            args.putInt("paperId", paperId)
+            args.putLong("paperId", paperId)
             val dialog = CommentDialog()
             dialog.arguments = args
             return dialog
@@ -48,7 +48,7 @@ class CommentDialog : BaseBottomSheetDialog() {
     }
 
     private lateinit var loadService: LoadService<Any>
-    private var paperId: Int = -1
+    private var paperId: Long = -1
     private lateinit var adapter: CommentAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -57,7 +57,7 @@ class CommentDialog : BaseBottomSheetDialog() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        paperId = requireArguments().getInt("paperId")
+        paperId = requireArguments().getLong("paperId")
         loadService = LoadSir.getDefault().register(smartRefresh) { getPaperComments(paperId, true) }
         smartRefresh.setOnLoadMoreListener {
             getPaperComments(paperId, false)
@@ -130,7 +130,7 @@ class CommentDialog : BaseBottomSheetDialog() {
     var offset = MicroService.PAGE_START
     private lateinit var disposable: Disposable
 
-    private fun getPaperComments(paperId: Int, clear: Boolean) {
+    private fun getPaperComments(paperId: Long, clear: Boolean) {
         offset = if (clear) MicroService.PAGE_START else offset + MicroService.PAGE_LIMIT
         ArmsUtils.obtainAppComponentFromContext(context)
                 .repositoryManager()
@@ -148,7 +148,7 @@ class CommentDialog : BaseBottomSheetDialog() {
                 })
     }
 
-    private fun addPaperComments(paperId: Int, content: String) {
+    private fun addPaperComments(paperId: Long, content: String) {
         ArmsUtils.obtainAppComponentFromContext(context)
                 .repositoryManager()
                 .obtainRetrofitService(CommentService::class.java)

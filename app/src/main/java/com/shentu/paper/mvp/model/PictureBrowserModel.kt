@@ -7,6 +7,7 @@ import com.jess.arms.integration.IRepositoryManager
 import com.jess.arms.mvp.BaseModel
 import com.shentu.paper.model.api.service.CollectService
 import com.shentu.paper.model.api.service.MicroService
+import com.shentu.paper.model.api.service.PaperService
 import com.shentu.paper.model.entity.Wallpaper
 import com.shentu.paper.model.response.BaseResponse
 import com.shentu.paper.model.response.WallpaperPageResponse
@@ -25,7 +26,7 @@ constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager
     @Inject
     lateinit var mApplication: Application
 
-    override fun addCollect(pid: Int): Observable<BaseResponse<Boolean>> {
+    override fun addCollect(pid: Long): Observable<BaseResponse<Boolean>> {
         return mRepositoryManager.obtainRetrofitService(CollectService::class.java)
                 .addCollect(pid)
     }
@@ -41,19 +42,24 @@ constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager
                 .updateCategoryCover(cid, logo)
     }
 
-    override fun buyPaper(pk: Int, pea: Int): Observable<BaseResponse<Int>> {
+    override fun buyPaper(pk: Long, pea: Int): Observable<BaseResponse<Int>> {
         return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
                 .buyPaper(pk, pea)
     }
 
-    override fun getPaperDetail(pk: Int): Observable<BaseResponse<Wallpaper>> {
+    override fun getPaperDetail(pk: Long): Observable<BaseResponse<Wallpaper>> {
         return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
                 .getPaperDetail(pk)
     }
 
-    override fun addPaper2Banner(bid: Int, pid: Int): Observable<BaseResponse<Boolean>> {
+    override fun addPaper2Banner(bid: Int, pid: Long): Observable<BaseResponse<Boolean>> {
         return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
                 .addPaper2Banner(bid, pid)
+    }
+
+    override fun setGarbage(paperId: Long): Observable<BaseResponse<String>> {
+        return mRepositoryManager.obtainRetrofitService(PaperService::class.java)
+                .setGarbage(paperId)
     }
 
     override fun onDestroy() {
