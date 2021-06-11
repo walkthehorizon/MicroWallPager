@@ -5,6 +5,26 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.mob.sdk'
 apply plugin: 'channel'
 
+// 用类型修饰符声明的变量在闭包中可见，但在方法中不可见
+String localScope1 = 'localScope1'
+
+println localScope1
+
+closure = {
+    println localScope1
+}
+
+def method() {
+    try {
+        localScope1
+    } catch (MissingPropertyException e) {
+        println 'localScope1NotAvailable'
+    }
+}
+
+closure.call()
+method()
+
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
     buildToolsVersion rootProject.ext.android["buildToolsVersion"]
