@@ -17,6 +17,7 @@ import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.ScreenUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.material.appbar.AppBarLayout
@@ -41,10 +42,12 @@ import com.shentu.paper.mvp.ui.adapter.HomeBannerAdapter
 import com.shentu.paper.mvp.ui.adapter.RecommendAdapter
 import com.shentu.paper.mvp.ui.adapter.decoration.RandomRecommendDecoration
 import com.shentu.paper.mvp.ui.browser.PictureBrowserActivity
+import com.shentu.paper.mvp.ui.my.ContentMode
 import com.shentu.paper.mvp.ui.widget.CustomPopWindow
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import kotlinx.android.synthetic.main.activity_home_new.*
 import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
@@ -71,6 +74,7 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
     private var wallpapers: MutableList<Wallpaper> = mutableListOf()
     private var countdown: Boolean = true
     private var bViewPager: ViewPager? = null
+    private var needRefresh = false
 //    private var historyBanner = Banner()
 
     override fun setupFragmentComponent(appComponent: AppComponent) {
@@ -198,6 +202,10 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
     override fun onResume() {
         super.onResume()
 //        Timber.e("开始计时")
+        if (needRefresh) {
+            refreshLayout.autoRefresh()
+            needRefresh = false
+        }
         startCountDown()
     }
 
@@ -234,7 +242,7 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
 
     override fun showMessage(message: String) {
         checkNotNull(message)
-        ArmsUtils.snackbarText(message)
+        ToastUtils.showShort(message)
     }
 
     override fun launchActivity(intent: Intent) {
@@ -372,6 +380,11 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun addLike(event: LikeEvent) {
         recommendAdapter.refreshNotifyItemChanged(event.position)
+    }
+
+    @Subscribe
+    fun switchContentMode(mode: ContentMode) {
+        needRefresh = true
     }
 
     fun getIsLightMode(): Boolean {

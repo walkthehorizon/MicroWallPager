@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import butterknife.OnClick
 import com.blankj.utilcode.util.SpanUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.IView
@@ -68,7 +69,7 @@ class SplashFragment : BaseFragment<SplashPresenter>(), SplashContract.View {
 
     override fun showMessage(message: String) {
         checkNotNull(message)
-        ArmsUtils.snackbarText(message)
+        ToastUtils.showShort(message)
     }
 
     override fun launchActivity(intent: Intent) {

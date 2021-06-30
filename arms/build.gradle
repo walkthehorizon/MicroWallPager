@@ -39,7 +39,7 @@ dependencies {
 //        exclude module: 'support-annotations'
 //    }
     api(rootProject.ext.dependencies["appcompat"])
-    compileOnly rootProject.ext.dependencies["material"]
+//    compileOnly rootProject.ext.dependencies["material"]
 //    api(rootProject.ext.dependencies["recyclerview"])
     api rootProject.ext.dependencies["annotation"]
 

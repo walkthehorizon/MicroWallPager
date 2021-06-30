@@ -25,7 +25,6 @@ import com.jess.arms.integration.AppManager
 import com.leon.channel.helper.ChannelReaderUtil
 import com.shentu.paper.BuildConfig
 import com.shentu.paper.app.AppLifecycleImpl
-import com.shentu.paper.app.HkApplication
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -53,6 +52,13 @@ class HkUtils private constructor() {
 
         val instance: HkUtils
             get() = SingletonHolder.INSTANCE
+
+        fun getChannel(context: Context): String {
+            return if (ChannelReaderUtil.getChannel(context).isNullOrEmpty())
+                "default"
+            else
+                ChannelReaderUtil.getChannel(context)
+        }
 
         fun contactKefu() {
             try {
@@ -212,13 +218,5 @@ class HkUtils private constructor() {
 
     fun get2x2Image(url: String?): String {
         return url?.replace("cos.ap-beijing", "picbj") + "!2x2"
-    }
-
-    fun isGentleManMode(): Boolean {
-        val channel = if (ChannelReaderUtil.getChannel(AppLifecycleImpl.instance).isNullOrEmpty())
-            "default"
-        else
-            ChannelReaderUtil.getChannel(AppLifecycleImpl.instance)
-        return channel == "google_play"
     }
 }

@@ -11,16 +11,16 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
+    <!--android:networkSecurityConfig="@xml/network_security_config"-->
     <application
-        android:name="com.shentu.paper.app.HkApplication"
-        android:allowBackup="false"
+        android:name=".app.HkApplication"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_new_launcher"
         android:label="@string/app_name"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
         tools:replace="android:allowBackup,android:name">
         <meta-data
@@ -50,32 +50,32 @@
         <activity android:name="com.shentu.paper.mvp.ui.activity.SearchActivity" />
         <activity
             android:name="com.shentu.paper.mvp.ui.activity.MainActivity"
-            android:theme="@style/AppTheme.AnimLauncher">
+            android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.shentu.paper.mvp.ui.browser.PictureBrowserActivity"
+            android:name=".mvp.ui.browser.PictureBrowserActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="singleTop"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.shentu.paper.mvp.ui.fragment.CategoryListActivity"
+            android:name=".mvp.ui.fragment.CategoryListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="singleTop" />
 
         <activity
-            android:name="com.shentu.paper.mvp.ui.login.LoginActivity"
+            android:name=".mvp.ui.login.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name="com.shentu.paper.mvp.ui.activity.SettingMoreActivity" />
+        <activity android:name=".mvp.ui.activity.SettingMoreActivity" />
 
-        <activity android:name="com.shentu.paper.mvp.ui.activity.PictureShareActivity" />
-        <activity android:name="com.shentu.paper.mvp.ui.home.PaperSummaryActivity" />
+        <activity android:name=".mvp.ui.activity.PictureShareActivity" />
+        <activity android:name=".mvp.ui.home.PaperSummaryActivity" />
 
-        <activity android:name="com.shentu.paper.mvp.ui.activity.BrowserActivity" />
+        <activity android:name=".mvp.ui.activity.BrowserActivity" />
     </application>
 
 </manifest>

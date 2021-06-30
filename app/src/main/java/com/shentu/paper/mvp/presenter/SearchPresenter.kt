@@ -1,6 +1,8 @@
 package com.shentu.paper.mvp.presenter
 
 import android.app.Application
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.OnLifecycleEvent
 import com.blankj.utilcode.util.SPUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -48,7 +50,11 @@ constructor(model: SearchContract.Model, rootView: SearchContract.View) :
             gson.fromJson(history, object : TypeToken<LimitQueue<String>>() {}.type)
         }
         Timber.e(keyQueue.queue.toString())
+        mRootView.showHistory(keyQueue)//默认展示历史记录
+    }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume(){
         //首次搜索key
         observable = Observable.create { emitter ->
             mEmitter = emitter
@@ -69,7 +75,7 @@ constructor(model: SearchContract.Model, rootView: SearchContract.View) :
                     Timber.e("load data: $it")
                     mModel.searchKey(it, true)
                 }
-                .compose(RxUtils.applySchedulers(mRootView, true))
+                .compose(RxUtils.applySchedulers(mRootView,true))
                 .subscribe(object : ErrorHandleSubscriber<SubjectPageResponse>(mErrorHandler) {
                     override fun onNext(t: SubjectPageResponse) {
                         if (!t.isSuccess) {
@@ -78,8 +84,6 @@ constructor(model: SearchContract.Model, rootView: SearchContract.View) :
                         t.data?.content?.let { mRootView.showResults(it, true) }
                     }
                 })
-
-        mRootView.showHistory(keyQueue)//默认展示历史记录
     }
 
     /**

@@ -77,24 +77,24 @@ interface MicroService {
     @FormUrlEncoded
     @POST("paper/set/banner")
     fun addPaper2Banner(@Field("bid") bid: Int,
-                        @Field("pid") pid: Int): Observable<BaseResponse<Boolean>>
+                        @Field("pid") pid: Long): Observable<BaseResponse<Boolean>>
 
     @PATCH("user/update/{pk}")
     fun updateUser(@Body user: MicroUser, @Path("pk") pk: Int): Observable<MicroUser>
 
     @POST("buy/paper/{pk}")
-    fun buyPaper(@Path("pk") pk: Int,
+    fun buyPaper(@Path("pk") pk: Long,
                  @Query("type") type: Int): Observable<BaseResponse<Int>>
 
     @GET("wallpaper/detail/{pk}")
-    fun getPaperDetail(@Path("pk") pk: Int): Observable<BaseResponse<Wallpaper>> //    /**
+    fun getPaperDetail(@Path("pk") pk: Long): Observable<BaseResponse<Wallpaper>> //    /**
 
     /**
      * 更新分享次数
      * */
     @FormUrlEncoded
     @POST("paper/share/num")
-    fun updatePaperShareNum(@Field("pid") pid: Int)
+    fun updatePaperShareNum(@Field("pid") pid: Long)
 
     companion object {
         const val PAGE_LIMIT = 20

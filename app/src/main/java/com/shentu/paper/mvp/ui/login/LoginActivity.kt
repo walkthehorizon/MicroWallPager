@@ -2,6 +2,7 @@ package com.shentu.paper.mvp.ui.login
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
@@ -78,7 +79,7 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
     }
 
     override fun setupActivityComponent(appComponent: AppComponent) {
-        BarUtils.setStatusBarAlpha(this)
+        BarUtils.setStatusBarColor(this, Color.TRANSPARENT)
         DaggerLoginComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)

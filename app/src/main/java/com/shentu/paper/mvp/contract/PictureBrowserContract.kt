@@ -7,6 +7,7 @@ import com.shentu.paper.model.response.BaseResponse
 import com.shentu.paper.model.response.WallpaperPageResponse
 import com.shentu.paper.mvp.ui.browser.SaveType
 import io.reactivex.Observable
+import retrofit2.http.Path
 
 
 interface PictureBrowserContract {
@@ -35,17 +36,19 @@ interface PictureBrowserContract {
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model : IModel {
-        fun addCollect(pid: Int): Observable<BaseResponse<Boolean>>
+        fun addCollect(pid: Long): Observable<BaseResponse<Boolean>>
 
         fun getWallPapersBySubjectId(id: Int): Observable<WallpaperPageResponse>
 
         fun updateCategoryCover(cid: Int, logo: String): Observable<BaseResponse<Boolean>>
 
-        fun buyPaper(pk: Int, pea: Int): Observable<BaseResponse<Int>>
+        fun buyPaper(pk: Long, pea: Int): Observable<BaseResponse<Int>>
 
-        fun getPaperDetail(pk: Int): Observable<BaseResponse<Wallpaper>>
+        fun getPaperDetail(pk: Long): Observable<BaseResponse<Wallpaper>>
 
-        fun addPaper2Banner(bid: Int, pid: Int): Observable<BaseResponse<Boolean>>
+        fun setGarbage(paperId: Long):Observable<BaseResponse<String>>
+
+        fun addPaper2Banner(bid: Int, pid: Long): Observable<BaseResponse<Boolean>>
     }
 
 }

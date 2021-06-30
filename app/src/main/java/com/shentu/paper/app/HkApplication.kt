@@ -3,8 +3,8 @@ package com.shentu.paper.app
 import com.jess.arms.base.BaseApplication
 
 /**
- * 可以放置一些初始化内容，不要放置一些多处使用的参数等，避免继承第三方Application是转移困难
- */
-class HkApplication : BaseApplication() {
-
-}
+ * 如果需要继承其他的Application,必须实现BaseApplication中的逻辑
+ * 因为Application无法通过热更修复，所以此种完全转移Application逻辑到代理的 AppLifecycleImpl 中
+ * 可以完美实现Application生命周期内逻辑的热更能力
+ * */
+class HkApplication : BaseApplication()

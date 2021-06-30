@@ -7,14 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.list.MultiChoiceListener
-import com.afollestad.materialdialogs.list.listItemsMultiChoice
+import com.afollestad.materialdialogs.list.SingleChoiceListener
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.TimeUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.google.gson.reflect.TypeToken
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.base.BaseFragment
 import com.jess.arms.di.component.AppComponent
@@ -43,13 +42,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_my.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import org.greenrobot.eventbus.EventBus
 import java.io.File
 
 
 class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
 
     private lateinit var binding: FragmentMyBinding
-    private lateinit var initModes: List<String>
 
     companion object {
         fun newInstance(): TabMyFragment {
@@ -100,20 +99,17 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                 return@setOnClickListener
             }
         }
-        val modeSp = SPUtils.getInstance().getString(Constant.CONTENT_MODE, "")
-        initModes = if (modeSp.isEmpty()) {
-            listOf(ContentMode.ANIM.name)
-        } else {
-            ArmsUtils.obtainAppComponentFromContext(mContext).gson()
-                    .fromJson(modeSp, object : TypeToken<List<String>>() {}.type)
-        }
-        binding.itMode.setEndValue(ContentMode.getModeStr(initModes))
-        binding.itMode.setOnClickListener {
-            if (!HkUserManager.isLogin) {
-                launchActivity(Intent(mContext, LoginActivity::class.java))
-                return@setOnClickListener
+        if (HkUserManager.user.canSetMode) {
+            binding.itMode.visibility = View.VISIBLE
+            val curMode = SPUtils.getInstance().getInt(Constant.CONTENT_MODE, 0)
+            binding.itMode.setEndValue(ContentMode.getContentMode(curMode).name)
+            binding.itMode.setOnClickListener {
+                if (!HkUserManager.isLogin) {
+                    launchActivity(Intent(mContext, LoginActivity::class.java))
+                    return@setOnClickListener
+                }
+                showContentModeDialog()
             }
-            showContentModeDialog()
         }
         if (!TimeUtils.isToday(SPUtils.getInstance().getLong(Constant.LAST_NOTIFY_TIME))) {
             checkUpdate(false)
@@ -146,28 +142,19 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
 
 
     private fun showContentModeDialog() {
-        val initSelects = IntArray(initModes.size)
-        if (initModes.contains(ContentMode.ANIM.name)) {
-            initSelects[0] = 0
-        }
-        if (initModes.contains(ContentMode.COS.name)) {
-            initSelects[1] = 1
-        }
-        var selectModes: List<String> = emptyList()
-        MaterialDialog(mContext)
-                .listItemsMultiChoice(initialSelection = initSelects, items = listOf(ContentMode.ANIM.name, ContentMode.COS.name), selection = object : MultiChoiceListener {
-                    override fun invoke(dialog: MaterialDialog, indices: IntArray, items: List<String>) {
-                        selectModes = items
+        val curMode = SPUtils.getInstance().getInt(Constant.CONTENT_MODE, HkUserManager.user.defaultContentMode)
+        val modes = listOf(ContentMode.COS.tName, ContentMode.ANIM.tName)
+        MaterialDialog(requireContext())
+                .listItemsSingleChoice(initialSelection = curMode, items = modes, selection = object : SingleChoiceListener {
+                    override fun invoke(dialog: MaterialDialog, index: Int, text: String) {
+                        if(index ==curMode){
+                            return
+                        }
+                        SPUtils.getInstance().put(Constant.CONTENT_MODE, ContentMode.getContentMode(index).id)
+                        binding.itMode.setEndValue(modes[index])
+                        EventBus.getDefault().post(ContentMode.getContentMode(index))
                     }
-                })
-                .positiveButton {
-                    initModes = selectModes
-                    SPUtils.getInstance().put(Constant.CONTENT_MODE, ArmsUtils.obtainAppComponentFromContext(mContext)
-                            .gson().toJson(selectModes))
-                    binding.itMode.setEndValue(ContentMode.getModeStr(selectModes))
-                    //TODO 刷新数据
-                }
-                .show()
+                }).show()
     }
 
     private fun showUpdateDialog(update: AppUpdate) {
@@ -214,7 +201,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                     .into(circle_avatar)
             itMoney.setEndValue("")
         }
-        itCache.setEndValue(FileUtils.getDirSize(glideCache))
+        itCache.setEndValue(FileUtils.getSize(glideCache))
     }
 
     override fun onResume() {
@@ -251,7 +238,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete {
                     GlideArms.get(mContext).clearMemory()
-                    itCache.setEndValue(FileUtils.getDirSize(glideCache))
+                    itCache.setEndValue(FileUtils.getSize(glideCache))
                     ToastUtils.showShort("清理完成")
                 }
                 .subscribe()
@@ -270,7 +257,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     }
 
     override fun showMessage(message: String) {
-        ArmsUtils.snackbarText(message)
+        ToastUtils.showShort(message)
     }
 
     override fun launchActivity(intent: Intent) {

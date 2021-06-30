@@ -4,7 +4,7 @@ import android.app.Application
 import com.google.gson.Gson
 import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.integration.IRepositoryManager
-import com.shentu.paper.app.BasePageModel
+import com.shentu.paper.app.page.BasePageModel
 import com.shentu.paper.model.api.service.MicroService
 import com.shentu.paper.model.response.WallpaperPageResponse
 import com.shentu.paper.mvp.contract.HomeRankContract
@@ -17,9 +17,9 @@ class HomeRankModel
 @Inject
 constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryManager), HomeRankContract.Model {
     @Inject
-    lateinit var mGson: Gson;
+    lateinit var mGson: Gson
     @Inject
-    lateinit var mApplication: Application;
+    lateinit var mApplication: Application
 
     override fun getRankPapers(clear: Boolean): Observable<WallpaperPageResponse> {
         return mRepositoryManager.obtainRetrofitService(MicroService::class.java)
@@ -27,6 +27,6 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
     }
 
     override fun onDestroy() {
-        super.onDestroy();
+        super.onDestroy()
     }
 }

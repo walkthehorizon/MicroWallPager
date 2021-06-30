@@ -1,26 +1,29 @@
--optimizationpasses 5
-
-
 -dontusemixedcaseclassnames
 
 -dontskipnonpubliclibraryclasses
 
 -dontskipnonpubliclibraryclassmembers
 
+-dontoptimize
+
 -dontpreverify
 
 -verbose
--printmapping priguardMapping.txt
+#让 Crashlytics 自动上传 ProGuard 或 DexGuard 映射文件
+#-printmapping priguardMapping.txt
 
 -optimizations !code/simplification/artithmetic,!field/*,!class/merging/*
 
+
+
 ################common###############
-#-keep class com.jess.arms.** { *; }
 -keep public class * implements com.jess.arms.integration.ConfigModule
 
+-keep class com.shentu.paper.mvp.ui.widget.** { *; }
+-keep class com.shentu.paper.model.** { *; }#自定义实体，理论上全都实现Serializable
+
  #实体类不参与混淆
--keep class com.shentu.wallpaper.mvp.ui.widget.** { *; }
--keep class com.shentu.wallpaper.model.** { *; }#自定义实体，理论上全都实现Serializable
+-keep class com.jess.arms.widget.** { *; } #自定义控件不参与混淆
 -keep class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator *;
 }
@@ -110,19 +113,6 @@
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
 -dontwarn com.squareup.okhttp.**
-
-
-################androidEventBus###############
--keep class org.simple.** { *; }
--keep interface org.simple.** { *; }
--keepclassmembers class * {
-    @org.simple.eventbus.Subscriber <methods>;
-}
--keepattributes *Annotation*
-
-################autolayout###############
--keep class com.zhy.autolayout.** { *; }
--keep interface com.zhy.autolayout.** { *; }
 
 
 ################RxJava and RxAndroid###############
@@ -240,6 +230,10 @@
      <init>(...);
 }
 
+####################autosize########################
+ -keep class me.jessyan.autosize.** { *; }
+ -keep interface me.jessyan.autosize.** { *; }
+
 #################mob#####################
 -keep class com.mob.**{*;}
 -keep class cn.smssdk.**{*;}
@@ -257,6 +251,10 @@
 -dontwarn com.mob.**
 -dontwarn **.R$*
 
+#############################vasDolly##########################
+-keep class com.leon.channel.helper.** {*;}
+-dontwarn com.leon.channel.helper.**
+
 ################matisse########################
 -dontwarn com.squareup.picasso.**
 
@@ -270,16 +268,38 @@
 # 如果使用了 单类注入，即不定义接口实现 IProvider，需添加下面规则，保护实现
 # -keep class * implements com.alibaba.android.arouter.facade.template.IProvider
 
-#################hotfix########################
+#####################友盟#############################
+-keep class com.uc.** {*;}
+-keep class com.zui.** {*;}
+-keep class com.miui.** {*;}
+-keep class com.heytap.** {*;}
+-keep class a.** {*;}
+-keep class com.vivo.** {*;}
+-keepclassmembers class * {
+   public <init>(org.json.JSONObject);
+}
+-keep public class [com.shentu.paper].R$*{
+public static final int *;
+}
+-keep class com.umeng.** {*;}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+#################Sophix############################
 #基线包使用，生成mapping.txt
 #-printmapping mapping.txt
 #生成的mapping.txt在app/build/outputs/mapping/release路径下，移动到/app路径下
 #修复后的项目使用，保证混淆结果一致
--applymapping mapping.txt
-
+#-applymapping mapping.txt
+#hotfix
 -keep class com.taobao.sophix.**{*;}
 -keep class com.ta.utdid2.device.**{*;}
 -dontwarn com.alibaba.sdk.android.utils.**
--keepclassmembers class com.shentu.wallpaper.app.HkApplication {
+#防止inline
+-dontoptimize
+
+-keepclassmembers class com.shentu.paper.app.HkApplication {
     public <init>();
 }

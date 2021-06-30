@@ -59,6 +59,7 @@
 
     <ImageView
         android:id="@+id/mIvCover"
+        android:visibility="gone"
         android:layout_width="280dp"
         android:layout_height="280dp"
         android:layout_below="@+id/rivEmail"

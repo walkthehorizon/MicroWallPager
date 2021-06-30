@@ -4,7 +4,7 @@ import android.app.Application
 import com.google.gson.Gson
 import com.jess.arms.di.scope.ActivityScope
 import com.jess.arms.integration.IRepositoryManager
-import com.shentu.paper.app.BasePageModel
+import com.shentu.paper.app.page.BasePageModel
 import com.shentu.paper.model.api.cache.MicroCache
 import com.shentu.paper.model.api.service.MicroService
 import com.shentu.paper.model.response.SubjectPageResponse
@@ -27,13 +27,8 @@ constructor(repositoryManager: IRepositoryManager) : BasePageModel(repositoryMan
 
     override fun searchKey(key: String, clear: Boolean): Observable<SubjectPageResponse> {
         offset = getOffset(clear)
-        return Observable.just(mRepositoryManager
+        return mRepositoryManager
                 .obtainRetrofitService(MicroService::class.java)
-                .searchSubject(key, limit, offset))
-                .flatMap {
-                    mRepositoryManager.obtainCacheService(MicroCache::class.java)
-                            .searchKey(it, DynamicKeyGroup(key, offset))
-                            .map { t: Reply<SubjectPageResponse> -> t.data }
-                }
+                .searchSubject(key, limit, offset)
     }
 }

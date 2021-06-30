@@ -70,7 +70,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     var categoryId: Int = -1
 
     //from web
-    private var paperId: Int = -1
+    private var paperId: Long = -1
 
     private lateinit var popupMenu: PopupMenu
 
@@ -85,7 +85,8 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                 .pictureBrowserModule(PictureBrowserModule(this))
                 .build()
                 .inject(this)
-        ScreenUtils.setFullScreen(this)
+//        ScreenUtils.setFullScreen(this)
+        setTheme(R.style.AppTheme_FullScreen)
         window.enterTransition = Fade()
     }
 
@@ -101,7 +102,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                 initView()
             }
             subjectId != -1 -> mPresenter?.getPictures(subjectId)
-            paperId != -1 -> mPresenter?.getPaperDetail(paperId)
+            paperId != -1L -> mPresenter?.getPaperDetail(paperId)
             else -> throw IllegalArgumentException("参数异常")
         }
     }
@@ -141,6 +142,9 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                 popupMenu.menu.findItem(R.id.itSetBanner).isVisible = false
                 popupMenu.menu.findItem(R.id.itSetCover).isVisible = false
             }
+            if (curPaper.subjectId == -1) {
+                popupMenu.menu.findItem(R.id.itSubject).isVisible = false
+            }
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item?.itemId) {
                     R.id.itSetPaper -> vpAdapter.getFragment(viewPager.currentItem).loadPicture(Behavior.SET_WALLPAPER)
@@ -161,6 +165,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
                             mPresenter?.addPaper2Banner(it.getInputField().text.toString().toInt(), wallpapers[index].id)
                         }
                     }
+                    R.id.itSetGarbage ->mPresenter?.setGarbage(curPaper.id)
                 }
                 true
             }
@@ -390,7 +395,7 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
      * 先于initData执行
      * */
     override fun onReturnSceneData(scene: Scene) {
-        paperId = scene.params["id"] as Int
+        paperId = scene.params["id"] as Long
     }
 
     override fun onNewIntent(intent: Intent?) {

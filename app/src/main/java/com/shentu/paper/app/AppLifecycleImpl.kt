@@ -51,6 +51,8 @@ class AppLifecycleImpl : AppLifecycles {
             ARouter.openLog() // 打印日志
             ARouter.openDebug() // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         }
+//        UMConfigure.init(application, "5f5a08fba4ae0a7f7d02fb9d", HkUtils.getChannel(application)
+//                , UMConfigure.DEVICE_TYPE_PHONE, null)
         ARouter.init(application) // 尽可能早，推荐在Application中初始化
         MobSDK.init(application)
         MobLink.setRestoreSceneListener(SceneListener())

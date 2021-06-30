@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
@@ -17,6 +18,9 @@ import androidx.viewpager.widget.ViewPager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
+import com.alibaba.android.arouter.core.LogisticsCenter
+import com.alibaba.android.arouter.utils.ClassUtils
+import com.alibaba.android.arouter.utils.Consts
 import com.blankj.utilcode.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.horizon.netbus.NetBus
@@ -35,7 +39,6 @@ import com.shentu.paper.app.HkUserManager
 import com.shentu.paper.app.config.Config
 import com.shentu.paper.app.page.ErrorCallback
 import com.shentu.paper.app.utils.RxUtils
-import com.shentu.paper.databinding.ActivityMainBinding
 import com.shentu.paper.di.component.DaggerMainComponent
 import com.shentu.paper.di.module.MainModule
 import com.shentu.paper.model.api.service.UserService
@@ -43,14 +46,12 @@ import com.shentu.paper.model.response.BaseResponse
 import com.shentu.paper.mvp.contract.MainContract
 import com.shentu.paper.mvp.presenter.MainPresenter
 import com.shentu.paper.mvp.ui.adapter.MainPagerAdapter
-import com.shentu.paper.mvp.ui.fragment.TabCategoryFragment
 import com.shentu.paper.mvp.ui.home.TabHomeFragment
 import com.shentu.paper.mvp.ui.my.TabMyFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_agreement.view.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import retrofit2.Retrofit
 import timber.log.Timber
 
 
@@ -59,8 +60,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
 
     private lateinit var mainPagerAdapter: MainPagerAdapter
     private var lastPos: Int = 0//上一个位置
-    private val fragments: List<Fragment> = listOf(TabHomeFragment.newInstance()
-            , TabMyFragment.newInstance())
+    private val fragments: List<Fragment> = listOf(TabHomeFragment.newInstance(), TabMyFragment.newInstance())
     private var loadService: LoadService<Any>? = null
 
 
@@ -72,7 +72,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
                 .build()
                 .inject(this)
         setTheme(R.style.AppTheme)
-        BarUtils.setStatusBarAlpha(this)
+        BarUtils.setStatusBarColor(this, Color.TRANSPARENT)
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {
@@ -82,14 +82,14 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
     override fun initData(savedInstanceState: Bundle?) {
         Config.init(this)
         loadService = LoadSir.getDefault().register(this) { initData(null) }
-        if(HkUserManager.isLogin){
-            showMainView()
-            GlobalScope.launch {
-                showContent()
-            }
-        }else{
-            mPresenter?.loginAccount()
-        }
+//        if(HkUserManager.isLogin){
+//            showMainView()
+//            GlobalScope.launch {
+//                showContent()
+//            }
+//        }else{
+            mPresenter?.getAccountInfo()
+//        }
     }
 
     override fun showMainView() {

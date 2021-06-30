@@ -11,15 +11,6 @@ import com.jess.arms.integration.EventBusManager;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-/**
- * ================================================
- * 基类 {@link Service}
- * <p>
- * Created by jess on 2016/5/6.
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
- * ================================================
- */
 public abstract class BaseService extends Service {
     protected final String TAG = this.getClass().getSimpleName();
     protected CompositeDisposable mCompositeDisposable;

@@ -9,6 +9,7 @@ interface UserService {
     @GET("sign")
     fun sign(): Observable<BaseResponse<Int>>
 
+    @Headers("Cache-Control:max-age=0")
     @GET("account/info")
     fun loginAccount(@Query("uuid") phone: String): Observable<BaseResponse<MicroUser>>
 

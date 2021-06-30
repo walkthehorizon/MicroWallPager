@@ -36,12 +36,7 @@ import javax.inject.Named;
  * 所以当遇到某些三方库需要继承于它的 Application 的时候,就只有自定义 Application 并继承于三方库的 Application
  * 这时就不用再继承 BaseApplication,只用在自定义Application中对应的生命周期调用AppDelegate对应的方法
  * (Application一定要实现APP接口),框架就能照常运行
- *
  * @see BaseApplication
- * @see <a href="https://github.com/JessYanCoding/MVPArms/wiki#3.12">AppDelegate wiki 官方文档</a>
- * Created by JessYan on 24/04/2017 09:44
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
 public class AppDelegate implements App, AppLifecycles {

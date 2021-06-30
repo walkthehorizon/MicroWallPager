@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -12,13 +12,16 @@
         <item name="android:configChanges">orientation</item>
     </style>
 
-    <style name="AppTheme.Launcher" parent="AppTheme">
-        <item name="android:statusBarColor">@color/transparent</item>
-        <item name="android:windowBackground">@drawable/layer_launcher</item>
+    <style name="AppTheme.FullScreen">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <!--    Android9刘海适配    -->
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="p">
+            shortEdges <!-- default, shortEdges, never -->
+        </item>
     </style>
 
-    <style name="AppTheme.AnimLauncher" parent="AppTheme">
-        <item name="android:statusBarColor">@color/transparent</item>
+    <style name="AppTheme.Splash" parent="AppTheme.FullScreen">
         <item name="android:windowBackground">@drawable/ic_anim_splash</item>
     </style>
 

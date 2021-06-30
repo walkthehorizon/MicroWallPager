@@ -1,5 +1,6 @@
 package com.shentu.paper.app.utils
 
+import com.shentu.paper.BuildConfig
 import com.shentu.paper.app.AppLifecycleImpl
 import com.shentu.paper.app.HkUserManager
 import com.shentu.paper.app.config.Config
@@ -22,10 +23,10 @@ class CosUtils private constructor() {
         val serviceConfig = CosXmlServiceConfig.Builder()
                 .setRegion("ap-beijing")
                 .isHttps(true) // 使用 https 请求, 默认 http 请求
-                .setDebuggable(true)
+                .setDebuggable(BuildConfig.DEBUG)
                 .builder()
         val credentialProvider = SessionCredentialProvider(HttpRequest.Builder<String>()
-                .url(URL(Config.appServer + "signature"))
+                .url(URL(Config.appServer.replace("https", "http") + "signature"))
                 .method("GET")
                 .build())
         cosXmlService = CosXmlSimpleService(AppLifecycleImpl.instance, serviceConfig, credentialProvider)
