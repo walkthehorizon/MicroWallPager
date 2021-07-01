@@ -10,19 +10,15 @@ import com.google.gson.Gson;
 import com.jess.arms.http.GlobalHttpHandler;
 import com.jess.arms.http.log.RequestInterceptor;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
-import io.rx_cache2.internal.RxCache;
-import io.victoralbertos.jolyglot.GsonSpeaker;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.listener.ResponseErrorListener;
 import okhttp3.HttpUrl;
@@ -126,45 +122,6 @@ public abstract class ClientModule {
     abstract Interceptor bindInterceptor(RequestInterceptor interceptor);
 
     /**
-     * 提供 {@link RxCache}
-     *
-     * @param application
-     * @param configuration
-     * @param cacheDirectory cacheDirectory RxCache缓存路径
-     * @return {@link RxCache}
-     */
-    @Singleton
-    @Provides
-    static RxCache provideRxCache(Application application, @Nullable RxCacheConfiguration configuration
-            , @Named("RxCacheDirectory") File cacheDirectory, Gson gson) {
-        RxCache.Builder builder = new RxCache.Builder();
-        RxCache rxCache = null;
-        if (configuration != null) {
-            rxCache = configuration.configRxCache(application, builder);
-        }
-        if (rxCache != null) return rxCache;
-        return builder
-                .persistence(cacheDirectory, new GsonSpeaker(gson));
-    }
-
-    /**
-     * 需要单独给 {@link RxCache} 提供缓存路径
-     *
-     * @param cacheDir
-     * @return {@link File}
-     */
-    @Singleton
-    @Provides
-    @Named("RxCacheDirectory")
-    static File provideRxCacheDirectory(File cacheDir) {
-        File cacheDirectory = new File(cacheDir, "RxCache");
-        if(!cacheDirectory.exists()){
-            cacheDirectory.mkdirs();
-        }
-        return cacheDirectory;
-    }
-
-    /**
      * 提供处理 RxJava 错误的管理器
      *
      * @param application
@@ -187,17 +144,5 @@ public abstract class ClientModule {
 
     public interface OkhttpConfiguration {
         void configOkhttp(Context context, OkHttpClient.Builder builder);
-    }
-
-    public interface RxCacheConfiguration {
-        /**
-         * 若想自定义 RxCache 的缓存文件夹或者解析方式, 如改成 fastjson
-         * 请 {@code return rxCacheBuilder.persistence(cacheDirectory, new FastJsonSpeaker());}, 否则请 {@code return null;}
-         *
-         * @param context
-         * @param builder
-         * @return {@link RxCache}
-         */
-        RxCache configRxCache(Context context, RxCache.Builder builder);
     }
 }

@@ -22,7 +22,6 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
 import com.jess.arms.integration.AppManager
-import com.leon.channel.helper.ChannelReaderUtil
 import com.shentu.paper.BuildConfig
 import com.shentu.paper.app.AppLifecycleImpl
 import timber.log.Timber
@@ -54,10 +53,7 @@ class HkUtils private constructor() {
             get() = SingletonHolder.INSTANCE
 
         fun getChannel(context: Context): String {
-            return if (ChannelReaderUtil.getChannel(context).isNullOrEmpty())
-                "default"
-            else
-                ChannelReaderUtil.getChannel(context)
+            return "default"
         }
 
         fun contactKefu() {

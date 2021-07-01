@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -54,11 +56,11 @@ dependencies {
     api(rootProject.ext.dependencies["rxandroid2"]) {
         exclude module: 'rxjava'
     }
-    api(rootProject.ext.dependencies["rxcache2"]) {
-        exclude module: 'rxjava'
-        exclude module: 'dagger'
-        exclude module: 'api'
-    }
+//    api(rootProject.ext.dependencies["rxcache2"]) {
+//        exclude module: 'rxjava'
+//        exclude module: 'dagger'
+//        exclude module: 'api'
+//    }
 //    implementation(rootProject.ext.dependencies["rxcache-jolyglot-gson"]) {
 //        exclude module: 'gson'
 //    }
@@ -101,7 +103,7 @@ dependencies {
 //    }
 
     //tools
-    compileOnly rootProject.ext.dependencies["javax.annotation"]
+//    compileOnly rootProject.ext.dependencies["javax.annotation"]
     api rootProject.ext.dependencies["dagger2"]
     annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
 //    compileOnly rootProject.ext.dependencies["androideventbus"]

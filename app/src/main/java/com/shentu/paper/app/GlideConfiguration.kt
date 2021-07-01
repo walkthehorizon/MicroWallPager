@@ -67,7 +67,7 @@ class GlideConfiguration : AppGlideModule() {
                 val builder = OkHttpClient.Builder()
                 builder.addInterceptor(object : Interceptor {
                     override fun intercept(chain: Interceptor.Chain): Response {
-                        val url = chain.request().url.toString()
+                        val url = chain.request().url().toString()
                         //            Timber.e("load image: %s", url);
                         val builder1 = chain.request().newBuilder()
                         if (url.contains("wmmt119.top") || url.contains("myqcloud.com")) {

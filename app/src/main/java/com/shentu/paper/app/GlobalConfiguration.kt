@@ -17,7 +17,6 @@ import com.jess.arms.http.log.RequestInterceptor
 import com.jess.arms.integration.ConfigModule
 import com.shentu.paper.BuildConfig
 import com.shentu.paper.app.config.Config
-import io.rx_cache2.internal.RxCache
 import okhttp3.*
 import retrofit2.Retrofit
 import timber.log.Timber
@@ -97,62 +96,61 @@ class GlobalConfiguration : ConfigModule {
                                     return if (cookieStore.isNullOrEmpty()) {
                                         emptyList()
                                     } else {
-                                        cookieStore[url.host]!!
+                                        cookieStore[url.host()]!!
                                     }
                                 }
 
                                 override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
                                     for (cookie in cookies) {
                                         Timber.d("cookie:%s", cookie.toString())
-                                        Timber.d("cookie value:%s", cookie.value)
+                                        Timber.d("cookie value:%s", cookie.value())
                                     }
                                     //第一个cookie的值为csrftoken，第二个是sessionid
                                     //每次进行登录都会产生一个相应的csrftoken，保存这个值才可进行后续的注销登录
-                                    SPUtils.getInstance().put("X-CSRFToken", cookies[0].value);
-                                    cookieStore[url.host] = cookies;
+                                    SPUtils.getInstance().put("X-CSRFToken", cookies[0].value());
+                                    cookieStore[url.host()] = cookies;
                                 }
 
                             })
-                            .addNetworkInterceptor(object : Interceptor {
-                                override fun intercept(chain: Interceptor.Chain): Response {
-                                    val request = chain.request()
-                                    val response = chain.proceed(request)
-                                    Timber.e("url %s , head %s", request.url.toString(), request.header("Cache-Control"))
-                                    var onlineCacheTime = 10L //在线的时候的缓存过期时间，如果想要不缓存，直接时间设置为0
-                                    if (!TextUtils.isEmpty(request.header("Cache-Control"))) {
-                                        onlineCacheTime = try {
-                                            request.header("Cache-Control")!!.split("=").toTypedArray()[1].toLong()
-                                        } catch (e: ClassCastException) {
-                                            Timber.e(e)
-                                            10L
-                                        }
+                            .addNetworkInterceptor { chain ->
+                                val request = chain.request()
+                                val response = chain.proceed(request)
+                                Timber.e(
+                                    "url %s , head %s",
+                                    request.url(),
+                                    request.header("Cache-Control")
+                                )
+                                var onlineCacheTime = 10L //在线的时候的缓存过期时间，如果想要不缓存，直接时间设置为0
+                                if (!TextUtils.isEmpty(request.header("Cache-Control"))) {
+                                    onlineCacheTime = try {
+                                        request.header("Cache-Control")!!.split("=")
+                                            .toTypedArray()[1].toLong()
+                                    } catch (e: ClassCastException) {
+                                        Timber.e(e)
+                                        10L
                                     }
-                                    return response.newBuilder()
-                                            .header("Cache-Control", "public, max-age=$onlineCacheTime")
-                                            .removeHeader("Pragma")
+                                }
+                                response.newBuilder()
+                                    .header("Cache-Control", "public, max-age=$onlineCacheTime")
+                                    .removeHeader("Pragma")
+                                    .build()
+                            }
+                        .addInterceptor { chain ->
+                            var request = chain.request()
+                            if (!NetworkUtils.isConnected()) {
+                                request = request.newBuilder()
+                                    .removeHeader("Pragma")
+                                    .cacheControl(
+                                        CacheControl.Builder()
+                                            .onlyIfCached()
+                                            .maxStale(30, TimeUnit.DAYS)
                                             .build()
-                                }
-                            })
-                            .addInterceptor(object : Interceptor {
-                                override fun intercept(chain: Interceptor.Chain): Response {
-                                    var request = chain.request()
-                                    if (!NetworkUtils.isConnected()) {
-                                        request = request.newBuilder()
-                                                .removeHeader("Pragma")
-                                                .cacheControl(CacheControl.Builder()
-                                                        .onlyIfCached()
-                                                        .maxStale(30, TimeUnit.DAYS)
-                                                        .build())
-                                                .build()
-                                    }
-                                    return chain.proceed(request)
-                                }
-                            })
-                            .cache(Cache(File(cachePath), (MemoryConstants.MB * 512).toLong()))
-                }
-                .rxCacheConfiguration { _: Context?, rxCacheBuilder: RxCache.Builder ->  //这里可以自己自定义配置 RxCache 的参数
-                    rxCacheBuilder.useExpiredDataIfLoaderNotAvailable(true)
-                    null
+                                    )
+                                    .build()
+                            }
+                            chain.proceed(request)
+                        }
+                        .cache(Cache(File(cachePath), (MemoryConstants.MB * 512).toLong()))
                 }
     }
 

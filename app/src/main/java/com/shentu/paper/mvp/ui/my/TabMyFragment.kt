@@ -201,7 +201,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                     .into(circle_avatar)
             itMoney.setEndValue("")
         }
-        itCache.setEndValue(FileUtils.getSize(glideCache))
+        itCache.setEndValue(FileUtils.getDirSize(glideCache))
     }
 
     override fun onResume() {
@@ -238,7 +238,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete {
                     GlideArms.get(mContext).clearMemory()
-                    itCache.setEndValue(FileUtils.getSize(glideCache))
+                    itCache.setEndValue(FileUtils.getDirSize(glideCache))
                     ToastUtils.showShort("清理完成")
                 }
                 .subscribe()

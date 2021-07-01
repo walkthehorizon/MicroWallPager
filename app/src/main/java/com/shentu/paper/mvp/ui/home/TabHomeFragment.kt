@@ -377,6 +377,10 @@ class TabHomeFragment : BaseFragment<TabHomePresenter>(), TabHomeContract.View
                 })
     }
 
+    override fun useEventBus(): Boolean {
+        return true
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun addLike(event: LikeEvent) {
         recommendAdapter.refreshNotifyItemChanged(event.position)

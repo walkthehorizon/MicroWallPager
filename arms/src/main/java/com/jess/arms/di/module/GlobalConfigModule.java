@@ -44,7 +44,6 @@ public class GlobalConfigModule {
     private File mCacheFile;
     private ClientModule.RetrofitConfiguration mRetrofitConfiguration;
     private ClientModule.OkhttpConfiguration mOkhttpConfiguration;
-    private ClientModule.RxCacheConfiguration mRxCacheConfiguration;
     private AppModule.GsonConfiguration mGsonConfiguration;
     private RequestInterceptor.Level mPrintHttpLogLevel;
     private FormatPrinter mFormatPrinter;
@@ -59,7 +58,6 @@ public class GlobalConfigModule {
         this.mCacheFile = builder.cacheFile;
         this.mRetrofitConfiguration = builder.retrofitConfiguration;
         this.mOkhttpConfiguration = builder.okhttpConfiguration;
-        this.mRxCacheConfiguration = builder.rxCacheConfiguration;
         this.mGsonConfiguration = builder.gsonConfiguration;
         this.mPrintHttpLogLevel = builder.printHttpLogLevel;
         this.mFormatPrinter = builder.formatPrinter;
@@ -148,13 +146,6 @@ public class GlobalConfigModule {
     @Singleton
     @Provides
     @Nullable
-    ClientModule.RxCacheConfiguration provideRxCacheConfiguration() {
-        return mRxCacheConfiguration;
-    }
-
-    @Singleton
-    @Provides
-    @Nullable
     AppModule.GsonConfiguration provideGsonConfiguration() {
         return mGsonConfiguration;
     }
@@ -200,7 +191,6 @@ public class GlobalConfigModule {
         private File cacheFile;
         private ClientModule.RetrofitConfiguration retrofitConfiguration;
         private ClientModule.OkhttpConfiguration okhttpConfiguration;
-        private ClientModule.RxCacheConfiguration rxCacheConfiguration;
         private AppModule.GsonConfiguration gsonConfiguration;
         private RequestInterceptor.Level printHttpLogLevel;
         private FormatPrinter formatPrinter;
@@ -253,11 +243,6 @@ public class GlobalConfigModule {
 
         public Builder okhttpConfiguration(ClientModule.OkhttpConfiguration okhttpConfiguration) {
             this.okhttpConfiguration = okhttpConfiguration;
-            return this;
-        }
-
-        public Builder rxCacheConfiguration(ClientModule.RxCacheConfiguration rxCacheConfiguration) {
-            this.rxCacheConfiguration = rxCacheConfiguration;
             return this;
         }
 

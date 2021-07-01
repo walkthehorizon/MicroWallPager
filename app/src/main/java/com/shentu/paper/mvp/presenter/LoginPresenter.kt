@@ -5,7 +5,6 @@ import com.blankj.utilcode.util.SPUtils
 import com.google.gson.Gson
 import com.jess.arms.di.scope.ActivityScope
 import com.jess.arms.integration.AppManager
-import com.jess.arms.integration.EventBusManager
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.paper.app.Constant
 import com.shentu.paper.app.HkUserManager
@@ -17,6 +16,7 @@ import com.shentu.paper.model.response.BaseResponse
 import com.shentu.paper.mvp.contract.LoginContract
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -53,7 +53,7 @@ constructor(model: LoginContract.Model, rootView: LoginContract.View) :
                         HkUserManager.user = t.data!!
                         Timber.e(HkUserManager.user.toString())
                         HkUserManager.save()
-                        EventBusManager.getInstance().post(LoginSuccessEvent())
+                        EventBus.getDefault().post(LoginSuccessEvent())
                         mRootView.killMyself()
                     }
                 })

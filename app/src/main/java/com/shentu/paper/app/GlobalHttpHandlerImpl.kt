@@ -6,7 +6,6 @@ import android.provider.Settings
 import android.text.TextUtils
 import com.blankj.utilcode.util.SPUtils
 import com.jess.arms.http.GlobalHttpHandler
-import com.leon.channel.helper.ChannelReaderUtil
 import com.shentu.paper.BuildConfig
 import com.shentu.paper.app.HkUserManager.token
 import com.shentu.paper.app.HkUserManager.uid
@@ -56,7 +55,7 @@ class GlobalHttpHandlerImpl(private val context: Context) : GlobalHttpHandler {
 
     // 这里可以在请求服务器之前可以拿到request,做一些操作比如给request统一添加token或者header以及参数加密等操作
     override fun onHttpRequestBefore(chain: Interceptor.Chain, request: Request): Request {
-        Timber.e("load url: %s", request.url.toString())
+        Timber.e("load url: %s", request.url().toString())
         val builder = request.newBuilder()
         val token = token
         if (!TextUtils.isEmpty(token)) {

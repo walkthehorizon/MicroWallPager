@@ -5,16 +5,13 @@ buildscript {
 
     repositories {
         maven {
-            url "http://maven.aliyun.com/nexus/content/repositories/releases"
+            url 'https://maven.aliyun.com/repository/public/'
         }
         maven {
             url "http://mvn.mob.com/android"
         }
         google()
         mavenCentral()
-//        maven {
-//            url 'https://maven.aliyun.com/repository/public/'
-//        }
         jcenter()
     }
     dependencies {
@@ -27,7 +24,6 @@ buildscript {
         classpath "com.mob.sdk:MobSDK:2018.0319.1724"
         classpath 'com.novoda:bintray-release:0.9.1'
         classpath "com.alibaba:arouter-register:1.0.2"
-        classpath 'com.leon.channel:plugin:2.0.3'
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }
 }
@@ -42,11 +38,11 @@ allprojects {
         maven {
             url "https://dl.bintray.com/tencentqcloudterminal/maven"
         }
+        maven {
+            url 'https://maven.aliyun.com/repository/public/'
+        }
         google()
         mavenCentral()
-//        maven {
-//            url 'https://maven.aliyun.com/repository/public/'
-//        }
         jcenter()
     }
 }

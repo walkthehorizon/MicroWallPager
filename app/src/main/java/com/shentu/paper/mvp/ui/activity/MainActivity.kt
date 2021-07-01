@@ -18,9 +18,6 @@ import androidx.viewpager.widget.ViewPager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
-import com.alibaba.android.arouter.core.LogisticsCenter
-import com.alibaba.android.arouter.utils.ClassUtils
-import com.alibaba.android.arouter.utils.Consts
 import com.blankj.utilcode.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.horizon.netbus.NetBus
@@ -51,7 +48,8 @@ import com.shentu.paper.mvp.ui.my.TabMyFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_agreement.view.*
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
-import retrofit2.Retrofit
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 
 

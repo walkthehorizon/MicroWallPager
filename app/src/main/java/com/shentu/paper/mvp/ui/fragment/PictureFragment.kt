@@ -189,7 +189,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
                 ToastUtils.showShort("创建文件失败")
                 return
             }
-            val copy = FileUtils.copy(curFile, File(destPath))
+            val copy = FileUtils.copyFile(curFile, File(destPath))
             if (!copy) {
                 ToastUtils.showShort("生成文件失败")
                 return

@@ -25,6 +25,8 @@ import com.shentu.paper.app.page.EmptyCallback
 import com.shentu.paper.app.page.ErrorCallback
 import com.shentu.paper.app.page.LoadingCallback
 import com.shentu.paper.mvp.ui.widget.MaterialFooter
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.EventBusBuilder
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
@@ -66,6 +68,8 @@ class AppLifecycleImpl : AppLifecycles {
                 .addCallback(LoadingCallback())
                 .setDefaultCallback(LoadingCallback::class.java) //设置默认状态页
                 .commit()
+
+        EventBus.builder().addIndex(MicroEventBusIndex()).installDefaultEventBus()
 //        Thread(Runnable { init(application) }).start()
     }
 

@@ -45,7 +45,7 @@ class ActivityLifecycleCallbacksImpl : ActivityLifecycleCallbacks {
         Timber.w("$activity - onActivityStopped")
     }
 
-    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle?) {
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
         Timber.w("$activity - onActivitySaveInstanceState")
     }
 

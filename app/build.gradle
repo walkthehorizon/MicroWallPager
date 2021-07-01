@@ -3,8 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.mob.sdk'
-apply plugin: 'channel'
-apply plugin: 'dagger.hilt.android.plugin'
+//apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -90,19 +89,6 @@ android {
     }
 }
 
-channel{
-    //多渠道包的输出目录，默认为new File(project.buildDir,"channel")
-    baseOutputDir = new File(project.buildDir,"channel")
-    //多渠道包的命名规则，默认为：${appName}-${versionName}-${versionCode}-${flavorName}-${buildType}
-    apkNameFormat ='${appName}-${versionName}-${versionCode}-${flavorName}-${buildType}'
-    //快速模式：生成渠道包时不进行校验（速度可以提升10倍以上，默认为false）
-    isFastMode = false
-    //buildTime的时间格式，默认格式：yyyyMMdd-HHmmss
-    buildTimeDateFormat = 'yyyyMMdd'
-    //低内存模式（仅针对V2签名，默认为false）：只把签名块、中央目录和EOCD读取到内存，不把最大头的内容块读取到内存，在手机上合成APK时，可以使用该模式
-    lowMemory = false
-}
-
 MobSDK {
     appKey "2726f3a69c300"
     appSecret "5ef67a98fcae47f91163577728158ac3"
@@ -138,6 +124,10 @@ MobSDK {
 
 kapt {
     generateStubs = true
+    useBuildCache = true
+    javacOptions {
+        option("-Xmaxerrs", 500)
+    }
     arguments {
         arg("AROUTER_MODULE_NAME", project.getName())
         includeCompileClasspath = true
@@ -210,8 +200,8 @@ dependencies {
     kapt rootProject.ext.dependencies["arouter-compiler"]
     kapt rootProject.ext.dependencies["dagger2-compiler"]
     kapt rootProject.ext.dependencies["dagger2-android-processor"]
-    kapt rootProject.ext.dependencies["hilt-android-compiler"]
-    implementation rootProject.ext.dependencies['hilt-android']
+//    kapt rootProject.ext.dependencies["hilt-android-compiler"]
+//    implementation rootProject.ext.dependencies['hilt-android']
 
     implementation rootProject.ext.dependencies["eventbus"]
     kapt rootProject.ext.dependencies["eventbus-processor"]

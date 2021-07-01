@@ -3,15 +3,17 @@ package com.jess.arms.base.delegate;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.View;
 
-import com.jess.arms.integration.EventBusManager;
-import com.jess.arms.utils.ArmsUtils;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
+import com.jess.arms.utils.ArmsUtils;
+
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import timber.log.Timber;
@@ -42,7 +44,7 @@ public class FragmentDelegateImpl implements FragmentDelegate {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         if (iFragment.useEventBus())//如果要使用eventbus请将此方法返回true
-            EventBusManager.getInstance().register(mFragment);//注册到事件主线
+            EventBus.getDefault().register(mFragment);//注册到事件主线
         iFragment.setupFragmentComponent(ArmsUtils.obtainAppComponentFromContext(mFragment.getActivity()));
     }
 
@@ -99,7 +101,7 @@ public class FragmentDelegateImpl implements FragmentDelegate {
     @Override
     public void onDestroy() {
         if (iFragment != null && iFragment.useEventBus())//如果要使用eventbus请将此方法返回true
-            EventBusManager.getInstance().unregister(mFragment);//注册到事件主线
+            EventBus.getDefault().unregister(mFragment);//注册到事件主线
         this.mUnbinder = null;
         this.mFragmentManager = null;
         this.mFragment = null;

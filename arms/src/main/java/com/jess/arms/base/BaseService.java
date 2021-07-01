@@ -4,9 +4,10 @@ package com.jess.arms.base;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+
 import androidx.annotation.Nullable;
 
-import com.jess.arms.integration.EventBusManager;
+import org.greenrobot.eventbus.EventBus;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -25,7 +26,7 @@ public abstract class BaseService extends Service {
     public void onCreate() {
         super.onCreate();
         if (useEventBus())
-            EventBusManager.getInstance().register(this);
+            EventBus.getDefault().register(this);
         init();
     }
 
@@ -33,7 +34,7 @@ public abstract class BaseService extends Service {
     public void onDestroy() {
         super.onDestroy();
         if (useEventBus())
-            EventBusManager.getInstance().unregister(this);
+            EventBus.getDefault().unregister(this);
         unDispose();//解除订阅
         this.mCompositeDisposable = null;
     }
