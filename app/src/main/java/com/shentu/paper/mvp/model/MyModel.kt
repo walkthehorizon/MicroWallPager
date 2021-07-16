@@ -2,14 +2,14 @@ package com.shentu.paper.mvp.model
 
 import android.app.Application
 import com.google.gson.Gson
-import com.jess.arms.di.scope.FragmentScope
 import com.jess.arms.integration.IRepositoryManager
 import com.jess.arms.mvp.BaseModel
 import com.shentu.paper.mvp.contract.MyContract
+import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
 
-@FragmentScope
+@FragmentScoped
 class MyModel
 @Inject
 constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager), MyContract.Model {

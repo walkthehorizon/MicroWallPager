@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
  * ================================================
  * {@link Activity} 代理类,用于框架内部在每个 {@link Activity} 的对应生命周期中插入需要的逻辑
  *
- * @see ActivityDelegateImpl
  * ================================================
  */
 public interface ActivityDelegate {

@@ -18,11 +18,10 @@ import com.blankj.utilcode.util.FileIOUtils
 import com.blankj.utilcode.util.ImageUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseActivity
-import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.IPresenter
 import com.shentu.paper.R
 import com.shentu.paper.app.Constant
-import com.shentu.paper.app.GlideArms
+import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.utils.HkUtils
 import com.shentu.paper.app.utils.PicUtils
 import com.shentu.paper.model.entity.Wallpaper
@@ -39,10 +38,6 @@ class PictureShareActivity : BaseActivity<IPresenter>() {
 
     private lateinit var cardBitmap: Bitmap
 
-    override fun setupActivityComponent(appComponent: AppComponent) {
-
-    }
-
     override fun initView(savedInstanceState: Bundle?): Int {
         return R.layout.activity_share
     }
@@ -50,7 +45,7 @@ class PictureShareActivity : BaseActivity<IPresenter>() {
     @SuppressLint("SetTextI18n")
     override fun initData(savedInstanceState: Bundle?) {
         ARouter.getInstance().inject(this)
-        GlideArms.with(this)
+        GlideApp.with(this)
                 .load(paper.url)
                 .transform(RoundedCornersTransformation(ConvertUtils.dp2px(10f)
                         , 0, RoundedCornersTransformation.CornerType.TOP))

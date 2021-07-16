@@ -12,17 +12,14 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseActivity
-import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.shentu.paper.R
-import com.shentu.paper.app.GlideArms
+import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.page.EmptyCallback
 import com.shentu.paper.app.page.ErrorCallback
 import com.shentu.paper.app.page.LoadingCallback
-import com.shentu.paper.di.component.DaggerSubjectDetailComponent
-import com.shentu.paper.di.module.SubjectDetailModule
 import com.shentu.paper.model.entity.Banner
 import com.shentu.paper.model.entity.Subject
 import com.shentu.paper.model.entity.Wallpaper
@@ -48,16 +45,6 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
     private lateinit var adapter: SubjectDetailAdapter
     private lateinit var loadService: LoadService<Any>
     private var bViewPager: ViewPager? = null
-
-    override fun setupActivityComponent(appComponent: AppComponent) {
-        DaggerSubjectDetailComponent //如找不到该类,请编译一下项目
-                .builder()
-                .appComponent(appComponent)
-                .subjectDetailModule(SubjectDetailModule(this))
-                .build()
-                .inject(this)
-    }
-
 
     override fun initView(savedInstanceState: Bundle?): Int {
         return R.layout.activity_subject_detail
@@ -109,7 +96,7 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
             toolbar.setTitle(banner?.title)
             mPresenter?.getBannerWallpapers(banner!!.id)
             ivCover.visibility = VISIBLE
-            GlideArms.with(this)
+            GlideApp.with(this)
                     .load(banner?.imageUrl)
                     .error(R.drawable.ic_twotone_broken_image_24)
                     .into(ivCover)

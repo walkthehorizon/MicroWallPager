@@ -18,7 +18,6 @@ import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.material.chip.ChipGroup
 import com.jess.arms.base.BaseActivity
-import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
@@ -28,8 +27,6 @@ import com.shentu.paper.app.page.ErrorCallback
 import com.shentu.paper.app.page.LoadingCallback
 import com.shentu.paper.app.page.SearchHistoryCallback
 import com.shentu.paper.app.utils.LimitQueue
-import com.shentu.paper.di.component.DaggersearchComponent
-import com.shentu.paper.di.module.searchModule
 import com.shentu.paper.model.entity.Subject
 import com.shentu.paper.mvp.contract.SearchContract
 import com.shentu.paper.mvp.presenter.SearchPresenter
@@ -49,15 +46,6 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
 
     private val hotAdapter: HotAdapter = HotAdapter(ArrayList())
     private lateinit var loadService: LoadService<Any>
-
-    override fun setupActivityComponent(appComponent: AppComponent) {
-        DaggersearchComponent //如找不到该类,请编译一下项目
-                .builder()
-                .appComponent(appComponent)
-                .searchModule(searchModule(this))
-                .build()
-                .inject(this)
-    }
 
     override fun initView(savedInstanceState: Bundle?): Int {
         return R.layout.activity_search

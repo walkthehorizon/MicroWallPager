@@ -8,7 +8,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.shentu.paper.R
-import com.shentu.paper.app.GlideArms
+import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.utils.HkUtils
 import com.shentu.paper.model.entity.Wallpaper
 
@@ -17,7 +17,7 @@ class HomeRankAdapter(data: List<Wallpaper>)
 
     override fun convert(helper: BaseViewHolder, item: Wallpaper) {
         val ivPicture = helper.getView<ImageView>(R.id.ivPicture)
-        GlideArms.with(mContext)
+        GlideApp.with(mContext)
                 .load(HkUtils.instance.get2x2Image(item.url))
                 .error(R.drawable.ic_error_black_24dp)
                 .placeholder(R.drawable.default_category_placeholder)

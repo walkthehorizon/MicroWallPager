@@ -30,7 +30,6 @@ import com.blankj.utilcode.util.ToastUtils
 import com.github.piasy.biv.BigImageViewer
 import com.google.android.material.button.MaterialButton
 import com.jess.arms.base.BaseActivity
-import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.mob.moblink.MobLink
 import com.mob.moblink.Scene
@@ -40,8 +39,6 @@ import com.shentu.paper.app.Constant
 import com.shentu.paper.app.HkUserManager
 import com.shentu.paper.app.event.LikeEvent
 import com.shentu.paper.app.utils.HkUtils
-import com.shentu.paper.di.component.DaggerPictureBrowserComponent
-import com.shentu.paper.di.module.PictureBrowserModule
 import com.shentu.paper.model.entity.Wallpaper
 import com.shentu.paper.mvp.contract.PictureBrowserContract
 import com.shentu.paper.mvp.presenter.PictureBrowserPresenter
@@ -78,16 +75,10 @@ class PictureBrowserActivity : BaseActivity<PictureBrowserPresenter>(), PictureB
     private lateinit var vpAdapter: PictureBrowserVpAdapter
     private lateinit var curPaper: Wallpaper
 
-    override fun setupActivityComponent(appComponent: AppComponent) {
-        DaggerPictureBrowserComponent //如找不到该类,请编译一下项目
-                .builder()
-                .appComponent(appComponent)
-                .pictureBrowserModule(PictureBrowserModule(this))
-                .build()
-                .inject(this)
-//        ScreenUtils.setFullScreen(this)
+    override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_FullScreen)
         window.enterTransition = Fade()
+        super.onCreate(savedInstanceState)
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {

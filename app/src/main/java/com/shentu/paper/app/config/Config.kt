@@ -1,5 +1,6 @@
 package com.shentu.paper.app.config
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.Lifecycle
@@ -16,11 +17,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@SuppressLint("StaticFieldLeak")
 object Config : LifecycleObserver {
 
     private val env: Environment = Environment.valueOf(SPUtils.getInstance().getString("Environment", if (BuildConfig.DEBUG) Environment.DEBUG.name else Environment.RELEASE.name))
     private lateinit var sensorHelper: SensorHelper
     private lateinit var context: Context
+    val cachePath: String = PathUtils.getExternalAppCachePath()
 
     fun init(context: Context) {
         if (env == Environment.RELEASE) {
@@ -46,7 +49,7 @@ object Config : LifecycleObserver {
 
     val appServer: String
         get() = when (env) {
-            Environment.DEBUG -> "http://192.168.10.122/micro/"
+            Environment.DEBUG -> "http://192.168.108.6/micro/"
             Environment.PRE -> "https://api.wmmt119.top/micro/"
             else -> "https://api.wmmt119.top/micro/"
         }

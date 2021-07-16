@@ -46,6 +46,7 @@ class GlobalConfiguration : ConfigModule {
     //cookie存储
     private var cookieStore: ConcurrentHashMap<String, List<Cookie>> = ConcurrentHashMap()
     private var globalHttpHandler: GlobalHttpHandlerImpl? = null
+
     override fun applyOptions(context: Context, builder: GlobalConfigModule.Builder) {
         val cachePath = PathUtils.getExternalAppCachePath()
         val cacheFile = File(cachePath)

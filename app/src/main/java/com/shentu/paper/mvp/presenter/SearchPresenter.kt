@@ -6,8 +6,7 @@ import androidx.lifecycle.OnLifecycleEvent
 import com.blankj.utilcode.util.SPUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.jess.arms.di.scope.ActivityScope
-import com.jess.arms.integration.AppManager
+
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.paper.app.utils.LimitQueue
 import com.shentu.paper.app.utils.RxUtils
@@ -22,7 +21,6 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-@ActivityScope
 class SearchPresenter
 @Inject
 constructor(model: SearchContract.Model, rootView: SearchContract.View) :
@@ -31,8 +29,7 @@ constructor(model: SearchContract.Model, rootView: SearchContract.View) :
     lateinit var mErrorHandler: RxErrorHandler
     @Inject
     lateinit var mApplication: Application
-    @Inject
-    lateinit var mAppManager: AppManager
+
     @Inject
     lateinit var gson: Gson
 

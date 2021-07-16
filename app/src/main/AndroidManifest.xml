@@ -76,6 +76,8 @@
         <activity android:name=".mvp.ui.home.PaperSummaryActivity" />
 
         <activity android:name=".mvp.ui.activity.BrowserActivity" />
+
+        <activity android:name=".mvp.ui.activity.TestActivity"/>
     </application>
 
 </manifest>

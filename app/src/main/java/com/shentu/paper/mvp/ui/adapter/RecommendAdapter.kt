@@ -18,7 +18,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.github.florent37.glidepalette.BitmapPalette.Profile.MUTED_LIGHT
 import com.github.florent37.glidepalette.GlidePalette
 import com.shentu.paper.R
-import com.shentu.paper.app.GlideArms
+import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.utils.HkUtils
 import com.shentu.paper.model.entity.Wallpaper
 import java.util.*
@@ -29,7 +29,7 @@ class RecommendAdapter(val context: Context, private var wallpapers: List<Wallpa
     override fun convert(helper: BaseViewHolder, item: Wallpaper) {
         val cardView: CardView = helper.getView(R.id.cardView)
         val ivPicture: ImageView = helper.getView(R.id.ivPicture)
-        GlideArms.with(mContext)
+        GlideApp.with(mContext)
                 .load(HkUtils.instance.get2x2Image(item.url))
                 .listener(GlidePalette.with(item.url)
                         .use(MUTED_LIGHT)

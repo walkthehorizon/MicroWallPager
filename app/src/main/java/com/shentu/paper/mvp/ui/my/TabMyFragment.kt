@@ -16,39 +16,48 @@ import com.blankj.utilcode.util.TimeUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.base.BaseFragment
-import com.jess.arms.di.component.AppComponent
+import com.jess.arms.integration.RepositoryManager
+import com.jess.arms.mvp.IPresenter
 import com.jess.arms.utils.ArmsUtils
 import com.shentu.paper.BuildConfig
 import com.shentu.paper.R
 import com.shentu.paper.app.Constant
-import com.shentu.paper.app.GlideArms
+import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.GlideConfiguration
 import com.shentu.paper.app.HkUserManager
+import com.shentu.paper.app.config.Config
 import com.shentu.paper.app.utils.HkUtils
 import com.shentu.paper.app.utils.RxUtils
 import com.shentu.paper.databinding.FragmentMyBinding
-import com.shentu.paper.di.component.DaggerMyComponent
-import com.shentu.paper.di.module.MyModule
 import com.shentu.paper.model.api.service.MicroService
 import com.shentu.paper.model.entity.AppUpdate
 import com.shentu.paper.model.response.BaseResponse
 import com.shentu.paper.mvp.contract.MyContract
-import com.shentu.paper.mvp.presenter.MyPresenter
+import com.shentu.paper.mvp.presenter.MainPresenter
 import com.shentu.paper.mvp.ui.activity.SettingMoreActivity
 import com.shentu.paper.mvp.ui.login.LoginActivity
 import com.shentu.paper.mvp.ui.update.AppUpdateDialog
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_my.*
+import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import org.greenrobot.eventbus.EventBus
 import java.io.File
+import javax.inject.Inject
 
-
-class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
+@AndroidEntryPoint
+class TabMyFragment : BaseFragment<MainPresenter>(), MyContract.View {
 
     private lateinit var binding: FragmentMyBinding
+
+    @Inject
+    lateinit var repositoryManager: RepositoryManager
+
+    @Inject
+    lateinit var errorHandler: RxErrorHandler
 
     companion object {
         fun newInstance(): TabMyFragment {
@@ -58,22 +67,13 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
 
     private lateinit var glideCache: File
 
-    override fun setupFragmentComponent(appComponent: AppComponent) {
-        DaggerMyComponent //如找不到该类,请编译一下项目
-                .builder()
-                .appComponent(appComponent)
-                .myModule(MyModule(this))
-                .build()
-                .inject(this)
-        glideCache = File(appComponent.cacheFile(), GlideConfiguration.IMAGE_DISK_CACHE_PATH)
-    }
-
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentMyBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun initData(savedInstanceState: Bundle?) {
+        glideCache = File(Config.cachePath, GlideConfiguration.IMAGE_DISK_CACHE_PATH)
         refreshUser()
         rlHead.setOnClickListener { clickHead() }
         itCollect.setOnClickListener { clickCollect() }
@@ -117,14 +117,11 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     }
 
     private fun checkUpdate(isUser: Boolean) {
-//        ToastUtils.showShort("请求版本信息啦")
-        ArmsUtils.obtainAppComponentFromContext(mContext)
-                .repositoryManager()
+        repositoryManager
                 .obtainRetrofitService(MicroService::class.java)
                 .updateInfo
                 .compose(RxUtils.applyClearSchedulers(this))
-                .subscribe(object : ErrorHandleSubscriber<BaseResponse<AppUpdate>>(
-                        ArmsUtils.obtainAppComponentFromContext(mContext).rxErrorHandler()) {
+                .subscribe(object : ErrorHandleSubscriber<BaseResponse<AppUpdate>>(errorHandler) {
                     override fun onNext(response: BaseResponse<AppUpdate>) {
                         if (!response.isSuccess) {
                             return
@@ -177,7 +174,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
             } else {
                 ivSex.clearColorFilter()
             }
-            GlideArms.with(this)
+            GlideApp.with(this)
                     .load(HkUserManager.user.avatar)
                     .into(circle_avatar)
             itMoney.setEndValue(user.pea.toString())
@@ -196,7 +193,7 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
             }
         } else {
             tvMyName.text = "微梦用户"
-            GlideArms.with(this)
+            GlideApp.with(this)
                     .load(R.drawable.default_head)
                     .into(circle_avatar)
             itMoney.setEndValue("")
@@ -233,19 +230,15 @@ class TabMyFragment : BaseFragment<MyPresenter>(), MyContract.View {
     }
 
     private fun clickCache() {
-        Completable.fromAction { GlideArms.get(mContext).clearDiskCache() }
+        Completable.fromAction { GlideApp.get(mContext).clearDiskCache() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete {
-                    GlideArms.get(mContext).clearMemory()
+                    GlideApp.get(mContext).clearMemory()
                     itCache.setEndValue(FileUtils.getDirSize(glideCache))
                     ToastUtils.showShort("清理完成")
                 }
                 .subscribe()
-    }
-
-    override fun setData(data: Any?) {
-
     }
 
     override fun showLoading() {

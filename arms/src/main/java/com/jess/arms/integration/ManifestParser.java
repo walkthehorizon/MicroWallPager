@@ -8,6 +8,10 @@ import android.content.pm.PackageManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.qualifiers.ApplicationContext;
+
 /**
  * ================================================
  * 用于解析 AndroidManifest 中的 Meta 属性

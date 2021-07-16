@@ -5,7 +5,7 @@ import android.widget.CheckBox
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.shentu.paper.R
-import com.shentu.paper.app.GlideArms
+import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.utils.HkUtils
 import com.shentu.paper.model.entity.Wallpaper
 
@@ -14,7 +14,7 @@ class CollectListAdapter(data: List<Wallpaper>?, val decoration: Int) : BaseQuic
     private var multiChecked = false
 
     override fun convert(helper: BaseViewHolder, item: Wallpaper) {
-        GlideArms.with(mContext)
+        GlideApp.with(mContext)
                 .load(HkUtils.instance.get2x2Image(item.url))
                 .placeholder(R.drawable.ic_pets_black_24dp)
                 .centerCrop()

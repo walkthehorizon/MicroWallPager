@@ -3,13 +3,13 @@ package com.shentu.paper.mvp.ui.adapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.shentu.paper.R
-import com.shentu.paper.app.GlideArms
+import com.shentu.paper.app.GlideApp
 import com.shentu.paper.model.entity.Comment
 
 class CommentAdapter(data: MutableList<Comment>) : BaseQuickAdapter<Comment, BaseViewHolder>(
         R.layout.item_dialog_comment, data) {
     override fun convert(helper: BaseViewHolder, item: Comment) {
-        GlideArms.with(helper.itemView)
+        GlideApp.with(helper.itemView)
                 .load(item.avatar)
                 .centerCrop()
                 .circleCrop()

@@ -19,6 +19,8 @@ import javax.inject.Singleton;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import dagger.hilt.InstallIn;
+import dagger.hilt.components.SingletonComponent;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.listener.ResponseErrorListener;
 import okhttp3.HttpUrl;
@@ -35,6 +37,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * <p>
  * ================================================
  */
+@InstallIn(SingletonComponent.class)
 @Module
 public abstract class ClientModule {
     private static final int TIME_OUT = 10;

@@ -11,7 +11,6 @@ import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jess.arms.base.BaseFragment
-import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
@@ -21,8 +20,6 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener
 import com.shentu.paper.R
 import com.shentu.paper.app.page.EmptyCallback
 import com.shentu.paper.app.page.ErrorCallback
-import com.shentu.paper.di.component.DaggerCategoryListComponent
-import com.shentu.paper.di.module.CategoryListModule
 import com.shentu.paper.model.entity.Wallpaper
 import com.shentu.paper.mvp.contract.CategoryDetailContract
 import com.shentu.paper.mvp.presenter.CategoryListPresenter
@@ -50,15 +47,6 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDeta
             fragment.arguments = bundle
             return fragment
         }
-    }
-
-    override fun setupFragmentComponent(appComponent: AppComponent) {
-        DaggerCategoryListComponent //如找不到该类,请编译一下项目
-                .builder()
-                .appComponent(appComponent)
-                .categoryListModule(CategoryListModule(this))
-                .build()
-                .inject(this)
     }
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState:

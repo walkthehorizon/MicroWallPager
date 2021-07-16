@@ -11,6 +11,7 @@ import com.jess.arms.utils.ArmsUtils;
 import com.shentu.paper.R;
 import com.shentu.paper.app.AppLifecycleImpl;
 import com.shentu.paper.app.GlideConfiguration;
+import com.shentu.paper.app.config.Config;
 
 import java.io.File;
 
@@ -43,7 +44,7 @@ public class PicUtils {
     }
 
     public String getCachePicturePath(String imgUrl) {
-        return new File(ArmsUtils.obtainAppComponentFromContext(AppLifecycleImpl.instance).cacheFile()
+        return new File(Config.INSTANCE.getCachePath()
                 + File.separator
                 + GlideConfiguration.IMAGE_DISK_CACHE_PATH
                 , URLUtil.guessFileName(imgUrl, null, null)).getAbsolutePath();

@@ -16,6 +16,7 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
 import com.jess.arms.integration.OkHttpUrlLoader
 import com.jess.arms.utils.ArmsUtils
+import com.shentu.paper.app.config.Config
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -29,14 +30,11 @@ import java.io.InputStream
  * ================================================
  */
 @Excludes(OkHttpLibraryGlideModule::class)
-@GlideModule(glideName = "GlideArms")
+@GlideModule(glideName = "GlideApp")
 class GlideConfiguration : AppGlideModule() {
     override fun applyOptions(context: Context, builder: GlideBuilder) {
-        val appComponent = ArmsUtils.obtainAppComponentFromContext(context)
         builder.setDiskCache {
-
-            // Careful: the external cache directory doesn't enforce permissions
-            val glide = File(appComponent.cacheFile(), IMAGE_DISK_CACHE_PATH)
+            val glide = File(Config.cachePath, IMAGE_DISK_CACHE_PATH)
             FileUtils.createOrExistsDir(glide)
             DiskLruCacheWrapper.create(glide, IMAGE_DISK_CACHE_MAX_SIZE.toLong())
         }

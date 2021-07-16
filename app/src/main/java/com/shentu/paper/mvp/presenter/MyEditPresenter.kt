@@ -1,9 +1,7 @@
 package com.shentu.paper.mvp.presenter
 
 import android.app.Application
-import com.jess.arms.di.scope.ActivityScope
 
-import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.paper.app.HkUserManager
 import com.shentu.paper.app.utils.CosUtils
@@ -22,7 +20,6 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-@ActivityScope
 class MyEditPresenter
 @Inject
 constructor(model: MyEditContract.Model, rootView: MyEditContract.View) :
@@ -32,8 +29,7 @@ constructor(model: MyEditContract.Model, rootView: MyEditContract.View) :
     @Inject
     lateinit var mApplication: Application
 
-    @Inject
-    lateinit var mAppManager: AppManager
+
 
     fun uploadAvatar(path: String) {
         mRootView.showLoading()

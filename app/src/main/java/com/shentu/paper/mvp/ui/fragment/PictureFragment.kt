@@ -15,7 +15,6 @@ import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.github.piasy.biv.loader.ImageLoader
 import com.jess.arms.base.BaseFragment
-import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.IPresenter
 import com.shentu.paper.app.bigimage.GlideImageViewFactory
 import com.shentu.paper.app.utils.HkUtils
@@ -51,10 +50,6 @@ class PictureFragment : BaseFragment<IPresenter>() {
     lateinit var wallpaper: Wallpaper
     var pos: Int = 0
 
-    override fun setupFragmentComponent(appComponent: AppComponent) {
-
-    }
-
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(com.shentu.paper.R.layout.fragment_picture, container, false)
     }
@@ -67,10 +62,6 @@ class PictureFragment : BaseFragment<IPresenter>() {
             callback?.switchNavigation()
         }
         loadPicture(Behavior.LOAD_NORMAL)
-    }
-
-    override fun setData(data: Any?) {
-
     }
 
     fun loadPicture(behavior: Behavior) {

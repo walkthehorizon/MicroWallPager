@@ -16,13 +16,10 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.*
 import com.jess.arms.base.BaseActivity
-import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.RxLifecycleUtils
 import com.shentu.paper.R
 import com.shentu.paper.app.Constant
-import com.shentu.paper.di.component.DaggerLoginComponent
-import com.shentu.paper.di.module.LoginModule
 import com.shentu.paper.model.entity.SmsError
 import com.shentu.paper.mvp.contract.LoginContract
 import com.shentu.paper.mvp.presenter.LoginPresenter
@@ -65,8 +62,7 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
                     }
                 }
             } else {
-                val desc = ArmsUtils.obtainAppComponentFromContext(this@LoginActivity)
-                        .gson()
+                val desc = GsonUtils
                         .fromJson((data as Throwable).message, SmsError::class.java)
                         .description
                 showMessage(desc)
@@ -78,14 +74,9 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
         }
     }
 
-    override fun setupActivityComponent(appComponent: AppComponent) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         BarUtils.setStatusBarColor(this, Color.TRANSPARENT)
-        DaggerLoginComponent //如找不到该类,请编译一下项目
-                .builder()
-                .appComponent(appComponent)
-                .loginModule(LoginModule(this))
-                .build()
-                .inject(this)
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {

@@ -11,25 +11,18 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ScreenUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.shentu.paper.R
 import com.shentu.paper.app.page.EmptyCallback
 import com.shentu.paper.app.page.ErrorCallback
-import com.shentu.paper.app.utils.RxUtils
-import com.shentu.paper.model.api.service.CommentService
 import com.shentu.paper.model.api.service.MicroService
 import com.shentu.paper.model.entity.Comment
-import com.shentu.paper.model.response.BaseResponse
-import com.shentu.paper.model.response.CommentPageResponse
 import com.shentu.paper.mvp.ui.adapter.CommentAdapter
 import com.shentu.paper.mvp.ui.widget.BaseBottomSheetDialog
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.dialog_comment.*
-import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 
 
 class CommentDialog : BaseBottomSheetDialog() {
@@ -132,42 +125,42 @@ class CommentDialog : BaseBottomSheetDialog() {
 
     private fun getPaperComments(paperId: Long, clear: Boolean) {
         offset = if (clear) MicroService.PAGE_START else offset + MicroService.PAGE_LIMIT
-        ArmsUtils.obtainAppComponentFromContext(context)
-                .repositoryManager()
-                .obtainRetrofitService(CommentService::class.java)
-                .getPaperComments(paperId, MicroService.PAGE_LIMIT, offset)
-                .compose(RxUtils.applySchedulers(this, clear))
-                .subscribe(object : ErrorHandleSubscriber<CommentPageResponse>(
-                        ArmsUtils.obtainAppComponentFromContext(context).rxErrorHandler()) {
-                    override fun onNext(t: CommentPageResponse) {
-                        if (!t.isSuccess) {
-                            return
-                        }
-                        showComments(t.data!!.content, clear)
-                    }
-                })
+//        ArmsUtils.obtainAppComponentFromContext(context)
+//                .repositoryManager()
+//                .obtainRetrofitService(CommentService::class.java)
+//                .getPaperComments(paperId, MicroService.PAGE_LIMIT, offset)
+//                .compose(RxUtils.applySchedulers(this, clear))
+//                .subscribe(object : ErrorHandleSubscriber<CommentPageResponse>(
+//                        ArmsUtils.obtainAppComponentFromContext(context).rxErrorHandler()) {
+//                    override fun onNext(t: CommentPageResponse) {
+//                        if (!t.isSuccess) {
+//                            return
+//                        }
+//                        showComments(t.data!!.content, clear)
+//                    }
+//                })
     }
 
     private fun addPaperComments(paperId: Long, content: String) {
-        ArmsUtils.obtainAppComponentFromContext(context)
-                .repositoryManager()
-                .obtainRetrofitService(CommentService::class.java)
-                .addPaperComments(paperId, content)
-                .compose(RxUtils.applyClearSchedulers(this))
-                .subscribe(object : ErrorHandleSubscriber<BaseResponse<Comment>>(
-                        ArmsUtils.obtainAppComponentFromContext(context).rxErrorHandler()) {
-                    override fun onNext(t: BaseResponse<Comment>) {
-                        if (!t.isSuccess) {
-                            ToastUtils.showShort("评论失败")
-                            return
-                        }
-                        showContent()
-                        t.data?.let { adapter.addData(0, it) }
-                        inputDialog.dismiss()
-                        callback?.commentAdd()
-                        ToastUtils.showShort("评论成功")
-                    }
-                })
+//        ArmsUtils.obtainAppComponentFromContext(context)
+//                .repositoryManager()
+//                .obtainRetrofitService(CommentService::class.java)
+//                .addPaperComments(paperId, content)
+//                .compose(RxUtils.applyClearSchedulers(this))
+//                .subscribe(object : ErrorHandleSubscriber<BaseResponse<Comment>>(
+//                        ArmsUtils.obtainAppComponentFromContext(context).rxErrorHandler()) {
+//                    override fun onNext(t: BaseResponse<Comment>) {
+//                        if (!t.isSuccess) {
+//                            ToastUtils.showShort("评论失败")
+//                            return
+//                        }
+//                        showContent()
+//                        t.data?.let { adapter.addData(0, it) }
+//                        inputDialog.dismiss()
+//                        callback?.commentAdd()
+//                        ToastUtils.showShort("评论成功")
+//                    }
+//                })
     }
 
     override fun onDestroy() {

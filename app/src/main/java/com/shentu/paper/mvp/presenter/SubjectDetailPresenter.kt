@@ -1,9 +1,7 @@
 package com.shentu.paper.mvp.presenter
 
 import android.app.Application
-import com.jess.arms.di.scope.ActivityScope
 
-import com.jess.arms.integration.AppManager
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.paper.app.utils.RxUtils
 import com.shentu.paper.model.response.SubjectDetailResponse
@@ -14,7 +12,6 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import javax.inject.Inject
 
 
-@ActivityScope
 class SubjectDetailPresenter
 @Inject
 constructor(model: SubjectDetailContract.Model, rootView: SubjectDetailContract.View) :
@@ -24,8 +21,7 @@ constructor(model: SubjectDetailContract.Model, rootView: SubjectDetailContract.
     @Inject
     lateinit var mApplication: Application
 
-    @Inject
-    lateinit var mAppManager: AppManager
+
 
     fun getSubjectWallpapers(id: Int, clear: Boolean) {
         mModel.getSubjectWallpapers(id, clear)

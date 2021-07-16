@@ -4,13 +4,13 @@ package com.jess.arms.base.delegate;
 
 import android.app.Activity;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.BaseFragment;
-import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.ActivityLifecycle;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.integration.cache.LruCache;
@@ -34,12 +34,12 @@ public interface IActivity {
     @NonNull
     Cache<String, Object> provideCache();
 
-    /**
-     * 提供 AppComponent (提供所有的单例对象) 给实现类, 进行 Component 依赖
-     *
-     * @param appComponent
-     */
-    void setupActivityComponent(@NonNull AppComponent appComponent);
+//    /**
+//     * 提供 AppComponent (提供所有的单例对象) 给实现类, 进行 Component 依赖
+//     *
+//     * @param appComponent
+//     */
+//    void setupActivityComponent(@NonNull ApplicationComponent appComponent);
 
     /**
      * 是否使用 EventBus
@@ -70,7 +70,7 @@ public interface IActivity {
     /**
      * 这个 Activity 是否会使用 Fragment,框架会根据这个属性判断是否注册 {@link FragmentManager.FragmentLifecycleCallbacks}
      * 如果返回{@code false},那意味着这个 Activity 不需要绑定 Fragment,那你再在这个 Activity 中绑定继承于 {@link BaseFragment} 的 Fragment 将不起任何作用
-     * @see ActivityLifecycle#registerFragmentCallbacks (Fragment 的注册过程)
+     * @see ActivityLifecycle #registerFragmentCallbacks (Fragment 的注册过程)
      *
      * @return
      */

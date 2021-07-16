@@ -4,18 +4,16 @@ package com.jess.arms.integration;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.base.delegate.ActivityDelegate;
-import com.jess.arms.base.delegate.ActivityDelegateImpl;
 import com.jess.arms.base.delegate.FragmentDelegate;
 import com.jess.arms.base.delegate.IActivity;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.integration.cache.IntelligentCache;
-import com.jess.arms.utils.Preconditions;
 
 import java.util.List;
 
@@ -34,8 +32,6 @@ import dagger.Lazy;
 @Singleton
 public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks {
 
-    @Inject
-    AppManager mAppManager;
     @Inject
     Application mApplication;
     @Inject
@@ -57,79 +53,41 @@ public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks
             isNotAdd = activity.getIntent().getBooleanExtra(AppManager.IS_NOT_ADD_ACTIVITY_LIST, false);
 
         if (!isNotAdd)
-            mAppManager.addActivity(activity);
-
-        //配置ActivityDelegate
-        if (activity instanceof IActivity) {
-            ActivityDelegate activityDelegate = fetchActivityDelegate(activity);
-            if (activityDelegate == null) {
-                Cache<String, Object> cache = getCacheFromActivity((IActivity) activity);
-                activityDelegate = new ActivityDelegateImpl(activity);
-                //使用 IntelligentCache.KEY_KEEP 作为 key 的前缀, 可以使储存的数据永久存储在内存中
-                //否则存储在 LRU 算法的存储空间中, 前提是 Activity 使用的是 IntelligentCache (框架默认使用)
-                cache.put(IntelligentCache.getKeyOfKeep(ActivityDelegate.ACTIVITY_DELEGATE), activityDelegate);
-            }
-            activityDelegate.onCreate(savedInstanceState);
-        }
+            AppManager.getAppManager().addActivity(activity);
 
         registerFragmentCallbacks(activity);
     }
 
     @Override
     public void onActivityStarted(Activity activity) {
-        ActivityDelegate activityDelegate = fetchActivityDelegate(activity);
-        if (activityDelegate != null) {
-            activityDelegate.onStart();
-        }
+
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
-        mAppManager.setCurrentActivity(activity);
-
-        ActivityDelegate activityDelegate = fetchActivityDelegate(activity);
-        if (activityDelegate != null) {
-            activityDelegate.onResume();
-        }
+        AppManager.getAppManager().setCurrentActivity(activity);
     }
 
     @Override
     public void onActivityPaused(Activity activity) {
-        ActivityDelegate activityDelegate = fetchActivityDelegate(activity);
-        if (activityDelegate != null) {
-            activityDelegate.onPause();
-        }
+
     }
 
     @Override
     public void onActivityStopped(Activity activity) {
-        if (mAppManager.getCurrentActivity() == activity) {
-            mAppManager.setCurrentActivity(null);
-        }
-
-        ActivityDelegate activityDelegate = fetchActivityDelegate(activity);
-        if (activityDelegate != null) {
-            activityDelegate.onStop();
+        if (AppManager.getAppManager().getCurrentActivity() == activity) {
+            AppManager.getAppManager().setCurrentActivity(null);
         }
     }
 
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-        ActivityDelegate activityDelegate = fetchActivityDelegate(activity);
-        if (activityDelegate != null) {
-            activityDelegate.onSaveInstanceState(outState);
-        }
+
     }
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-        mAppManager.removeActivity(activity);
-
-        ActivityDelegate activityDelegate = fetchActivityDelegate(activity);
-        if (activityDelegate != null) {
-            activityDelegate.onDestroy();
-            getCacheFromActivity((IActivity) activity).clear();
-        }
+        AppManager.getAppManager().removeActivity(activity);
     }
 
     /**
@@ -163,20 +121,5 @@ public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks
         }
     }
 
-    private ActivityDelegate fetchActivityDelegate(Activity activity) {
-        ActivityDelegate activityDelegate = null;
-        if (activity instanceof IActivity) {
-            Cache<String, Object> cache = getCacheFromActivity((IActivity) activity);
-            activityDelegate = (ActivityDelegate) cache.get(IntelligentCache.getKeyOfKeep(ActivityDelegate.ACTIVITY_DELEGATE));
-        }
-        return activityDelegate;
-    }
-
-    @NonNull
-    private Cache<String, Object> getCacheFromActivity(IActivity activity) {
-        Cache<String, Object> cache = activity.provideCache();
-        Preconditions.checkNotNull(cache, "%s cannot be null on Activity", Cache.class.getName());
-        return cache;
-    }
 
 }

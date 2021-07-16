@@ -10,7 +10,7 @@ import com.blankj.utilcode.util.ConvertUtils
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.shentu.paper.R
-import com.shentu.paper.app.GlideArms
+import com.shentu.paper.app.GlideApp
 import com.shentu.paper.model.entity.Banner
 import com.shentu.paper.mvp.ui.activity.BannerListActivity
 import com.shentu.paper.mvp.ui.activity.SubjectDetailActivity
@@ -36,7 +36,7 @@ class HomeBannerAdapter(private val banners: List<Banner>, private val context: 
             }
             SubjectDetailActivity.open(banners[position], context)
         }
-        GlideArms.with(container.context)
+        GlideApp.with(container.context)
                 .load(if (banners[position].type == 1) R.drawable.ic_banner_more else banners[position].imageUrl)
                 .transform(CenterCrop(), RoundedCorners(ConvertUtils.dp2px(8.0f)))
                 .into(ivBanner)

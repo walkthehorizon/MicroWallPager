@@ -3,8 +3,7 @@ package com.shentu.paper.mvp.presenter
 import android.app.Application
 import com.blankj.utilcode.util.SPUtils
 import com.google.gson.Gson
-import com.jess.arms.di.scope.ActivityScope
-import com.jess.arms.integration.AppManager
+
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.paper.app.Constant
 import com.shentu.paper.app.HkUserManager
@@ -21,7 +20,6 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-@ActivityScope
 class LoginPresenter
 @Inject
 constructor(model: LoginContract.Model, rootView: LoginContract.View) :
@@ -30,9 +28,6 @@ constructor(model: LoginContract.Model, rootView: LoginContract.View) :
     lateinit var mErrorHandler: RxErrorHandler
     @Inject
     lateinit var mApplication: Application
-
-    @Inject
-    lateinit var mAppManager: AppManager
 
     @Inject
     lateinit var gson: Gson

@@ -10,41 +10,42 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseFragment
-import com.jess.arms.di.component.AppComponent
+import com.jess.arms.integration.RepositoryManager
+import com.jess.arms.mvp.IPresenter
 import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.shentu.paper.R
 import com.shentu.paper.app.page.EmptyCallback
 import com.shentu.paper.app.page.ErrorCallback
-import com.shentu.paper.di.component.DaggerHomeRankComponent
-import com.shentu.paper.di.module.HomeRankModule
+import com.shentu.paper.app.utils.RxUtils
+import com.shentu.paper.model.api.service.MicroService
 import com.shentu.paper.model.entity.Wallpaper
+import com.shentu.paper.model.response.WallpaperPageResponse
 import com.shentu.paper.mvp.contract.HomeRankContract
-import com.shentu.paper.mvp.presenter.HomeRankPresenter
 import com.shentu.paper.mvp.ui.adapter.HomeRankAdapter
 import com.shentu.paper.mvp.ui.browser.PictureBrowserActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home_new.smartRefresh
 import kotlinx.android.synthetic.main.fragment_home_rank.*
+import me.jessyan.rxerrorhandler.core.RxErrorHandler
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import javax.inject.Inject
 
 /**
  * 最热
  * */
-class HomeRankFragment : BaseFragment<HomeRankPresenter>(), HomeRankContract.View {
+class HomeRankFragment : BaseFragment<IPresenter>(), HomeRankContract.View {
 
     private lateinit var loadService: LoadService<Any>
     private lateinit var adapter: HomeRankAdapter
     private var bViewPager: ViewPager? = null
 
+    @Inject
+    lateinit var repositoryManager: RepositoryManager
 
-    override fun setupFragmentComponent(appComponent: AppComponent) {
-        DaggerHomeRankComponent //如找不到该类,请编译一下项目
-                .builder()
-                .appComponent(appComponent)
-                .homeRankModule(HomeRankModule(this))
-                .build()
-                .inject(this)
-    }
+    @Inject
+    lateinit var errorHandler:RxErrorHandler
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_home_rank, container, false);
@@ -53,13 +54,13 @@ class HomeRankFragment : BaseFragment<HomeRankPresenter>(), HomeRankContract.Vie
     override fun initData(savedInstanceState: Bundle?) {
         loadService = LoadSir.getDefault().register(smartRefresh) {
             showLoading()
-            mPresenter?.getRankPapers(true)
+            getRankPapers(true)
         }
 
-        smartRefresh.setOnRefreshListener { mPresenter?.getRankPapers(true) }
-        smartRefresh.setOnLoadMoreListener { mPresenter?.getRankPapers(false) }
+        smartRefresh.setOnRefreshListener { getRankPapers(true) }
+        smartRefresh.setOnLoadMoreListener { getRankPapers(false) }
 
-        mPresenter?.getRankPapers(true)
+        getRankPapers(true)
     }
 
     override fun showEmpty() {
@@ -106,7 +107,7 @@ class HomeRankFragment : BaseFragment<HomeRankPresenter>(), HomeRankContract.Vie
 
                             override fun loadMore(viewPager: ViewPager) {
                                 bViewPager = viewPager
-                                mPresenter?.getRankPapers(false)
+                                getRankPapers(false)
                             }
 
                         }, compat, context = it)
@@ -123,6 +124,26 @@ class HomeRankFragment : BaseFragment<HomeRankPresenter>(), HomeRankContract.Vie
         if (papers.size > 0) {
             bViewPager?.adapter?.notifyDataSetChanged()
         }
+    }
+
+    private var offset = 0;
+
+    fun getRankPapers(clear: Boolean) {
+        repositoryManager
+            .obtainRetrofitService(MicroService::class.java)
+            .getRankPapers(MicroService.PAGE_LIMIT ,
+                (if (clear) MicroService.PAGE_START else offset + MicroService.PAGE_START).also {
+                    offset = it
+                })
+            .compose(RxUtils.applySchedulers(this, clear))
+            .subscribe(object : ErrorHandleSubscriber<WallpaperPageResponse>(errorHandler) {
+                override fun onNext(t: WallpaperPageResponse) {
+                    if (!t.isSuccess) {
+                        return
+                    }
+                    t.data?.content?.let { showRanks(it, clear) }
+                }
+            })
     }
 
     override fun launchActivity(intent: Intent) {

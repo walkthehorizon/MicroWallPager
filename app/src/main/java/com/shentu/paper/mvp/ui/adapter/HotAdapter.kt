@@ -12,14 +12,14 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseQuickAdapter.OnItemChildClickListener
 import com.chad.library.adapter.base.BaseViewHolder
 import com.shentu.paper.R
-import com.shentu.paper.app.GlideArms
+import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.utils.HkUtils
 import com.shentu.paper.model.entity.Subject
 
 class HotAdapter(data: List<Subject?>) : BaseMultiItemQuickAdapter<Subject, BaseViewHolder>(data) {
     override fun convert(helper: BaseViewHolder, item: Subject) {
         helper.getView<View>(R.id.tv_content).visibility = View.GONE
-        GlideArms.with(helper.itemView.context)
+        GlideApp.with(helper.itemView.context)
                 .load(item.cover)
                 .placeholder(R.drawable.default_head)
                 .circleCrop()
@@ -28,29 +28,29 @@ class HotAdapter(data: List<Subject?>) : BaseMultiItemQuickAdapter<Subject, Base
         helper.setText(R.id.tv_content, item.name + "：" + item.description)
         helper.getView<View>(R.id.tv_support).isSelected = false
         if (item.itemType == Subject.ITEM_VIEW_1) {
-            GlideArms.with(helper.itemView.context)
+            GlideApp.with(helper.itemView.context)
                     .load(item.cover)
                     .transform(CenterCrop(), RoundedCorners(ConvertUtils.dp2px(5f)))
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into((helper.getView<View>(R.id.iv_cover) as ImageView))
         }
         if (item.itemType == Subject.ITEM_VIEW_2) {
-            GlideArms.with(helper.itemView.context)
+            GlideApp.with(helper.itemView.context)
                     .load(HkUtils.instance.get2x2Image(item.cover))
                     .transform(CenterCrop(), RoundedCorners(ConvertUtils.dp2px(5f)))
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into((helper.getView<View>(R.id.iv_1) as ImageView))
-            GlideArms.with(helper.itemView.context)
+            GlideApp.with(helper.itemView.context)
                     .load(HkUtils.instance.get2x2Image(item.cover_1))
                     .transform(CenterCrop(), RoundedCorners(ConvertUtils.dp2px(5f)))
                     .into((helper.getView<View>(R.id.iv_2) as ImageView))
-            GlideArms.with(helper.itemView.context)
+            GlideApp.with(helper.itemView.context)
                     .load(HkUtils.instance.get2x2Image(item.cover_2))
                     .transform(CenterCrop(), RoundedCorners(ConvertUtils.dp2px(5f)))
                     .into((helper.getView<View>(R.id.iv_3) as ImageView))
         }
         if (item.itemType == Subject.ITEM_VIEW_3) {
-            GlideArms.with(helper.itemView.context)
+            GlideApp.with(helper.itemView.context)
                     .load(HkUtils.instance.get2x2Image(item.cover))
                     .transform(RoundedCorners(ConvertUtils.dp2px(5f)),CenterCrop())
                     .into((helper.getView<View>(R.id.iv_cover) as ImageView))

@@ -11,38 +11,28 @@ import butterknife.OnClick
 import com.blankj.utilcode.util.SpanUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseFragment
-import com.jess.arms.di.component.AppComponent
+import com.jess.arms.mvp.IPresenter
 import com.jess.arms.mvp.IView
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
 import com.jess.arms.utils.RxLifecycleUtils
 import com.shentu.paper.R
-import com.shentu.paper.di.component.DaggerSplashComponent
-import com.shentu.paper.di.module.SplashModule
 import com.shentu.paper.mvp.contract.SplashContract
-import com.shentu.paper.mvp.presenter.SplashPresenter
 import com.shentu.paper.mvp.ui.activity.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.app_fragment_splash.*
+import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
+class SplashFragment : BaseFragment<IPresenter>(), SplashContract.View {
 
-class SplashFragment : BaseFragment<SplashPresenter>(), SplashContract.View {
-
-    private var appComponent: AppComponent? = null
-
-    override fun setupFragmentComponent(appComponent: AppComponent) {
-        DaggerSplashComponent //如找不到该类,请编译一下项目
-                .builder()
-                .appComponent(appComponent)
-                .splashModule(SplashModule(this))
-                .build()
-                .inject(this)
-        this.appComponent = appComponent
-    }
+    @Inject
+    lateinit var errorHandler:RxErrorHandler
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.app_fragment_splash, container, false)
@@ -56,10 +46,6 @@ class SplashFragment : BaseFragment<SplashPresenter>(), SplashContract.View {
         super.onViewCreated(view, savedInstanceState)
 //        Objects.requireNonNull(mPresenter).getAd()
         toMainPage()
-    }
-
-    override fun setData(data: Any?) {
-
     }
 
     @OnClick(R.id.mbJump)
@@ -87,7 +73,7 @@ class SplashFragment : BaseFragment<SplashPresenter>(), SplashContract.View {
 //            return
 //        }
 //        context?.let {
-//            GlideArms.with(it)
+//            GlideApp.with(it)
 //                    .load(splashAd.cover_url)
 //                    .listener(object : RequestListener<Drawable> {
 //                        override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Drawable>, isFirstResource: Boolean): Boolean {
@@ -118,7 +104,7 @@ class SplashFragment : BaseFragment<SplashPresenter>(), SplashContract.View {
                 .compose(RxLifecycleUtils.bindToLifecycle(this@SplashFragment as IView))
                 .map { aLong -> total - aLong.toInt() - 1 }
                 .take(total.toLong())
-                .subscribe(object : ErrorHandleSubscriber<Int>(appComponent!!.rxErrorHandler()) {
+                .subscribe(object : ErrorHandleSubscriber<Int>(errorHandler) {
                     @SuppressLint("SetTextI18n")
                     override fun onNext(integer: Int) {
                         showCountDownText(integer)

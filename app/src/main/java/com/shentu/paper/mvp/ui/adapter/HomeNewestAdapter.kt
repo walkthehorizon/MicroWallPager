@@ -8,7 +8,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.chad.library.adapter.base.BaseSectionQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.shentu.paper.R
-import com.shentu.paper.app.GlideArms
+import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.utils.HkUtils
 import com.shentu.paper.model.entity.WallpaerSection
 
@@ -22,7 +22,7 @@ class HomeNewestAdapter(data: List<WallpaerSection>)
 
     override fun convert(helper: BaseViewHolder, item: WallpaerSection) {
         val ivPicture = helper.getView<ImageView>(R.id.ivPicture)
-        GlideArms.with(mContext)
+        GlideApp.with(mContext)
                 .load(HkUtils.instance.get2x2Image(item.t!!.url))
                 .error(R.drawable.ic_error_black_24dp)
                 .placeholder(R.drawable.default_category_placeholder)

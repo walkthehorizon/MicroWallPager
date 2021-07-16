@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseFragment
-import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
@@ -20,15 +19,15 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import com.shentu.paper.R
 import com.shentu.paper.app.page.EmptyCallback
 import com.shentu.paper.app.page.ErrorCallback
-import com.shentu.paper.di.component.DaggerCategoryComponent
-import com.shentu.paper.di.module.CategoryModule
 import com.shentu.paper.model.entity.Category
 import com.shentu.paper.mvp.contract.CategoryContract
 import com.shentu.paper.mvp.presenter.CategoryPresenter
 import com.shentu.paper.mvp.ui.adapter.CategoryAdapter
 import com.shentu.paper.mvp.ui.adapter.decoration.RvCategoryDecoration
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_category.*
 
+@AndroidEntryPoint
 class TabCategoryFragment : BaseFragment<CategoryPresenter>(), CategoryContract.View {
 
     private lateinit var loadService: LoadService<Any>
@@ -38,16 +37,6 @@ class TabCategoryFragment : BaseFragment<CategoryPresenter>(), CategoryContract.
         fun newInstance(): TabCategoryFragment {
             return TabCategoryFragment()
         }
-    }
-
-
-    override fun setupFragmentComponent(appComponent: AppComponent) {
-        DaggerCategoryComponent //如找不到该类,请编译一下项目
-                .builder()
-                .appComponent(appComponent)
-                .categoryModule(CategoryModule(this))
-                .build()
-                .inject(this)
     }
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

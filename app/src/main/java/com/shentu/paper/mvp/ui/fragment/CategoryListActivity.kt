@@ -5,7 +5,6 @@ import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.jess.arms.base.BaseActivity
-import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.IPresenter
 import com.shentu.paper.R
 import kotlinx.android.synthetic.main.activity_category_list.*
@@ -20,10 +19,6 @@ class CategoryListActivity : BaseActivity<IPresenter>() {
     @Autowired
     var cid = 0
 
-    override fun setupActivityComponent(appComponent: AppComponent) {
-
-    }
-
     override fun initView(savedInstanceState: Bundle?): Int {
         return R.layout.activity_category_list
     }
@@ -33,7 +28,7 @@ class CategoryListActivity : BaseActivity<IPresenter>() {
         toolbar.setTitle(title)
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.container, CategoryListFragment.newInstance(cid))
+                .replace(R.id.container, CategoryListFragment.newInstance(cid),CategoryListFragment::class.simpleName)
                 .commit()
     }
 

@@ -8,6 +8,7 @@ import androidx.multidex.MultiDex
 import butterknife.ButterKnife
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.Utils
+import com.didichuxing.doraemonkit.DoKit
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.horizon.netbus.NetBus
@@ -26,7 +27,6 @@ import com.shentu.paper.app.page.ErrorCallback
 import com.shentu.paper.app.page.LoadingCallback
 import com.shentu.paper.mvp.ui.widget.MaterialFooter
 import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.EventBusBuilder
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
@@ -71,6 +71,9 @@ class AppLifecycleImpl : AppLifecycles {
 
         EventBus.builder().addIndex(MicroEventBusIndex()).installDefaultEventBus()
 //        Thread(Runnable { init(application) }).start()
+
+        DoKit.Builder(application)
+            .build()
     }
 
     override fun onTerminate(application: Application) {}

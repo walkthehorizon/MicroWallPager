@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-//apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -104,8 +105,12 @@ dependencies {
 
     //tools
 //    compileOnly rootProject.ext.dependencies["javax.annotation"]
-    api rootProject.ext.dependencies["dagger2"]
-    annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
+//    api rootProject.ext.dependencies["dagger2"]
+//    annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
+
+    kapt rootProject.ext.dependencies["hilt-android-compiler"]
+    implementation rootProject.ext.dependencies['hilt-android']
+
 //    compileOnly rootProject.ext.dependencies["androideventbus"]
     compileOnly rootProject.ext.dependencies["eventbus"]
     api rootProject.ext.dependencies["gson"]

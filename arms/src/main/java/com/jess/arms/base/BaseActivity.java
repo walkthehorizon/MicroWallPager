@@ -31,11 +31,13 @@ import javax.inject.Inject;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LifecycleObserver;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import dagger.hilt.android.AndroidEntryPoint;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -49,18 +51,17 @@ import pub.devrel.easypermissions.EasyPermissions;
 public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivity implements IActivity, ActivityLifecycleable {
     protected final String TAG = this.getClass().getSimpleName();
     private final BehaviorSubject<ActivityEvent> mLifecycleSubject = BehaviorSubject.create();
-    private Cache<String, Object> mCache;
     private Unbinder mUnbinder;
     @Inject
     @Nullable
     protected P mPresenter;//如果当前页面逻辑简单, Presenter 可以为 null
 
+    @Inject
+    Cache<String, Object> mCache;
+
     @NonNull
     @Override
     public synchronized Cache<String, Object> provideCache() {
-        if (mCache == null) {
-            mCache = ArmsUtils.obtainAppComponentFromContext(this).cacheFactory().build(CacheType.ACTIVITY_CACHE);
-        }
         return mCache;
     }
 
@@ -95,6 +96,11 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
         if (mPresenter != null) {
             getLifecycle().addObserver((LifecycleObserver) mPresenter);
         }
+        //如果要使用 EventBus 请将此方法返回 true
+        if (useEventBus()){
+            //注册到事件主线
+            EventBus.getDefault().register(this);
+        }
 //        snackbar = TSnackbar.make(findViewById(android.R.id.content), "网络已断开连接", Snackbar.LENGTH_INDEFINITE);
         initData(savedInstanceState);
     }
@@ -102,6 +108,9 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //如果要使用 EventBus 请将此方法返回 true
+        if (useEventBus())
+            EventBus.getDefault().unregister(this);
         if (mUnbinder != null && mUnbinder != Unbinder.EMPTY)
             mUnbinder.unbind();
         this.mUnbinder = null;

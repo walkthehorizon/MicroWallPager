@@ -22,8 +22,8 @@ import com.blankj.utilcode.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.horizon.netbus.NetBus
 import com.jess.arms.base.BaseActivity
-import com.jess.arms.di.component.AppComponent
 import com.jess.arms.integration.AppManager
+import com.jess.arms.integration.IRepositoryManager
 import com.jess.arms.utils.ArmsUtils
 import com.jess.arms.utils.Preconditions.checkNotNull
 import com.kingja.loadsir.core.LoadService
@@ -36,8 +36,6 @@ import com.shentu.paper.app.HkUserManager
 import com.shentu.paper.app.config.Config
 import com.shentu.paper.app.page.ErrorCallback
 import com.shentu.paper.app.utils.RxUtils
-import com.shentu.paper.di.component.DaggerMainComponent
-import com.shentu.paper.di.module.MainModule
 import com.shentu.paper.model.api.service.UserService
 import com.shentu.paper.model.response.BaseResponse
 import com.shentu.paper.mvp.contract.MainContract
@@ -45,32 +43,37 @@ import com.shentu.paper.mvp.presenter.MainPresenter
 import com.shentu.paper.mvp.ui.adapter.MainPagerAdapter
 import com.shentu.paper.mvp.ui.home.TabHomeFragment
 import com.shentu.paper.mvp.ui.my.TabMyFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_agreement.view.*
+import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
+import javax.inject.Inject
 
 
-class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager.OnPageChangeListener
-        , BottomNavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemReselectedListener {
+@AndroidEntryPoint
+class MainActivity : BaseActivity<MainPresenter>(), MainContract.View,
+    ViewPager.OnPageChangeListener, BottomNavigationView.OnNavigationItemSelectedListener,
+    BottomNavigationView.OnNavigationItemReselectedListener {
 
     private lateinit var mainPagerAdapter: MainPagerAdapter
     private var lastPos: Int = 0//上一个位置
-    private val fragments: List<Fragment> = listOf(TabHomeFragment.newInstance(), TabMyFragment.newInstance())
+    private val fragments: List<Fragment> =
+        listOf(TabHomeFragment.newInstance(), TabMyFragment.newInstance())
     private var loadService: LoadService<Any>? = null
 
+    @Inject
+    lateinit var repositoryManager: IRepositoryManager
 
-    override fun setupActivityComponent(appComponent: AppComponent) {
-        DaggerMainComponent //如找不到该类,请编译一下项目
-                .builder()
-                .appComponent(appComponent)
-                .mainModule(MainModule(this))
-                .build()
-                .inject(this)
+    @Inject
+    lateinit var rxErrorHandler: RxErrorHandler
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         BarUtils.setStatusBarColor(this, Color.TRANSPARENT)
+        super.onCreate(savedInstanceState)
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {
@@ -86,7 +89,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
 //                showContent()
 //            }
 //        }else{
-            mPresenter?.getAccountInfo()
+        mPresenter?.getAccountInfo()
 //        }
     }
 
@@ -142,35 +145,40 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
             customView(R.layout.dialog_agreement)
             cancelable(false)
         }
-        dialog.window!!.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.bg_dialog_change_tip))
+        dialog.window!!.setBackgroundDrawable(
+            ContextCompat.getDrawable(
+                this,
+                R.drawable.bg_dialog_change_tip
+            )
+        )
         val tvContent: TextView = dialog.getCustomView().tvContent
         tvContent.movementMethod = LinkMovementMethod.getInstance()
         tvContent.text = SpanUtils()
-                .append("感谢您下载${resources.getString(R.string.app_name)}！我们非常重视您的个人信息和隐私保护。为了更好地保障您的个人利益，在使用我们的产品前，请您务必审慎阅读、充分理解")
-                .append("《服务协议》")
-                .setClickSpan(object : ClickableSpan() {
-                    override fun onClick(widget: View) {
-                        BrowserActivity.open(this@MainActivity, Constant.WEB_SERVER)
-                    }
+            .append("感谢您下载${resources.getString(R.string.app_name)}！我们非常重视您的个人信息和隐私保护。为了更好地保障您的个人利益，在使用我们的产品前，请您务必审慎阅读、充分理解")
+            .append("《服务协议》")
+            .setClickSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    BrowserActivity.open(this@MainActivity, Constant.WEB_SERVER)
+                }
 
-                    override fun updateDrawState(ds: TextPaint) {
-                        ds.isUnderlineText = false
-                        ds.color = ContextCompat.getColor(this@MainActivity, R.color.colorAccent)
-                    }
-                })
-                .append("《隐私政策》")
-                .setClickSpan(object : ClickableSpan() {
-                    override fun onClick(widget: View) {
-                        BrowserActivity.open(this@MainActivity, Constant.WEB_PRIVACY)
-                    }
+                override fun updateDrawState(ds: TextPaint) {
+                    ds.isUnderlineText = false
+                    ds.color = ContextCompat.getColor(this@MainActivity, R.color.colorAccent)
+                }
+            })
+            .append("《隐私政策》")
+            .setClickSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    BrowserActivity.open(this@MainActivity, Constant.WEB_PRIVACY)
+                }
 
-                    override fun updateDrawState(ds: TextPaint) {
-                        ds.isUnderlineText = false
-                        ds.color = ContextCompat.getColor(this@MainActivity, R.color.colorAccent)
-                    }
-                })
-                .append("各条款，我们会按照上述政策收集、使用和共享您的个人信息。如您同意，请点击“同意”开始接受我们的服务。")
-                .create()
+                override fun updateDrawState(ds: TextPaint) {
+                    ds.isUnderlineText = false
+                    ds.color = ContextCompat.getColor(this@MainActivity, R.color.colorAccent)
+                }
+            })
+            .append("各条款，我们会按照上述政策收集、使用和共享您的个人信息。如您同意，请点击“同意”开始接受我们的服务。")
+            .create()
         dialog.getCustomView().tvConfirm.setOnClickListener {
             MobSDK.submitPolicyGrantResult(true, object : OperationCallback<Void>() {
                 override fun onFailure(p0: Throwable?) {
@@ -254,7 +262,10 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
     private fun switchStatusBar() {
         when (viewPager.currentItem) {
             0 -> {
-                BarUtils.setStatusBarLightMode(this, (fragments[0] as TabHomeFragment).getIsLightMode())
+                BarUtils.setStatusBarLightMode(
+                    this,
+                    (fragments[0] as TabHomeFragment).getIsLightMode()
+                )
             }
             1 -> {
                 BarUtils.setStatusBarLightMode(this, true)
@@ -283,26 +294,26 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.View, ViewPager
             return
         }
         SPUtils.getInstance().put(Constant.LAST_SIGN_TIME, System.currentTimeMillis())
-        ArmsUtils.obtainAppComponentFromContext(this)
-                .repositoryManager()
-                .obtainRetrofitService(UserService::class.java)
-                .sign()
-                .compose(RxUtils.applyClearSchedulers(this))
-                .subscribe(object : ErrorHandleSubscriber<BaseResponse<Int>>(
-                        ArmsUtils.obtainAppComponentFromContext(this).rxErrorHandler()) {
-                    @SuppressLint("SetTextI18n")
-                    override fun onNext(t: BaseResponse<Int>) {
-                        if (!t.isSuccess) {
-                            return
-                        }
-                        llSign.visibility = View.VISIBLE
-                        tvSign.text = "每日登录：+" + t.data
-                        llSign.scaleX = 0f
-                        llSign.scaleY = 0f
-                        llSign.animate().scaleX(1f).scaleY(1f).setStartDelay(1200).start()
-                        lottieSign.playAnimation()
-                        t.data?.let { HkUserManager.updateKandou(it) }
+        repositoryManager
+            .obtainRetrofitService(UserService::class.java)
+            .sign()
+            .compose(RxUtils.applyClearSchedulers(this))
+            .subscribe(object : ErrorHandleSubscriber<BaseResponse<Int>>(
+                rxErrorHandler
+            ) {
+                @SuppressLint("SetTextI18n")
+                override fun onNext(t: BaseResponse<Int>) {
+                    if (!t.isSuccess) {
+                        return
                     }
-                })
+                    llSign.visibility = View.VISIBLE
+                    tvSign.text = "每日登录：+" + t.data
+                    llSign.scaleX = 0f
+                    llSign.scaleY = 0f
+                    llSign.animate().scaleX(1f).scaleY(1f).setStartDelay(1200).start()
+                    lottieSign.playAnimation()
+                    t.data?.let { HkUserManager.updateKandou(it) }
+                }
+            })
     }
 }

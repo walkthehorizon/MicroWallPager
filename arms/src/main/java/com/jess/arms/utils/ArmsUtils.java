@@ -1,12 +1,9 @@
 
 package com.jess.arms.utils;
 
-import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.jess.arms.base.App;
-import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.AppManager;
 
 /**
@@ -52,12 +49,6 @@ public class ArmsUtils {
      */
     public static void exitApp() {
         AppManager.getAppManager().appExit();
-    }
-
-    public static AppComponent obtainAppComponentFromContext(Context context) {
-        Preconditions.checkNotNull(context, "%s cannot be null", Context.class.getName());
-        Preconditions.checkState(context.getApplicationContext() instanceof App, "Application does not implements App");
-        return ((App) context.getApplicationContext()).getAppComponent();
     }
 
 }

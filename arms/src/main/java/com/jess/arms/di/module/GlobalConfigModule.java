@@ -6,11 +6,14 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
+import com.jess.arms.base.BaseApplication;
 import com.jess.arms.http.BaseUrl;
 import com.jess.arms.http.GlobalHttpHandler;
 import com.jess.arms.http.log.DefaultFormatPrinter;
 import com.jess.arms.http.log.FormatPrinter;
 import com.jess.arms.http.log.RequestInterceptor;
+import com.jess.arms.integration.ConfigModule;
+import com.jess.arms.integration.ManifestParser;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.integration.cache.CacheType;
 import com.jess.arms.integration.cache.IntelligentCache;
@@ -25,6 +28,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import dagger.hilt.InstallIn;
+import dagger.hilt.components.SingletonComponent;
 import me.jessyan.rxerrorhandler.handler.listener.ResponseErrorListener;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -34,6 +39,7 @@ import okhttp3.Interceptor;
  * 框架独创的建造者模式 {@link Module},可向框架中注入外部配置的自定义参数
  * ================================================
  */
+@InstallIn(SingletonComponent.class)
 @Module
 public class GlobalConfigModule {
     private HttpUrl mApiUrl;
@@ -48,8 +54,16 @@ public class GlobalConfigModule {
     private RequestInterceptor.Level mPrintHttpLogLevel;
     private FormatPrinter mFormatPrinter;
     private Cache.Factory mCacheFactory;
+    private List<ConfigModule> mModules;
 
-    private GlobalConfigModule(Builder builder) {
+    public GlobalConfigModule() {
+        mModules = new ManifestParser(BaseApplication.getInstance()).parse();
+        GlobalConfigModule.Builder builder = GlobalConfigModule
+                .builder();
+        //遍历 ConfigModule 集合, 给全局配置 GlobalConfigModule 添加参数
+        for (ConfigModule module : mModules) {
+            module.applyOptions(BaseApplication.getInstance(),builder);
+        }
         this.mApiUrl = builder.apiUrl;
         this.mBaseUrl = builder.baseUrl;
         this.mHandler = builder.handler;
@@ -68,6 +82,11 @@ public class GlobalConfigModule {
         return new Builder();
     }
 
+    @Provides
+    @Singleton
+    List<ConfigModule> provideConfigModules() {
+        return mModules;
+    }
 
     @Singleton
     @Provides
@@ -158,7 +177,7 @@ public class GlobalConfigModule {
 
     @Singleton
     @Provides
-    FormatPrinter provideFormatPrinter(){
+    FormatPrinter provideFormatPrinter() {
         return mFormatPrinter == null ? new DefaultFormatPrinter() : mFormatPrinter;
     }
 
@@ -168,7 +187,7 @@ public class GlobalConfigModule {
         return mCacheFactory == null ? type -> {
             //若想自定义 LruCache 的 size, 或者不想使用 LruCache, 想使用自己自定义的策略
             //使用 GlobalConfigModule.Builder#cacheFactory() 即可扩展
-            switch (type.getCacheTypeId()){
+            switch (type.getCacheTypeId()) {
                 //Activity、Fragment 以及 Extras 使用 IntelligentCache (具有 LruCache 和 可永久存储数据的 Map)
                 case CacheType.EXTRAS_TYPE_ID:
                 case CacheType.ACTIVITY_CACHE_TYPE_ID:
@@ -256,7 +275,7 @@ public class GlobalConfigModule {
             return this;
         }
 
-        public Builder formatPrinter(FormatPrinter formatPrinter){
+        public Builder formatPrinter(FormatPrinter formatPrinter) {
             this.formatPrinter = Preconditions.checkNotNull(formatPrinter, FormatPrinter.class.getCanonicalName() + "can not be null.");
             return this;
         }
@@ -265,12 +284,6 @@ public class GlobalConfigModule {
             this.cacheFactory = cacheFactory;
             return this;
         }
-
-        public GlobalConfigModule build() {
-            return new GlobalConfigModule(this);
-        }
-
-
     }
 
 

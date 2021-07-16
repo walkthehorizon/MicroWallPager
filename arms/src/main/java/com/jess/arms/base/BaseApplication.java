@@ -4,13 +4,10 @@ package com.jess.arms.base;
 import android.app.Application;
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-
 import com.jess.arms.base.delegate.AppDelegate;
 import com.jess.arms.base.delegate.AppLifecycles;
-import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.utils.ArmsUtils;
-import com.jess.arms.utils.Preconditions;
+
+import dagger.hilt.android.HiltAndroidApp;
 
 /**
  * ================================================
@@ -18,9 +15,9 @@ import com.jess.arms.utils.Preconditions;
  * RxLifecycle、RxCache 等 Rx 系三方库, 并且提供 UI 自适应方案, 本框架将它们结合起来, 并全部使用 Dagger2 管理
  * ================================================
  */
-public class BaseApplication extends Application implements App {
+public class BaseApplication extends Application  {
     private AppLifecycles mAppDelegate;
-
+    private static BaseApplication instance;
     /**
      * 这里会在 {@link BaseApplication#onCreate} 之前被调用,可以做一些较早的初始化
      * 常用于 MultiDex 以及插件化框架的初始化
@@ -29,6 +26,7 @@ public class BaseApplication extends Application implements App {
      */
     @Override
     protected void attachBaseContext(Context base) {
+        instance = this;
         super.attachBaseContext(base);
         if (mAppDelegate == null)
             this.mAppDelegate = new AppDelegate(base);
@@ -52,18 +50,7 @@ public class BaseApplication extends Application implements App {
             this.mAppDelegate.onTerminate(this);
     }
 
-    /**
-     * 将 {@link AppComponent} 返回出去, 供其它地方使用, {@link AppComponent} 接口中声明的方法所返回的实例, 在 {@link #getAppComponent()} 拿到对象后都可以直接使用
-     *
-     * @see ArmsUtils#obtainAppComponentFromContext(Context) 可直接获取 {@link AppComponent}
-     * @return AppComponent
-     */
-    @NonNull
-    @Override
-    public AppComponent getAppComponent() {
-        Preconditions.checkNotNull(mAppDelegate, "%s cannot be null", AppDelegate.class.getName());
-        Preconditions.checkState(mAppDelegate instanceof App, "%s must be implements %s", mAppDelegate.getClass().getName(), App.class.getName());
-        return ((App) mAppDelegate).getAppComponent();
+    public static BaseApplication getInstance() {
+        return instance;
     }
-
 }

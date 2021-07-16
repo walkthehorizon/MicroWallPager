@@ -16,23 +16,21 @@ import com.blankj.utilcode.util.PermissionUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.jess.arms.base.BaseActivity
-import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.shentu.paper.R
-import com.shentu.paper.app.GlideArms
+import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.HkUserManager
-import com.shentu.paper.di.component.DaggerMyEditComponent
-import com.shentu.paper.di.module.MyEditModule
 import com.shentu.paper.model.entity.MicroUser
 import com.shentu.paper.mvp.contract.MyEditContract
 import com.shentu.paper.mvp.presenter.MyEditPresenter
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.internal.entity.CaptureStrategy
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_my_edit.*
 import java.io.File
 
-
+@AndroidEntryPoint
 class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
 
     companion object {
@@ -43,15 +41,6 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
     //裁剪输出路径
     private val cropImage = File(PathUtils.getExternalAppCachePath(), "avatar_crop.jpg")
     private val user: MicroUser = HkUserManager.user
-
-    override fun setupActivityComponent(appComponent: AppComponent) {
-        DaggerMyEditComponent //如找不到该类,请编译一下项目
-                .builder()
-                .appComponent(appComponent)
-                .myEditModule(MyEditModule(this))
-                .build()
-                .inject(this)
-    }
 
 
     override fun initView(savedInstanceState: Bundle?): Int {
@@ -93,7 +82,7 @@ class MyEditActivity : BaseActivity<MyEditPresenter>(), MyEditContract.View {
      * scrollToTop
      * */
     override fun refreshView() {
-        GlideArms.with(this)
+        GlideApp.with(this)
                 .load(user.avatar)
                 .transform(CircleCrop())
                 .error(R.drawable.default_head)

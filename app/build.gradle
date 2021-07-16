@@ -3,7 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.mob.sdk'
-//apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'com.didi.dokit'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -87,6 +88,9 @@ android {
         freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
         freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.FlowPreview"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 MobSDK {
@@ -142,6 +146,20 @@ buildscript {
 }
 
 
+dokitExt {
+    //通用设置
+    comm {
+        //地图经纬度开关
+        gpsSwitch false
+        //网络开关
+        networkSwitch false
+        //大图开关
+        bigImgSwitch true
+        //webView js 抓包
+        webViewSwitch false
+    }
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation rootProject.ext.dependencies["core"]
@@ -168,6 +186,14 @@ dependencies {
     implementation rootProject.ext.dependencies["viewpager2"]
     implementation(rootProject.ext.dependencies["recyclerview"])
     implementation rootProject.ext.dependencies["viewpager2"]
+
+    debugImplementation (rootProject.ext.dependencies["dokitx"]){
+        exclude group: 'com.google.zxing' , module: 'core'
+    }
+    releaseImplementation rootProject.ext.dependencies["dokitx-no-op"]
+    debugImplementation (rootProject.ext.dependencies["dokitx-mc"]){
+        exclude group: 'com.google.zxing' , module: 'core'
+    }
 
     //support
     implementation rootProject.ext.dependencies["agentweb"]
@@ -198,10 +224,10 @@ dependencies {
     }
     implementation rootProject.ext.dependencies["arouter"]
     kapt rootProject.ext.dependencies["arouter-compiler"]
-    kapt rootProject.ext.dependencies["dagger2-compiler"]
-    kapt rootProject.ext.dependencies["dagger2-android-processor"]
-//    kapt rootProject.ext.dependencies["hilt-android-compiler"]
-//    implementation rootProject.ext.dependencies['hilt-android']
+//    kapt rootProject.ext.dependencies["dagger2-compiler"]
+//    kapt rootProject.ext.dependencies["dagger2-android-processor"]
+    kapt rootProject.ext.dependencies["hilt-android-compiler"]
+    implementation rootProject.ext.dependencies['hilt-android']
 
     implementation rootProject.ext.dependencies["eventbus"]
     kapt rootProject.ext.dependencies["eventbus-processor"]

@@ -4,10 +4,9 @@ import android.app.Application
 import android.content.Context
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.jess.arms.di.scope.ActivityScope
-import com.jess.arms.integration.AppManager
+
 import com.jess.arms.mvp.BasePresenter
-import com.shentu.paper.app.GlideArms
+import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.HkUserManager
 import com.shentu.paper.app.utils.RxUtils
 import com.shentu.paper.model.entity.Wallpaper
@@ -19,13 +18,11 @@ import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
-import retrofit2.http.Path
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
 
-@ActivityScope
 class PictureBrowserPresenter
 @Inject
 constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContract.View) :
@@ -36,8 +33,7 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
     @Inject
     lateinit var mApplication: Application
 
-    @Inject
-    lateinit var mAppManager: AppManager
+
 
     fun addCollect(pid: Long, position: Int) {
         mModel.addCollect(pid)
@@ -78,7 +74,7 @@ constructor(model: PictureBrowserContract.Model, rootView: PictureBrowserContrac
         Observable.create(ObservableOnSubscribe<MutableList<Wallpaper>> {
             for (wallpaper in wallpapers) {
                 val file: File? = try {
-                    GlideArms.with(mRootView as Context).downloadOnly().load(wallpaper.originUrl).onlyRetrieveFromCache(true).submit().get()
+                    GlideApp.with(mRootView as Context).downloadOnly().load(wallpaper.originUrl).onlyRetrieveFromCache(true).submit().get()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     null

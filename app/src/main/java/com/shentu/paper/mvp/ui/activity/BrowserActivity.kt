@@ -2,17 +2,20 @@ package com.shentu.paper.mvp.ui.activity
 
 import android.content.Context
 import android.content.Intent
-import android.net.http.SslCertificate
-import android.net.http.SslError
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.ViewGroup
-import android.webkit.*
+import android.webkit.ConsoleMessage
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
 import androidx.core.content.ContextCompat
 import com.jess.arms.base.BaseActivity
-import com.jess.arms.di.component.AppComponent
 import com.jess.arms.mvp.IPresenter
-import com.just.agentweb.*
+import com.just.agentweb.AgentWeb
+import com.just.agentweb.DefaultWebClient
+import com.just.agentweb.MiddlewareWebChromeBase
+import com.just.agentweb.MiddlewareWebClientBase
 import com.shentu.paper.R
 import com.shentu.paper.app.utils.UIController
 import com.shentu.paper.app.webview.AndroidInterface
@@ -57,10 +60,6 @@ class BrowserActivity : BaseActivity<IPresenter>() {
             super.onReceivedError(view, request, error)
             Timber.e(error.toString())
         }
-    }
-
-    override fun setupActivityComponent(appComponent: AppComponent) {
-
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {

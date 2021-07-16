@@ -5,10 +5,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.jess.arms.base.BaseActivity
-import com.jess.arms.di.component.AppComponent
+import com.jess.arms.integration.RepositoryManager
 import com.jess.arms.mvp.IPresenter
 import com.jess.arms.mvp.IView
-import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.shentu.paper.R
@@ -20,7 +19,9 @@ import com.shentu.paper.model.entity.Banner
 import com.shentu.paper.model.response.BannerPageResponse
 import com.shentu.paper.mvp.ui.adapter.BannerListAdapter
 import kotlinx.android.synthetic.main.activity_subject_list.*
+import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import javax.inject.Inject
 
 class BannerListActivity : BaseActivity<IPresenter>(), IView {
 
@@ -28,9 +29,11 @@ class BannerListActivity : BaseActivity<IPresenter>(), IView {
     private var adapter: BannerListAdapter = BannerListAdapter(ArrayList())
     private lateinit var loadService: LoadService<Any>
 
-    override fun setupActivityComponent(appComponent: AppComponent) {
+    @Inject
+    lateinit var repositoryManager: RepositoryManager
 
-    }
+    @Inject
+    lateinit var errorHandler: RxErrorHandler
 
     override fun initView(savedInstanceState: Bundle?): Int {
         return R.layout.activity_subject_list
@@ -90,19 +93,18 @@ class BannerListActivity : BaseActivity<IPresenter>(), IView {
 
     private fun getBanners(clear: Boolean) {
         offset = if (clear) 0 else offset + MicroService.PAGE_LIMIT
-        ArmsUtils.obtainAppComponentFromContext(this)
-                .repositoryManager()
-                .obtainRetrofitService(MicroService::class.java)
-                .getBanners()
-                .compose(RxUtils.applySchedulers(this, clear))
-                .subscribe(object : ErrorHandleSubscriber<BannerPageResponse>(
-                        ArmsUtils.obtainAppComponentFromContext(this).rxErrorHandler()) {
-                    override fun onNext(t: BannerPageResponse) {
-                        if (!t.isSuccess) {
-                            return
-                        }
-                        t.data?.content?.let { showBanners(it, clear) }
+        repositoryManager
+            .obtainRetrofitService(MicroService::class.java)
+            .getBanners1()
+            .compose(RxUtils.applySchedulers(this, clear))
+            .subscribe(object : ErrorHandleSubscriber<BannerPageResponse>(
+                errorHandler) {
+                override fun onNext(t: BannerPageResponse) {
+                    if (!t.isSuccess) {
+                        return
                     }
-                })
+                    t.data?.content?.let { showBanners(it, clear) }
+                }
+            })
     }
 }

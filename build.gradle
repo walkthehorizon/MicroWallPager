@@ -1,7 +1,8 @@
 apply from: "config.gradle"
 buildscript {
     ext.kotlin_version = '1.5.10'
-    ext.hilt_version = '2.28-alpha'
+    ext.hilt_version = '2.37'
+    ext.dokitx_version = '3.4.0-alpha04'
 
     repositories {
         maven {
@@ -15,7 +16,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.1'
+        classpath 'com.android.tools.build:gradle:4.2.2'
         //Gradle Android Maven plugin
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         //Gradle Bintray Plugin
@@ -25,6 +26,8 @@ buildscript {
         classpath 'com.novoda:bintray-release:0.9.1'
         classpath "com.alibaba:arouter-register:1.0.2"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+        classpath "io.github.didi.dokit:dokitx-plugin:${dokitx_version}"
+        classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.10'
     }
 }
 

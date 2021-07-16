@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.TimeUtils
 import com.jess.arms.base.BaseFragment
-import com.jess.arms.di.component.AppComponent
+import com.jess.arms.integration.RepositoryManager
 import com.jess.arms.mvp.IPresenter
 import com.jess.arms.mvp.IView
 import com.kingja.loadsir.core.LoadService
@@ -27,9 +27,11 @@ import com.shentu.paper.mvp.ui.adapter.HomeNewestAdapter
 import com.shentu.paper.mvp.ui.browser.PictureBrowserActivity
 import com.shentu.paper.mvp.ui.widget.stickyHead.StickyItemDecoration
 import kotlinx.android.synthetic.main.activity_home_new.*
+import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 /**
  * 最新
@@ -37,13 +39,14 @@ import java.util.*
 class HomeNewFragment : BaseFragment<IPresenter>(), IView {
 
     private lateinit var adapter: HomeNewestAdapter
-    private lateinit var appComponent: AppComponent
     private lateinit var loadService: LoadService<Any>
     private var bViewPager: ViewPager? = null
 
-    override fun setupFragmentComponent(appComponent: AppComponent) {
-        this.appComponent = appComponent
-    }
+    @Inject
+    lateinit var repositoryManager: RepositoryManager
+
+    @Inject
+    lateinit var errorHandler:RxErrorHandler
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.activity_home_new, container, false)
@@ -139,11 +142,11 @@ class HomeNewFragment : BaseFragment<IPresenter>(), IView {
 
     private fun getNewest(clear: Boolean) {
         offset = if (clear) MicroService.PAGE_START else offset + MicroService.PAGE_LIMIT
-        appComponent.repositoryManager()
+        repositoryManager
                 .obtainRetrofitService(MicroService::class.java)
                 .getNewestPapers(MicroService.PAGE_LIMIT, offset)
                 .compose(RxUtils.applySchedulers(this, clear))
-                .subscribe(object : ErrorHandleSubscriber<WallpaperPageResponse>(appComponent.rxErrorHandler()) {
+                .subscribe(object : ErrorHandleSubscriber<WallpaperPageResponse>(errorHandler) {
                     override fun onNext(t: WallpaperPageResponse) {
                         if (!t.isSuccess || t.data == null || t.data.content.isEmpty()) {
                             return

@@ -3,6 +3,7 @@ package com.shentu.paper.mvp.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.transition.Slide
+import android.view.Gravity
 import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.GravityCompat
@@ -16,7 +17,6 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.jess.arms.base.BaseActivity
-import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
@@ -26,8 +26,6 @@ import com.shentu.paper.R
 import com.shentu.paper.app.page.EmptyCallback
 import com.shentu.paper.app.page.ErrorCallback
 import com.shentu.paper.databinding.ActivityMyCollectBinding
-import com.shentu.paper.di.component.DaggerMyCollectComponent
-import com.shentu.paper.di.module.MyCollectModule
 import com.shentu.paper.model.body.DelCollectBody
 import com.shentu.paper.model.entity.Wallpaper
 import com.shentu.paper.mvp.contract.MyCollectContract
@@ -63,22 +61,13 @@ class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.
     private lateinit var adapter: CollectListAdapter
     private lateinit var loadService: LoadService<Any>
 
-    override fun setupActivityComponent(appComponent: AppComponent) {
-        DaggerMyCollectComponent //如找不到该类,请编译一下项目
-                .builder()
-                .appComponent(appComponent)
-                .myCollectModule(MyCollectModule(this))
-                .build()
-                .inject(this)
-    }
-
     override fun initView(savedInstanceState: Bundle?): Int {
         binding = ActivityMyCollectBinding.inflate(layoutInflater)
         return R.layout.activity_my_collect
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-        window.exitTransition = Slide(GravityCompat.START)
+        window.exitTransition = Slide(Gravity.START)
         loadService = LoadSir.getDefault().register(smartRefresh) {
             showContent()
             smartRefresh.autoRefresh()

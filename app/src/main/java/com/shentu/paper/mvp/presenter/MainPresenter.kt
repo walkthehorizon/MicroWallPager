@@ -1,9 +1,8 @@
 package com.shentu.paper.mvp.presenter
 
 import android.app.Application
-import com.jess.arms.di.scope.ActivityScope
 
-import com.jess.arms.integration.AppManager
+
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.paper.app.HkUserManager
 import com.shentu.paper.app.utils.RxUtils
@@ -15,7 +14,6 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import javax.inject.Inject
 
 
-@ActivityScope
 open class MainPresenter @Inject
 constructor(model: MainContract.Model, rootView: MainContract.View) : BasePresenter<MainContract.Model, MainContract.View>(model, rootView) {
     @Inject
@@ -24,8 +22,7 @@ constructor(model: MainContract.Model, rootView: MainContract.View) : BasePresen
     @Inject
     lateinit var mApplication: Application
 
-    @Inject
-    lateinit var mAppManager: AppManager
+
 
     fun getAccountInfo() {
         mModel.loginAccount()

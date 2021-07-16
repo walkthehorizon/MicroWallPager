@@ -1,8 +1,7 @@
 package com.shentu.paper.mvp.presenter
 
 import android.app.Application
-import com.jess.arms.di.scope.FragmentScope
-import com.jess.arms.integration.AppManager
+
 import com.jess.arms.mvp.BasePresenter
 import com.shentu.paper.app.utils.RxUtils
 import com.shentu.paper.model.response.WallpaperPageResponse
@@ -11,7 +10,6 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import javax.inject.Inject
 
-@FragmentScope
 class CategoryListPresenter
 @Inject
 constructor(model: CategoryDetailContract.Model, rootView: CategoryDetailContract.View) :
@@ -21,8 +19,7 @@ constructor(model: CategoryDetailContract.Model, rootView: CategoryDetailContrac
     @Inject
     lateinit var mApplication: Application
 
-    @Inject
-    lateinit var mAppManager: AppManager
+
 
     fun getCategoryList(id: Int, clear: Boolean) {
         mModel.getCategoryWallpapers(id, clear)
