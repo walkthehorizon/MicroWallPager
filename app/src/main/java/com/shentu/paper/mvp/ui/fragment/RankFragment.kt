@@ -8,12 +8,11 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.jess.arms.base.BaseFragment
-import com.jess.arms.mvp.IPresenter
-import com.jess.arms.utils.ArmsUtils
+import com.micro.base.BaseFragment
+import com.micro.mvp.IPresenter
+import com.micro.utils.ArmsUtils
 import com.shentu.paper.R
 import com.shentu.paper.mvp.contract.RankContract
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_rank.*
 
 class RankFragment : BaseFragment<IPresenter>(), RankContract.View {

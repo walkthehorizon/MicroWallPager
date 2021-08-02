@@ -17,8 +17,8 @@ import com.blankj.utilcode.util.KeyboardUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.material.chip.ChipGroup
-import com.jess.arms.base.BaseActivity
-import com.jess.arms.utils.ArmsUtils
+import com.micro.base.BaseActivity
+import com.micro.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.shentu.paper.R

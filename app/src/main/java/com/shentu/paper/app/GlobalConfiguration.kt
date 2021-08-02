@@ -11,10 +11,10 @@ import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.SPUtils
 import com.google.gson.GsonBuilder
-import com.jess.arms.base.delegate.AppLifecycles
-import com.jess.arms.di.module.GlobalConfigModule
-import com.jess.arms.http.log.RequestInterceptor
-import com.jess.arms.integration.ConfigModule
+import com.micro.base.delegate.AppLifecycles
+import com.micro.di.module.GlobalConfigModule
+import com.micro.http.log.RequestInterceptor
+import com.micro.integration.ConfigModule
 import com.shentu.paper.BuildConfig
 import com.shentu.paper.app.config.Config
 import okhttp3.*
@@ -37,9 +37,9 @@ import javax.net.ssl.*
  * ConfigModule 的实现类可以有无数多个, 在 Application 中只是注册回调, 并不会影响性能 (多个 ConfigModule 在多 Module 环境下尤为受用)
  * 不过要注意 ConfigModule 接口的实现类对象是通过反射生成的, 这里会有些性能损耗
  *
- * @see com.jess.arms.base.delegate.AppDelegate
+ * @see com.micro.arms.base.delegate.AppDelegate
  *
- * @see com.jess.arms.integration.ManifestParser
+ * @see com.micro.arms.integration.ManifestParser
  * ================================================
  */
 class GlobalConfiguration : ConfigModule {

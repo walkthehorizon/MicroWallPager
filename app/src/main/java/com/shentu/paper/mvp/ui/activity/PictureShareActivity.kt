@@ -17,8 +17,8 @@ import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.FileIOUtils
 import com.blankj.utilcode.util.ImageUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.jess.arms.base.BaseActivity
-import com.jess.arms.mvp.IPresenter
+import com.micro.base.BaseActivity
+import com.micro.mvp.IPresenter
 import com.shentu.paper.R
 import com.shentu.paper.app.Constant
 import com.shentu.paper.app.GlideApp

@@ -12,11 +12,8 @@ import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
-import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager.widget.ViewPager
@@ -25,11 +22,9 @@ import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.appbar.AppBarLayout
-import com.jess.arms.base.BaseFragment
-import com.jess.arms.integration.RepositoryManager
-import com.jess.arms.mvp.IPresenter
+import com.micro.base.BaseFragment
+import com.micro.integration.RepositoryManager
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener

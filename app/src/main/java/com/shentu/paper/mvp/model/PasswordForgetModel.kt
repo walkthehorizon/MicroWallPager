@@ -2,8 +2,8 @@ package com.shentu.paper.mvp.model
 
 import android.app.Application
 import com.google.gson.Gson
-import com.jess.arms.integration.IRepositoryManager
-import com.jess.arms.mvp.BaseModel
+import com.micro.integration.IRepositoryManager
+import com.micro.mvp.BaseModel
 import com.shentu.paper.mvp.contract.PasswordForgetContract
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject

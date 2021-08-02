@@ -8,8 +8,8 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.Transformation
-import com.jess.arms.base.BaseActivity
-import com.jess.arms.mvp.IPresenter
+import com.micro.base.BaseActivity
+import com.micro.mvp.IPresenter
 import com.shentu.paper.R
 import kotlinx.android.synthetic.main.activity_test.*
 

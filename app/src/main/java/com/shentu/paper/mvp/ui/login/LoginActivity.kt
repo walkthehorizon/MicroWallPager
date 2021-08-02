@@ -15,9 +15,9 @@ import com.afollestad.materialdialogs.customview.customView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.*
-import com.jess.arms.base.BaseActivity
-import com.jess.arms.utils.ArmsUtils
-import com.jess.arms.utils.RxLifecycleUtils
+import com.micro.base.BaseActivity
+import com.micro.utils.ArmsUtils
+import com.micro.utils.RxLifecycleUtils
 import com.shentu.paper.R
 import com.shentu.paper.app.Constant
 import com.shentu.paper.model.entity.SmsError

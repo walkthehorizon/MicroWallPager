@@ -9,10 +9,10 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.ToastUtils
-import com.jess.arms.base.BaseFragment
-import com.jess.arms.integration.RepositoryManager
-import com.jess.arms.mvp.IPresenter
-import com.jess.arms.utils.ArmsUtils
+import com.micro.base.BaseFragment
+import com.micro.integration.RepositoryManager
+import com.micro.mvp.IPresenter
+import com.micro.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.shentu.paper.R
@@ -25,7 +25,6 @@ import com.shentu.paper.model.response.WallpaperPageResponse
 import com.shentu.paper.mvp.contract.HomeRankContract
 import com.shentu.paper.mvp.ui.adapter.HomeRankAdapter
 import com.shentu.paper.mvp.ui.browser.PictureBrowserActivity
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home_new.smartRefresh
 import kotlinx.android.synthetic.main.fragment_home_rank.*
 import me.jessyan.rxerrorhandler.core.RxErrorHandler

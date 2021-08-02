@@ -4,8 +4,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.View
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.jess.arms.integration.lifecycle.FragmentLifecycleable
-import com.jess.arms.mvp.IView
+import com.micro.integration.lifecycle.FragmentLifecycleable
+import com.micro.mvp.IView
 import com.shentu.paper.R
 import com.trello.rxlifecycle2.android.FragmentEvent
 import io.reactivex.subjects.BehaviorSubject

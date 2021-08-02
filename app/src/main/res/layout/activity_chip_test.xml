@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.shentu.paper.mvp.ui.widget.PullHeadLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultPullHeight="60dp">
+
+        <TextView
+            android:id="@+id/tvHead"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/red"
+            android:gravity="center"
+            android:text="张三丰无敌"
+            android:textSize="20sp" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/pink">
+
+                <TextView
+                    android:layout_width="72dp"
+                    android:layout_height="2000dp"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:text="好人会有好报的,大爷做好人好事,以后周边邻里都会去你家买买买的。 这个时候帮助别人就是帮助自己。遇到困难的时候,别人也会伸出援手的! 原标题:郑州小卖部大爷为居民免费供电 网友:好人..."
+                    android:textSize="36sp" />
+
+            </FrameLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </com.shentu.paper.mvp.ui.widget.PullHeadLayout>
+
+
+</FrameLayout>
+

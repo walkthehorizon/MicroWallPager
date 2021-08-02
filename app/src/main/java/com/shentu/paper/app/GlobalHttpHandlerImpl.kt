@@ -5,7 +5,7 @@ import android.os.Build
 import android.provider.Settings
 import android.text.TextUtils
 import com.blankj.utilcode.util.SPUtils
-import com.jess.arms.http.GlobalHttpHandler
+import com.micro.http.GlobalHttpHandler
 import com.shentu.paper.BuildConfig
 import com.shentu.paper.app.HkUserManager.token
 import com.shentu.paper.app.HkUserManager.uid

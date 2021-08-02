@@ -21,7 +21,7 @@ import com.blankj.utilcode.util.SPUtils
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
-import com.jess.arms.integration.AppManager
+import com.micro.integration.AppManager
 import com.shentu.paper.BuildConfig
 import com.shentu.paper.app.AppLifecycleImpl
 import timber.log.Timber

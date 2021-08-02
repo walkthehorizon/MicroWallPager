@@ -29,8 +29,8 @@ import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.github.piasy.biv.BigImageViewer
 import com.google.android.material.button.MaterialButton
-import com.jess.arms.base.BaseActivity
-import com.jess.arms.utils.ArmsUtils
+import com.micro.base.BaseActivity
+import com.micro.utils.ArmsUtils
 import com.mob.moblink.MobLink
 import com.mob.moblink.Scene
 import com.mob.moblink.SceneRestorable

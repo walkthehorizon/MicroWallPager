@@ -4,10 +4,10 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.jess.arms.base.BaseActivity
-import com.jess.arms.integration.RepositoryManager
-import com.jess.arms.mvp.IPresenter
-import com.jess.arms.mvp.IView
+import com.micro.base.BaseActivity
+import com.micro.integration.RepositoryManager
+import com.micro.mvp.IPresenter
+import com.micro.mvp.IView
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.shentu.paper.R

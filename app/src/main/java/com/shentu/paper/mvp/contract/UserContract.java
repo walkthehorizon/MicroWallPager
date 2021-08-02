@@ -3,8 +3,8 @@ package com.shentu.paper.mvp.contract;
 
 import android.app.Activity;
 
-import com.jess.arms.mvp.IModel;
-import com.jess.arms.mvp.IView;
+import com.micro.mvp.IModel;
+import com.micro.mvp.IView;
 import com.shentu.paper.model.entity.MicroUser;
 
 import java.util.List;

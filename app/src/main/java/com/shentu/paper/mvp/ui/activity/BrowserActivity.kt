@@ -10,8 +10,8 @@ import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import androidx.core.content.ContextCompat
-import com.jess.arms.base.BaseActivity
-import com.jess.arms.mvp.IPresenter
+import com.micro.base.BaseActivity
+import com.micro.mvp.IPresenter
 import com.just.agentweb.AgentWeb
 import com.just.agentweb.DefaultWebClient
 import com.just.agentweb.MiddlewareWebChromeBase

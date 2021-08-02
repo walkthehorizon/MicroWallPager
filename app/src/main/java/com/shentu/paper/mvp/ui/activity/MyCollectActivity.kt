@@ -6,7 +6,6 @@ import android.transition.Slide
 import android.view.Gravity
 import android.view.View
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,8 +15,8 @@ import com.afollestad.materialdialogs.customview.customView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.jess.arms.base.BaseActivity
-import com.jess.arms.utils.ArmsUtils
+import com.micro.base.BaseActivity
+import com.micro.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.scwang.smart.refresh.layout.api.RefreshLayout

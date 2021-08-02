@@ -1,6 +1,6 @@
 package com.shentu.paper.app
 
-import com.jess.arms.base.BaseApplication
+import com.micro.base.BaseApplication
 import dagger.hilt.android.HiltAndroidApp
 
 /**

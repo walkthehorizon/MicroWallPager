@@ -9,10 +9,10 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.TimeUtils
-import com.jess.arms.base.BaseFragment
-import com.jess.arms.integration.RepositoryManager
-import com.jess.arms.mvp.IPresenter
-import com.jess.arms.mvp.IView
+import com.micro.base.BaseFragment
+import com.micro.integration.RepositoryManager
+import com.micro.mvp.IPresenter
+import com.micro.mvp.IView
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.shentu.paper.R

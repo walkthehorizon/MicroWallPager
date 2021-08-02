@@ -1,7 +1,7 @@
 package com.shentu.paper.app.page;
 
-import com.jess.arms.integration.IRepositoryManager;
-import com.jess.arms.mvp.BaseModel;
+import com.micro.integration.IRepositoryManager;
+import com.micro.mvp.BaseModel;
 import com.shentu.paper.model.api.service.MicroService;
 
 /**

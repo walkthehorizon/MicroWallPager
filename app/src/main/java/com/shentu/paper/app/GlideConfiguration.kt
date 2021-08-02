@@ -14,8 +14,7 @@ import com.bumptech.glide.load.engine.cache.LruResourceCache
 import com.bumptech.glide.load.engine.cache.MemorySizeCalculator
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
-import com.jess.arms.integration.OkHttpUrlLoader
-import com.jess.arms.utils.ArmsUtils
+import com.micro.integration.OkHttpUrlLoader
 import com.shentu.paper.app.config.Config
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

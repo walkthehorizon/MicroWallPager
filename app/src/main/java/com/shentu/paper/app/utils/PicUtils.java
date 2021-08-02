@@ -7,9 +7,7 @@ import android.webkit.URLUtil;
 import com.blankj.utilcode.util.PathUtils;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
-import com.jess.arms.utils.ArmsUtils;
 import com.shentu.paper.R;
-import com.shentu.paper.app.AppLifecycleImpl;
 import com.shentu.paper.app.GlideConfiguration;
 import com.shentu.paper.app.config.Config;
 

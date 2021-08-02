@@ -163,7 +163,7 @@ dokitExt {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation rootProject.ext.dependencies["core"]
-    api project(':arms')
+    api project(':base')
 //    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation rootProject.ext.dependencies["kotlinx-coroutines-android"]
 //    implementation rootProject.ext.dependencies["kotlinx-coroutines-core"]

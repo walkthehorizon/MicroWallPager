@@ -10,8 +10,8 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.jess.arms.base.BaseActivity
-import com.jess.arms.utils.ArmsUtils
+import com.micro.base.BaseActivity
+import com.micro.utils.ArmsUtils
 import com.shentu.paper.R
 import com.shentu.paper.app.Constant
 import com.shentu.paper.app.HkUserManager

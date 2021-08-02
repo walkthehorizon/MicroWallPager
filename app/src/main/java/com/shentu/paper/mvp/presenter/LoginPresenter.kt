@@ -4,7 +4,7 @@ import android.app.Application
 import com.blankj.utilcode.util.SPUtils
 import com.google.gson.Gson
 
-import com.jess.arms.mvp.BasePresenter
+import com.micro.mvp.BasePresenter
 import com.shentu.paper.app.Constant
 import com.shentu.paper.app.HkUserManager
 import com.shentu.paper.app.StateCode

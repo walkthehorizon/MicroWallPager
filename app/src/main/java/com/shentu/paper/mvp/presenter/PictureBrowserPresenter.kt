@@ -5,7 +5,7 @@ import android.content.Context
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
 
-import com.jess.arms.mvp.BasePresenter
+import com.micro.mvp.BasePresenter
 import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.HkUserManager
 import com.shentu.paper.app.utils.RxUtils

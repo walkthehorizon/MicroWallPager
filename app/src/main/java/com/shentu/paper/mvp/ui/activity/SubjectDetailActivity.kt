@@ -11,8 +11,8 @@ import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ToastUtils
-import com.jess.arms.base.BaseActivity
-import com.jess.arms.utils.ArmsUtils
+import com.micro.base.BaseActivity
+import com.micro.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.shentu.paper.R

@@ -4,8 +4,8 @@ package com.shentu.paper.app.utils;
 import android.text.TextUtils;
 
 import com.blankj.utilcode.util.ToastUtils;
-import com.jess.arms.mvp.IView;
-import com.jess.arms.utils.RxLifecycleUtils;
+import com.micro.mvp.IView;
+import com.micro.utils.RxLifecycleUtils;
 import com.shentu.paper.model.response.BasePageResponse;
 import com.shentu.paper.model.response.BaseResponse;
 

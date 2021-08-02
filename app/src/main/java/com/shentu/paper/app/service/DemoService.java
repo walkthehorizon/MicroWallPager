@@ -1,7 +1,7 @@
 
 package com.shentu.paper.app.service;
 
-import com.jess.arms.base.BaseService;
+import com.micro.base.BaseService;
 
 /**
  * ================================================

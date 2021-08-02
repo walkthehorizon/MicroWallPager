@@ -8,13 +8,11 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.jess.arms.integration.IRepositoryManager
-import com.jess.arms.integration.RepositoryManager
+import com.micro.integration.RepositoryManager
 import com.shentu.paper.model.api.service.MicroService
 import com.shentu.paper.model.api.source.HomePagingSource
 import com.shentu.paper.model.entity.Banner
 import com.shentu.paper.model.entity.Wallpaper
-import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

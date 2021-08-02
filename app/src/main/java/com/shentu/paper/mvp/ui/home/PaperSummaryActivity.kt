@@ -2,8 +2,8 @@ package com.shentu.paper.mvp.ui.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.jess.arms.base.BaseActivity
-import com.jess.arms.mvp.IPresenter
+import com.micro.base.BaseActivity
+import com.micro.mvp.IPresenter
 import com.shentu.paper.R
 import com.shentu.paper.mvp.ui.adapter.PaperSummaryVpAdapter
 import kotlinx.android.synthetic.main.activity_paper_summary.*

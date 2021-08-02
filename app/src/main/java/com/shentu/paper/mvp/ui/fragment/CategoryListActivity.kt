@@ -4,8 +4,8 @@ import android.os.Bundle
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
-import com.jess.arms.base.BaseActivity
-import com.jess.arms.mvp.IPresenter
+import com.micro.base.BaseActivity
+import com.micro.mvp.IPresenter
 import com.shentu.paper.R
 import kotlinx.android.synthetic.main.activity_category_list.*
 

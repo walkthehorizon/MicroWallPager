@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.jess.arms.base.BaseFragment
-import com.jess.arms.utils.ArmsUtils
+import com.micro.base.BaseFragment
+import com.micro.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.scwang.smart.refresh.layout.api.RefreshLayout

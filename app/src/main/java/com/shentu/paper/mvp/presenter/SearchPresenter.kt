@@ -7,7 +7,7 @@ import com.blankj.utilcode.util.SPUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-import com.jess.arms.mvp.BasePresenter
+import com.micro.mvp.BasePresenter
 import com.shentu.paper.app.utils.LimitQueue
 import com.shentu.paper.app.utils.RxUtils
 import com.shentu.paper.model.response.SubjectPageResponse

@@ -9,8 +9,11 @@ buildscript {
             url 'https://maven.aliyun.com/repository/public/'
         }
         maven {
-            url "http://mvn.mob.com/android"
+            url "https://mvn.mob.com/android"
         }
+        maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
+        maven { url "https://maven.aliyun.com/repository/google" }
+        maven { url "https://maven.aliyun.com/repository/public" }
         google()
         mavenCentral()
         jcenter()
@@ -41,9 +44,8 @@ allprojects {
         maven {
             url "https://dl.bintray.com/tencentqcloudterminal/maven"
         }
-        maven {
-            url 'https://maven.aliyun.com/repository/public/'
-        }
+        maven { url "https://maven.aliyun.com/repository/google" }
+        maven { url "https://maven.aliyun.com/repository/public" }
         google()
         mavenCentral()
         jcenter()

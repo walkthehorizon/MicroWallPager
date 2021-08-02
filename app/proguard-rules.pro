@@ -17,13 +17,13 @@
 
 
 ################common###############
--keep public class * implements com.jess.arms.integration.ConfigModule
+-keep public class * implements com.micro.integration.ConfigModule
 
 -keep class com.shentu.paper.mvp.ui.widget.** { *; }
 -keep class com.shentu.paper.model.** { *; }#自定义实体，理论上全都实现Serializable
 
  #实体类不参与混淆
--keep class com.jess.arms.widget.** { *; } #自定义控件不参与混淆
+-keep class com.micro.arms.widget.** { *; } #自定义控件不参与混淆
 -keep class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator *;
 }

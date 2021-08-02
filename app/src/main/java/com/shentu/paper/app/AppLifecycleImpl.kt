@@ -12,7 +12,7 @@ import com.didichuxing.doraemonkit.DoKit
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
 import com.horizon.netbus.NetBus
-import com.jess.arms.base.delegate.AppLifecycles
+import com.micro.base.delegate.AppLifecycles
 import com.kingja.loadsir.core.LoadSir
 import com.liulishuo.filedownloader.FileDownloader
 import com.mob.MobSDK

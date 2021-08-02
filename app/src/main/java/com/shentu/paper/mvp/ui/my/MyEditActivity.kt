@@ -15,8 +15,8 @@ import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.PermissionUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.jess.arms.base.BaseActivity
-import com.jess.arms.utils.ArmsUtils
+import com.micro.base.BaseActivity
+import com.micro.utils.ArmsUtils
 import com.shentu.paper.R
 import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.HkUserManager
