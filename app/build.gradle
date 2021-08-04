@@ -4,7 +4,8 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.mob.sdk'
 apply plugin: 'dagger.hilt.android.plugin'
-apply plugin: 'com.didi.dokit'
+//apply plugin: 'com.didi.dokit'
+apply plugin: 'com.horizon.bigimgcheck'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -14,9 +15,6 @@ android {
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
-    }
-    viewBinding {
-        enabled = true
     }
     defaultConfig {
         applicationId "com.shentu.paper"
@@ -82,7 +80,7 @@ android {
 
     kotlinOptions {
         // work-runtime-ktx 2.1.0 and above now requires Java 8
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_1_8
 
         // Enable Coroutines and Flow APIs
         freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
@@ -139,26 +137,19 @@ kapt {
     }
 }
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
-
-
-dokitExt {
-    //通用设置
-    comm {
-        //地图经纬度开关
-        gpsSwitch false
-        //网络开关
-        networkSwitch false
-        //大图开关
-        bigImgSwitch true
-        //webView js 抓包
-        webViewSwitch false
-    }
-}
+//dokitExt {
+//    //通用设置
+//    comm {
+//        //地图经纬度开关
+//        gpsSwitch false
+//        //网络开关
+//        networkSwitch false
+//        //大图开关
+//        bigImgSwitch true
+//        //webView js 抓包
+//        webViewSwitch false
+//    }
+//}
 
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')

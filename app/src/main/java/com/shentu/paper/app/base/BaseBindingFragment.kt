@@ -1,4 +1,4 @@
-package com.micro.base
+package com.shentu.paper.app.base//package com.micro.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

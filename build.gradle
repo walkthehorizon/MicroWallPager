@@ -6,17 +6,14 @@ buildscript {
 
     repositories {
         maven {
-            url 'https://maven.aliyun.com/repository/public/'
-        }
-        maven {
             url "https://mvn.mob.com/android"
         }
         maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
         maven { url "https://maven.aliyun.com/repository/google" }
         maven { url "https://maven.aliyun.com/repository/public" }
-        google()
-        mavenCentral()
-        jcenter()
+//        google()
+//        mavenCentral()
+//        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.2'
@@ -46,9 +43,9 @@ allprojects {
         }
         maven { url "https://maven.aliyun.com/repository/google" }
         maven { url "https://maven.aliyun.com/repository/public" }
-        google()
-        mavenCentral()
-        jcenter()
+//        google()
+//        mavenCentral()
+//        jcenter()
     }
 }
 
