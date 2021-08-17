@@ -1,5 +1,6 @@
 package com.shentu.paper.app
 
+import android.os.StrictMode
 import com.micro.base.BaseApplication
 import dagger.hilt.android.HiltAndroidApp
 

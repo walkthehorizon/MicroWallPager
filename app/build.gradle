@@ -5,12 +5,11 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.mob.sdk'
 apply plugin: 'dagger.hilt.android.plugin'
 //apply plugin: 'com.didi.dokit'
-apply plugin: 'com.horizon.bigimgcheck'
+//apply plugin: 'doubleTap'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
-    buildToolsVersion rootProject.ext.android["buildToolsVersion"]
-//    useLibrary 'org.apache.http.legacy'
+    //    useLibrary 'org.apache.http.legacy'
 
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
@@ -91,6 +90,11 @@ android {
     }
 }
 
+//doubleTab {
+//    injectClassName = "com.shentu.paper.mvp.ui.activity.MainActivity"
+//    injectFunctionName = "isNotDoubleTap"
+//}
+
 MobSDK {
     appKey "2726f3a69c300"
     appSecret "5ef67a98fcae47f91163577728158ac3"
@@ -145,7 +149,7 @@ kapt {
 //        //网络开关
 //        networkSwitch false
 //        //大图开关
-//        bigImgSwitch true
+//        bigImgSwitch false
 //        //webView js 抓包
 //        webViewSwitch false
 //    }
@@ -155,13 +159,15 @@ dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation rootProject.ext.dependencies["core"]
     api project(':base')
-//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation rootProject.ext.dependencies["fragment-ktx"]
+    implementation  rootProject.ext.dependencies["activity-ktx"]
+
     implementation rootProject.ext.dependencies["kotlinx-coroutines-android"]
-//    implementation rootProject.ext.dependencies["kotlinx-coroutines-core"]
     //room
-    kapt rootProject.ext.dependencies["room-compiler"]
-    implementation rootProject.ext.dependencies["room-runtime"]
-    implementation rootProject.ext.dependencies["room-ktx"]
+//    kapt rootProject.ext.dependencies["room-compiler"]
+//    implementation rootProject.ext.dependencies["room-runtime"]
+//    implementation rootProject.ext.dependencies["room-ktx"]
     //lifecycle
     implementation rootProject.ext.dependencies["lifecycle-viewmodel-ktx"]
     implementation rootProject.ext.dependencies["lifecycle-livedata-ktx"]
@@ -172,19 +178,18 @@ dependencies {
     implementation rootProject.ext.dependencies["navigation-ui-ktx"]
     implementation rootProject.ext.dependencies["navigation-fragment-ktx"]
     implementation rootProject.ext.dependencies["paging-runtime"]
-    implementation rootProject.ext.dependencies["work-runtime-ktx"]
+//    implementation rootProject.ext.dependencies["work-runtime-ktx"]
 
     implementation rootProject.ext.dependencies["viewpager2"]
     implementation(rootProject.ext.dependencies["recyclerview"])
-    implementation rootProject.ext.dependencies["viewpager2"]
 
     debugImplementation (rootProject.ext.dependencies["dokitx"]){
         exclude group: 'com.google.zxing' , module: 'core'
     }
     releaseImplementation rootProject.ext.dependencies["dokitx-no-op"]
-    debugImplementation (rootProject.ext.dependencies["dokitx-mc"]){
-        exclude group: 'com.google.zxing' , module: 'core'
-    }
+//    debugImplementation (rootProject.ext.dependencies["dokitx-mc"]){
+//        exclude group: 'com.google.zxing' , module: 'core'
+//    }
 
     //support
     implementation rootProject.ext.dependencies["agentweb"]
@@ -194,13 +199,12 @@ dependencies {
     implementation rootProject.ext.dependencies["multidex"]
     implementation rootProject.ext.dependencies["material"]
     //tools
-//    implementation rootProject.ext.dependencies["hotfix"]
     implementation rootProject.ext.dependencies["progressmanager"]
-    implementation rootProject.ext.dependencies["retrofit-url-manager"]
-    implementation rootProject.ext.dependencies["lifecyclemodel"]
-    implementation rootProject.ext.dependencies["logger"]
+//    implementation rootProject.ext.dependencies["retrofit-url-manager"]
+//    implementation rootProject.ext.dependencies["lifecyclemodel"]
+//    implementation rootProject.ext.dependencies["logger"]
     implementation rootProject.ext.dependencies["utilcode"]
-    implementation rootProject.ext.dependencies["glide-transformations"]
+//    implementation rootProject.ext.dependencies["glide-transformations"]
     implementation rootProject.ext.dependencies["glide"]
     implementation rootProject.ext.dependencies["okhttp3"]
     //    implementation rootProject.ext.dependencies["glide-loader-okhttp3"]
@@ -215,8 +219,6 @@ dependencies {
     }
     implementation rootProject.ext.dependencies["arouter"]
     kapt rootProject.ext.dependencies["arouter-compiler"]
-//    kapt rootProject.ext.dependencies["dagger2-compiler"]
-//    kapt rootProject.ext.dependencies["dagger2-android-processor"]
     kapt rootProject.ext.dependencies["hilt-android-compiler"]
     implementation rootProject.ext.dependencies['hilt-android']
 
@@ -228,7 +230,7 @@ dependencies {
     implementation rootProject.ext.dependencies["circleimageview"]
     implementation rootProject.ext.dependencies["smartrefresh"]
     implementation rootProject.ext.dependencies["refresh-header-material"]
-    implementation rootProject.ext.dependencies["photoview"]
+//    implementation rootProject.ext.dependencies["photoview"]
     implementation rootProject.ext.dependencies["autosize"]
     //    implementation rootProject.ext.dependencies["material-dialogs"]
     implementation rootProject.ext.dependencies["mdialogs-core"]
@@ -242,6 +244,11 @@ dependencies {
 //    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2'
     //bigImage
     implementation rootProject.ext.dependencies["bigImageViewer"]
-    implementation 'com.github.piasy:GlideImageLoader:1.8.0'
-    implementation rootProject.ext.dependencies["bigGifDrawable"]
+    implementation 'com.github.piasy:GlideImageLoader:1.8.1'
+//    implementation rootProject.ext.dependencies["bigGifDrawable"]
+
+//    implementation 'com.github.huage2580:PermissionMonitor:1.0.1'
+
+//    api 'com.github.tiann:epic:0.11.2'
+
 }

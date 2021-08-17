@@ -17,6 +17,7 @@ import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.FileIOUtils
 import com.blankj.utilcode.util.ImageUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.micro.base.BaseActivity
 import com.micro.mvp.IPresenter
 import com.shentu.paper.R
@@ -25,7 +26,6 @@ import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.utils.HkUtils
 import com.shentu.paper.app.utils.PicUtils
 import com.shentu.paper.model.entity.Wallpaper
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.activity_share.*
 import kotlinx.android.synthetic.main.layout_custom_share.*
 
@@ -47,8 +47,7 @@ class PictureShareActivity : BaseActivity<IPresenter>() {
         ARouter.getInstance().inject(this)
         GlideApp.with(this)
                 .load(paper.url)
-                .transform(RoundedCornersTransformation(ConvertUtils.dp2px(10f)
-                        , 0, RoundedCornersTransformation.CornerType.TOP))
+                .transform(RoundedCorners(ConvertUtils.dp2px(10f)) )
                 .into(ivShare)
         ivCode.post {
             val qrBitmap = HkUtils.instance.createQRImage(Constant.BASE_WALLPAPER_SHARE_URL + paper.id

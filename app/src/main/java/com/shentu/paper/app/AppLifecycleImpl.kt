@@ -47,6 +47,7 @@ class AppLifecycleImpl : AppLifecycles {
         if (BuildConfig.DEBUG) { //Timber初始化
             Timber.plant(DebugTree())
         }
+//        PermissionMonitor.start(false)
         Utils.init(application)
         NetBus.getInstance().init(application)
         if (BuildConfig.DEBUG) { // 这两行必须写在init之前，否则这些配置在init过程中将无效

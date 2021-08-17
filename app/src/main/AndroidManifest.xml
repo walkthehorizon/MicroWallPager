@@ -51,10 +51,10 @@
         <activity
             android:name="com.shentu.paper.mvp.ui.activity.MainActivity"
             android:theme="@style/AppTheme.Splash">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".mvp.ui.browser.PictureBrowserActivity"
@@ -79,12 +79,12 @@
 
         <activity android:name=".mvp.ui.activity.TestActivity"/>
 
-        <activity android:name=".mvp.ui.activity.TestChipActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+<!--        <activity android:name=".mvp.ui.activity.TestChipActivity">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
     </application>
 
 </manifest>

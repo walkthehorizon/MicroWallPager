@@ -16,7 +16,6 @@ import com.blankj.utilcode.util.ToastUtils
 import com.github.piasy.biv.loader.ImageLoader
 import com.micro.base.BaseFragment
 import com.micro.mvp.IPresenter
-import com.shentu.paper.app.bigimage.GlideImageViewFactory
 import com.shentu.paper.app.utils.HkUtils
 import com.shentu.paper.app.utils.PicUtils
 import com.shentu.paper.model.entity.Wallpaper
@@ -57,7 +56,6 @@ class PictureFragment : BaseFragment<IPresenter>() {
     override fun initData(savedInstanceState: Bundle?) {
         pos = arguments?.get("pos") as Int
         wallpaper = requireArguments()["wallpaper"] as Wallpaper
-        photoView.setImageViewFactory(GlideImageViewFactory())
         photoView.setOnClickListener {
             callback?.switchNavigation()
         }
@@ -152,29 +150,29 @@ class PictureFragment : BaseFragment<IPresenter>() {
     fun savePicture(destUrl: String, curFile: File?) {
         Timber.d("save picture url %s", destUrl)
         val destPath = PicUtils.getInstance().getDownloadPicturePath(mContext, destUrl)
-        if (false) {
-            val values = ContentValues()
-            values.put(MediaStore.Images.Media.MIME_TYPE, "image/*")
-            values.put(MediaStore.Images.Media.DISPLAY_NAME, URLUtil.guessFileName(destUrl
-                    , null, null))
-            values.put(MediaStore.Images.ImageColumns.IS_PENDING, true)
-            values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM + File.separator + "萌幻Cos")
-            val uri = requireContext().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-            if (uri == null) {
-                ToastUtils.showShort("下载失败 uri null")
-                return
-            }
-            val ous: ParcelFileDescriptor? = context?.contentResolver?.openFileDescriptor(AndPermission.getFileUri(context, File(destPath)), "rw")
-            val ins = context?.contentResolver?.openFileDescriptor(AndPermission.getFileUri(context, curFile), "rw")
-            if (ins == null || ous == null) {
-                ToastUtils.showShort("下载失败 ins==null||ous==null ")
-                return
-            }
-            android.os.FileUtils.copy(ins.fileDescriptor, ous.fileDescriptor)
-            values.clear()
-            values.put(MediaStore.Images.ImageColumns.IS_PENDING, false)
-            uri.let { context?.contentResolver?.update(it, values, null, null) }
-        } else {
+//        if (false) {
+//            val values = ContentValues()
+//            values.put(MediaStore.Images.Media.MIME_TYPE, "image/*")
+//            values.put(MediaStore.Images.Media.DISPLAY_NAME, URLUtil.guessFileName(destUrl
+//                    , null, null))
+//            values.put(MediaStore.Images.ImageColumns.IS_PENDING, true)
+//            values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM + File.separator + "萌幻Cos")
+//            val uri = requireContext().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+//            if (uri == null) {
+//                ToastUtils.showShort("下载失败 uri null")
+//                return
+//            }
+//            val ous: ParcelFileDescriptor? = context?.contentResolver?.openFileDescriptor(AndPermission.getFileUri(context, File(destPath)), "rw")
+//            val ins = context?.contentResolver?.openFileDescriptor(AndPermission.getFileUri(context, curFile), "rw")
+//            if (ins == null || ous == null) {
+//                ToastUtils.showShort("下载失败 ins==null||ous==null ")
+//                return
+//            }
+//            android.os.FileUtils.copy(ins.fileDescriptor, ous.fileDescriptor)
+//            values.clear()
+//            values.put(MediaStore.Images.ImageColumns.IS_PENDING, false)
+//            uri.let { context?.contentResolver?.update(it, values, null, null) }
+//        } else {
             val created = FileUtils.createOrExistsFile(destPath)
             if (!created) {
                 ToastUtils.showShort("创建文件失败")
@@ -187,7 +185,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
             }
             MediaStore.Images.Media.insertImage(context?.contentResolver,
                     destPath, URLUtil.guessFileName(destUrl, null, null), "")
-        }
+//        }
         ToastUtils.showShort("图片已保存在 手机相册》萌幻Cos")
     }
 
