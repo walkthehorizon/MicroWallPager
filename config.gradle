@@ -59,8 +59,8 @@ ext {
             "lifecycle-runtime-ktx"         : "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version",
             "lifecycle-viewmodel-savedstate": "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version",
             "lifecycle-common-java8"        : "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version",
-            "navigation-ui-ktx"             : "androidx.navigation:navigation-fragment-ktx:$nav_version",
-            "navigation-fragment-ktx"       : "androidx.navigation:navigation-ui-ktx:$nav_version",
+            "navigation-fragment-ktx"       : "androidx.navigation:navigation-fragment-ktx:$nav_version",
+            "navigation-ui-ktx"             : "androidx.navigation:navigation-ui-ktx:$nav_version",
             "paging-runtime"                : "androidx.paging:paging-runtime:$paging_version",
             "work-runtime-ktx"              : "androidx.work:work-runtime-ktx:$work_version",
 

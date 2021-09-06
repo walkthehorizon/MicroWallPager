@@ -29,6 +29,9 @@ class RecommendNewAdapter : PagingDataAdapter<Wallpaper, BaseViewHolder>(object 
         }
 
         override fun areContentsTheSame(oldItem: Wallpaper, newItem: Wallpaper): Boolean {
+            if(oldItem.collected != oldItem.collected){
+                return false
+            }
             return oldItem == newItem
         } }) {
 

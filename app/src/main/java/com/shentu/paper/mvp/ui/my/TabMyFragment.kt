@@ -2,10 +2,9 @@ package com.shentu.paper.mvp.ui.my
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.SingleChoiceListener
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
@@ -15,8 +14,6 @@ import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.TimeUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.micro.base.BaseActivity
-import com.micro.base.BaseFragment
-import com.micro.integration.RepositoryManager
 import com.micro.utils.ArmsUtils
 import com.shentu.paper.BuildConfig
 import com.shentu.paper.R
@@ -24,39 +21,28 @@ import com.shentu.paper.app.Constant
 import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.GlideConfiguration
 import com.shentu.paper.app.HkUserManager
+import com.shentu.paper.app.base.BaseBindingFragment
 import com.shentu.paper.app.config.Config
 import com.shentu.paper.app.utils.HkUtils
-import com.shentu.paper.app.utils.RxUtils
 import com.shentu.paper.databinding.FragmentMyBinding
-import com.shentu.paper.model.api.service.MicroService
 import com.shentu.paper.model.entity.AppUpdate
-import com.shentu.paper.model.response.BaseResponse
 import com.shentu.paper.mvp.contract.MyContract
-import com.shentu.paper.mvp.presenter.MainPresenter
 import com.shentu.paper.mvp.ui.activity.SettingMoreActivity
 import com.shentu.paper.mvp.ui.login.LoginActivity
 import com.shentu.paper.mvp.ui.update.AppUpdateDialog
+import com.shentu.paper.viewmodels.UpdateViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_my.*
-import me.jessyan.rxerrorhandler.core.RxErrorHandler
-import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
 import org.greenrobot.eventbus.EventBus
 import java.io.File
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class TabMyFragment : BaseFragment<MainPresenter>(), MyContract.View {
+class TabMyFragment : BaseBindingFragment<FragmentMyBinding>(), MyContract.View {
 
-    private lateinit var binding: FragmentMyBinding
-
-    @Inject
-    lateinit var repositoryManager: RepositoryManager
-
-    @Inject
-    lateinit var errorHandler: RxErrorHandler
+    private val updateViewModel by viewModels<UpdateViewModel>()
 
     companion object {
         fun newInstance(): TabMyFragment {
@@ -66,35 +52,31 @@ class TabMyFragment : BaseFragment<MainPresenter>(), MyContract.View {
 
     private lateinit var glideCache: File
 
-    override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentMyBinding.inflate(layoutInflater)
-        return binding.root
-    }
-
-    override fun initData(savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         glideCache = File(Config.cachePath, GlideConfiguration.IMAGE_DISK_CACHE_PATH)
         refreshUser()
         rlHead.setOnClickListener { clickHead() }
         itCollect.setOnClickListener { clickCollect() }
         itUpdate.setEndValue(BuildConfig.VERSION_NAME)
         itUpdate.setOnClickListener {
-            checkUpdate(true)
+            updateViewModel.checkUpdate(true)
         }
         itCache.setOnClickListener { clickCache() }
         itFeedback.setOnClickListener { clickFeedback() }
         itMore.setOnClickListener {
-            startActivity(Intent(mContext, SettingMoreActivity::class.java))
+            startActivity(Intent(requireContext(), SettingMoreActivity::class.java))
         }
         rlHead.setOnClickListener {
             if (!HkUserManager.isLogin) {
                 LoginActivity.open()
                 return@setOnClickListener
             }
-            startActivity(Intent(mContext, MyEditActivity::class.java))
+            startActivity(Intent(requireContext(), MyEditActivity::class.java))
         }
         itMoney.setOnClickListener {
             if (!HkUserManager.isLogin) {
-                launchActivity(Intent(mContext, LoginActivity::class.java))
+                launchActivity(Intent(requireContext(), LoginActivity::class.java))
                 return@setOnClickListener
             }
         }
@@ -104,38 +86,26 @@ class TabMyFragment : BaseFragment<MainPresenter>(), MyContract.View {
             binding.itMode.setEndValue(ContentMode.getContentMode(curMode).name)
             binding.itMode.setOnClickListener {
                 if (!HkUserManager.isLogin) {
-                    launchActivity(Intent(mContext, LoginActivity::class.java))
+                    launchActivity(Intent(requireContext(), LoginActivity::class.java))
                     return@setOnClickListener
                 }
                 showContentModeDialog()
             }
         }
         if (!TimeUtils.isToday(SPUtils.getInstance().getLong(Constant.LAST_NOTIFY_TIME))) {
-            checkUpdate(false)
+            updateViewModel.checkUpdate(false)
         }
+        updateViewModel.liveData.observe(viewLifecycleOwner , {
+            if (it.versionCode > BuildConfig.VERSION_CODE) {
+                itUpdate.setEndValue("有新版本：${it.versionName}")
+                showUpdateDialog(it)
+                return@observe
+            }
+            if (it.isUser) {
+                ToastUtils.showShort("已是最新版本")
+            }
+        })
     }
-
-    private fun checkUpdate(isUser: Boolean) {
-        repositoryManager
-                .obtainRetrofitService(MicroService::class.java)
-                .updateInfo
-                .compose(RxUtils.applyClearSchedulers(this))
-                .subscribe(object : ErrorHandleSubscriber<BaseResponse<AppUpdate>>(errorHandler) {
-                    override fun onNext(response: BaseResponse<AppUpdate>) {
-                        if (!response.isSuccess) {
-                            return
-                        }
-                        if (response.data!!.versionCode > BuildConfig.VERSION_CODE) {
-                            itUpdate.setEndValue("有新版本：${response.data.versionName}")
-                            showUpdateDialog(response.data)
-                        }
-                        if (isUser) {
-                            ToastUtils.showShort("已是最新版本")
-                        }
-                    }
-                })
-    }
-
 
     private fun showContentModeDialog() {
         val curMode = SPUtils.getInstance().getInt(Constant.CONTENT_MODE, HkUserManager.user.defaultContentMode)
@@ -169,7 +139,7 @@ class TabMyFragment : BaseFragment<MainPresenter>(), MyContract.View {
                 else -> R.drawable.ic_im_sex_unsure
             })
             if (user.sex == 2) {
-                ivSex.setColorFilter(ContextCompat.getColor(mContext, R.color.red_trans))
+                ivSex.setColorFilter(ContextCompat.getColor(requireContext(), R.color.red_trans))
             } else {
                 ivSex.clearColorFilter()
             }
@@ -180,11 +150,11 @@ class TabMyFragment : BaseFragment<MainPresenter>(), MyContract.View {
             when {
                 HkUserManager.user.vip -> {
                     tvIdentify.text = "VIP"
-                    tvIdentify.setTextColor(ContextCompat.getColor(mContext, R.color.red_dark))
+                    tvIdentify.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_dark))
                 }
 //                HkUserManager.instance.user.svip -> {
 //                    tvIdentify.text = "SVIP"
-//                    tvIdentify.setTextColor(ContextCompat.getColor(mContext, R.color.yellow_dark))
+//                    tvIdentify.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow_dark))
 //                }
                 else -> {
                     tvIdentify.text = ""
@@ -207,18 +177,18 @@ class TabMyFragment : BaseFragment<MainPresenter>(), MyContract.View {
 
     private fun clickHead() {
         if (!HkUserManager.isLogin) {
-            launchActivity(Intent(mContext, LoginActivity::class.java))
+            launchActivity(Intent(requireContext(), LoginActivity::class.java))
             return
         }
     }
 
     private fun clickCollect() {
         if (!HkUserManager.isLogin) {
-            launchActivity(Intent(mContext, LoginActivity::class.java))
+            launchActivity(Intent(requireContext(), LoginActivity::class.java))
             return
         }
         ARouter.getInstance().build("/activity/my/collect/")
-                .navigation(mContext)
+                .navigation(requireContext())
     }
 
     /**
@@ -229,11 +199,11 @@ class TabMyFragment : BaseFragment<MainPresenter>(), MyContract.View {
     }
 
     private fun clickCache() {
-        Completable.fromAction { GlideApp.get(mContext).clearDiskCache() }
+        Completable.fromAction { GlideApp.get(requireContext()).clearDiskCache() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete {
-                    GlideApp.get(mContext).clearMemory()
+                    GlideApp.get(requireContext()).clearMemory()
                     itCache.setEndValue(FileUtils.getDirSize(glideCache))
                     ToastUtils.showShort("清理完成")
                 }

@@ -3,9 +3,7 @@ package com.shentu.paper.di.module
 import android.content.Context
 import com.shentu.paper.mvp.contract.CategoryContract
 import com.shentu.paper.mvp.model.CategoryModel
-import com.shentu.paper.mvp.ui.activity.MainActivity
-import com.shentu.paper.mvp.ui.fragment.CategoryListActivity
-import com.shentu.paper.mvp.ui.fragment.CategoryListFragment
+import com.shentu.paper.MainActivity
 import com.shentu.paper.mvp.ui.fragment.TabCategoryFragment
 import dagger.Module
 import dagger.Provides

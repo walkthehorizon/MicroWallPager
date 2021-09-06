@@ -55,7 +55,7 @@ class GlobalHttpHandlerImpl(private val context: Context) : GlobalHttpHandler {
 
     // 这里可以在请求服务器之前可以拿到request,做一些操作比如给request统一添加token或者header以及参数加密等操作
     override fun onHttpRequestBefore(chain: Interceptor.Chain, request: Request): Request {
-        Timber.e("load url: %s", request.url().toString())
+        Timber.d("load url: %s", request.url().toString())
         val builder = request.newBuilder()
         val token = token
         if (!TextUtils.isEmpty(token)) {

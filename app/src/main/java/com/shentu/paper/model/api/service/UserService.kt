@@ -1,5 +1,6 @@
 package com.shentu.paper.model.api.service
 
+import com.shentu.paper.app.HkUserManager
 import com.shentu.paper.model.entity.MicroUser
 import com.shentu.paper.model.response.BaseResponse
 import io.reactivex.Observable
@@ -7,11 +8,11 @@ import retrofit2.http.*
 
 interface UserService {
     @GET("sign")
-    fun sign(): Observable<BaseResponse<Int>>
+    suspend fun sign(): BaseResponse<Int>
 
     @Headers("Cache-Control:max-age=0")
     @GET("account/info")
-    fun loginAccount(@Query("uuid") phone: String): Observable<BaseResponse<MicroUser>>
+    suspend fun loginAccount(@Query("uuid") uuid: String = HkUserManager.uuid): BaseResponse<MicroUser>
 
     @FormUrlEncoded
     @POST("account/register/")

@@ -1,4 +1,4 @@
-package com.shentu.paper.mvp.viewmodels
+package com.shentu.paper.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,14 +22,16 @@ import javax.inject.Inject
 class HomeViewModel
 @Inject constructor(private val mRepositoryManager: RepositoryManager) : ViewModel() {
 
-    val bannerLiveData:MutableLiveData<MutableList<Banner>> = MutableLiveData()
+    val bannerLiveData: MutableLiveData<MutableList<Banner>> = MutableLiveData()
 
-    fun getRecommends(clear: Boolean):Flow<PagingData<Wallpaper>> {
+    fun getRecommends(clear: Boolean): Flow<PagingData<Wallpaper>> {
         return Pager(
-            config = PagingConfig(25,enablePlaceholders = false),
-            pagingSourceFactory = {HomePagingSource(
-                mRepositoryManager.obtainRetrofitService(MicroService::class.java)
-            )}
+            config = PagingConfig(25, enablePlaceholders = false),
+            pagingSourceFactory = {
+                HomePagingSource(
+                    mRepositoryManager.obtainRetrofitService(MicroService::class.java)
+                )
+            }
         ).flow.cachedIn(viewModelScope)
     }
 
@@ -37,16 +39,17 @@ class HomeViewModel
         viewModelScope.launch {
             val response = mRepositoryManager.obtainRetrofitService(MicroService::class.java)
                 .getBanners()
-            if(!response.isSuccess){
+            if (!response.isSuccess) {
                 return@launch
             }
             bannerLiveData.postValue(response.data?.content)
         }
     }
 
-    class Factory(private val mRepositoryManager: RepositoryManager) : ViewModelProvider.Factory{
+    class Factory(private val mRepositoryManager: RepositoryManager) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return modelClass.getConstructor(RepositoryManager::class.java).newInstance(mRepositoryManager)
+            return modelClass.getConstructor(RepositoryManager::class.java)
+                .newInstance(mRepositoryManager)
         }
     }
 

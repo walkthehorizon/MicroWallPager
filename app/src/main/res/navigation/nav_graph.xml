@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/bottom_nav_hot">
+
+    <fragment
+        android:id="@+id/bottom_nav_hot"
+        android:name="com.shentu.paper.mvp.ui.home.TabHomeFragment"
+        android:label="TabHomeFragment" />
+
+    <fragment
+        android:id="@+id/bottom_nav_my"
+        android:name="com.shentu.paper.mvp.ui.my.TabMyFragment"
+        android:label="TabMyFragment" />
+
+    <fragment
+        android:id="@+id/pictureBrowserFragment"
+        android:name="com.shentu.paper.mvp.ui.browser.PictureBrowserFragment"
+        android:label="pictureBrowser"
+        tools:layout="@layout/fragment_picture_browser">
+
+        <argument
+            android:name="pictureArgs"
+            app:argType="com.shentu.paper.mvp.ui.browser.PaperSource" />
+
+        <!--        <action android:id="@+id/toPictureBrowser"-->
+        <!--            app:destination="@id/pictureBrowserFragment"/>-->
+    </fragment>
+
+
+
+    <!--    <activity-->
+    <!--        android:id="@+id/paperBrowserActivity"-->
+    <!--        android:name="com.shentu.paper.mvp.ui.browser.PaperBrowserActivity"-->
+    <!--        android:label="PaperBrowserActivity">-->
+
+    <!--       -->
+
+    <!--    </activity>-->
+
+
+</navigation>

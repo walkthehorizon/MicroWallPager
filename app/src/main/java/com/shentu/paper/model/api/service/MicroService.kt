@@ -11,8 +11,9 @@ interface MicroService {
     @get:GET("splash")
     val splash: Observable<SplashAdResponse>
 
-    @get:GET("update")
-    val updateInfo: Observable<BaseResponse<AppUpdate>>
+    @GET("update")
+    suspend fun updateInfo(): BaseResponse<AppUpdate>
+
 
     @GET("subjects/{pk}")
     fun getSubjectDetail(@Path("pk") pk: Int): Observable<SubjectDetailResponse>

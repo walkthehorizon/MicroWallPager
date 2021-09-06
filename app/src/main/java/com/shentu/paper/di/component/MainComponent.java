@@ -3,7 +3,7 @@
 //import com.jess.arms.di.component.AppComponent;
 //import com.jess.arms.di.scope.ActivityScope;
 //import com.shentu.paper.di.module.MainModule;
-//import com.shentu.paper.mvp.ui.activity.MainActivity;
+//import com.shentu.paper.MainActivity;
 //
 //import dagger.Component;
 //

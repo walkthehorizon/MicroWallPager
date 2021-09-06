@@ -137,13 +137,13 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
     @Override
     protected void onStart() {
         super.onStart();
-        NetBus.getInstance().register(this);
+//        NetBus.getInstance().register(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        NetBus.getInstance().unRegister(this);
+//        NetBus.getInstance().unRegister(this);
     }
 
 //    private TSnackbar snackbar;

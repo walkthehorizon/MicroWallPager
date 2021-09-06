@@ -40,7 +40,9 @@ private fun <VB : ViewBinding> withGenericBindingClass(any: Any, block: (Class<V
             try {
                 return block.invoke(it as Class<VB>)
             } catch (e: NoSuchMethodException) {
+                e.printStackTrace()
             } catch (e: ClassCastException) {
+                e.printStackTrace()
             }
         }
     }

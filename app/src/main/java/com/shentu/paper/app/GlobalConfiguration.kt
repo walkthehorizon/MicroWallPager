@@ -116,11 +116,6 @@ class GlobalConfiguration : ConfigModule {
                             .addNetworkInterceptor { chain ->
                                 val request = chain.request()
                                 val response = chain.proceed(request)
-                                Timber.e(
-                                    "url %s , head %s",
-                                    request.url(),
-                                    request.header("Cache-Control")
-                                )
                                 var onlineCacheTime = 10L //在线的时候的缓存过期时间，如果想要不缓存，直接时间设置为0
                                 if (!TextUtils.isEmpty(request.header("Cache-Control"))) {
                                     onlineCacheTime = try {

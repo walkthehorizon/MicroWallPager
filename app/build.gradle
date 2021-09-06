@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.mob.sdk'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 //apply plugin: 'com.didi.dokit'
 //apply plugin: 'doubleTap'
 
@@ -91,7 +92,7 @@ android {
 }
 
 //doubleTab {
-//    injectClassName = "com.shentu.paper.mvp.ui.activity.MainActivity"
+//    injectClassName = "com.shentu.paper.test.DoubleTapCheck"
 //    injectFunctionName = "isNotDoubleTap"
 //}
 
@@ -160,8 +161,8 @@ dependencies {
     implementation rootProject.ext.dependencies["core"]
     api project(':base')
 
-    implementation rootProject.ext.dependencies["fragment-ktx"]
-    implementation  rootProject.ext.dependencies["activity-ktx"]
+//    implementation (rootProject.ext.dependencies["fragment-ktx"])
+//    implementation  rootProject.ext.dependencies["activity-ktx"]
 
     implementation rootProject.ext.dependencies["kotlinx-coroutines-android"]
     //room
@@ -175,8 +176,14 @@ dependencies {
     implementation rootProject.ext.dependencies["lifecycle-viewmodel-savedstate"]
     implementation rootProject.ext.dependencies["lifecycle-common-java8"]
 
-    implementation rootProject.ext.dependencies["navigation-ui-ktx"]
+    //https://issuetracker.google.com/issues/127932815
     implementation rootProject.ext.dependencies["navigation-fragment-ktx"]
+    implementation rootProject.ext.dependencies["navigation-ui-ktx"]
+//    //解决fragment导航默认采用replace等一系列问题，覆盖navigation-fragment
+//    implementation 'com.kunminx.arch:smooth-navigation:3.9.0-beta1'
+//    implementation (rootProject.ext.dependencies["navigation-fragment-ktx"]){
+//        exclude group: 'androidx.navigation', module: "navigation-fragment"
+//    }
     implementation rootProject.ext.dependencies["paging-runtime"]
 //    implementation rootProject.ext.dependencies["work-runtime-ktx"]
 
@@ -246,9 +253,4 @@ dependencies {
     implementation rootProject.ext.dependencies["bigImageViewer"]
     implementation 'com.github.piasy:GlideImageLoader:1.8.1'
 //    implementation rootProject.ext.dependencies["bigGifDrawable"]
-
-//    implementation 'com.github.huage2580:PermissionMonitor:1.0.1'
-
-//    api 'com.github.tiann:epic:0.11.2'
-
 }

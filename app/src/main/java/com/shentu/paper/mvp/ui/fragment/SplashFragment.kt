@@ -18,7 +18,7 @@ import com.micro.utils.Preconditions.checkNotNull
 import com.micro.utils.RxLifecycleUtils
 import com.shentu.paper.R
 import com.shentu.paper.mvp.contract.SplashContract
-import com.shentu.paper.mvp.ui.activity.MainActivity
+import com.shentu.paper.MainActivity
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

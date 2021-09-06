@@ -1,18 +1,26 @@
 package com.shentu.paper.mvp.ui.activity
 
 import android.os.Bundle
-import com.micro.base.BaseActivity
+import android.view.View
+import com.google.android.material.button.MaterialButton
 import com.shentu.paper.R
-import com.shentu.paper.mvp.presenter.MainPresenter
+import com.shentu.paper.app.base.BaseBindingActivity
+import com.shentu.paper.databinding.ActivityTestBinding
+import timber.log.Timber
 
-class TestMMKVActivity : BaseActivity<MainPresenter>() {
-    override fun initView(savedInstanceState: Bundle?): Int {
-        return R.layout.activity_main
+class TestMMKVActivity : BaseBindingActivity<ActivityTestBinding>(), View.OnClickListener {
+    private lateinit var mbPlay: MaterialButton
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding.mbPlay.setOnClickListener(this)
     }
 
-    override fun initData(savedInstanceState: Bundle?) {
+    private fun testClick() {
+        Timber.e("efsdgsdgsdgsd")
+    }
 
-
-
+    override fun onClick(v: View?) {
+        testClick()
     }
 }
