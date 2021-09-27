@@ -11,8 +11,8 @@ interface CollectService {
     @GET("collect/my")
     fun getMyCollects(@Query("offset") offset: Int): Observable<WallpaperPageResponse>
 
-    @POST("collect/add/{pid}")
-    fun addCollect(@Path("pid") pid: Long): Observable<BaseResponse<Boolean>>
+    @POST("collect/modify/{id}")
+    suspend fun modifyPaperCollect(@Path("id") id: Long): BaseResponse<Boolean>
 
     @POST("collect/del/collects")
     fun delCollects(@Body body: DelCollectBody): Observable<BaseResponse<Boolean>>

@@ -10,16 +10,4 @@
         android:id="@+id/itSubject"
         android:title="打开主题" />
 
-    <item
-        android:id="@+id/itSetBanner"
-        android:title="加入banner" />
-
-    <item
-        android:id="@+id/itSetCover"
-        android:title="设为封面" />
-
-    <item
-        android:id="@+id/itSetGarbage"
-        android:title="这是垃圾" />
-
 </menu>

@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.util.SparseIntArray
 import android.view.*
 import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
@@ -17,10 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
-import androidx.paging.flatMap
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ConvertUtils
@@ -35,7 +31,6 @@ import com.shentu.paper.R
 import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.base.BaseBindingFragment
 import com.shentu.paper.app.event.LikeEvent
-import com.shentu.paper.app.ktCountDown
 import com.shentu.paper.app.ktInterval
 import com.shentu.paper.databinding.FragmentTabHomeBinding
 import com.shentu.paper.model.entity.Banner
@@ -44,27 +39,22 @@ import com.shentu.paper.mvp.ui.activity.SearchActivity
 import com.shentu.paper.mvp.ui.adapter.HomeBannerAdapter
 import com.shentu.paper.mvp.ui.adapter.RecommendNewAdapter
 import com.shentu.paper.mvp.ui.adapter.decoration.RandomRecommendDecoration
-import com.shentu.paper.mvp.ui.browser.PictureBrowserActivity
+import com.shentu.paper.mvp.ui.browser.PaperBrowserActivity
+import com.shentu.paper.mvp.ui.browser.SourceRecommend
 import com.shentu.paper.mvp.ui.my.ContentMode
-import com.shentu.paper.mvp.ui.widget.CustomPopWindow
 import com.shentu.paper.viewmodels.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_setting_more.*
 import kotlinx.android.synthetic.main.fragment_tab_home.*
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import me.jessyan.rxerrorhandler.core.RxErrorHandler
-import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber
+import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -79,7 +69,6 @@ class TabHomeFragment : BaseBindingFragment<FragmentTabHomeBinding>(), OnRefresh
     private var banners: MutableList<Banner> = arrayListOf()
     private var wallpapers: MutableList<Wallpaper> = mutableListOf()
     private var countdown: Boolean = true
-    private var bViewPager: ViewPager? = null
     private var needRefresh = false
 
     private val homeViewModel: HomeViewModel by viewModels()
@@ -98,21 +87,14 @@ class TabHomeFragment : BaseBindingFragment<FragmentTabHomeBinding>(), OnRefresh
                 val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(
                     view, view.width / 2, view.height / 2, 0, 0
                 )
-                PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
-                    override fun getWallpaperList(): MutableList<Wallpaper> {
-                        return wallpapers
-                    }
-
-                    override fun loadMore(viewPager: ViewPager) {
-                        loadData(false)
-                        bViewPager = viewPager
-                    }
-
-                }, compat, context = requireContext())
+                PaperBrowserActivity.open(
+                    requireContext(),
+                    SourceRecommend(getCurrentAllPapers(), position)
+                )
             }
         })
         recommendAdapter.addLoadStateListener {
-            Timber.e(it.toString())
+//            Timber.e(it.toString())
             if (it.refresh is LoadState.Error || it.append is LoadState.Error) {
                 (it.refresh as LoadState.Error).error.message?.let { it1 ->
                     showMessage(it1)
@@ -226,6 +208,14 @@ class TabHomeFragment : BaseBindingFragment<FragmentTabHomeBinding>(), OnRefresh
 
     }
 
+    private fun getCurrentAllPapers(): List<Wallpaper> {
+        wallpapers.clear()
+        for (i in 0 until recommendAdapter.itemCount) {
+            wallpapers.add(recommendAdapter.peek(i) as Wallpaper)
+        }
+        return wallpapers
+    }
+
     private fun getRecommendHead(): View {
         val ivHead = ImageView(context)
         val lp = ViewGroup.LayoutParams(-1, -2)
@@ -284,10 +274,11 @@ class TabHomeFragment : BaseBindingFragment<FragmentTabHomeBinding>(), OnRefresh
         }
     }
 
-    fun loadData(clear: Boolean) {
+    private fun loadData(clear: Boolean) {
         homeViewModel.viewModelScope.launch {
             homeViewModel.getRecommends(clear).collectLatest {
                 recommendAdapter.submitData(it)
+                Timber.e("Home submit Data")
             }
         }
     }

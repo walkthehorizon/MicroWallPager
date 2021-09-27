@@ -15,20 +15,6 @@
         android:name="com.shentu.paper.mvp.ui.my.TabMyFragment"
         android:label="TabMyFragment" />
 
-    <fragment
-        android:id="@+id/pictureBrowserFragment"
-        android:name="com.shentu.paper.mvp.ui.browser.PictureBrowserFragment"
-        android:label="pictureBrowser"
-        tools:layout="@layout/fragment_picture_browser">
-
-        <argument
-            android:name="pictureArgs"
-            app:argType="com.shentu.paper.mvp.ui.browser.PaperSource" />
-
-        <!--        <action android:id="@+id/toPictureBrowser"-->
-        <!--            app:destination="@id/pictureBrowserFragment"/>-->
-    </fragment>
-
 
 
     <!--    <activity-->

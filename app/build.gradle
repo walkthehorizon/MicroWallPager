@@ -6,7 +6,6 @@ apply plugin: 'com.mob.sdk'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 //apply plugin: 'com.didi.dokit'
-//apply plugin: 'doubleTap'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -90,11 +89,6 @@ android {
         viewBinding = true
     }
 }
-
-//doubleTab {
-//    injectClassName = "com.shentu.paper.test.DoubleTapCheck"
-//    injectFunctionName = "isNotDoubleTap"
-//}
 
 MobSDK {
     appKey "2726f3a69c300"
@@ -253,4 +247,5 @@ dependencies {
     implementation rootProject.ext.dependencies["bigImageViewer"]
     implementation 'com.github.piasy:GlideImageLoader:1.8.1'
 //    implementation rootProject.ext.dependencies["bigGifDrawable"]
+//    implementation 'com.vmadalin:easypermissions-ktx:1.0.0'
 }

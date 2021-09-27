@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.micro.base.BaseFragment
-import com.micro.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
+import com.micro.base.BaseFragment
+import com.micro.utils.ArmsUtils
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener
@@ -25,7 +25,8 @@ import com.shentu.paper.mvp.contract.CategoryDetailContract
 import com.shentu.paper.mvp.presenter.CategoryListPresenter
 import com.shentu.paper.mvp.ui.adapter.CategoryListAdapter
 import com.shentu.paper.mvp.ui.adapter.decoration.RvCategoryListDecoration
-import com.shentu.paper.mvp.ui.browser.PictureBrowserActivity
+import com.shentu.paper.mvp.ui.browser.PaperBrowserActivity
+import com.shentu.paper.mvp.ui.browser.SourceCategory
 import kotlinx.android.synthetic.main.fragment_category_list.*
 
 
@@ -67,19 +68,7 @@ class CategoryListFragment : BaseFragment<CategoryListPresenter>(), CategoryDeta
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                     , view.width / 2, view.height / 2
                     , 0, 0)
-            PictureBrowserActivity.open(position, compat = compat, callback =
-            object : PictureBrowserActivity.Callback {
-                override fun getWallpaperList(): MutableList<Wallpaper> {
-                    return (rvCategoryList.adapter as CategoryListAdapter).data
-                }
-
-                override fun loadMore(viewPager: ViewPager) {
-                    bViewPager = viewPager
-                    mPresenter?.getCategoryList(categoryId, false)
-                }
-
-            }
-                    , context = mContext, categoryId = categoryId)
+            PaperBrowserActivity.open(requireContext(),SourceCategory(position,adapter.data[position].categoryId))
         }
         rvCategoryList.adapter = adapter
         rvCategoryList.layoutManager = GridLayoutManager(context

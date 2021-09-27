@@ -9,12 +9,12 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.ToastUtils
+import com.kingja.loadsir.core.LoadService
+import com.kingja.loadsir.core.LoadSir
 import com.micro.base.BaseFragment
 import com.micro.integration.RepositoryManager
 import com.micro.mvp.IPresenter
 import com.micro.utils.ArmsUtils
-import com.kingja.loadsir.core.LoadService
-import com.kingja.loadsir.core.LoadSir
 import com.shentu.paper.R
 import com.shentu.paper.app.page.EmptyCallback
 import com.shentu.paper.app.page.ErrorCallback
@@ -24,7 +24,6 @@ import com.shentu.paper.model.entity.Wallpaper
 import com.shentu.paper.model.response.WallpaperPageResponse
 import com.shentu.paper.mvp.contract.HomeRankContract
 import com.shentu.paper.mvp.ui.adapter.HomeRankAdapter
-import com.shentu.paper.mvp.ui.browser.PictureBrowserActivity
 import kotlinx.android.synthetic.main.activity_home_new.smartRefresh
 import kotlinx.android.synthetic.main.fragment_home_rank.*
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
@@ -98,19 +97,19 @@ class HomeRankFragment : BaseFragment<IPresenter>(), HomeRankContract.View {
                     val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                             , view.width / 2, view.height / 2
                             , 0, 0)
-                    context?.let {
-                        PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
-                            override fun getWallpaperList(): MutableList<Wallpaper> {
-                                return papers
-                            }
-
-                            override fun loadMore(viewPager: ViewPager) {
-                                bViewPager = viewPager
-                                getRankPapers(false)
-                            }
-
-                        }, compat, context = it)
-                    }
+//                    context?.let {
+//                        PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
+//                            override fun getWallpaperList(): MutableList<Wallpaper> {
+//                                return papers
+//                            }
+//
+//                            override fun loadMore(viewPager: ViewPager) {
+//                                bViewPager = viewPager
+//                                getRankPapers(false)
+//                            }
+//
+//                        }, compat, context = it)
+//                    }
                 }
                 rvRank.layoutManager = LinearLayoutManager(context)
                 rvRank.setHasFixedSize(true)

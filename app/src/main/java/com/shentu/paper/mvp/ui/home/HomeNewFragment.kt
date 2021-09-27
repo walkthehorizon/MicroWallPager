@@ -9,22 +9,20 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.TimeUtils
+import com.kingja.loadsir.core.LoadService
+import com.kingja.loadsir.core.LoadSir
 import com.micro.base.BaseFragment
 import com.micro.integration.RepositoryManager
 import com.micro.mvp.IPresenter
 import com.micro.mvp.IView
-import com.kingja.loadsir.core.LoadService
-import com.kingja.loadsir.core.LoadSir
 import com.shentu.paper.R
 import com.shentu.paper.app.page.EmptyCallback
 import com.shentu.paper.app.page.ErrorCallback
 import com.shentu.paper.app.utils.RxUtils
 import com.shentu.paper.model.api.service.MicroService
 import com.shentu.paper.model.entity.WallpaerSection
-import com.shentu.paper.model.entity.Wallpaper
 import com.shentu.paper.model.response.WallpaperPageResponse
 import com.shentu.paper.mvp.ui.adapter.HomeNewestAdapter
-import com.shentu.paper.mvp.ui.browser.PictureBrowserActivity
 import com.shentu.paper.mvp.ui.widget.stickyHead.StickyItemDecoration
 import kotlinx.android.synthetic.main.activity_home_new.*
 import me.jessyan.rxerrorhandler.core.RxErrorHandler
@@ -70,25 +68,25 @@ class HomeNewFragment : BaseFragment<IPresenter>(), IView {
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                     , view.width / 2, view.height / 2
                     , 0, 0)
-            context?.let {
-                PictureBrowserActivity.open(getRealPos(position), object : PictureBrowserActivity.Callback {
-                    override fun getWallpaperList(): MutableList<Wallpaper> {
-                        val papers = mutableListOf<Wallpaper>()
-                        for (paper in adapter.data) {
-                            if (!paper.isHeader) {
-                                papers.add((paper as WallpaerSection).t!!)
-                            }
-                        }
-                        return papers
-                    }
-
-                    override fun loadMore(viewPager: ViewPager) {
-                        bViewPager = viewPager
-                        getNewest(false)
-                    }
-
-                }, compat, context = it)
-            }
+//            context?.let {
+//                PictureBrowserActivity.open(getRealPos(position), object : PictureBrowserActivity.Callback {
+//                    override fun getWallpaperList(): MutableList<Wallpaper> {
+//                        val papers = mutableListOf<Wallpaper>()
+//                        for (paper in adapter.data) {
+//                            if (!paper.isHeader) {
+//                                papers.add((paper as WallpaerSection).t!!)
+//                            }
+//                        }
+//                        return papers
+//                    }
+//
+//                    override fun loadMore(viewPager: ViewPager) {
+//                        bViewPager = viewPager
+//                        getNewest(false)
+//                    }
+//
+//                }, compat, context = it)
+//            }
         }
 
         stickyHead.setDataCallback { pos ->

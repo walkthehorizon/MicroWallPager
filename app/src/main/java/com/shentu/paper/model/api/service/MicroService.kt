@@ -39,6 +39,13 @@ interface MicroService {
         @Query("offset") offset: Int
     ): Observable<WallpaperPageResponse>
 
+    @GET("wallpapers")
+    suspend fun getCategoryPapers(
+        @Query("category_id") categoryId: Int,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): Observable<WallpaperPageResponse>
+
     /**
      * 获取推荐的WallPaper
      */

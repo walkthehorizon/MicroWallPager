@@ -1,5 +1,6 @@
 package com.shentu.paper.app.base//package com.micro.base
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,14 @@ import androidx.viewbinding.ViewBinding
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.micro.mvp.IView
+import com.shentu.paper.app.HkUserManager
 import com.shentu.paper.app.page.EmptyCallback
 import com.shentu.paper.app.page.ErrorCallback
 import com.shentu.paper.app.page.LoadingCallback
+import com.shentu.paper.mvp.ui.login.LoginActivity
 import inflateBindingWithGeneric
 import org.greenrobot.eventbus.EventBus
+import pub.devrel.easypermissions.EasyPermissions
 
 abstract class BaseBindingFragment<VB : ViewBinding> : Fragment(), IView {
 
@@ -31,14 +35,6 @@ abstract class BaseBindingFragment<VB : ViewBinding> : Fragment(), IView {
     ): View {
         binding = inflateBindingWithGeneric(layoutInflater, container, false)
         return binding.root
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,5 +86,22 @@ abstract class BaseBindingFragment<VB : ViewBinding> : Fragment(), IView {
         }
     }
 
+    protected open fun runAfterLogin(action: () -> Unit) {
+        if (!HkUserManager.isLogin) {
+            launchActivity(Intent(context, LoginActivity::class.java))
+            LoginActivity.action = action
+        }
+    }
+
     protected open fun useEventBus(): Boolean = false
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        // EasyPermissions handles the request result.
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
 }

@@ -37,9 +37,11 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
     companion object {
         fun open() {
             ARouter.getInstance()
-                    .build("/activity/login/account")
-                    .navigation()
+                .build("/activity/login/account")
+                .navigation()
         }
+
+        var action: (() -> Unit)? = null
     }
 
     private var loadingDialog: MaterialDialog? = null
@@ -63,8 +65,8 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
                 }
             } else {
                 val desc = GsonUtils
-                        .fromJson((data as Throwable).message, SmsError::class.java)
-                        .description
+                    .fromJson((data as Throwable).message, SmsError::class.java)
+                    .description
                 showMessage(desc)
 //                (data as Throwable).message?.let {
 //                    showMessage(it)
@@ -115,56 +117,61 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginContract.View {
         SMSSDK.registerEventHandler(eh)
         tvAgreement.movementMethod = LinkMovementMethod.getInstance()
         tvAgreement.text = SpanUtils()
-                .append("未注册用户登录时将自动创建账号，且代表您已同意")
-                .append("《用户协议》")
-                .setClickSpan(object : ClickableSpan() {
-                    override fun onClick(widget: View) {
-                        BrowserActivity.open(this@LoginActivity, Constant.WEB_SERVER)
-                    }
+            .append("未注册用户登录时将自动创建账号，且代表您已同意")
+            .append("《用户协议》")
+            .setClickSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    BrowserActivity.open(this@LoginActivity, Constant.WEB_SERVER)
+                }
 
-                    override fun updateDrawState(ds: TextPaint) {
-                        super.updateDrawState(ds)
-                        ds.isUnderlineText = false
-                    }
-                })
-                .append("和")
-                .append("《隐私政策》")
-                .setClickSpan(object : ClickableSpan() {
-                    override fun onClick(widget: View) {
-                        BrowserActivity.open(this@LoginActivity, Constant.WEB_PRIVACY)
-                    }
+                override fun updateDrawState(ds: TextPaint) {
+                    super.updateDrawState(ds)
+                    ds.isUnderlineText = false
+                }
+            })
+            .append("和")
+            .append("《隐私政策》")
+            .setClickSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    BrowserActivity.open(this@LoginActivity, Constant.WEB_PRIVACY)
+                }
 
-                    override fun updateDrawState(ds: TextPaint) {
-                        super.updateDrawState(ds)
-                        ds.isUnderlineText = false
-                    }
-                })
-                .create()
+                override fun updateDrawState(ds: TextPaint) {
+                    super.updateDrawState(ds)
+                    ds.isUnderlineText = false
+                }
+            })
+            .create()
     }
 
     @SuppressLint("CheckResult", "SetTextI18n")
     fun sendCodeSuccess() {
         showMessage("验证码已发送")
         Observable.interval(1, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(RxLifecycleUtils.bindUntilEvent<Long, ActivityEvent>(this, ActivityEvent.DESTROY))
-                .take(60)
-                .map { aLong -> 59 - aLong }
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { tvSendCode.isEnabled = false }
-                .doOnComplete {
-                    tvSendCode.isEnabled = true
-                    tvSendCode.text = "发送验证码"
-                }
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe { aLong -> tvSendCode.text = "${aLong}s" }
+            .observeOn(AndroidSchedulers.mainThread())
+            .compose(
+                RxLifecycleUtils.bindUntilEvent<Long, ActivityEvent>(
+                    this,
+                    ActivityEvent.DESTROY
+                )
+            )
+            .take(60)
+            .map { aLong -> 59 - aLong }
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { tvSendCode.isEnabled = false }
+            .doOnComplete {
+                tvSendCode.isEnabled = true
+                tvSendCode.text = "发送验证码"
+            }
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribe { aLong -> tvSendCode.text = "${aLong}s" }
     }
 
     override fun showVerifyDialog() {
         val dialog = MaterialDialog(this)
-                .cancelable(false)
-                .title(text = "验证手机号")
-                .customView(R.layout.login_verify, scrollable = false)
+            .cancelable(false)
+            .title(text = "验证手机号")
+            .customView(R.layout.login_verify, scrollable = false)
         dialog.vc_input.setOnCompleteListener(object : VerificationCodeInput.Listener {
             override fun onComplete(content: String?) {
                 ToastUtils.showShort(content)

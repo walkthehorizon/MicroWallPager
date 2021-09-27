@@ -1,11 +1,8 @@
 package com.shentu.paper.mvp.ui.fragment
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.os.ParcelFileDescriptor
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +19,6 @@ import com.shentu.paper.model.entity.Wallpaper
 import com.shentu.paper.mvp.ui.browser.Behavior
 import com.shentu.paper.mvp.ui.browser.SaveType
 import com.shentu.paper.mvp.ui.widget.progress.ProgressPieIndicator
-import com.yanzhenjie.permission.AndPermission
 import kotlinx.android.synthetic.main.fragment_picture.*
 import timber.log.Timber
 import java.io.File
@@ -57,7 +53,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
         pos = arguments?.get("pos") as Int
         wallpaper = requireArguments()["wallpaper"] as Wallpaper
         photoView.setOnClickListener {
-            callback?.switchNavigation()
+            callback?.onSwitchNavigation()
         }
         loadPicture(Behavior.LOAD_NORMAL)
     }
@@ -66,6 +62,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
         if (isLoading) {
             return
         }
+        Timber.e("load picture %s" , wallpaper.url)
         context?.let {
             photoView.setProgressIndicator(ProgressPieIndicator())
             photoView.setImageLoaderCallback(getImageLoadCallback(behavior))
@@ -104,6 +101,7 @@ class PictureFragment : BaseFragment<IPresenter>() {
             }
 
             override fun onFail(error: Exception?) {
+                Timber.e("load picture fail %s",error?.message)
                 callback?.onLoadOrigin(pos, false)
             }
 
@@ -190,14 +188,21 @@ class PictureFragment : BaseFragment<IPresenter>() {
     }
 
     interface Callback {
-        fun switchNavigation()
+        fun onSwitchNavigation()
 
-        fun onLoadOrigin(pos: Int, result: Boolean)
+        fun onLoadOrigin(pos: Int, result: Boolean){
+
+        }
     }
 
     private var callback: Callback? = null
 
     fun setCallback(callback: Callback?) {
         this.callback = callback
+    }
+
+    override fun onDestroyView() {
+        this.callback = null
+        super.onDestroyView()
     }
 }

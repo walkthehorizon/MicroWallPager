@@ -32,7 +32,8 @@ import com.shentu.paper.mvp.contract.SearchContract
 import com.shentu.paper.mvp.presenter.SearchPresenter
 import com.shentu.paper.mvp.ui.adapter.HotAdapter
 import com.shentu.paper.mvp.ui.adapter.decoration.HotPageRvDecoration
-import com.shentu.paper.mvp.ui.browser.PictureBrowserActivity
+import com.shentu.paper.mvp.ui.browser.PaperBrowserActivity
+import com.shentu.paper.mvp.ui.browser.SourceSubject
 import com.shentu.paper.mvp.ui.widget.DefaultToolbar
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.coroutines.GlobalScope
@@ -90,7 +91,7 @@ class SearchActivity : BaseActivity<SearchPresenter>(), SearchContract.View {
                 R.id.iv_3 -> 2
                 else -> 0
             }
-            PictureBrowserActivity.open(current = current, subjectId = subject.id, context = this)
+            PaperBrowserActivity.open(this,SourceSubject(current,subject.id))
         }
         rvData.adapter = hotAdapter
 

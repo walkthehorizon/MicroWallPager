@@ -31,7 +31,8 @@ import com.shentu.paper.mvp.contract.MyCollectContract
 import com.shentu.paper.mvp.presenter.MyCollectPresenter
 import com.shentu.paper.mvp.ui.adapter.CollectListAdapter
 import com.shentu.paper.mvp.ui.adapter.decoration.CollectListDecoration
-import com.shentu.paper.mvp.ui.browser.PictureBrowserActivity
+import com.shentu.paper.mvp.ui.browser.PaperBrowserActivity
+import com.shentu.paper.mvp.ui.browser.SourceCollect
 import kotlinx.android.synthetic.main.activity_my_collect.*
 
 @Route(path = "/activity/my/collect/")
@@ -39,7 +40,7 @@ class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.
 
     private lateinit var loadingDialog: MaterialDialog
     private var bViewPager: ViewPager? = null
-    private lateinit var binding:ActivityMyCollectBinding
+    private lateinit var binding: ActivityMyCollectBinding
 
     override fun showDelDialog() {
         MaterialDialog(this).show {
@@ -103,18 +104,9 @@ class MyCollectActivity : BaseActivity<MyCollectPresenter>(), MyCollectContract.
                 return@setOnItemClickListener
             }
             ViewCompat.setTransitionName(view, resources.getString(R.string.picture_transitionName))
-            val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
-            PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
-                override fun getWallpaperList(): MutableList<Wallpaper> {
-                    return adapter.data
-                }
-
-                override fun loadMore(viewPager: ViewPager) {
-                    bViewPager = viewPager
-                    mPresenter?.getMyCollects(true)
-                }
-
-            }, compat, context = this)
+            val compat: ActivityOptionsCompat =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(this)
+            PaperBrowserActivity.open(this, SourceCollect(position))
         }
         tvDelete.setOnClickListener {
             showDelDialog()

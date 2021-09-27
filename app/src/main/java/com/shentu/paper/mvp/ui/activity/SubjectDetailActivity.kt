@@ -11,10 +11,10 @@ import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.blankj.utilcode.util.ToastUtils
-import com.micro.base.BaseActivity
-import com.micro.utils.ArmsUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
+import com.micro.base.BaseActivity
+import com.micro.utils.ArmsUtils
 import com.shentu.paper.R
 import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.page.EmptyCallback
@@ -26,7 +26,8 @@ import com.shentu.paper.model.entity.Wallpaper
 import com.shentu.paper.mvp.contract.SubjectDetailContract
 import com.shentu.paper.mvp.presenter.SubjectDetailPresenter
 import com.shentu.paper.mvp.ui.adapter.SubjectDetailAdapter
-import com.shentu.paper.mvp.ui.browser.PictureBrowserActivity
+import com.shentu.paper.mvp.ui.browser.PaperBrowserActivity
+import com.shentu.paper.mvp.ui.browser.SourceSubject
 import kotlinx.android.synthetic.main.activity_subject_detail.*
 
 @Route(path = "/activity/subject/detail")
@@ -69,17 +70,7 @@ class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDet
             val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
                     , view.width / 2, view.height / 2
                     , 0, 0)
-            PictureBrowserActivity.open(position, object : PictureBrowserActivity.Callback {
-                override fun getWallpaperList(): MutableList<Wallpaper> {
-                    return adapter.data
-                }
-
-                override fun loadMore(viewPager: ViewPager) {
-                    bViewPager = viewPager
-                    loadData(false)
-                }
-
-            }, compat = compat, context = this)
+            PaperBrowserActivity.open(this,SourceSubject(position,adapter.data[position].subjectId))
         }
         rvSubject.layoutManager = GridLayoutManager(this, 2)
         rvSubject.setHasFixedSize(true)

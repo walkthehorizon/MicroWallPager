@@ -13,9 +13,8 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 val errorHandler = CoroutineExceptionHandler { _, t ->
-    Timber.e(t)
     //这里不光是只能打印错误,还可以根据不同的错误作出不同的逻辑处理
-    var msg = ""
+    var msg = t.message
     if (t is UnknownHostException) {
         msg = "网络连接不可用"
     } else if (t is SocketTimeoutException) {
@@ -27,7 +26,7 @@ val errorHandler = CoroutineExceptionHandler { _, t ->
     } else if (t is JsonParseException || t is ParseException || t is JSONException) {
         msg = "数据解析错误"
     }
-    if (!TextUtils.isEmpty(msg)) {
+    msg?.let {
         ToastUtils.showShort(msg)
     }
 }

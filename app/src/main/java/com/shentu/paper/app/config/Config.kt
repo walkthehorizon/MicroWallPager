@@ -49,7 +49,7 @@ object Config : LifecycleObserver {
 
     val appServer: String
         get() = when (env) {
-            Environment.DEBUG -> "http://192.168.108.6/micro/"
+            Environment.DEBUG -> "http://192.168.107.149/micro/"
             Environment.PRE -> "https://api.wmmt119.top/micro/"
             else -> "https://api.wmmt119.top/micro/"
         }
