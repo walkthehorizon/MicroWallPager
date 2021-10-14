@@ -9,6 +9,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.micro.integration.RepositoryManager
+import com.shentu.paper.app.errorHandler
 import com.shentu.paper.model.api.service.MicroService
 import com.shentu.paper.model.api.source.HomePagingSource
 import com.shentu.paper.model.entity.Banner
@@ -36,7 +37,7 @@ class HomeViewModel
     }
 
     fun getBanners() {
-        viewModelScope.launch {
+        viewModelScope.launch (errorHandler){
             val response = mRepositoryManager.obtainRetrofitService(MicroService::class.java)
                 .getBanners()
             if (!response.isSuccess) {

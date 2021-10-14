@@ -95,11 +95,13 @@ class TabHomeFragment : BaseBindingFragment<FragmentTabHomeBinding>(), OnRefresh
         })
         recommendAdapter.addLoadStateListener {
 //            Timber.e(it.toString())
-            if (it.refresh is LoadState.Error || it.append is LoadState.Error) {
+            if (it.refresh is LoadState.Error) {
                 (it.refresh as LoadState.Error).error.message?.let { it1 ->
                     showMessage(it1)
                     binding.refreshLayout.finishRefresh(false)
                 }
+            }
+            if(it.append is LoadState.Error){
                 (it.append as LoadState.Error).error.message?.let { it1 ->
                     showMessage(it1)
                     binding.refreshLayout.finishLoadMore(false)
@@ -197,9 +199,6 @@ class TabHomeFragment : BaseBindingFragment<FragmentTabHomeBinding>(), OnRefresh
             }
         }
         homeViewModel.getBanners()
-        lifecycleScope.launchWhenStarted {
-            ToastUtils.showShort("onSTart")
-        }
         showContent()
     }
 

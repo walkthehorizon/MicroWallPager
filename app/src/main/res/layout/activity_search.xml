@@ -52,13 +52,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:focusable="false"
+            app:srlEnableFooterFollowWhenNoMoreData="true"
             app:srlEnableRefresh="false">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvData"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:listitem="@layout/app_item_hot_page_2" />
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvData"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/app_item_hot_page_2" />
+
+                <com.shentu.paper.mvp.ui.search.SearchHistoryView
+                    android:id="@+id/historyView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
 
         </com.scwang.smart.refresh.layout.SmartRefreshLayout>
     </FrameLayout>

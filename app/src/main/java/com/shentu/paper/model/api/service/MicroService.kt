@@ -84,11 +84,11 @@ interface MicroService {
      * 搜索subject
      * */
     @GET("subject/search")
-    fun searchSubject(
+    suspend fun searchSubject(
         @Query("search") key: String,
-        @Query("limit") limit: Int,
-        @Query("offset") offset: Int
-    ): Observable<SubjectPageResponse>
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int = PAGE_LIMIT,
+    ): SubjectPageResponse
 
     @GET("banners")
     suspend fun getBanners(): BannerPageResponse
