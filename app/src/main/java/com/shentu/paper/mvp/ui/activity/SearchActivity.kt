@@ -1,30 +1,16 @@
 package com.shentu.paper.mvp.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.*
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.google.gson.reflect.TypeToken
-import com.micro.utils.ArmsUtils
-import com.kingja.loadsir.core.LoadSir
 import com.shentu.paper.R
 import com.shentu.paper.app.base.BaseBindingActivity
-import com.shentu.paper.app.page.EmptyCallback
-import com.shentu.paper.app.page.ErrorCallback
-import com.shentu.paper.app.page.LoadingCallback
-import com.shentu.paper.app.page.SearchHistoryCallback
-import com.shentu.paper.app.utils.LimitQueue
 import com.shentu.paper.databinding.ActivitySearchBinding
 import com.shentu.paper.model.entity.Subject
-import com.shentu.paper.model.response.SubjectPageResponse
-import com.shentu.paper.mvp.contract.SearchContract
 import com.shentu.paper.mvp.ui.adapter.HotAdapter
 import com.shentu.paper.mvp.ui.adapter.decoration.HotPageRvDecoration
 import com.shentu.paper.mvp.ui.browser.PaperBrowserActivity
@@ -34,10 +20,8 @@ import com.shentu.paper.mvp.ui.widget.AbsTextWatcher
 import com.shentu.paper.mvp.ui.widget.DefaultToolbar
 import com.shentu.paper.viewmodels.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.coroutines.delay
-import timber.log.Timber
 
 @AndroidEntryPoint
 class SearchActivity : BaseBindingActivity<ActivitySearchBinding>() {
@@ -46,7 +30,7 @@ class SearchActivity : BaseBindingActivity<ActivitySearchBinding>() {
     private val searchViewModel by viewModels<SearchViewModel>()
 
     override fun getLoadTarget(): View {
-        return binding.smartRefresh
+        return binding.rvData
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,10 +82,15 @@ class SearchActivity : BaseBindingActivity<ActivitySearchBinding>() {
                     showError()
                     return@observe
                 }
+                if(it.data?.count==0){
+                    showEmpty()
+                    return@observe
+                }
                 hotAdapter.setNewData(it.data?.content)
-                binding.smartRefresh.setNoMoreData(true)
+                showContent()
             })
         searchViewModel.historyLiveData.observe(this,{
+            showLoading()
             if(it.isNullOrEmpty()){
                 binding.rvData.visibility = View.GONE
                 binding.historyView.show()
@@ -110,52 +99,12 @@ class SearchActivity : BaseBindingActivity<ActivitySearchBinding>() {
                 binding.historyView.updateKey(it)
             }
         })
+        showContent()
     }
 
     override fun onStop() {
         super.onStop()
         KeyboardUtils.hideSoftInput(etSearch)
         etSearch.clearFocus()
-    }
-
-    override fun showContent() {
-        loadService?.showSuccess()
-    }
-
-    override fun hideRefresh(clear: Boolean) {
-        if (clear) {
-            smartRefresh.finishRefresh()
-        } else {
-            smartRefresh.finishLoadMore()
-        }
-    }
-
-    override fun showLoading() {
-        loadService?.showCallback(LoadingCallback::class.java)
-    }
-
-    override fun showEmpty() {
-        loadService?.showCallback(EmptyCallback::class.java)
-    }
-
-    override fun showError() {
-        loadService?.showCallback(ErrorCallback::class.java)
-    }
-
-    override fun showNoMoreData() {
-        smartRefresh.finishLoadMoreWithNoMoreData()
-    }
-
-    override fun showMessage(message: String) {
-        ToastUtils.showShort(message)
-    }
-
-    override fun launchActivity(intent: Intent) {
-        ArmsUtils.startActivity(intent)
-    }
-
-    override fun killMyself() {
-
-        finishAfterTransition()
     }
 }

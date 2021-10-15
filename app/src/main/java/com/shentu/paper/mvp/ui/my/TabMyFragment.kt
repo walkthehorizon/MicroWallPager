@@ -144,8 +144,9 @@ class TabMyFragment : BaseBindingFragment<FragmentMyBinding>(), MyContract.View 
                 ivSex.clearColorFilter()
             }
             GlideApp.with(this)
-                    .load(HkUserManager.user.avatar)
-                    .into(circle_avatar)
+                .load(HkUserManager.user.avatar)
+                .error(R.drawable.default_head)
+                .into(circle_avatar)
             itMoney.setEndValue(user.pea.toString())
             when {
                 HkUserManager.user.vip -> {

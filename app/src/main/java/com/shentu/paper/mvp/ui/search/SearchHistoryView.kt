@@ -35,7 +35,7 @@ class SearchHistoryView : FrameLayout {
     )
 
     init {
-        val history = SPUtils.getInstance().getString("search_history", "")
+        val history = SPUtils.getInstance().getString(KEY_SEARCH_HISTORY, "")
         queue = if (history.isEmpty()) {
             LimitQueue(12)
         } else {
@@ -79,7 +79,7 @@ class SearchHistoryView : FrameLayout {
 
     fun updateKey(key: String) {
         queue.offer(key, true)
-        SPUtils.getInstance().put(SearchHistoryView.KEY_SEARCH_HISTORY, key)
+        SPUtils.getInstance().put(KEY_SEARCH_HISTORY, GsonUtils.toJson(queue))
         hide()
     }
 

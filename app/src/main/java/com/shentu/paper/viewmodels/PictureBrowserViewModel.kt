@@ -11,6 +11,7 @@ import com.shentu.paper.model.api.service.MicroService
 import com.shentu.paper.model.api.service.PaperService
 import com.shentu.paper.model.api.service.SubjectService
 import com.shentu.paper.model.entity.Wallpaper
+import com.shentu.paper.model.response.WallpaperPageResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,8 +21,8 @@ import kotlin.math.max
 class PictureBrowserViewModel
 @Inject constructor(private val mRepositoryManager: RepositoryManager) : ViewModel() {
 
-    private val _liveData: MutableLiveData<List<Wallpaper>> = MutableLiveData()
-    val liveData: LiveData<List<Wallpaper>> = _liveData
+    private val _liveData: MutableLiveData<WallpaperPageResponse> = MutableLiveData()
+    val liveData: LiveData<WallpaperPageResponse> = _liveData
     private val _liveDataPaper: MutableLiveData<Wallpaper> = MutableLiveData()
     val liveDataPaper: LiveData<Wallpaper> = _liveDataPaper
     private val _liveDataSubject: MutableLiveData<List<Wallpaper>> = MutableLiveData()
@@ -35,10 +36,7 @@ class PictureBrowserViewModel
         viewModelScope.launch(errorHandler) {
             val response = mRepositoryManager.obtainRetrofitService(MicroService::class.java)
                 .getRecommendWallpapers(offset)
-            if (!response.isSuccess) {
-                throw Throwable(response.msg)
-            }
-            _liveData.postValue(response.data?.content)
+            _liveData.postValue(response)
         }
     }
 
@@ -54,7 +52,7 @@ class PictureBrowserViewModel
     }
 
     fun loadSubjectAllPapers(subjectId: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch (errorHandler){
             val response = mRepositoryManager.obtainRetrofitService(SubjectService::class.java)
                 .getSubjectAllPapers(subjectId)
             if (!response.isSuccess) {

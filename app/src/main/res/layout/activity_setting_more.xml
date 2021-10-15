@@ -19,6 +19,7 @@
         android:id="@+id/rivDownload"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:visibility="gone"
         android:layout_below="@+id/toolbar"
         app:riv_arrow_visible="false"
         app:riv_divider_visible="true"

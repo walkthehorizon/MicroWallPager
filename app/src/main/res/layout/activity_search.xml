@@ -11,8 +11,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/default_toolbar_height"
-        app:tl_left_icon="@drawable/ic_arrow_back_white_24dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        app:tl_left_icon="@drawable/ic_arrow_back_white_24dp">
 
         <EditText
             android:id="@+id/etSearch"
@@ -26,53 +26,38 @@
             android:drawablePadding="10dp"
             android:gravity="center_vertical|start"
             android:hint="@string/action_search"
-            android:textColorHint="@color/colorIcon"
             android:imeOptions="actionDone"
             android:inputType="text"
+            android:maxLength="16"
             android:maxLines="1"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:maxLength="16"
             android:textColor="@color/colorPrimaryText"
+            android:textColorHint="@color/colorIcon"
             android:textSize="@dimen/sp_15"
-            android:transitionName="@string/search_transitionName">
-        </EditText>
+            android:transitionName="@string/search_transitionName" />
 
     </com.shentu.paper.mvp.ui.widget.DefaultToolbar>
 
     <FrameLayout
-        android:layout_marginTop="@dimen/activity_divider_height"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:focusable="false"
-        android:layout_weight="1">
+        android:layout_marginTop="@dimen/activity_divider_height"
+        android:layout_weight="1"
+        android:focusable="false">
 
-        <com.scwang.smart.refresh.layout.SmartRefreshLayout
-            android:id="@+id/smartRefresh"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvData"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:focusable="false"
-            app:srlEnableFooterFollowWhenNoMoreData="true"
-            app:srlEnableRefresh="false">
+            tools:listitem="@layout/app_item_hot_page_2" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <com.shentu.paper.mvp.ui.search.SearchHistoryView
+            android:id="@+id/historyView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvData"
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:listitem="@layout/app_item_hot_page_2" />
 
-                <com.shentu.paper.mvp.ui.search.SearchHistoryView
-                    android:id="@+id/historyView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </FrameLayout>
-
-        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
     </FrameLayout>
 
 </LinearLayout>

@@ -9,7 +9,7 @@
         android:id="@+id/pictureBrowserFragment"
         android:name="com.shentu.paper.mvp.ui.browser.PaperBrowserFragment"
         android:label="pictureBrowser"
-        tools:layout="@layout/fragment_picture_browser">
+        tools:layout="@layout/fragment_paper_browser">
 
 <!--        <argument-->
 <!--            android:name="pictureArgs"-->

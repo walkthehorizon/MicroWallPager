@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:text="没有更多数据了！"
+    android:text="这里好像什么都没有哎！"
     android:textColor="@color/colorPrimaryText"
     android:textSize="20sp">
 

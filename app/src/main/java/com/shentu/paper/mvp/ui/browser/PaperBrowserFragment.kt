@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.Looper
 import android.view.Gravity
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
@@ -13,7 +14,7 @@ import com.shentu.paper.R
 import com.shentu.paper.app.HkUserManager
 import com.shentu.paper.app.base.BaseBindingFragment
 import com.shentu.paper.app.utils.ShareUtils
-import com.shentu.paper.databinding.FragmentPictureBrowserBinding
+import com.shentu.paper.databinding.FragmentPaperBrowserBinding
 import com.shentu.paper.model.entity.Wallpaper
 import com.shentu.paper.mvp.ui.activity.SubjectDetailActivity
 import com.shentu.paper.mvp.ui.adapter.PaperBrowserVpAdapter
@@ -21,12 +22,13 @@ import com.shentu.paper.mvp.ui.fragment.PictureFragment
 import com.shentu.paper.mvp.ui.login.LoginActivity
 import com.shentu.paper.viewmodels.PictureBrowserViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_picture_browser.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
+import timber.log.Timber
 
 @AndroidEntryPoint
-class PaperBrowserFragment : BaseBindingFragment<FragmentPictureBrowserBinding>(),PictureFragment.Callback {
+class PaperBrowserFragment : BaseBindingFragment<FragmentPaperBrowserBinding>(),
+    PictureFragment.Callback {
 
     private val pictureViewModel: PictureBrowserViewModel by viewModels()
     private lateinit var curPaper: Wallpaper
@@ -46,17 +48,14 @@ class PaperBrowserFragment : BaseBindingFragment<FragmentPictureBrowserBinding>(
         pictureViewModel.liveDataCollect.observe(viewLifecycleOwner) {
             showLikeStatus(it)
         }
-    }
-
-    private fun initView() {
+        vpAdapter = PaperBrowserVpAdapter(this@PaperBrowserFragment, allPapers)
         binding.apply {
             ivShare.setOnClickListener {
                 pictureViewModel.loadPaperShare(curPaper.id)
             }
             viewPager.apply {
-                offscreenPageLimit = 4
+                offscreenPageLimit = 2
                 orientation = ViewPager2.ORIENTATION_VERTICAL
-                vpAdapter = PaperBrowserVpAdapter(this@PaperBrowserFragment, allPapers)
                 adapter = vpAdapter
             }
             viewPager.registerOnPageChangeCallback(OnPageChangeCallback())
@@ -71,7 +70,6 @@ class PaperBrowserFragment : BaseBindingFragment<FragmentPictureBrowserBinding>(
             ivMore.setOnClickListener {
                 showMenu()
             }
-            tvLike.text = curPaper.collectNum.toString()
             tvLike.setOnClickListener {
                 if (!HkUserManager.isLogin) {
                     launchActivity(Intent(requireContext(), LoginActivity::class.java))
@@ -85,11 +83,17 @@ class PaperBrowserFragment : BaseBindingFragment<FragmentPictureBrowserBinding>(
                 pictureViewModel.loadPaperShare(curPaper.id)
             }
 
-            tvComment.text = curPaper.commentNum.toString()
             tvComment.setOnClickListener {
                 showCommentDialog()
             }
         }
+    }
+
+    private fun initView(papers: List<Wallpaper>, curPaper: Wallpaper, position: Int) {
+        vpAdapter.notifyItemRangeInserted(allPapers.size, papers.size)
+        binding.tvComment.text = curPaper.commentNum.toString()
+        binding.tvLike.text = curPaper.collectNum.toString()
+        binding.viewPager.setCurrentItem(position, false)
     }
 
     private fun showCommentDialog() {
@@ -97,7 +101,7 @@ class PaperBrowserFragment : BaseBindingFragment<FragmentPictureBrowserBinding>(
         commentDialog.setCallback(object : CommentDialog.Callback {
             override fun commentAdd() {
                 curPaper.commentNum += 1
-                tvComment.text = curPaper.commentNum.toString()
+                binding.tvComment.text = curPaper.commentNum.toString()
             }
         })
         commentDialog.show(childFragmentManager, null)
@@ -122,7 +126,7 @@ class PaperBrowserFragment : BaseBindingFragment<FragmentPictureBrowserBinding>(
 
     private fun showMenu() {
         if (!this::popupMenu.isInitialized) {
-            popupMenu = PopupMenu(requireContext(), ivMore, Gravity.BOTTOM)
+            popupMenu = PopupMenu(requireContext(), binding.ivMore, Gravity.BOTTOM)
             popupMenu.menuInflater.inflate(R.menu.menu_picture_detail, popupMenu.menu)
             if (curPaper.subjectId == -1) {
                 popupMenu.menu.findItem(R.id.itSubject).isVisible = false
@@ -149,38 +153,45 @@ class PaperBrowserFragment : BaseBindingFragment<FragmentPictureBrowserBinding>(
                 allPapers.addAll(sc.papers)
                 position = sc.curPosition
                 curPaper = allPapers[position]
-                initView()
+                initView(allPapers, curPaper, position)
                 pictureViewModel.liveData.observe(viewLifecycleOwner) {
-                    allPapers.addAll(it)
-                    vpAdapter.notifyItemRangeInserted(allPapers.size, it.size)
+                    if (!it.isSuccess) {
+                        showMessage(it.msg)
+                        return@observe
+                    }
+                    allPapers.addAll(it.data!!.content)
+                    vpAdapter.notifyItemRangeInserted(allPapers.size, it.data.content.size)
                 }
             }
             is SourcePaper -> {
-                position = 0
                 pictureViewModel.liveDataPaper.observe(viewLifecycleOwner) {
                     curPaper = it
-                    initView()
+                    allPapers.add(curPaper)
+                    initView(allPapers, curPaper, position)
                 }
                 pictureViewModel.loadPaperDetail((source as SourcePaper).paperId)
             }
             is SourceSubject -> {
                 position = (source as SourceSubject).curPosition
+//                curPaper =
+//                    Wallpaper(url = "https://wallpager-1251812446.cos.ap-beijing.myqcloud.com/image/1645/61959430682a825f7e058ea7485b2760cca9471b.jpg")
+//                allPapers.add(curPaper)
                 pictureViewModel.liveDataSubject.observe(viewLifecycleOwner) {
-                    curPaper = it[(source as SourceRecommend).curPosition]
-                    initView()
+                    curPaper = it[(source as SourceSubject).curPosition]
+                    allPapers.addAll(it)
+                    initView(allPapers, curPaper,position)
                 }
                 pictureViewModel.loadSubjectAllPapers((source as SourceSubject).subjectId)
             }
-            else -> throw IllegalArgumentException("找不到合适的PictureBrowser路由！")
+            else -> throw IllegalArgumentException("找不到合适的页面！")
         }
-        binding.viewPager.setCurrentItem(position,false)
     }
 
     private fun showLikeStatus(collected: Boolean) {
         curPaper.collected = collected
         curPaper.collectNum = curPaper.collectNum + if (collected) 1 else -1
-        tvLike.text = curPaper.collectNum.toString()
-        tvLike.setCompoundDrawablesRelativeWithIntrinsicBounds(
+        binding.tvLike.text = curPaper.collectNum.toString()
+        binding.tvLike.setCompoundDrawablesRelativeWithIntrinsicBounds(
             0,
             if (collected) R.drawable.ic_favorite_black_24dp else R.drawable.ic_favorite_border_black_24dp,
             0,
@@ -192,28 +203,30 @@ class PaperBrowserFragment : BaseBindingFragment<FragmentPictureBrowserBinding>(
     private fun refreshLikeState(position: Int) {
         curPaper = allPapers[position]
         binding.tvOrder.text = "${position + 1}/${allPapers.size}"
-        tvLike.text = curPaper.collectNum.toString()
-        tvLike.setCompoundDrawablesRelativeWithIntrinsicBounds(
+        binding.tvLike.text = curPaper.collectNum.toString()
+        binding.tvLike.setCompoundDrawablesRelativeWithIntrinsicBounds(
             0, if (curPaper.collected) R.drawable.ic_favorite_black_24dp else
                 R.drawable.ic_favorite_border_black_24dp, 0, 0
         )
-        tvLike.isClickable = !curPaper.collected
+        binding.tvLike.isClickable = !curPaper.collected
     }
 
     override fun onSwitchNavigation() {
-        if (rl_head.visibility == View.VISIBLE) {
-            rl_head.visibility = View.GONE
-            rl_bottom.visibility = View.GONE
-            llRight.visibility = View.GONE
-        } else {
-            rl_head.visibility = View.VISIBLE
-            rl_bottom.visibility = View.VISIBLE
-            llRight.visibility = View.VISIBLE
+        binding.apply {
+            if (rlHead.visibility == View.VISIBLE) {
+                rlHead.visibility = View.GONE
+                rlBottom.visibility = View.GONE
+                llRight.visibility = View.GONE
+            } else {
+                rlHead.visibility = View.VISIBLE
+                rlBottom.visibility = View.VISIBLE
+                llRight.visibility = View.VISIBLE
+            }
         }
     }
 
     private fun getCurrentPictureFragment(): PictureFragment? {
-        return vpAdapter.getFragment(viewPager.currentItem) as PictureFragment?
+        return vpAdapter.getFragment(binding.viewPager.currentItem) as PictureFragment?
     }
 
     companion object {
