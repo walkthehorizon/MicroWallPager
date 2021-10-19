@@ -12,18 +12,20 @@ import com.kingja.loadsir.core.LoadSir
 import com.micro.mvp.IView
 import com.micro.utils.ArmsUtils
 import com.micro.utils.Preconditions
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.shentu.paper.app.page.EmptyCallback
 import com.shentu.paper.app.page.ErrorCallback
 import com.shentu.paper.app.page.LoadingCallback
 import com.shentu.paper.mvp.ui.widget.progress.DefaultLoadCallback
 import inflateBindingWithGeneric
+import kotlinx.android.synthetic.main.activity_my_collect.*
 import org.greenrobot.eventbus.EventBus
 
 abstract class BaseBindingActivity<VB : ViewBinding> : AppCompatActivity(), IView {
     protected lateinit var binding: VB
-    protected val loadService: LoadService<*>? by lazy {
-        if (getLoadTarget() != null) LoadSir.getDefault()
-            .register(getLoadTarget()) { onReload() } else null
+    private var loadService: LoadService<Any>? = null
+    private val smartRefresh: SmartRefreshLayout? by lazy {
+        getRefreshLayout()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,14 +35,28 @@ abstract class BaseBindingActivity<VB : ViewBinding> : AppCompatActivity(), IVie
         }
         binding = inflateBindingWithGeneric(layoutInflater)
         setContentView(binding.root)
+        if (getLoadTarget() != null) {
+            loadService = LoadSir.getDefault().register(getLoadTarget()) { onReload() }
+        }
+        initView(savedInstanceState)
+        initData(savedInstanceState)
     }
+
+    abstract fun initView(savedInstanceState: Bundle?)
+
+    abstract fun initData(savedInstanceState: Bundle?)
 
     open fun getLoadTarget(): View? {
         return null
     }
 
     open fun onReload() {
+        showContent()
+        smartRefresh?.autoRefresh()
+    }
 
+    open fun getRefreshLayout(): SmartRefreshLayout? {
+        return null
     }
 
     override fun showContent() {
@@ -57,6 +73,19 @@ abstract class BaseBindingActivity<VB : ViewBinding> : AppCompatActivity(), IVie
 
     override fun showLoading() {
         loadService?.showCallback(LoadingCallback::class.java)
+    }
+
+    override fun hideRefresh(clear: Boolean) {
+        if (clear) {
+            smartRefresh?.finishRefresh()
+        } else {
+            smartRefresh?.finishLoadMore()
+        }
+    }
+
+    override fun hideRefresh(clear: Boolean, noMoreData: Boolean) {
+        hideRefresh(clear)
+        smartRefresh?.setNoMoreData(noMoreData)
     }
 
     override fun showMessage(message: String) {

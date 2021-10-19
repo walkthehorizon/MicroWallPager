@@ -13,9 +13,11 @@
 
     <CheckBox
         android:id="@+id/checkbox"
-        android:layout_width="wrap_content"
+        android:layout_width="24dp"
         android:clickable="false"
-        android:layout_height="wrap_content"
+        android:button="@null"
+        android:background="@drawable/bg_collect_check_box"
+        android:layout_height="24dp"
         android:buttonTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

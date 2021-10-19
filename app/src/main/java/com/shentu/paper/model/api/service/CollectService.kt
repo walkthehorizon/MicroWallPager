@@ -9,11 +9,11 @@ import retrofit2.http.*
 interface CollectService {
     @Headers("Cache-Control: max-age=5")
     @GET("collect/my")
-    fun getMyCollects(@Query("offset") offset: Int): Observable<WallpaperPageResponse>
+    suspend fun getMyCollects(@Query("offset") offset: Int): WallpaperPageResponse
 
     @POST("collect/modify/{id}")
     suspend fun modifyPaperCollect(@Path("id") id: Long): BaseResponse<Boolean>
 
     @POST("collect/del/collects")
-    fun delCollects(@Body body: DelCollectBody): Observable<BaseResponse<Boolean>>
+    suspend fun delCollects(@Body body: DelCollectBody): BaseResponse<Boolean>
 }

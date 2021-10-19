@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.os.Looper
 import android.view.Gravity
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
@@ -24,7 +23,6 @@ import com.shentu.paper.viewmodels.PictureBrowserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import timber.log.Timber
 
 @AndroidEntryPoint
 class PaperBrowserFragment : BaseBindingFragment<FragmentPaperBrowserBinding>(),
@@ -45,7 +43,7 @@ class PaperBrowserFragment : BaseBindingFragment<FragmentPaperBrowserBinding>(),
         pictureViewModel.liveDataShare.observe(viewLifecycleOwner) {
             ShareUtils.showShare(requireContext(), it)
         }
-        pictureViewModel.liveDataCollect.observe(viewLifecycleOwner) {
+        pictureViewModel.liveDataAdd.observe(viewLifecycleOwner) {
             showLikeStatus(it)
         }
         vpAdapter = PaperBrowserVpAdapter(this@PaperBrowserFragment, allPapers)
@@ -154,7 +152,7 @@ class PaperBrowserFragment : BaseBindingFragment<FragmentPaperBrowserBinding>(),
                 position = sc.curPosition
                 curPaper = allPapers[position]
                 initView(allPapers, curPaper, position)
-                pictureViewModel.liveData.observe(viewLifecycleOwner) {
+                pictureViewModel.liveDataRecommend.observe(viewLifecycleOwner) {
                     if (!it.isSuccess) {
                         showMessage(it.msg)
                         return@observe
@@ -182,6 +180,21 @@ class PaperBrowserFragment : BaseBindingFragment<FragmentPaperBrowserBinding>(),
                     initView(allPapers, curPaper,position)
                 }
                 pictureViewModel.loadSubjectAllPapers((source as SourceSubject).subjectId)
+            }
+            is SourceCollect -> {
+                val sc = source as SourceCollect
+                allPapers.addAll(sc.papers)
+                position = sc.curPosition
+                curPaper = allPapers[position]
+                initView(allPapers, curPaper, position)
+                pictureViewModel.liveDataCollects.observe(viewLifecycleOwner) {
+                    if (!it.isSuccess) {
+                        showMessage(it.msg)
+                        return@observe
+                    }
+                    allPapers.addAll(it.data!!.content)
+                    vpAdapter.notifyItemRangeInserted(allPapers.size, it.data.content.size)
+                }
             }
             else -> throw IllegalArgumentException("找不到合适的页面！")
         }
@@ -248,6 +261,11 @@ class PaperBrowserFragment : BaseBindingFragment<FragmentPaperBrowserBinding>(),
             if (source is SourceRecommend) {
                 if (position == allPapers.size - 1) {
                     pictureViewModel.loadRecommendPapers(allPapers.size)
+                }
+            }
+            if(source is SourceCollect){
+                if (position == allPapers.size - 1) {
+                    pictureViewModel.loadCollectPapers(allPapers.size)
                 }
             }
         }

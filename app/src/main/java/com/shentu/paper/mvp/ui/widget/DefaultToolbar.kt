@@ -29,7 +29,6 @@ class DefaultToolbar @JvmOverloads constructor(context: Context, attrs: Attribut
         val endTextSize = a.getDimension(R.styleable.DefaultToolbar_tl_end_text_size, 16f)
         val startIconColor = a.getColor(R.styleable.DefaultToolbar_tl_left_tint, Color.WHITE)
         a.recycle()
-        Timber.e("left:  $leftIcon")
         isBack = leftIcon == R.drawable.ic_arrow_back_white_24dp
         setTitle(tlTitle)
         setLeftIcon(leftIcon, startIconColor)

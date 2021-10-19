@@ -33,8 +33,7 @@ class SearchActivity : BaseBindingActivity<ActivitySearchBinding>() {
         return binding.rvData
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun initView(savedInstanceState: Bundle?) {
         toolbar.addOnClickListener(object : DefaultToolbar.OnClickListener() {
             override fun onClickLeftIcon() {
                 KeyboardUtils.hideSoftInput(etSearch)
@@ -76,6 +75,10 @@ class SearchActivity : BaseBindingActivity<ActivitySearchBinding>() {
                 searchViewModel.search(key)
             }
         })
+        showContent()
+    }
+
+    override fun initData(savedInstanceState: Bundle?) {
         searchViewModel.liveData.observe(this,
             {
                 if(!it.isSuccess){
@@ -99,7 +102,6 @@ class SearchActivity : BaseBindingActivity<ActivitySearchBinding>() {
                 binding.historyView.updateKey(it)
             }
         })
-        showContent()
     }
 
     override fun onStop() {

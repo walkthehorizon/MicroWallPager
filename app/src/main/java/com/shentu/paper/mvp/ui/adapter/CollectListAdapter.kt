@@ -9,7 +9,7 @@ import com.shentu.paper.app.GlideApp
 import com.shentu.paper.app.utils.HkUtils
 import com.shentu.paper.model.entity.Wallpaper
 
-class CollectListAdapter(data: List<Wallpaper>?, val decoration: Int) : BaseQuickAdapter<Wallpaper
+class CollectListAdapter(data: List<Wallpaper> = emptyList(), val decoration: Int) : BaseQuickAdapter<Wallpaper
         , BaseViewHolder>(R.layout.item_collect, data) {
     private var multiChecked = false
 

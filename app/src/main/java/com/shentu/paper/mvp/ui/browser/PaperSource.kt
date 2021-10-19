@@ -14,6 +14,6 @@ data class SourceCategory(val curPosition: Int = 0, val categoryId: Int) : Paper
 
 data class SourcePaper(val paperId: Long) : PaperSource()
 
-data class SourceCollect(val curPosition: Int = 0) : PaperSource()
+data class SourceCollect(val papers: List<Wallpaper>, val curPosition: Int = 0) : PaperSource()
 
 object Unknown : PaperSource()

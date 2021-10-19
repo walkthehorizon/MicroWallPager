@@ -36,6 +36,13 @@ public interface IView {
     default void hideRefresh(boolean clear) {
 
     }
+
+    /**
+     * 隐藏刷新
+     */
+    default void hideRefresh(boolean clear , boolean noMoreData) {
+
+    }
     /**
      * 展示错误界面
      * */

@@ -106,4 +106,5 @@
     <declare-styleable name="PullHeadLayout">
         <attr name="defaultPullHeight" format="dimension" />
     </declare-styleable>
+
 </resources>

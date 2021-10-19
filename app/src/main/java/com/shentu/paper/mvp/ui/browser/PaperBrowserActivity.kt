@@ -25,7 +25,14 @@ class PaperBrowserActivity : BaseBindingActivity<ActivityPaperBrowserBinding>(),
         setTheme(R.style.AppTheme_FullScreen)
         window.enterTransition = Fade()
         super.onCreate(savedInstanceState)
+    }
+
+    override fun initView(savedInstanceState: Bundle?) {
         nav2Picture(intent.getSerializableExtra(KEY_PAPER_SOURCE) as PaperSource)
+    }
+
+    override fun initData(savedInstanceState: Bundle?) {
+
     }
 
     private fun nav2Picture(source: PaperSource) {

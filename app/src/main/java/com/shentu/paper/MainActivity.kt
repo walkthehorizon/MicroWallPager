@@ -49,6 +49,13 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(),
         setTheme(R.style.AppTheme)
         BarUtils.setStatusBarColor(this, Color.TRANSPARENT)
         super.onCreate(savedInstanceState)
+    }
+
+    override fun initView(savedInstanceState: Bundle?) {
+
+    }
+
+    override fun initData(savedInstanceState: Bundle?) {
         if (BuildConfig.DEBUG) {
             Config.init(this)
         }
@@ -58,6 +65,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(),
             loadData()
         }
     }
+
 
     override fun onResume() {
         super.onResume()

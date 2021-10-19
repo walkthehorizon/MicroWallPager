@@ -21,22 +21,34 @@ import kotlin.math.max
 class PictureBrowserViewModel
 @Inject constructor(private val mRepositoryManager: RepositoryManager) : ViewModel() {
 
+    private val LOAD_COUNT = 5
+
     private val _liveData: MutableLiveData<WallpaperPageResponse> = MutableLiveData()
-    val liveData: LiveData<WallpaperPageResponse> = _liveData
+    val liveDataRecommend: LiveData<WallpaperPageResponse> = _liveData
     private val _liveDataPaper: MutableLiveData<Wallpaper> = MutableLiveData()
     val liveDataPaper: LiveData<Wallpaper> = _liveDataPaper
     private val _liveDataSubject: MutableLiveData<List<Wallpaper>> = MutableLiveData()
     val liveDataSubject: LiveData<List<Wallpaper>> = _liveDataSubject
     private var offset = MicroService.PAGE_START
     val liveDataShare: MutableLiveData<Wallpaper> = MutableLiveData()
-    val liveDataCollect: MutableLiveData<Boolean> = MutableLiveData()
+    val liveDataAdd: MutableLiveData<Boolean> = MutableLiveData()
+    val liveDataCollects : MutableLiveData<WallpaperPageResponse> = MutableLiveData()
 
     fun loadRecommendPapers(position: Int, append: Boolean = true) {
-        offset = if (append) position + 5 else max(position - 5, 0)
+        offset = if (append) position + LOAD_COUNT else max(position - LOAD_COUNT, 0)
         viewModelScope.launch(errorHandler) {
             val response = mRepositoryManager.obtainRetrofitService(MicroService::class.java)
                 .getRecommendWallpapers(offset)
             _liveData.postValue(response)
+        }
+    }
+
+    fun loadCollectPapers(position: Int, append: Boolean = true) {
+        offset = if (append) position + LOAD_COUNT else max(position - LOAD_COUNT, 0)
+        viewModelScope.launch(errorHandler) {
+            val response = mRepositoryManager.obtainRetrofitService(CollectService::class.java)
+                .getMyCollects(offset)
+            liveDataCollects.postValue(response)
         }
     }
 
@@ -80,7 +92,7 @@ class PictureBrowserViewModel
             if (!response.isSuccess) {
                 throw Throwable(response.msg)
             }
-            liveDataCollect.postValue(response.data)
+            liveDataAdd.postValue(response.data)
         }
     }
 }

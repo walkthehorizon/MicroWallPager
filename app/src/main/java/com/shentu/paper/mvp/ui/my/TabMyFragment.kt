@@ -27,6 +27,7 @@ import com.shentu.paper.app.utils.HkUtils
 import com.shentu.paper.databinding.FragmentMyBinding
 import com.shentu.paper.model.entity.AppUpdate
 import com.shentu.paper.mvp.contract.MyContract
+import com.shentu.paper.mvp.ui.activity.MyCollectActivity
 import com.shentu.paper.mvp.ui.activity.SettingMoreActivity
 import com.shentu.paper.mvp.ui.login.LoginActivity
 import com.shentu.paper.mvp.ui.update.AppUpdateDialog
@@ -188,8 +189,7 @@ class TabMyFragment : BaseBindingFragment<FragmentMyBinding>(), MyContract.View 
             launchActivity(Intent(requireContext(), LoginActivity::class.java))
             return
         }
-        ARouter.getInstance().build("/activity/my/collect/")
-                .navigation(requireContext())
+        launchActivity(Intent(requireContext(),MyCollectActivity::class.java))
     }
 
     /**
