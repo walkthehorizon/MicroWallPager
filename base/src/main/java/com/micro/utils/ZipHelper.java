@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.DataFormatException;
@@ -112,7 +113,7 @@ public class ZipHelper {
 
             returnValues = new byte[bytesDecompressedSoFar.size()];
             for (int b = 0; b < returnValues.length; b++) {
-                returnValues[b] = (byte) (bytesDecompressedSoFar.get(b));
+                returnValues[b] = bytesDecompressedSoFar.get(b);
             }
 
         } catch (DataFormatException dfe) {
@@ -162,15 +163,10 @@ public class ZipHelper {
     public static byte[] compressForZlib(String stringToCompress) {
         byte[] returnValues = null;
 
-        try {
-
-            returnValues = compressForZlib
-                    (
-                            stringToCompress.getBytes("UTF-8")
-                    );
-        } catch (UnsupportedEncodingException uee) {
-            uee.printStackTrace();
-        }
+        returnValues = compressForZlib
+                (
+                        stringToCompress.getBytes(StandardCharsets.UTF_8)
+                );
 
         return returnValues;
     }
@@ -188,7 +184,7 @@ public class ZipHelper {
         try {
             os = new ByteArrayOutputStream(string.length());
             gos = new GZIPOutputStream(os);
-            gos.write(string.getBytes("UTF-8"));
+            gos.write(string.getBytes(StandardCharsets.UTF_8));
             byte[] compressed = os.toByteArray();
             return compressed;
         } catch (IOException e) {

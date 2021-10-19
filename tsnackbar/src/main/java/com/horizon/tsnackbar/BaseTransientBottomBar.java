@@ -224,7 +224,7 @@ public abstract class BaseTransientBottomBar<B extends BaseTransientBottomBar<B>
                     ((BaseTransientBottomBar.Behavior)behavior).setBaseTransientBottomBar(this);
                 }
 
-                ((SwipeDismissBehavior)behavior).setListener(new OnDismissListener() {
+                behavior.setListener(new OnDismissListener() {
                     public void onDismiss(View view) {
                         view.setVisibility(View.GONE);
                         BaseTransientBottomBar.this.dispatchDismiss(0);
@@ -242,7 +242,7 @@ public abstract class BaseTransientBottomBar<B extends BaseTransientBottomBar<B>
 
                     }
                 });
-                clp.setBehavior((androidx.coordinatorlayout.widget.CoordinatorLayout.Behavior)behavior);
+                clp.setBehavior(behavior);
                 clp.insetEdge = 80;
             }
 
@@ -273,7 +273,7 @@ public abstract class BaseTransientBottomBar<B extends BaseTransientBottomBar<B>
         } else {
             this.view.setOnLayoutChangeListener(new BaseTransientBottomBar.OnLayoutChangeListener() {
                 public void onLayoutChange(View view, int left, int top, int right, int bottom) {
-                    BaseTransientBottomBar.this.view.setOnLayoutChangeListener((BaseTransientBottomBar.OnLayoutChangeListener)null);
+                    BaseTransientBottomBar.this.view.setOnLayoutChangeListener(null);
                     if (BaseTransientBottomBar.this.shouldAnimate()) {
                         BaseTransientBottomBar.this.animateViewIn();
                     } else {
@@ -295,7 +295,7 @@ public abstract class BaseTransientBottomBar<B extends BaseTransientBottomBar<B>
         }
 
         ValueAnimator animator = new ValueAnimator();
-        animator.setIntValues(new int[]{translationYBottom, 0});
+        animator.setIntValues(translationYBottom, 0);
         animator.setInterpolator(AnimationUtils.FAST_OUT_SLOW_IN_INTERPOLATOR);
         animator.setDuration(250L);
         animator.addListener(new AnimatorListenerAdapter() {
@@ -326,7 +326,7 @@ public abstract class BaseTransientBottomBar<B extends BaseTransientBottomBar<B>
 
     private void animateViewOut(final int event) {
         ValueAnimator animator = new ValueAnimator();
-        animator.setIntValues(new int[]{0, -this.getTranslationYBottom()});
+        animator.setIntValues(0, -this.getTranslationYBottom());
         animator.setInterpolator(AnimationUtils.FAST_OUT_SLOW_IN_INTERPOLATOR);
         animator.setDuration(250L);
         animator.addListener(new AnimatorListenerAdapter() {
@@ -489,7 +489,7 @@ public abstract class BaseTransientBottomBar<B extends BaseTransientBottomBar<B>
         private BaseTransientBottomBar.OnAttachStateChangeListener onAttachStateChangeListener;
 
         protected SnackbarBaseLayout(Context context) {
-            this(context, (AttributeSet)null);
+            this(context, null);
         }
 
         @SuppressLint("WrongConstant")

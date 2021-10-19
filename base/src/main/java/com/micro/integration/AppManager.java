@@ -235,9 +235,7 @@ public final class AppManager {
             return;
         }
         synchronized (AppManager.class) {
-            if (mActivityList.contains(activity)) {
-                mActivityList.remove(activity);
-            }
+            mActivityList.remove(activity);
         }
     }
 

@@ -15,7 +15,7 @@ import dagger.hilt.android.scopes.FragmentScoped
 @InstallIn(FragmentComponent::class)
 @Module
 //构建CategoryModule时,将View的实现类传进来,这样就可以提供View的实现类给presenter
-class CategoryModule() {
+class CategoryModule {
     @FragmentScoped
     @Provides
     fun provideCategoryView(@ActivityContext context: Context): CategoryContract.View {

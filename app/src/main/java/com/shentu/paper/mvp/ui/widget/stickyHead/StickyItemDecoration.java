@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
-    private int mStickyHeadType;
+    private final int mStickyHeadType;
     private int mFirstVisiblePosition;
     //    private int mFirstCompletelyVisiblePosition;
     private int mStickyHeadPosition;
@@ -24,7 +24,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
     private RecyclerView.Adapter mAdapter;
 
-    private StickyHeadContainer mStickyHeadContainer;
+    private final StickyHeadContainer mStickyHeadContainer;
     private boolean mEnableStickyHead = true;
 
 

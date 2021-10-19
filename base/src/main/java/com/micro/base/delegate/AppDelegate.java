@@ -131,7 +131,7 @@ public class AppDelegate implements AppLifecycles {
         this.mActivityLifecycles = null;
         this.mComponentCallback = null;
         this.mAppLifecycles = null;
-        this.mApplication = null;
+        mApplication = null;
     }
 
 
@@ -160,7 +160,7 @@ public class AppDelegate implements AppLifecycles {
      * 不响应 {@link ComponentCallbacks2#onTrimMemory(int)} 回调, 系统 kill 掉进程的几率更大
      */
     private static class AppComponentCallbacks implements ComponentCallbacks2 {
-        private Application mApplication;
+        private final Application mApplication;
 //        private AppComponent mAppComponent;
 
         public AppComponentCallbacks(Application application) {

@@ -42,19 +42,19 @@ import okhttp3.Interceptor;
 @InstallIn(SingletonComponent.class)
 @Module
 public class GlobalConfigModule {
-    private HttpUrl mApiUrl;
-    private BaseUrl mBaseUrl;
-    private GlobalHttpHandler mHandler;
-    private List<Interceptor> mInterceptors;
-    private ResponseErrorListener mErrorListener;
-    private File mCacheFile;
-    private ClientModule.RetrofitConfiguration mRetrofitConfiguration;
-    private ClientModule.OkhttpConfiguration mOkhttpConfiguration;
-    private AppModule.GsonConfiguration mGsonConfiguration;
-    private RequestInterceptor.Level mPrintHttpLogLevel;
-    private FormatPrinter mFormatPrinter;
-    private Cache.Factory mCacheFactory;
-    private List<ConfigModule> mModules;
+    private final HttpUrl mApiUrl;
+    private final BaseUrl mBaseUrl;
+    private final GlobalHttpHandler mHandler;
+    private final List<Interceptor> mInterceptors;
+    private final ResponseErrorListener mErrorListener;
+    private final File mCacheFile;
+    private final ClientModule.RetrofitConfiguration mRetrofitConfiguration;
+    private final ClientModule.OkhttpConfiguration mOkhttpConfiguration;
+    private final AppModule.GsonConfiguration mGsonConfiguration;
+    private final RequestInterceptor.Level mPrintHttpLogLevel;
+    private final FormatPrinter mFormatPrinter;
+    private final Cache.Factory mCacheFactory;
+    private final List<ConfigModule> mModules;
 
     public GlobalConfigModule() {
         mModules = new ManifestParser(BaseApplication.getInstance()).parse();

@@ -46,7 +46,7 @@ class HomeRankFragment : BaseFragment<IPresenter>(), HomeRankContract.View {
     lateinit var errorHandler:RxErrorHandler
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_home_rank, container, false);
+        return inflater.inflate(R.layout.fragment_home_rank, container, false)
     }
 
     override fun initData(savedInstanceState: Bundle?) {
@@ -124,7 +124,7 @@ class HomeRankFragment : BaseFragment<IPresenter>(), HomeRankContract.View {
         }
     }
 
-    private var offset = 0;
+    private var offset = 0
 
     fun getRankPapers(clear: Boolean) {
         repositoryManager

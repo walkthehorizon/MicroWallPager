@@ -28,7 +28,7 @@ class AppUpdateDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         update = requireArguments().getSerializable("update") as AppUpdate
         if (update != null) {
-            tvVersion!!.text = "V" + update!!.versionName!!
+            tvVersion!!.text = "V" + update!!.versionName
             tvContent!!.text = update!!.updateInfo
         }
         mbUpdate.setOnClickListener { clickUpdate() }

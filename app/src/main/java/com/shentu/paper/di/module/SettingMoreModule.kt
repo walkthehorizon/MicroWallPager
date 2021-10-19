@@ -14,7 +14,7 @@ import dagger.hilt.android.scopes.ActivityScoped
 @InstallIn(ActivityComponent::class)
 @Module
 //构建SettingMoreModule时,将View的实现类传进来,这样就可以提供View的实现类给presenter
-class SettingMoreModule() {
+class SettingMoreModule {
     @ActivityScoped
     @Provides
     fun provideSettingMoreView(@ActivityContext context: Context): SettingMoreContract.View {

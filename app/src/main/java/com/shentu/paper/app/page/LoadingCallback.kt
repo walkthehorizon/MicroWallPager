@@ -10,10 +10,6 @@ class LoadingCallback : Callback() {
         return R.layout.layout_default_loading
     }
 
-    override fun getSuccessVisible(): Boolean {
-        return super.getSuccessVisible()
-    }
-
     override fun onReloadEvent(context: Context, view: View): Boolean {
         return true
     }

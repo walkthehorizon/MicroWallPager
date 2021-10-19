@@ -10,7 +10,5 @@ interface SplashContract {
         fun showCountDownText(time: Int)
     }
 
-    interface Model : IModel {
-
-    }
+    interface Model : IModel
 }

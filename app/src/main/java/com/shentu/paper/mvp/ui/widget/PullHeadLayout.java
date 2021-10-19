@@ -47,7 +47,7 @@ public class PullHeadLayout extends ViewGroup implements NestedScrollingParent,
 
     private View mTarget; // the target of the gesture
     OnDragEndListener mListener;
-    private int mTouchSlop;
+    private final int mTouchSlop;
     private float mTotalDragDistance = -1;
 
     // If nested scrolling is enabled, the total amount that needed to be
@@ -61,7 +61,7 @@ public class PullHeadLayout extends ViewGroup implements NestedScrollingParent,
     private boolean mNestedScrollInProgress;
 
     int mCurrentTargetOffsetTop;
-    private int mDefaultPullHeight;
+    private final int mDefaultPullHeight;
 
     private float mInitialMotionY;
     private float mInitialDownY;

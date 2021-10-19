@@ -29,13 +29,6 @@ class VerificationCodeInput(context: Context, attrs: AttributeSet?) : ViewGroup(
     private var boxBgFocus: Drawable? = null
     private var boxBgNormal: Drawable? = null
     private var listener: Listener? = null
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-    }
-
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-    }
 
     private fun initViews() {
         val textWatcher: TextWatcher = object : TextWatcher {

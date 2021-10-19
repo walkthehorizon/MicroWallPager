@@ -32,7 +32,7 @@ class RankFragment : BaseFragment<IPresenter>(), RankContract.View {
     }
 
     override fun initView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_rank, container, false);
+        return inflater.inflate(R.layout.fragment_rank, container, false)
     }
 
     override fun initData(savedInstanceState: Bundle?) {

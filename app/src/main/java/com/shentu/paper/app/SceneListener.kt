@@ -1,4 +1,4 @@
-package com.shentu.paper.app;
+package com.shentu.paper.app
 
 import android.app.Activity
 import com.mob.moblink.RestoreSceneListener

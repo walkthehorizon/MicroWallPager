@@ -202,11 +202,6 @@ class TabHomeFragment : BaseBindingFragment<FragmentTabHomeBinding>(), OnRefresh
         showContent()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
     private fun getCurrentAllPapers(): List<Wallpaper> {
         wallpapers.clear()
         for (i in 0 until recommendAdapter.itemCount) {

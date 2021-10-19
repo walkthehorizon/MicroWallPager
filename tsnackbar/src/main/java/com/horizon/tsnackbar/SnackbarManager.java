@@ -130,7 +130,7 @@ class SnackbarManager {
         if (this.nextSnackbar != null) {
             this.currentSnackbar = this.nextSnackbar;
             this.nextSnackbar = null;
-            SnackbarManager.Callback callback = (SnackbarManager.Callback)this.currentSnackbar.callback.get();
+            SnackbarManager.Callback callback = this.currentSnackbar.callback.get();
             if (callback != null) {
                 callback.show();
             } else {
@@ -141,7 +141,7 @@ class SnackbarManager {
     }
 
     private boolean cancelSnackbarLocked(SnackbarManager.SnackbarRecord record, int event) {
-        SnackbarManager.Callback callback = (SnackbarManager.Callback)record.callback.get();
+        SnackbarManager.Callback callback = record.callback.get();
         if (callback != null) {
             this.handler.removeCallbacksAndMessages(record);
             callback.dismiss(event);
@@ -169,7 +169,7 @@ class SnackbarManager {
             }
 
             this.handler.removeCallbacksAndMessages(r);
-            this.handler.sendMessageDelayed(Message.obtain(this.handler, 0, r), (long)durationMs);
+            this.handler.sendMessageDelayed(Message.obtain(this.handler, 0, r), durationMs);
         }
     }
 

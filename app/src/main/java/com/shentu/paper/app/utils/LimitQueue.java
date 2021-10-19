@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 public class LimitQueue<E> implements Serializable {
-    private int limit; // 队列长度
+    private final int limit; // 队列长度
 
-    private LinkedList<E> queue;
+    private final LinkedList<E> queue;
 
     public LimitQueue(int limit) {
         this.limit = limit;

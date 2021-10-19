@@ -17,9 +17,10 @@ class SettingMoreModel
 @Inject
 constructor(repositoryManager: IRepositoryManager) : BaseModel(repositoryManager), SettingMoreContract.Model {
     @Inject
-    lateinit var mGson: Gson;
+    lateinit var mGson: Gson
+
     @Inject
-    lateinit var mApplication: Application;
+    lateinit var mApplication: Application
 
     override fun logout(): Observable<BaseResponse<String>> {
         return mRepositoryManager

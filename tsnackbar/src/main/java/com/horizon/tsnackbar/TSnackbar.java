@@ -136,7 +136,7 @@ public final class TSnackbar extends BaseTransientBottomBar<TSnackbar> {
             });
         } else {
             tv.setVisibility(View.GONE);
-            tv.setOnClickListener((OnClickListener)null);
+            tv.setOnClickListener(null);
             this.hasAction = false;
         }
 

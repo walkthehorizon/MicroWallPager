@@ -24,7 +24,7 @@ import android.widget.PopupWindow;
 public class CustomPopWindow implements PopupWindow.OnDismissListener{
     private static final String TAG = "CustomPopWindow";
     private static final float DEFAULT_ALPHA = 0.7f;
-    private Context mContext;
+    private final Context mContext;
     private int mWidth;
     private int mHeight;
     private boolean mIsFocusable = true;
@@ -261,7 +261,7 @@ public class CustomPopWindow implements PopupWindow.OnDismissListener{
     }
 
     public static class PopupWindowBuilder{
-        private CustomPopWindow mCustomPopWindow;
+        private final CustomPopWindow mCustomPopWindow;
 
         public PopupWindowBuilder(Context context){
             mCustomPopWindow = new CustomPopWindow(context);

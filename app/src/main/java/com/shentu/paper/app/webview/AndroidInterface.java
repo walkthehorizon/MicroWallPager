@@ -9,8 +9,8 @@ import com.blankj.utilcode.util.ToastUtils;
 
 public class AndroidInterface {
 
-    private Handler deliver = new Handler(Looper.getMainLooper());
-    private Context context;
+    private final Handler deliver = new Handler(Looper.getMainLooper());
+    private final Context context;
 
     public AndroidInterface(Context context) {
         this.context = context;

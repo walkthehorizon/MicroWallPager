@@ -108,8 +108,8 @@ class GlobalConfiguration : ConfigModule {
                                     }
                                     //第一个cookie的值为csrftoken，第二个是sessionid
                                     //每次进行登录都会产生一个相应的csrftoken，保存这个值才可进行后续的注销登录
-                                    SPUtils.getInstance().put("X-CSRFToken", cookies[0].value());
-                                    cookieStore[url.host()] = cookies;
+                                    SPUtils.getInstance().put("X-CSRFToken", cookies[0].value())
+                                    cookieStore[url.host()] = cookies
                                 }
 
                             })

@@ -170,7 +170,7 @@ public class DefaultFormatPrinter implements FormatPrinter {
         }
     }
 
-    private static ThreadLocal<Integer> last = new ThreadLocal<Integer>() {
+    private static final ThreadLocal<Integer> last = new ThreadLocal<Integer>() {
         @Override
         protected Integer initialValue() {
             return 0;

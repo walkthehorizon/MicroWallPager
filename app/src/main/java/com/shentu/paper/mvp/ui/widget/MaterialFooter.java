@@ -19,8 +19,8 @@ import com.scwang.smart.refresh.layout.constant.SpinnerStyle;
 import com.scwang.smart.refresh.layout.util.SmartUtil;
 
 public class MaterialFooter extends LinearLayout implements RefreshFooter {
-    private ProgressBar progressBar;
-    private TextView tvTip;
+    private final ProgressBar progressBar;
+    private final TextView tvTip;
 
     public MaterialFooter(@NonNull Context context) {
         this(context, null);

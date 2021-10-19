@@ -24,8 +24,8 @@ public class SnackbarContentLayout extends LinearLayout implements BaseTransient
   private TextView messageView;
   private Button actionView;
 
-  private int maxWidth;
-  private int maxInlineActionWidth;
+  private final int maxWidth;
+  private final int maxInlineActionWidth;
 
   public SnackbarContentLayout(@NonNull Context context) {
     this(context, null);
