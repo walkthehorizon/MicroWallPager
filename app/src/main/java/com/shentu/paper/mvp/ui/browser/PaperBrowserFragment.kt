@@ -6,9 +6,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
+import android.view.WindowInsets
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
+import com.blankj.utilcode.util.BarUtils
 import com.shentu.paper.R
 import com.shentu.paper.app.HkUserManager
 import com.shentu.paper.app.base.BaseBindingFragment
@@ -40,6 +42,7 @@ class PaperBrowserFragment : BaseBindingFragment<FragmentPaperBrowserBinding>(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        BarUtils.addMarginTopEqualStatusBarHeight(binding.rlHead)
         pictureViewModel.liveDataShare.observe(viewLifecycleOwner) {
             ShareUtils.showShare(requireContext(), it)
         }
@@ -85,6 +88,7 @@ class PaperBrowserFragment : BaseBindingFragment<FragmentPaperBrowserBinding>(),
                 showCommentDialog()
             }
         }
+        requireActivity().window
     }
 
     private fun initView(papers: List<Wallpaper>, curPaper: Wallpaper, position: Int) {

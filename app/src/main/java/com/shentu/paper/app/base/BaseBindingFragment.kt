@@ -90,6 +90,8 @@ abstract class BaseBindingFragment<VB : ViewBinding> : Fragment(), IView {
         if (!HkUserManager.isLogin) {
             launchActivity(Intent(context, LoginActivity::class.java))
             LoginActivity.action = action
+        } else {
+            action.invoke()
         }
     }
 

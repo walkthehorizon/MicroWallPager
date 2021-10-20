@@ -12,6 +12,12 @@
         <item name="android:configChanges">orientation</item>
     </style>
 
+    <style name="NeverActivityTheme" parent="AppTheme">
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">
+            never
+        </item>
+    </style>
+
     <style name="AppTheme.FullScreen">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowTranslucentStatus">true</item>

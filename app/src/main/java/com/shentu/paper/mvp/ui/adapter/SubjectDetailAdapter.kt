@@ -11,7 +11,7 @@ import com.shentu.paper.R
 import com.shentu.paper.app.GlideApp
 import com.shentu.paper.model.entity.Wallpaper
 
-class SubjectDetailAdapter(data: List<Wallpaper>) : BaseQuickAdapter<Wallpaper, BaseViewHolder>(
+class SubjectDetailAdapter(data: List<Wallpaper> = emptyList()) : BaseQuickAdapter<Wallpaper, BaseViewHolder>(
         R.layout.item_subject_wallpaper, data) {
     override fun convert(helper: BaseViewHolder?, item: Wallpaper?) {
         helper?.getView<ImageView>(R.id.ivPaper)?.let {

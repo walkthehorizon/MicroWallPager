@@ -8,6 +8,6 @@
 
     <item
         android:id="@+id/itSubject"
-        android:title="打开主题" />
+        android:title="查看专辑" />
 
 </menu>

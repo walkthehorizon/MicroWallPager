@@ -2,12 +2,16 @@ package com.shentu.paper.mvp.ui.browser
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.transition.Fade
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavArgument
 import androidx.navigation.findNavController
+import com.blankj.utilcode.util.BarUtils
+import com.blankj.utilcode.util.ScreenUtils
 import com.github.piasy.biv.BigImageViewer
 import com.mob.moblink.MobLink
 import com.mob.moblink.Scene
@@ -22,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class PaperBrowserActivity : BaseBindingActivity<ActivityPaperBrowserBinding>(), SceneRestorable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme_FullScreen)
+        BarUtils.setStatusBarAlpha(this)
         window.enterTransition = Fade()
         super.onCreate(savedInstanceState)
     }

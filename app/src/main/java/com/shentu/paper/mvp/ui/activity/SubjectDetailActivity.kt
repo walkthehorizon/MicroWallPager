@@ -3,157 +3,122 @@ package com.shentu.paper.mvp.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.view.View.VISIBLE
+import androidx.activity.viewModels
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager.widget.ViewPager
-import com.alibaba.android.arouter.facade.annotation.Autowired
-import com.alibaba.android.arouter.facade.annotation.Route
-import com.alibaba.android.arouter.launcher.ARouter
-import com.blankj.utilcode.util.ToastUtils
-import com.kingja.loadsir.core.LoadService
-import com.kingja.loadsir.core.LoadSir
-import com.micro.base.BaseActivity
-import com.micro.utils.ArmsUtils
 import com.shentu.paper.R
 import com.shentu.paper.app.GlideApp
-import com.shentu.paper.app.page.EmptyCallback
-import com.shentu.paper.app.page.ErrorCallback
-import com.shentu.paper.app.page.LoadingCallback
+import com.shentu.paper.app.base.BaseBindingActivity
+import com.shentu.paper.databinding.ActivitySubjectDetailBinding
 import com.shentu.paper.model.entity.Banner
-import com.shentu.paper.model.entity.Subject
-import com.shentu.paper.model.entity.Wallpaper
-import com.shentu.paper.mvp.contract.SubjectDetailContract
-import com.shentu.paper.mvp.presenter.SubjectDetailPresenter
 import com.shentu.paper.mvp.ui.adapter.SubjectDetailAdapter
 import com.shentu.paper.mvp.ui.browser.PaperBrowserActivity
 import com.shentu.paper.mvp.ui.browser.SourceSubject
-import kotlinx.android.synthetic.main.activity_subject_detail.*
+import com.shentu.paper.viewmodels.SubjectViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-@Route(path = "/activity/subject/detail")
-class SubjectDetailActivity : BaseActivity<SubjectDetailPresenter>(), SubjectDetailContract.View {
-
-    @Autowired
-    @JvmField
-    var banner: Banner? = null
-    @Autowired
-    @JvmField
-    var subjectId = -1
-    @Autowired
-    @JvmField
-    var type = 1
-
+@AndroidEntryPoint
+class SubjectDetailActivity : BaseBindingActivity<ActivitySubjectDetailBinding>() {
     private lateinit var adapter: SubjectDetailAdapter
-    private lateinit var loadService: LoadService<Any>
-    private var bViewPager: ViewPager? = null
 
-    override fun initView(savedInstanceState: Bundle?): Int {
-        return R.layout.activity_subject_detail
+    private val type by lazy {
+        intent.getIntExtra("type", -1)
+    }
+    private val subjectId by lazy {
+        intent.getIntExtra("subjectId", -1)
     }
 
+    private val banner: Banner by lazy {
+        intent.getSerializableExtra("banner") as Banner
+    }
+    private val viewModel by viewModels<SubjectViewModel>()
+
+    override fun onReload() {
+        showLoading()
+        loadData()
+    }
+
+    override fun getLoadTarget(): View {
+        return binding.rvData
+    }
+
+    override fun initView(savedInstanceState: Bundle?) {
+        if (type == -1) {
+            showError()
+            return
+        }
+        adapter = SubjectDetailAdapter()
+        adapter.setOnItemClickListener { _, view, position ->
+            val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(
+                view, view.width / 2, view.height / 2, 0, 0
+            )
+            PaperBrowserActivity.open(
+                this,
+                SourceSubject(position, adapter.data[position].subjectId),
+                compat
+            )
+        }
+        binding.rvData.apply {
+            layoutManager = GridLayoutManager(this@SubjectDetailActivity, 2)
+            setHasFixedSize(true)
+        }
+        binding.rvData.adapter = adapter
+    }
 
     override fun initData(savedInstanceState: Bundle?) {
-        ARouter.getInstance().inject(this)
-        loadService = LoadSir.getDefault().register(this) {
-            showLoading()
-            loadData(false)
-        }
-        if (type == 1) {
-            smartRefresh.setEnableRefresh(true)
-            smartRefresh.setEnableLoadMore(true)
-            smartRefresh.setOnRefreshListener {
-                loadData(false)
+        loadData()
+        viewModel.papersLiveData.observe(this, {
+            if (!it.isSuccess) {
+                showError()
+                return@observe
             }
-        }
-        adapter = SubjectDetailAdapter(emptyList())
-        adapter.setOnItemClickListener { _, view, position ->
-            val compat: ActivityOptionsCompat = ActivityOptionsCompat.makeScaleUpAnimation(view
-                    , view.width / 2, view.height / 2
-                    , 0, 0)
-            PaperBrowserActivity.open(this,SourceSubject(position,adapter.data[position].subjectId))
-        }
-        rvSubject.layoutManager = GridLayoutManager(this, 2)
-        rvSubject.setHasFixedSize(true)
-        rvSubject.adapter = adapter
-
-        loadData(true)
+            if (it.data?.count == 0) {
+                showEmpty()
+                return@observe
+            }
+            adapter.setNewData(it.data!!.content)
+            showContent()
+        })
+        viewModel.subjectDetailLiveData.observe(this, {
+            if (!it.isSuccess) {
+                showMessage(it.msg)
+                return@observe
+            }
+            binding.toolbar.setTitle(it.data!!.name)
+            binding.tvDesc.loadData(it.data.description, "text/html", "utf-8")
+        })
     }
 
-    private fun loadData(clear: Boolean) {
+    private fun loadData() {
         if (type == 1) {
-            mPresenter?.getSubjectDetail(subjectId)
-            mPresenter?.getSubjectWallpapers(subjectId, clear)
+            viewModel.loadSubjectData(subjectId)
         } else {
-            toolbar.setTitle(banner?.title)
-            mPresenter?.getBannerWallpapers(banner!!.id)
-            ivCover.visibility = VISIBLE
+            binding.toolbar.setTitle(banner.title)
+            viewModel.loaBannerData(banner.id)
+            binding.ivCover.visibility = VISIBLE
             GlideApp.with(this)
-                    .load(banner?.imageUrl)
-                    .error(R.drawable.ic_twotone_broken_image_24)
-                    .into(ivCover)
+                .load(banner.imageUrl)
+                .error(R.drawable.ic_twotone_broken_image_24)
+                .into(binding.ivCover)
         }
-    }
-
-    override fun showDetail(subject: Subject) {
-        toolbar.setTitle(subject.name)
-        tvDesc.loadData(subject.description, "text/html", "utf-8")
-    }
-
-    override fun showWallpapers(wallpapers: List<Wallpaper>, clear: Boolean) {
-        if (clear) {
-            adapter.setNewData(wallpapers)
-        } else {
-            adapter.addData(wallpapers)
-        }
-        if (wallpapers.isNotEmpty()) {
-            bViewPager?.adapter?.notifyDataSetChanged()
-        }
-    }
-
-    override fun showLoading() {
-        loadService.showCallback(LoadingCallback::class.java)
-    }
-
-    override fun showContent() {
-        loadService.showSuccess()
-    }
-
-    override fun showEmpty() {
-        loadService.showCallback(EmptyCallback::class.java)
-    }
-
-    override fun showError() {
-        loadService.showCallback(ErrorCallback::class.java)
-    }
-
-    override fun showMessage(message: String) {
-        ToastUtils.showShort(message)
-    }
-
-    override fun launchActivity(intent: Intent) {
-        ArmsUtils.startActivity(intent)
-    }
-
-    override fun killMyself() {
-        finish()
     }
 
     companion object {
 
         fun open(subjectId: Int = -1, context: Context) {
-            ARouter.getInstance()
-                    .build("/activity/subject/detail")
-                    .withInt("subjectId", subjectId)
-                    .withInt("type", 1)
-                    .navigation(context)
+            val intent = Intent(context, SubjectDetailActivity::class.java)
+            intent.putExtra("subjectId", subjectId)
+            intent.putExtra("type", 1)
+            context.startActivity(intent)
         }
 
         fun open(banner: Banner, context: Context) {
-            ARouter.getInstance()
-                    .build("/activity/subject/detail")
-                    .withSerializable("banner", banner)
-                    .withInt("type", 2)
-                    .navigation(context)
+            val intent = Intent(context, SubjectDetailActivity::class.java)
+            intent.putExtra("banner", banner)
+            intent.putExtra("type", 2)
         }
     }
 }

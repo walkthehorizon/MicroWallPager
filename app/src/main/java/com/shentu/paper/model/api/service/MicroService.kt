@@ -15,22 +15,12 @@ interface MicroService {
     suspend fun updateInfo(): BaseResponse<AppUpdate>
 
 
-    @GET("subjects/{pk}")
-    fun getSubjectDetail(@Path("pk") pk: Int): Observable<SubjectDetailResponse>
-
     @GET("wallpapers")
-    fun getSubjectWallpapers(
-        @Query("subject_id") subjectId: Int,
-        @Query("limit") limit: Int,
-        @Query("offset") offset: Int
-    ): Observable<WallpaperPageResponse>
-
-    @GET("wallpapers")
-    fun getBannerWallpapers(
-        @Query("banner_id") subjectId: Int,
-        @Query("limit") limit: Int,
-        @Query("offset") offset: Int
-    ): Observable<WallpaperPageResponse>
+    suspend fun getBannerWallpapers(
+        @Query("banner_id") bannerId: Int,
+        @Query("limit") limit: Int = 100,
+        @Query("offset") offset: Int = MicroService.PAGE_START
+    ): WallpaperPageResponse
 
     @GET("wallpapers")
     fun getCategoryWallpapers(
